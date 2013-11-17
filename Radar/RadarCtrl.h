@@ -2,12 +2,12 @@
 #include "afxwin.h"
 #include "RadarParam.h"
 
-class RadarCtrl :
+class __declspec(dllexport) CRadarCtrl :
     public CStatic
 {
 public:
-    RadarCtrl(RadarParam &param);
-    ~RadarCtrl(void);
+    CRadarCtrl(RadarParam &param);
+    ~CRadarCtrl(void);
 
 private:
     RadarParam &m_Param;

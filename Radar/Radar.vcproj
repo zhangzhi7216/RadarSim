@@ -44,6 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="../Common"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -51,6 +52,7 @@
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="4"
+				ForcedIncludeFiles="Defines.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -124,12 +126,14 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="../Common"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+				ForcedIncludeFiles="Defines.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -287,5 +291,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="Radar.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

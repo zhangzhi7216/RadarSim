@@ -1,6 +1,6 @@
 #pragma once
 
-struct RadarParam
+struct __declspec(dllexport) RadarParam
 {
 public:
     RadarParam(void);
