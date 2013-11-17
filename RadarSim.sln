@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DataCenter", "DataCenter\DataCenter.vcproj", "{BF47FCFF-5D93-4C86-A139-901C0E36EB9E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Plane", "Plane\Plane.vcproj", "{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Radar", "Radar\Radar.vcproj", "{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF47FCFF-5D93-4C86-A139-901C0E36EB9E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BF47FCFF-5D93-4C86-A139-901C0E36EB9E}.Debug|Win32.Build.0 = Debug|Win32
+		{BF47FCFF-5D93-4C86-A139-901C0E36EB9E}.Release|Win32.ActiveCfg = Release|Win32
+		{BF47FCFF-5D93-4C86-A139-901C0E36EB9E}.Release|Win32.Build.0 = Release|Win32
+		{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}.Debug|Win32.Build.0 = Debug|Win32
+		{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}.Release|Win32.ActiveCfg = Release|Win32
+		{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}.Release|Win32.Build.0 = Release|Win32
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Debug|Win32.Build.0 = Debug|Win32
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Release|Win32.ActiveCfg = Release|Win32
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
