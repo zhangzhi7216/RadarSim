@@ -68,6 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\Radar.def"
 				GenerateDebugInformation="true"
@@ -149,6 +150,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="1"
 				ModuleDefinitionFile=".\Radar.def"
 				GenerateDebugInformation="true"

@@ -27,6 +27,7 @@ void CRadarDlg::CreateDlg(CRadarDlg &dlg)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     dlg.Create(IDD_RADAR_DLG, GetDesktopWindow());
+    dlg.m_Ctrl.Init();
 }
 
 void CRadarDlg::DoDataExchange(CDataExchange* pDX)

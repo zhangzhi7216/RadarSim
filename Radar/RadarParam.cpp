@@ -3,7 +3,7 @@
 
 RadarParam::RadarParam(void)
 : Enable(TRUE)
-, ScanLineAngle(30)
+, ScanlineAngle(30)
 {
 }
 

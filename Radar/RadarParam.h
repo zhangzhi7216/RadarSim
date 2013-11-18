@@ -7,5 +7,5 @@ public:
     virtual ~RadarParam(void);
 
     BOOL Enable;
-    DOUBLE ScanLineAngle;
+    DOUBLE ScanlineAngle;
 };

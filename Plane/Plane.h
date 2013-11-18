@@ -19,6 +19,7 @@ class CPlaneApp : public CWinAppEx
 {
 public:
 	CPlaneApp();
+    virtual ~CPlaneApp();
 
 // ÖØÐ´
 	public:

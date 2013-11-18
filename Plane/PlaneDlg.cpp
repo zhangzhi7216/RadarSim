@@ -53,8 +53,13 @@ BOOL CPlaneDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	// TODO: 在此添加额外的初始化代码
+    // TODO: 在此添加额外的初始化代码
     m_Initialized = true;
+
+    if (!m_RadarCtrl.Init())
+    {
+        return FALSE;
+    }
     Resize();
 
     CRadarDlg::CreateDlg(m_RadarDlg);

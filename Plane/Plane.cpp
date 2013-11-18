@@ -10,6 +10,8 @@
 #define new DEBUG_NEW
 #endif
 
+#include <GdiPlus.h>
+using namespace Gdiplus;
 
 // CPlaneApp
 
@@ -24,8 +26,16 @@ CPlaneApp::CPlaneApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+    GdiplusStartupInput gdiplusStartupInput;
+    ULONG_PTR gdiplusToken;
+    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
+CPlaneApp::~CPlaneApp()
+{
+    ULONG_PTR gdiplusToken = NULL; 
+    GdiplusShutdown(gdiplusToken);
+}
 
 // 唯一的一个 CPlaneApp 对象
 
@@ -64,6 +74,7 @@ BOOL CPlaneApp::InitInstance()
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
+
 
 	CPlaneDlg dlg;
 	m_pMainWnd = &dlg;
