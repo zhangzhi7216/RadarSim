@@ -115,7 +115,11 @@ void CPlaneDlg::Resize()
 
     // Resize Radar.
     int left = rect.left + PAD, width = (rect.right - rect.left) / 2 - PAD * 2, top = rect.top + PAD, height = (rect.bottom - rect.top) / 2 - PAD * 2;
-    GetDlgItem(IDC_RADAR_GRP)->MoveWindow(left, top, width, height);
+    if (width > height)
+    {
+        width = height;
+    }
+    GetDlgItem(IDC_RADAR_CTRL_GRP)->MoveWindow(left, top, width, height);
 
     left = left + PAD;
     width = width - PAD *2;

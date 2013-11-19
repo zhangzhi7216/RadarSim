@@ -14,7 +14,7 @@ public:
 
     bool Init();
 
-private:
+public:
     RadarParam &m_Param;
 
     Image *m_Image;
@@ -22,9 +22,9 @@ private:
     Image *m_ScanlineImg;
     int m_CurrentAngle;
 
-    void DrawBackground(int size);
-    void DrawScanline(int size);
-    void BlendAll(int size);
+    void DrawBackground();
+    void DrawScanline();
+    void BlendAll();
 
 public:
     DECLARE_MESSAGE_MAP()

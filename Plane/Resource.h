@@ -6,7 +6,7 @@
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128
 #define IDC_RADAR_CTRL                  1000
-#define IDC_RADAR_GRP                   1001
+#define IDC_RADAR_CTRL_GRP              1001
 
 // Next default values for new objects
 // 

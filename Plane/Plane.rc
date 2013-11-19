@@ -84,7 +84,7 @@ CAPTION "Plane"
 FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     LTEXT           "¾²Ì¬",IDC_RADAR_CTRL,54,47,15,8,SS_NOTIFY
-    GROUPBOX        "À×´ï",IDC_RADAR_GRP,7,7,124,92,BS_NOTIFY
+    GROUPBOX        "À×´ï",IDC_RADAR_CTRL_GRP,7,7,124,92,BS_NOTIFY
 END
 
 

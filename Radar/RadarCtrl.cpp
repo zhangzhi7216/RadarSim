@@ -33,21 +33,22 @@ CRadarCtrl::~CRadarCtrl(void)
 
 bool CRadarCtrl::Init()
 {
-    SetTimer(0, 100, NULL);
+    SetTimer(0, 50, NULL);
 
-    RECT rect;
-    GetWindowRect(&rect);
-    ScreenToClient(&rect);
-
-    DrawBackground(min(rect.right - rect.left, rect.bottom - rect.top));
-    DrawScanline(min(rect.right - rect.left, rect.bottom - rect.top));
-    BlendAll(min(rect.right - rect.left, rect.bottom - rect.top));
+    DrawBackground();
+    DrawScanline();
+    BlendAll();
 
     return true;
 }
 
-void CRadarCtrl::DrawBackground(int size)
+void CRadarCtrl::DrawBackground()
 {
+    RECT rect;
+    GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    int size = min(rect.right - rect.left, rect.bottom - rect.top);
+
     Image *backgroundImg = new Bitmap(size, size);
 
     Color topColor(0, 120, 0);
@@ -99,8 +100,13 @@ PointF AzEl2XY(int size, int azimuth, int elevation)
     return PointF((float)x, (float)y);
 }
 
-void CRadarCtrl::DrawScanline(int size)
+void CRadarCtrl::DrawScanline()
 {
+    RECT rect;
+    GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    int size = min(rect.right - rect.left, rect.bottom - rect.top);
+
     Image *scanlineImg = new Bitmap(size, size);
 
     PointF pt = AzEl2XY(size, m_CurrentAngle, 0);
@@ -130,8 +136,13 @@ void CRadarCtrl::DrawScanline(int size)
     m_ScanlineImg = scanlineImg;
 }
 
-void CRadarCtrl::BlendAll(int size)
+void CRadarCtrl::BlendAll()
 {
+    RECT rect;
+    GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    int size = min(rect.right - rect.left, rect.bottom - rect.top);
+
     Image *img = new Bitmap(size, size);
     Graphics graphics(img);
     GraphicsPath pathRadar;
@@ -139,7 +150,14 @@ void CRadarCtrl::BlendAll(int size)
     pathRadar.AddEllipse(-1.0, -1.0, (float)(size + 1), (float)(size + 1));
     graphics.SetClip(&Region(&pathRadar));
     graphics.DrawImage(m_BackgroundImg, Point(0, 0));
-    graphics.DrawImage(m_ScanlineImg, Point(0, 0));
+    
+    if (m_Param.Enable)
+    {
+        if (m_Param.ShowScanline)
+        {
+            graphics.DrawImage(m_ScanlineImg, Point(0, 0));
+        }
+    }
 
     if (m_Image)
     {
@@ -186,19 +204,14 @@ void CRadarCtrl::OnTimer(UINT_PTR nIDEvent)
 
     CStatic::OnTimer(nIDEvent);
 
-    RECT rect;
-    GetWindowRect(&rect);
-    ScreenToClient(&rect);
-
     m_CurrentAngle++;
     if (m_CurrentAngle >= 360)
     {
         m_CurrentAngle = 0;
     }
 
-    DrawScanline(min(rect.right - rect.left, rect.bottom - rect.top));
-
-    BlendAll(min(rect.right - rect.left, rect.bottom - rect.top));
+    DrawScanline();
+    BlendAll();
 
     Invalidate();
 }
@@ -208,9 +221,7 @@ void CRadarCtrl::OnSize(UINT nType, int cx, int cy)
     CStatic::OnSize(nType, cx, cy);
 
     // TODO: 在此处添加消息处理程序代码
-    DrawBackground(min(cx, cy));
-
-    DrawScanline(min(cx, cy));
-
-    BlendAll(min(cx, cy));
+    DrawBackground();
+    DrawScanline();
+    BlendAll();
 }
