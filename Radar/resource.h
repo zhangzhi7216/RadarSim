@@ -25,6 +25,11 @@
 #define IDC_RADAR_PHI_VAR               4019
 #define IDC_RADAR_PRO_DET_STATIC        4020
 #define IDC_RADAR_PRO_DET               4021
+#define IDC_RADAR_SHOW_TRACK            4022
+#define IDC_RADAR_TARGET_ID             4023
+#define IDC_RADAR_TARGET_ID_STATIC      4024
+#define IDC_RADAR_TARGET_COLOR          4025
+#define IDC_RADAR_TARGET_COLOR_STATIC   4026
 
 // Next default values for new objects
 // 
@@ -32,7 +37,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        4001
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         4010
+#define _APS_NEXT_CONTROL_VALUE         4025
 #define _APS_NEXT_SYMED_VALUE           4000
 #endif
 #endif

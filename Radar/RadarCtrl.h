@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-#include "RadarParam.h"
+#include "Sensor.h"
 
 #include <GdiPlus.h>
 using namespace Gdiplus;
@@ -9,21 +9,23 @@ class __declspec(dllexport) CRadarCtrl :
     public CStatic
 {
 public:
-    CRadarCtrl(RadarParam &param);
+    CRadarCtrl(Sensor &radar);
     ~CRadarCtrl(void);
 
     bool Init();
 
 public:
-    RadarParam &m_Param;
+    Sensor &m_Radar;
 
     Image *m_Image;
     Image *m_BackgroundImg;
+    Image *m_TargetsImg;
     Image *m_ScanlineImg;
     int m_CurrentAngle;
 
     void DrawBackground();
     void DrawScanline();
+    void DrawTargets();
     void BlendAll();
 
 public:

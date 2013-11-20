@@ -10,6 +10,12 @@
 
 #include "PlaneRadarProxy.h"
 
+#include "Target.h"
+
+#include <vector>
+
+using namespace std;
+
 // CPlaneDlg ¶Ô»°¿ò
 class CPlaneDlg : public CDialog
 {
@@ -41,9 +47,12 @@ public:
     afx_msg void OnSize(UINT nType, int cx, int cy);
 
     bool m_ShowRadarDlg;
-    RadarParam m_RadarParam;
+    Sensor m_Radar;
     CRadarCtrl m_RadarCtrl;
     PlaneRadarProxy m_PlaneRadarProxy;
     CRadarDlg m_RadarDlg;
     afx_msg void OnStnDblclickRadarCtrl();
+
+    Plane m_Plane;
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

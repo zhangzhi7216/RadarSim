@@ -1,8 +1,9 @@
 #pragma once
 
-#include "RadarParam.h"
+#include "Sensor.h"
 #include "RadarClientProxy.h"
 #include "RadarCtrl.h"
+#include "afxwin.h"
 
 // CRadarDlg 对话框
 
@@ -11,7 +12,7 @@ class __declspec(dllexport) CRadarDlg : public CDialog
 	DECLARE_DYNAMIC(CRadarDlg)
 
 public:
-	CRadarDlg(RadarParam &param, RadarClientProxy &clientProxy, CWnd* pParent = NULL);   // 标准构造函数
+	CRadarDlg(Sensor &radar, RadarClientProxy &clientProxy, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CRadarDlg();
 
     static void CreateDlg(CRadarDlg &dlg);
@@ -27,7 +28,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-    RadarParam &m_Param;
+    Sensor &m_Radar;
     RadarClientProxy &m_ClientProxy;
     CRadarCtrl m_Ctrl;
     afx_msg void OnClose();
@@ -37,4 +38,10 @@ public:
     void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnBnClickedRadarEnable();
+    afx_msg void OnEnChangeRadarMaxDis();
+    CComboBox m_TargetId;
+    afx_msg void OnBnClickedRadarShowTrack();
+    afx_msg void OnCbnSelchangeRadarTargetId();
+    CComboBox m_TargetColor;
+    afx_msg void OnCbnSelchangeRadarTargetColor();
 };

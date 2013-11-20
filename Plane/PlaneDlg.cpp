@@ -20,9 +20,10 @@ CPlaneDlg::CPlaneDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CPlaneDlg::IDD, pParent)
     , m_Initialized(false)
     , m_ShowRadarDlg(true)
-    , m_RadarCtrl(m_RadarParam)
+    , m_Radar(Sensor::SensorTypeSource, m_Plane)
+    , m_RadarCtrl(m_Radar)
     , m_PlaneRadarProxy(*this)
-    , m_RadarDlg(m_RadarParam, m_PlaneRadarProxy)
+    , m_RadarDlg(m_Radar, m_PlaneRadarProxy)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -39,6 +40,7 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CDialog)
 	//}}AFX_MSG_MAP
     ON_WM_SIZE()
     ON_STN_DBLCLK(IDC_RADAR_CTRL, &CPlaneDlg::OnStnDblclickRadarCtrl)
+    ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -56,6 +58,19 @@ BOOL CPlaneDlg::OnInitDialog()
     // TODO: 在此添加额外的初始化代码
     m_Initialized = true;
 
+    // 初始化我机和目标
+    Target target0, target1;
+
+    target0.m_Id = 3;
+    target1.m_Id = 4;
+
+    target0.m_Color = Target::TargetColorOrange;
+    target1.m_Color = Target::TargetColorYellow;
+
+    m_Plane.AddTarget(target0);
+    m_Plane.AddTarget(target1);
+
+    // 初始化雷达
     if (!m_RadarCtrl.Init())
     {
         return FALSE;
@@ -68,6 +83,9 @@ BOOL CPlaneDlg::OnInitDialog()
         m_RadarDlg.ShowWindow(SW_SHOW);
     }
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
+
+    // Debug用的Timer
+    SetTimer(0, 800, NULL);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -152,4 +170,24 @@ void CPlaneDlg::OnStnDblclickRadarCtrl()
         m_RadarDlg.ShowWindow(SW_SHOW);
         m_ShowRadarDlg = true;
     }
+}
+
+void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+
+    CDialog::OnTimer(nIDEvent);
+
+    m_Plane.m_Targets[3].MoveTo(m_Plane.m_Targets[3].m_Position + Position(2, 3, 4));
+    m_Plane.m_Targets[4].MoveTo(m_Plane.m_Targets[4].m_Position + Position(3, 5, 4));
+
+    m_Plane.MoveTo(m_Plane.m_Position + Position(1, 1, 1));
+
+    m_RadarCtrl.DrawTargets();
+    m_RadarCtrl.BlendAll();
+    m_RadarCtrl.Invalidate();
+
+    m_RadarDlg.m_Ctrl.DrawTargets();
+    m_RadarDlg.m_Ctrl.BlendAll();
+    m_RadarDlg.m_Ctrl.Invalidate();
 }

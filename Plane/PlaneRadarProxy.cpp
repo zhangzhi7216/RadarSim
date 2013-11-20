@@ -17,6 +17,16 @@ void PlaneRadarProxy::OnClose()
     m_Dlg.OnStnDblclickRadarCtrl();
 }
 
+void PlaneRadarProxy::DrawTargets()
+{
+    m_Dlg.m_RadarCtrl.DrawTargets();
+}
+
+void PlaneRadarProxy::BlendAll()
+{
+    m_Dlg.m_RadarCtrl.BlendAll();
+}
+
 void PlaneRadarProxy::Invalidate(BOOL bErase)
 {
     m_Dlg.m_RadarCtrl.Invalidate(bErase);

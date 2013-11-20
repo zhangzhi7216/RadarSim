@@ -12,6 +12,8 @@ public:
     virtual ~PlaneRadarProxy(void);
 
     virtual void OnClose();
+    virtual void DrawTargets();
+    virtual void BlendAll();
     virtual void Invalidate(BOOL bErase = 1);
     virtual BOOL RedrawWindow(LPCRECT lpRectUpdate = NULL,
         CRgn* prgnUpdate = NULL,

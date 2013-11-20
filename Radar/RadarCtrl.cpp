@@ -3,10 +3,11 @@
 
 #include <math.h>
 
-CRadarCtrl::CRadarCtrl(RadarParam &param)
-: m_Param(param)
+CRadarCtrl::CRadarCtrl(Sensor &radar)
+: m_Radar(radar)
 , m_Image(0)
 , m_BackgroundImg(NULL)
+, m_TargetsImg(NULL)
 , m_ScanlineImg(NULL)
 , m_CurrentAngle(0)
 {
@@ -23,6 +24,11 @@ CRadarCtrl::~CRadarCtrl(void)
     {
         delete m_BackgroundImg;
         m_BackgroundImg = NULL;
+    }
+    if (m_TargetsImg)
+    {
+        delete m_TargetsImg;
+        m_TargetsImg = NULL;
     }
     if (m_ScanlineImg)
     {
@@ -100,6 +106,49 @@ PointF AzEl2XY(int size, int azimuth, int elevation)
     return PointF((float)x, (float)y);
 }
 
+void CRadarCtrl::DrawTargets()
+{
+    RECT rect;
+    GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    int size = min(rect.right - rect.left, rect.bottom - rect.top);
+
+    Image *targetsImg = new Bitmap(size, size);
+
+    Graphics graphics(targetsImg);
+    graphics.SetCompositingQuality(CompositingQualityHighQuality);
+    graphics.SetInterpolationMode(InterpolationModeBicubic);
+    graphics.SetSmoothingMode(SmoothingModeAntiAlias);
+    graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
+
+    for (map<int, Target>::iterator it = m_Radar.m_Plane.m_Targets.begin();
+        it != m_Radar.m_Plane.m_Targets.end();
+        ++it)
+    {
+        Pen pen(Target::TargetColors[it->second.m_Color]);
+        if (m_Radar.ShowTrack)
+        {
+            for (int i = 1; i < m_Radar.m_Plane.m_RelPositionPaths[it->first].size(); ++i)
+            {
+                if (m_Radar.m_Plane.m_DistancePaths[it->first][i - 1] <= m_Radar.MaxDis && m_Radar.m_Plane.m_DistancePaths[it->first][i] <= m_Radar.MaxDis)
+                {
+                    graphics.DrawLine(&pen, PointF(m_Radar.m_Plane.m_ThetaPaths[it->first][i - 1], m_Radar.m_Plane.m_PhiPaths[it->first][i - 1]), PointF(m_Radar.m_Plane.m_ThetaPaths[it->first][i], m_Radar.m_Plane.m_PhiPaths[it->first][i]));
+                }
+            }
+        }
+        if (m_Radar.m_Plane.m_DistancePaths[it->first].size() > 0 && m_Radar.m_Plane.m_DistancePaths[it->first].back() <= m_Radar.MaxDis)
+        {
+            graphics.FillEllipse(&SolidBrush(Target::TargetColors[it->second.m_Color]), m_Radar.m_Plane.m_ThetaPaths[it->first].back() - 2, m_Radar.m_Plane.m_PhiPaths[it->first].back() - 2, 4, 4);
+        }
+    }
+
+    if (m_TargetsImg)
+    {
+        delete m_TargetsImg;
+    }
+    m_TargetsImg = targetsImg;
+}
+
 void CRadarCtrl::DrawScanline()
 {
     RECT rect;
@@ -151,9 +200,10 @@ void CRadarCtrl::BlendAll()
     graphics.SetClip(&Region(&pathRadar));
     graphics.DrawImage(m_BackgroundImg, Point(0, 0));
     
-    if (m_Param.Enable)
+    if (m_Radar.Enable)
     {
-        if (m_Param.ShowScanline)
+        graphics.DrawImage(m_TargetsImg, Point(0, 0));
+        if (m_Radar.ShowScanline)
         {
             graphics.DrawImage(m_ScanlineImg, Point(0, 0));
         }
@@ -223,5 +273,6 @@ void CRadarCtrl::OnSize(UINT nType, int cx, int cy)
     // TODO: 在此处添加消息处理程序代码
     DrawBackground();
     DrawScanline();
+    DrawTargets();
     BlendAll();
 }
