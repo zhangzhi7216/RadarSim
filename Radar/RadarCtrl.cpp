@@ -138,7 +138,12 @@ void CRadarCtrl::DrawTargets()
         }
         if (m_Radar.m_Plane.m_DistancePaths[it->first].size() > 0 && m_Radar.m_Plane.m_DistancePaths[it->first].back() <= m_Radar.MaxDis)
         {
-            graphics.FillEllipse(&SolidBrush(Target::TargetColors[it->second.m_Color]), m_Radar.m_Plane.m_ThetaPaths[it->first].back() - 2, m_Radar.m_Plane.m_PhiPaths[it->first].back() - 2, 4, 4);
+            SolidBrush brush(Target::TargetColors[it->second.m_Color]);
+            graphics.FillEllipse(&brush, m_Radar.m_Plane.m_ThetaPaths[it->first].back() - 2, m_Radar.m_Plane.m_PhiPaths[it->first].back() - 2, 4, 4);
+            CString str;
+            str.AppendFormat(TEXT("%d"), m_Radar.m_Plane.m_RelPositionPaths[it->first].back().Z);
+            Font font(TEXT("ËÎÌו"), 10);
+            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Radar.m_Plane.m_ThetaPaths[it->first].back(), m_Radar.m_Plane.m_PhiPaths[it->first].back()), &brush);
         }
     }
 
