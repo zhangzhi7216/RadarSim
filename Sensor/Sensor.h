@@ -1,4 +1,4 @@
-// Radar.h : Radar DLL 的主头文件
+// Sensor.h : Sensor DLL 的主头文件
 //
 
 #pragma once
@@ -10,14 +10,14 @@
 #include "resource.h"		// 主符号
 
 
-// CRadarApp
-// 有关此类实现的信息，请参阅 Radar.cpp
+// CSensorApp
+// 有关此类实现的信息，请参阅 Sensor.cpp
 //
 
-class CRadarApp : public CWinApp
+class CSensorApp : public CWinApp
 {
 public:
-	CRadarApp();
+	CSensorApp();
 
 // 重写
 public:

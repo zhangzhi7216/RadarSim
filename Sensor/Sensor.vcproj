@@ -2,10 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Plane"
-	ProjectGUID="{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}"
-	RootNamespace="Plane"
-	Keyword="MFCProj"
+	Name="Sensor"
+	ProjectGUID="{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}"
+	RootNamespace="Sensor"
+	Keyword="MFCDLLProj"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -40,13 +40,12 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../Plane;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				AdditionalIncludeDirectories="../Common"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -71,6 +70,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="2"
+				ModuleDefinitionFile=".\Sensor.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -101,7 +101,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -122,15 +122,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../Plane;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
-				MinimalRebuild="false"
+				AdditionalIncludeDirectories="../Common"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -154,6 +152,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="1"
+				ModuleDefinitionFile=".\Sensor.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -192,19 +191,23 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Plane.cpp"
+				RelativePath=".\Sensor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneDlg.cpp"
+				RelativePath=".\Sensor.def"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneEsmProxy.cpp"
+				RelativePath=".\SensorClientProxy.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneRadarProxy.cpp"
+				RelativePath=".\SensorCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SensorDlg.cpp"
 				>
 			</File>
 			<File
@@ -234,27 +237,23 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\Common\Defines.h"
+				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Plane.h"
+				RelativePath=".\Sensor.h"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneDlg.h"
+				RelativePath=".\SensorClientProxy.h"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneEsmProxy.h"
+				RelativePath=".\SensorCtrl.h"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneRadarProxy.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\Resource.h"
+				RelativePath=".\SensorDlg.h"
 				>
 			</File>
 			<File
@@ -272,15 +271,15 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\PlaneDlg\res\PlaneDlg.ico"
+				RelativePath=".\res\Sensor.ico"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneDlg.rc"
+				RelativePath=".\Sensor.rc"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\res\PlaneDlg.rc2"
+				RelativePath=".\res\Sensor.rc2"
 				>
 			</File>
 		</Filter>
@@ -292,7 +291,7 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="Plane.rc"
+			Value="Sensor.rc"
 		/>
 	</Globals>
 </VisualStudioProject>

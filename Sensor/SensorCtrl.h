@@ -1,19 +1,19 @@
 #pragma once
 #include "afxwin.h"
-#include "Sensor.h"
+#include "../Common/Sensor.h"
 
 #include <GdiPlus.h>
 using namespace Gdiplus;
 
-class __declspec(dllexport) CRadarCtrl :
+class __declspec(dllexport) CSensorCtrl :
     public CStatic
 {
 public:
-    CRadarCtrl(Sensor &radar);
-    ~CRadarCtrl(void);
+    CSensorCtrl(Sensor &sensor);
+    ~CSensorCtrl(void);
 
 public:
-    Sensor &m_Radar;
+    Sensor &m_Sensor;
 
     Image *m_Image;
     Image *m_BackgroundImg;

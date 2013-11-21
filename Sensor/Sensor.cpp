@@ -1,8 +1,8 @@
-// Radar.cpp : 定义 DLL 的初始化例程。
+// Sensor.cpp : 定义 DLL 的初始化例程。
 //
 
 #include "stdafx.h"
-#include "Radar.h"
+#include "Sensor.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -33,29 +33,29 @@
 //		请参阅 MFC 技术说明 33 和 58。
 //
 
-// CRadarApp
+// CSensorApp
 
-BEGIN_MESSAGE_MAP(CRadarApp, CWinApp)
+BEGIN_MESSAGE_MAP(CSensorApp, CWinApp)
 END_MESSAGE_MAP()
 
 
-// CRadarApp 构造
+// CSensorApp 构造
 
-CRadarApp::CRadarApp()
+CSensorApp::CSensorApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
 }
 
 
-// 唯一的一个 CRadarApp 对象
+// 唯一的一个 CSensorApp 对象
 
-CRadarApp theApp;
+CSensorApp theApp;
 
 
-// CRadarApp 初始化
+// CSensorApp 初始化
 
-BOOL CRadarApp::InitInstance()
+BOOL CSensorApp::InitInstance()
 {
 	CWinApp::InitInstance();
 

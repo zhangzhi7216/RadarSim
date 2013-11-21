@@ -3,8 +3,8 @@
 //
 
 #include "stdafx.h"
-#include "Plane.h"
-#include "PlaneDlg.h"
+#include "FusionPlane.h"
+#include "FusionPlaneDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -13,16 +13,16 @@
 #include <GdiPlus.h>
 using namespace Gdiplus;
 
-// CPlaneApp
+// CFusionPlaneApp
 
-BEGIN_MESSAGE_MAP(CPlaneApp, CWinAppEx)
+BEGIN_MESSAGE_MAP(CFusionPlaneApp, CWinAppEx)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// CPlaneApp 构造
+// CFusionPlaneApp 构造
 
-CPlaneApp::CPlaneApp()
+CFusionPlaneApp::CFusionPlaneApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
@@ -31,20 +31,20 @@ CPlaneApp::CPlaneApp()
     GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 }
 
-CPlaneApp::~CPlaneApp()
+CFusionPlaneApp::~CFusionPlaneApp()
 {
     ULONG_PTR gdiplusToken = NULL; 
     GdiplusShutdown(gdiplusToken);
 }
 
-// 唯一的一个 CPlaneApp 对象
+// 唯一的一个 CFusionPlaneApp 对象
 
-CPlaneApp theApp;
+CFusionPlaneApp theApp;
 
 
-// CPlaneApp 初始化
+// CFusionPlaneApp 初始化
 
-BOOL CPlaneApp::InitInstance()
+BOOL CFusionPlaneApp::InitInstance()
 {
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
@@ -76,7 +76,7 @@ BOOL CPlaneApp::InitInstance()
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 
-	CPlaneDlg dlg(TEXT("我机"));
+	CFusionPlaneDlg dlg(TEXT("融合机"));
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

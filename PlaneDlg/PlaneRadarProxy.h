@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../Radar/RadarClientProxy.h"
+#include "../Sensor/SensorClientProxy.h"
 
 class CPlaneDlg;
 
 class PlaneRadarProxy :
-    public RadarClientProxy
+    public SensorClientProxy
 {
 public:
     PlaneRadarProxy(CPlaneDlg &dlg);

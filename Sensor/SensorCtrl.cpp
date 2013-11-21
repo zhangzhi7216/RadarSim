@@ -1,10 +1,10 @@
 #include "StdAfx.h"
-#include "RadarCtrl.h"
+#include "SensorCtrl.h"
 
 #include <math.h>
 
-CRadarCtrl::CRadarCtrl(Sensor &radar)
-: m_Radar(radar)
+CSensorCtrl::CSensorCtrl(Sensor &sensor)
+: m_Sensor(sensor)
 , m_Image(0)
 , m_BackgroundImg(NULL)
 , m_TargetsImg(NULL)
@@ -13,7 +13,7 @@ CRadarCtrl::CRadarCtrl(Sensor &radar)
 {
 }
 
-CRadarCtrl::~CRadarCtrl(void)
+CSensorCtrl::~CSensorCtrl(void)
 {
     if (m_Image)
     {
@@ -37,7 +37,7 @@ CRadarCtrl::~CRadarCtrl(void)
     }
 }
 
-void CRadarCtrl::DrawBackground()
+void CSensorCtrl::DrawBackground()
 {
     RECT rect;
     GetWindowRect(&rect);
@@ -95,7 +95,7 @@ PointF AzEl2XY(int size, int azimuth, int elevation)
     return PointF((float)x, (float)y);
 }
 
-void CRadarCtrl::DrawTargets()
+void CSensorCtrl::DrawTargets()
 {
     RECT rect;
     GetWindowRect(&rect);
@@ -110,29 +110,29 @@ void CRadarCtrl::DrawTargets()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    for (map<int, Target>::iterator it = m_Radar.m_Plane.m_Targets.begin();
-        it != m_Radar.m_Plane.m_Targets.end();
+    for (map<int, Target>::iterator it = m_Sensor.m_Plane.m_Targets.begin();
+        it != m_Sensor.m_Plane.m_Targets.end();
         ++it)
     {
         Pen pen(Target::TargetColors[it->second.m_Color]);
-        if (m_Radar.ShowTrack)
+        if (m_Sensor.ShowTrack)
         {
-            for (int i = 1; i < m_Radar.m_Plane.m_RelPositionPaths[it->first].size(); ++i)
+            for (int i = 1; i < m_Sensor.m_Plane.m_RelPositionPaths[it->first].size(); ++i)
             {
-                if (m_Radar.m_Plane.m_DistancePaths[it->first][i - 1] <= m_Radar.MaxDis && m_Radar.m_Plane.m_DistancePaths[it->first][i] <= m_Radar.MaxDis)
+                if (m_Sensor.m_Plane.m_DistancePaths[it->first][i - 1] <= m_Sensor.MaxDis && m_Sensor.m_Plane.m_DistancePaths[it->first][i] <= m_Sensor.MaxDis)
                 {
-                    graphics.DrawLine(&pen, PointF(m_Radar.m_Plane.m_ThetaPaths[it->first][i - 1], m_Radar.m_Plane.m_PhiPaths[it->first][i - 1]), PointF(m_Radar.m_Plane.m_ThetaPaths[it->first][i], m_Radar.m_Plane.m_PhiPaths[it->first][i]));
+                    graphics.DrawLine(&pen, PointF(m_Sensor.m_Plane.m_ThetaPaths[it->first][i - 1], m_Sensor.m_Plane.m_PhiPaths[it->first][i - 1]), PointF(m_Sensor.m_Plane.m_ThetaPaths[it->first][i], m_Sensor.m_Plane.m_PhiPaths[it->first][i]));
                 }
             }
         }
-        if (m_Radar.m_Plane.m_DistancePaths[it->first].size() > 0 && m_Radar.m_Plane.m_DistancePaths[it->first].back() <= m_Radar.MaxDis)
+        if (m_Sensor.m_Plane.m_DistancePaths[it->first].size() > 0 && m_Sensor.m_Plane.m_DistancePaths[it->first].back() <= m_Sensor.MaxDis)
         {
             SolidBrush brush(Target::TargetColors[it->second.m_Color]);
-            graphics.FillEllipse(&brush, m_Radar.m_Plane.m_ThetaPaths[it->first].back() - 2, m_Radar.m_Plane.m_PhiPaths[it->first].back() - 2, 4, 4);
+            graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[it->first].back() - 2, m_Sensor.m_Plane.m_PhiPaths[it->first].back() - 2, 4, 4);
             CString str;
-            str.AppendFormat(TEXT("%d"), m_Radar.m_Plane.m_RelPositionPaths[it->first].back().Z);
+            str.AppendFormat(TEXT("%d"), m_Sensor.m_Plane.m_RelPositionPaths[it->first].back().Z);
             Font font(TEXT("宋体"), 10);
-            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Radar.m_Plane.m_ThetaPaths[it->first].back(), m_Radar.m_Plane.m_PhiPaths[it->first].back()), &brush);
+            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[it->first].back(), m_Sensor.m_Plane.m_PhiPaths[it->first].back()), &brush);
         }
     }
 
@@ -143,7 +143,7 @@ void CRadarCtrl::DrawTargets()
     m_TargetsImg = targetsImg;
 }
 
-void CRadarCtrl::DrawScanline()
+void CSensorCtrl::DrawScanline()
 {
     RECT rect;
     GetWindowRect(&rect);
@@ -179,7 +179,7 @@ void CRadarCtrl::DrawScanline()
     m_ScanlineImg = scanlineImg;
 }
 
-void CRadarCtrl::BlendAll()
+void CSensorCtrl::BlendAll()
 {
     RECT rect;
     GetWindowRect(&rect);
@@ -188,16 +188,16 @@ void CRadarCtrl::BlendAll()
 
     Image *img = new Bitmap(size, size);
     Graphics graphics(img);
-    GraphicsPath pathRadar;
-    pathRadar.SetFillMode(FillModeWinding);
-    pathRadar.AddEllipse(-1.0, -1.0, (float)(size + 1), (float)(size + 1));
-    graphics.SetClip(&Region(&pathRadar));
+    GraphicsPath pathSensor;
+    pathSensor.SetFillMode(FillModeWinding);
+    pathSensor.AddEllipse(-1.0, -1.0, (float)(size + 1), (float)(size + 1));
+    graphics.SetClip(&Region(&pathSensor));
     graphics.DrawImage(m_BackgroundImg, Point(0, 0));
     
-    if (m_Radar.Enable)
+    if (m_Sensor.Enable)
     {
         graphics.DrawImage(m_TargetsImg, Point(0, 0));
-        if (m_Radar.ShowScanline)
+        if (m_Sensor.ShowScanline)
         {
             graphics.DrawImage(m_ScanlineImg, Point(0, 0));
         }
@@ -210,14 +210,14 @@ void CRadarCtrl::BlendAll()
     m_Image = img;
 }
 
-BEGIN_MESSAGE_MAP(CRadarCtrl, CStatic)
+BEGIN_MESSAGE_MAP(CSensorCtrl, CStatic)
     ON_WM_PAINT()
     ON_WM_TIMER()
     ON_WM_SIZE()
     ON_WM_CREATE()
 END_MESSAGE_MAP()
 
-void CRadarCtrl::OnPaint()
+void CSensorCtrl::OnPaint()
 {
     CPaintDC dc(this); // device context for painting
     // TODO: 在此处添加消息处理程序代码
@@ -243,7 +243,7 @@ void CRadarCtrl::OnPaint()
     }
 }
 
-void CRadarCtrl::OnTimer(UINT_PTR nIDEvent)
+void CSensorCtrl::OnTimer(UINT_PTR nIDEvent)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
 
@@ -261,7 +261,7 @@ void CRadarCtrl::OnTimer(UINT_PTR nIDEvent)
     Invalidate();
 }
 
-void CRadarCtrl::OnSize(UINT nType, int cx, int cy)
+void CSensorCtrl::OnSize(UINT nType, int cx, int cy)
 {
     CStatic::OnSize(nType, cx, cy);
 
@@ -272,7 +272,7 @@ void CRadarCtrl::OnSize(UINT nType, int cx, int cy)
     BlendAll();
 }
 
-void CRadarCtrl::PreSubclassWindow()
+void CSensorCtrl::PreSubclassWindow()
 {
     CStatic::PreSubclassWindow();
 

@@ -1,10 +1,10 @@
 #pragma once
 
-class __declspec(dllexport) RadarClientProxy
+class __declspec(dllexport) SensorClientProxy
 {
 public:
-    RadarClientProxy(void);
-    virtual ~RadarClientProxy(void);
+    SensorClientProxy(void);
+    virtual ~SensorClientProxy(void);
 
     virtual void OnClose() = 0;
     virtual void DrawTargets() = 0;

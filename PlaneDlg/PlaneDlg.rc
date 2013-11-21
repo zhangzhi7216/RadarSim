@@ -54,13 +54,39 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\Radar.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""res\\PlaneDlg.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
     "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
     "#endif\r\n"
     "\0"
 END
 
 #endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PLANE_DIALOG DIALOGEX 0, 0, 400, 289
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "Plane"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    LTEXT           "静态",IDC_RADAR_CTRL,54,47,15,8,SS_NOTIFY
+    GROUPBOX        "雷达",IDC_RADAR_CTRL_GRP,7,7,124,92,BS_NOTIFY
+    LTEXT           "静态",IDC_ESM_CTRL,53,231,15,8,SS_NOTIFY
+    GROUPBOX        "ESM",IDC_ESM_CTRL_GRP,7,190,124,92,BS_NOTIFY
+END
+
+IDD_FUSION_PLANE_DIALOG DIALOGEX 0, 0, 320, 200
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "FusionPlane"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+END
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +104,7 @@ VS_VERSION_INFO VERSIONINFO
  FILEFLAGS 0x0L
 #endif
  FILEOS 0x4L
- FILETYPE 0x2L
+ FILETYPE 0x1L
  FILESUBTYPE 0x0L
 BEGIN
     BLOCK "StringFileInfo"
@@ -88,9 +114,9 @@ BEGIN
             VALUE "CompanyName", "TODO: <公司名>"
             VALUE "FileDescription", "TODO: <文件说明>"
             VALUE "FileVersion", "1.0.0.1"
-            VALUE "InternalName", "Radar.dll"
+            VALUE "InternalName", "Plane.exe"
             VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
-            VALUE "OriginalFilename", "Radar.dll"
+            VALUE "OriginalFilename", "Plane.exe"
             VALUE "ProductName", "TODO: <产品名>"
             VALUE "ProductVersion", "1.0.0.1"
         END
@@ -104,67 +130,18 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Dialog
-//
-
-IDD_RADAR_DLG DIALOGEX 0, 0, 335, 315
-STYLE DS_SETFONT | DS_FIXEDSYS | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
-CAPTION "Radar"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    LTEXT           "静态",IDC_RADAR,311,7,17,8
-    GROUPBOX        "雷达",IDC_RADAR_GRP,280,268,48,40
-    GROUPBOX        "参数",IDC_RADAR_PARAM_GRP,7,7,137,301
-    CONTROL         "显示扫描线",IDC_RADAR_SHOW_SCANLINE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,229,56,10
-    CONTROL         "开启",IDC_RADAR_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,41,32,10
-    LTEXT           "类型：",IDC_RADAR_TYPE_STATIC,17,23,25,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_TYPE,78,17,40,14,ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "最大距离：",IDC_RADAR_MAX_DIS_STATIC,17,63,41,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_MAX_DIS,78,57,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "最大方位角：",IDC_RADAR_MAX_THETA_STATIC,17,87,49,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_MAX_THETA,78,81,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "最大俯仰角：",IDC_RADAR_MAX_PHI_STATIC,17,108,49,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_MAX_PHI,78,103,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "距离方差：",IDC_RADAR_DIS_VAR_STATIC,17,132,41,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_DIS_VAR,78,127,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "方位方差：",IDC_RADAR_THETA_VAR_STATIC,17,156,41,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_THETA_VAR,78,151,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "俯仰方差：",IDC_RADAR_PHI_VAR_STATIC,17,182,41,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_PHI_VAR,78,176,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    LTEXT           "概率检测：",IDC_RADAR_PRO_DET_STATIC,17,205,41,8,SS_CENTERIMAGE
-    EDITTEXT        IDC_RADAR_PRO_DET,78,199,40,14,ES_AUTOHSCROLL | ES_NUMBER
-    COMBOBOX        IDC_RADAR_TARGET_ID,78,265,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "目标选择：",IDC_RADAR_TARGET_ID_STATIC,17,266,41,8
-    COMBOBOX        IDC_RADAR_TARGET_COLOR,78,284,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "目标颜色：",IDC_RADAR_TARGET_COLOR_STATIC,17,285,41,8
-    CONTROL         "显示轨迹",IDC_RADAR_SHOW_TRACK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,246,48,10
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // DESIGNINFO
 //
 
 #ifdef APSTUDIO_INVOKED
 GUIDELINES DESIGNINFO 
 BEGIN
-    IDD_RADAR_DLG, DIALOG
+    IDD_PLANE_DIALOG, DIALOG
     BEGIN
         LEFTMARGIN, 7
-        RIGHTMARGIN, 328
-        VERTGUIDE, 17
-        VERTGUIDE, 78
+        RIGHTMARGIN, 393
         TOPMARGIN, 7
-        BOTTOMMARGIN, 308
-        HORZGUIDE, 31
-        HORZGUIDE, 71
-        HORZGUIDE, 95
-        HORZGUIDE, 116
-        HORZGUIDE, 140
-        HORZGUIDE, 165
-        HORZGUIDE, 190
-        HORZGUIDE, 213
+        BOTTOMMARGIN, 282
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -177,7 +154,18 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\Plane.ico"
+IDR_MAINFRAME           ICON                    "res\\PlaneDlg.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDP_SOCKETS_INIT_FAILED "Windows 套接字初始化失败。"
+END
+
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -196,7 +184,7 @@ IDR_MAINFRAME           ICON                    "res\\Plane.ico"
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
 #pragma code_page(936)
-#include "res\Radar.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "res\PlaneDlg.rc2"  // 非 Microsoft Visual C++ 编辑的资源
 #include "l.CHS\afxres.rc"      // 标准组件
 #endif
 
