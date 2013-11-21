@@ -7,6 +7,8 @@ using namespace Gdiplus;
 #include <map>
 using namespace std;
 
+#include "Defines.h"
+
 class Target
 {
 public:

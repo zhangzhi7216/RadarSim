@@ -22,6 +22,7 @@ public:
 
 protected:
     HICON m_hIcon;
+    virtual BOOL OnInitDialog();
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 
     afx_msg HCURSOR OnQueryDragIcon();

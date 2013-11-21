@@ -12,8 +12,6 @@ public:
     CRadarCtrl(Sensor &radar);
     ~CRadarCtrl(void);
 
-    bool Init();
-
 public:
     Sensor &m_Radar;
 
@@ -33,4 +31,5 @@ public:
     afx_msg void OnPaint();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnSize(UINT nType, int cx, int cy);
+    void PreSubclassWindow();
 };

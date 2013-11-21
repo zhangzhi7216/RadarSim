@@ -37,17 +37,6 @@ CRadarCtrl::~CRadarCtrl(void)
     }
 }
 
-bool CRadarCtrl::Init()
-{
-    SetTimer(0, 50, NULL);
-
-    DrawBackground();
-    DrawScanline();
-    BlendAll();
-
-    return true;
-}
-
 void CRadarCtrl::DrawBackground()
 {
     RECT rect;
@@ -225,6 +214,7 @@ BEGIN_MESSAGE_MAP(CRadarCtrl, CStatic)
     ON_WM_PAINT()
     ON_WM_TIMER()
     ON_WM_SIZE()
+    ON_WM_CREATE()
 END_MESSAGE_MAP()
 
 void CRadarCtrl::OnPaint()
@@ -280,4 +270,11 @@ void CRadarCtrl::OnSize(UINT nType, int cx, int cy)
     DrawScanline();
     DrawTargets();
     BlendAll();
+}
+
+void CRadarCtrl::PreSubclassWindow()
+{
+    CStatic::PreSubclassWindow();
+
+    SetTimer(0, 50, NULL);
 }

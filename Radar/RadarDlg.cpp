@@ -28,32 +28,6 @@ void CRadarDlg::CreateDlg(CRadarDlg &dlg)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     dlg.Create(IDD_RADAR_DLG, GetDesktopWindow());
-
-    dlg.SetIcon(dlg.m_hIcon, TRUE);
-    dlg.SetIcon(dlg.m_hIcon, FALSE);
-
-    dlg.m_Initialized = true;
-
-    for (map<int, Target>::iterator it = dlg.m_Radar.m_Plane.m_Targets.begin();
-        it != dlg.m_Radar.m_Plane.m_Targets.end();
-        ++it)
-    {
-        CString str;
-        str.AppendFormat(TEXT("%d"), it->first);
-        dlg.m_TargetId.InsertString(dlg.m_TargetId.GetCount(), str);
-        dlg.m_TargetId.SetItemData(dlg.m_TargetId.GetCount() - 1, it->first);
-    }
-
-    for (int i = 0; i < Target::TargetColorLast; ++i)
-    {
-        dlg.m_TargetColor.InsertString(i, Target::TargetColorNames[i]);
-    }
-
-    if (!dlg.m_Ctrl.Init())
-    {
-        ASSERT(0);
-    }
-    dlg.Resize();
 }
 
 void CRadarDlg::DoDataExchange(CDataExchange* pDX)
@@ -91,6 +65,37 @@ END_MESSAGE_MAP()
 
 // CRadarDlg 消息处理程序
 
+BOOL CRadarDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
+	//  执行此操作
+	SetIcon(m_hIcon, TRUE);			// 设置大图标
+	SetIcon(m_hIcon, FALSE);		// 设置小图标
+
+    // TODO: 在此添加额外的初始化代码
+    m_Initialized = true;
+
+    for (map<int, Target>::iterator it = m_Radar.m_Plane.m_Targets.begin();
+        it != m_Radar.m_Plane.m_Targets.end();
+        ++it)
+    {
+        CString str;
+        str.AppendFormat(TEXT("%d"), it->first);
+        m_TargetId.InsertString(m_TargetId.GetCount(), str);
+        m_TargetId.SetItemData(m_TargetId.GetCount() - 1, it->first);
+    }
+
+    for (int i = 0; i < Target::TargetColorLast; ++i)
+    {
+        m_TargetColor.InsertString(i, Target::TargetColorNames[i]);
+    }
+
+    Resize();
+
+	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
+}
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
