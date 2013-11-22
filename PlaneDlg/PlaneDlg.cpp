@@ -68,18 +68,6 @@ BOOL CPlaneDlg::OnInitDialog()
 
     SetWindowTextW(m_Title);
 
-    // 初始化我机和目标
-    Target target0, target1;
-
-    target0.m_Id = 3;
-    target1.m_Id = 4;
-
-    target0.m_Color = Target::TargetColorOrange;
-    target1.m_Color = Target::TargetColorYellow;
-
-    m_Plane.AddTarget(target0);
-    m_Plane.AddTarget(target1);
-
     Resize();
 
     CSensorDlg::CreateDlg(m_RadarDlg);
@@ -99,6 +87,15 @@ BOOL CPlaneDlg::OnInitDialog()
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
+
+    // 初始化我机和目标
+    Target target0, target1;
+
+    target0.m_Id = 3;
+    target1.m_Id = 4;
+
+    AddTarget(target0);
+    AddTarget(target1);
 
     // Debug用的Timer
     SetTimer(0, 800, NULL);
@@ -225,25 +222,60 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 
     CDialog::OnTimer(nIDEvent);
 
-    m_Plane.m_Targets[3].MoveTo(m_Plane.m_Targets[3].m_Position + Position(2, 3, 4));
-    m_Plane.m_Targets[4].MoveTo(m_Plane.m_Targets[4].m_Position + Position(3, 5, 4));
+    static int count = 0;
 
-    m_Plane.MoveTo(m_Plane.m_Position + Position(1, 1, 1));
+    if (++count <= 200)
+    {
+        m_Plane.m_Targets[0].MoveTo(m_Plane.m_Targets[0].m_Position + Position(2, 3, 4));
+        m_Plane.m_Targets[1].MoveTo(m_Plane.m_Targets[1].m_Position + Position(3, 5, 4));
 
-    m_RadarCtrl.DrawTargets();
-    m_RadarCtrl.BlendAll();
-    m_RadarCtrl.Invalidate();
+        m_Plane.MoveTo(m_Plane.m_Position + Position(1, 1, 1));
 
-    m_RadarDlg.m_Ctrl.DrawTargets();
-    m_RadarDlg.m_Ctrl.BlendAll();
-    m_RadarDlg.m_Ctrl.Invalidate();
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+
+        m_RadarDlg.m_Ctrl.DrawTargets();
+        m_RadarDlg.m_Ctrl.BlendAll();
+        m_RadarDlg.m_Ctrl.Invalidate();
 
 
-    m_EsmCtrl.DrawTargets();
-    m_EsmCtrl.BlendAll();
-    m_EsmCtrl.Invalidate();
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
 
-    m_EsmDlg.m_Ctrl.DrawTargets();
-    m_EsmDlg.m_Ctrl.BlendAll();
-    m_EsmDlg.m_Ctrl.Invalidate();
+        m_EsmDlg.m_Ctrl.DrawTargets();
+        m_EsmDlg.m_Ctrl.BlendAll();
+        m_EsmDlg.m_Ctrl.Invalidate();
+    }
+    else
+    {
+        Reset();
+    }
+}
+
+void CPlaneDlg::Reset()
+{
+    m_Plane.Reset();
+
+    m_Radar.Reset();
+    m_Esm.Reset();
+    m_RadarCtrl.Reset();
+    m_EsmCtrl.Reset();
+    m_RadarDlg.Reset();
+    m_EsmDlg.Reset();
+}
+
+void CPlaneDlg::AddTarget(Target &target)
+{
+    m_Radar.AddTarget(target);
+    m_Esm.AddTarget(target);
+
+    m_Plane.AddTarget(target);
+
+    m_RadarCtrl.AddTarget(target);
+    m_EsmCtrl.AddTarget(target);
+
+    m_RadarDlg.AddTarget(target);
+    m_EsmDlg.AddTarget(target);
 }

@@ -35,17 +35,17 @@ void CSensorDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_SENSOR, m_Ctrl);
-    DDX_Text(pDX, IDC_SENSOR_TYPE, Sensor::SensorTypeNames[m_Sensor.Type]);
-    DDX_Check(pDX, IDC_SENSOR_ENABLE, m_Sensor.Enable);
-    DDX_Text(pDX, IDC_SENSOR_MAX_DIS, m_Sensor.MaxDis);
-    DDX_Text(pDX, IDC_SENSOR_MAX_THETA, m_Sensor.MaxTheta);
-    DDX_Text(pDX, IDC_SENSOR_MAX_PHI, m_Sensor.MaxPhi);
-    DDX_Text(pDX, IDC_SENSOR_DIS_VAR, m_Sensor.DisVar);
-    DDX_Text(pDX, IDC_SENSOR_THETA_VAR, m_Sensor.ThetaVar);
-    DDX_Text(pDX, IDC_SENSOR_PHI_VAR, m_Sensor.PhiVar);
-    DDX_Text(pDX, IDC_SENSOR_PRO_DET, m_Sensor.ProDet);
-    DDX_Check(pDX, IDC_SENSOR_SHOW_SCANLINE, m_Sensor.ShowScanline);
-    DDX_Check(pDX, IDC_SENSOR_SHOW_TRACK, m_Sensor.ShowTrack);
+    DDX_Text(pDX, IDC_SENSOR_TYPE, Sensor::SensorTypeNames[m_Sensor.m_Type]);
+    DDX_Check(pDX, IDC_SENSOR_ENABLE, m_Sensor.m_Enable);
+    DDX_Text(pDX, IDC_SENSOR_MAX_DIS, m_Sensor.m_MaxDis);
+    DDX_Text(pDX, IDC_SENSOR_MAX_THETA, m_Sensor.m_MaxTheta);
+    DDX_Text(pDX, IDC_SENSOR_MAX_PHI, m_Sensor.m_MaxPhi);
+    DDX_Text(pDX, IDC_SENSOR_DIS_VAR, m_Sensor.m_DisVar);
+    DDX_Text(pDX, IDC_SENSOR_THETA_VAR, m_Sensor.m_ThetaVar);
+    DDX_Text(pDX, IDC_SENSOR_PHI_VAR, m_Sensor.m_PhiVar);
+    DDX_Text(pDX, IDC_SENSOR_PRO_DET, m_Sensor.m_ProDet);
+    DDX_Check(pDX, IDC_SENSOR_SHOW_SCANLINE, m_Sensor.m_ShowScanline);
+    DDX_Check(pDX, IDC_SENSOR_SHOW_TRACK, m_Sensor.m_ShowTrack);
     DDX_Control(pDX, IDC_SENSOR_TARGET_ID, m_TargetId);
     DDX_Control(pDX, IDC_SENSOR_TARGET_COLOR, m_TargetColor);
 }
@@ -81,19 +81,9 @@ BOOL CSensorDlg::OnInitDialog()
     SetWindowTextW(m_Title);
     GetDlgItem(IDC_SENSOR_GRP)->SetWindowTextW(m_Title);
 
-    for (map<int, Target>::iterator it = m_Sensor.m_Plane.m_Targets.begin();
-        it != m_Sensor.m_Plane.m_Targets.end();
-        ++it)
+    for (int i = 0; i < Sensor::TargetColorLast; ++i)
     {
-        CString str;
-        str.AppendFormat(TEXT("%d"), it->first);
-        m_TargetId.InsertString(m_TargetId.GetCount(), str);
-        m_TargetId.SetItemData(m_TargetId.GetCount() - 1, it->first);
-    }
-
-    for (int i = 0; i < Target::TargetColorLast; ++i)
-    {
-        m_TargetColor.InsertString(i, Target::TargetColorNames[i]);
+        m_TargetColor.InsertString(i, Sensor::TargetColorNames[i]);
     }
 
     Resize();
@@ -196,7 +186,7 @@ void CSensorDlg::OnSize(UINT nType, int cx, int cy)
 void CSensorDlg::OnBnClickedSensorEnable()
 {
     // TODO: 在此添加控件通知处理程序代码
-    m_Sensor.Enable = !m_Sensor.Enable;
+    m_Sensor.m_Enable = !m_Sensor.m_Enable;
     m_Ctrl.BlendAll();
     m_Ctrl.Invalidate();
     m_ClientProxy.BlendAll();
@@ -206,7 +196,7 @@ void CSensorDlg::OnBnClickedSensorEnable()
 void CSensorDlg::OnBnClickedSensorShowScanline()
 {
     // TODO: 在此添加控件通知处理程序代码
-    m_Sensor.ShowScanline = !m_Sensor.ShowScanline;
+    m_Sensor.m_ShowScanline = !m_Sensor.m_ShowScanline;
     m_Ctrl.BlendAll();
     m_Ctrl.Invalidate();
     m_ClientProxy.BlendAll();
@@ -216,7 +206,7 @@ void CSensorDlg::OnBnClickedSensorShowScanline()
 void CSensorDlg::OnBnClickedSensorShowTrack()
 {
     // TODO: 在此添加控件通知处理程序代码
-    m_Sensor.ShowTrack = !m_Sensor.ShowTrack;
+    m_Sensor.m_ShowTrack = !m_Sensor.m_ShowTrack;
     m_Ctrl.DrawTargets();
     m_Ctrl.BlendAll();
     m_Ctrl.Invalidate();
@@ -233,7 +223,7 @@ void CSensorDlg::OnEnChangeSensorMaxDis()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
+    m_Sensor.m_MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
     m_Ctrl.BlendAll();
     m_Ctrl.Invalidate();
     m_ClientProxy.BlendAll();
@@ -247,8 +237,7 @@ void CSensorDlg::OnCbnSelchangeSensorTargetId()
     int count = m_TargetId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        int targetId = m_TargetId.GetItemData(index);
-        m_TargetColor.SetCurSel(m_Sensor.m_Plane.m_Targets[targetId].m_Color);
+        m_TargetColor.SetCurSel(m_Sensor.m_TargetColors[index]);
     }
 }
 
@@ -259,8 +248,7 @@ void CSensorDlg::OnCbnSelchangeSensorTargetColor()
     int count = m_TargetId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        int targetId = m_TargetId.GetItemData(index);
-        m_Sensor.m_Plane.m_Targets[targetId].m_Color = (Target::TargetColor)m_TargetColor.GetCurSel();
+        m_Sensor.m_TargetColors[index] = (Sensor::TargetColor)m_TargetColor.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -268,4 +256,21 @@ void CSensorDlg::OnCbnSelchangeSensorTargetColor()
         m_ClientProxy.BlendAll();
         m_ClientProxy.Invalidate();
     }
+}
+
+void CSensorDlg::Reset()
+{
+    m_Ctrl.Reset();
+
+    m_TargetId.Clear();
+    m_TargetColor.SetCurSel(CB_ERR);
+
+    UpdateData(FALSE);
+}
+
+void CSensorDlg::AddTarget(Target &target)
+{
+    CString str;
+    str.AppendFormat(TEXT("%d"), target.m_Id);
+    m_TargetId.InsertString(m_TargetId.GetCount(), str);
 }

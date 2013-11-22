@@ -46,4 +46,7 @@ public:
     afx_msg void OnCbnSelchangeSensorTargetId();
     CComboBox m_TargetColor;
     afx_msg void OnCbnSelchangeSensorTargetColor();
+
+    void Reset();
+    void AddTarget(Target &target);
 };

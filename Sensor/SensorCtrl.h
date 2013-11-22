@@ -32,4 +32,8 @@ public:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     void PreSubclassWindow();
+
+public:
+    void Reset();
+    void AddTarget(Target &target);
 };

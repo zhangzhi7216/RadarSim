@@ -15,25 +15,44 @@ public:
 
     static CString SensorTypeNames[SensorTypeLast];
 
+    enum TargetColor
+    {
+        TargetColorRed = 0,
+        TargetColorOrange,
+        TargetColorYellow,
+        TargetColorGreen,
+        TargetColorCyan,
+        TargetColorBlue,
+        TargetColorPurple,
+        TargetColorLast,
+    };
+    static Color TargetColors[TargetColorLast];
+    static CString TargetColorNames[TargetColorLast];
+
     Sensor(SensorType type, Plane &plane);
     virtual ~Sensor(void);
 
-    SensorType Type;
-    BOOL Enable;
+    SensorType m_Type;
+    BOOL m_Enable;
 
-    double MaxDis;
-    double MaxTheta;
-    double MaxPhi;
+    double m_MaxDis;
+    double m_MaxTheta;
+    double m_MaxPhi;
 
-    double DisVar;
-    double ThetaVar;
-    double PhiVar;
+    double m_DisVar;
+    double m_ThetaVar;
+    double m_PhiVar;
 
-    double ProDet;
+    double m_ProDet;
 
-    BOOL ShowScanline;
-    BOOL ShowTrack;
+    BOOL m_ShowScanline;
+    BOOL m_ShowTrack;
+
+    vector<TargetColor> m_TargetColors;
 
     Plane &m_Plane;
+
+    void Reset();
+    void AddTarget(Target &target);
 };
 

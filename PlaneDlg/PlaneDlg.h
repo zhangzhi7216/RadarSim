@@ -64,4 +64,7 @@ public:
 
     Plane m_Plane;
     afx_msg void OnTimer(UINT_PTR nIDEvent);
+
+    void Reset();
+    void AddTarget(Target &target);
 };

@@ -110,29 +110,27 @@ void CSensorCtrl::DrawTargets()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    for (map<int, Target>::iterator it = m_Sensor.m_Plane.m_Targets.begin();
-        it != m_Sensor.m_Plane.m_Targets.end();
-        ++it)
+    for (int i = 0; i < m_Sensor.m_Plane.m_Targets.size(); ++i)
     {
-        Pen pen(Target::TargetColors[it->second.m_Color]);
-        if (m_Sensor.ShowTrack)
+        Pen pen(Sensor::TargetColors[m_Sensor.m_TargetColors[i]]);
+        if (m_Sensor.m_ShowTrack)
         {
-            for (int i = 1; i < m_Sensor.m_Plane.m_RelPositionPaths[it->first].size(); ++i)
+            for (int j = 1; j < m_Sensor.m_Plane.m_RelPositionPaths[i].size(); ++j)
             {
-                if (m_Sensor.m_Plane.m_DistancePaths[it->first][i - 1] <= m_Sensor.MaxDis && m_Sensor.m_Plane.m_DistancePaths[it->first][i] <= m_Sensor.MaxDis)
+                if (m_Sensor.m_Plane.m_DistancePaths[i][j - 1] <= m_Sensor.m_MaxDis && m_Sensor.m_Plane.m_DistancePaths[i][j] <= m_Sensor.m_MaxDis)
                 {
-                    graphics.DrawLine(&pen, PointF(m_Sensor.m_Plane.m_ThetaPaths[it->first][i - 1], m_Sensor.m_Plane.m_PhiPaths[it->first][i - 1]), PointF(m_Sensor.m_Plane.m_ThetaPaths[it->first][i], m_Sensor.m_Plane.m_PhiPaths[it->first][i]));
+                    graphics.DrawLine(&pen, PointF(m_Sensor.m_Plane.m_ThetaPaths[i][j - 1], m_Sensor.m_Plane.m_PhiPaths[i][j - 1]), PointF(m_Sensor.m_Plane.m_ThetaPaths[i][j], m_Sensor.m_Plane.m_PhiPaths[i][j]));
                 }
             }
         }
-        if (m_Sensor.m_Plane.m_DistancePaths[it->first].size() > 0 && m_Sensor.m_Plane.m_DistancePaths[it->first].back() <= m_Sensor.MaxDis)
+        if (m_Sensor.m_Plane.m_DistancePaths[i].size() > 0 && m_Sensor.m_Plane.m_DistancePaths[i].back() <= m_Sensor.m_MaxDis)
         {
-            SolidBrush brush(Target::TargetColors[it->second.m_Color]);
-            graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[it->first].back() - 2, m_Sensor.m_Plane.m_PhiPaths[it->first].back() - 2, 4, 4);
+            SolidBrush brush(Sensor::TargetColors[m_Sensor.m_TargetColors[i]]);
+            graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[i].back() - 2, m_Sensor.m_Plane.m_PhiPaths[i].back() - 2, 4, 4);
             CString str;
-            str.AppendFormat(TEXT("%d"), m_Sensor.m_Plane.m_RelPositionPaths[it->first].back().Z);
+            str.AppendFormat(TEXT("%d"), m_Sensor.m_Plane.m_RelPositionPaths[i].back().Z);
             Font font(TEXT("ËÎÌו"), 10);
-            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[it->first].back(), m_Sensor.m_Plane.m_PhiPaths[it->first].back()), &brush);
+            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[i].back(), m_Sensor.m_Plane.m_PhiPaths[i].back()), &brush);
         }
     }
 
@@ -194,10 +192,10 @@ void CSensorCtrl::BlendAll()
     graphics.SetClip(&Region(&pathSensor));
     graphics.DrawImage(m_BackgroundImg, Point(0, 0));
     
-    if (m_Sensor.Enable)
+    if (m_Sensor.m_Enable)
     {
         graphics.DrawImage(m_TargetsImg, Point(0, 0));
-        if (m_Sensor.ShowScanline)
+        if (m_Sensor.m_ShowScanline)
         {
             graphics.DrawImage(m_ScanlineImg, Point(0, 0));
         }
@@ -277,4 +275,17 @@ void CSensorCtrl::PreSubclassWindow()
     CStatic::PreSubclassWindow();
 
     SetTimer(0, 50, NULL);
+}
+
+void CSensorCtrl::Reset()
+{
+    DrawBackground();
+    DrawScanline();
+    DrawTargets();
+    BlendAll();
+    Invalidate();
+}
+
+void CSensorCtrl::AddTarget(Target &target)
+{
 }
