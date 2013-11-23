@@ -6,6 +6,11 @@ using namespace std;
 
 #define PAD 10
 
+#define TARGET_TRACK_WIDTH 2
+#define TARGET_RADIUS 4
+#define TARGET_TITLE_PAD 2
+#define TARGET_TITLE_OFFSET 15
+
 typedef struct Point3D
 {
     Point3D()

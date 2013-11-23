@@ -31,10 +31,3 @@ void PlaneEsmProxy::Invalidate(BOOL bErase)
 {
     m_Dlg.m_EsmCtrl.Invalidate(bErase);
 }
-
-BOOL PlaneEsmProxy::RedrawWindow(LPCRECT lpRectUpdate,
-                                   CRgn* prgnUpdate,
-                                   UINT flags)
-{
-    return m_Dlg.m_EsmCtrl.RedrawWindow(lpRectUpdate, prgnUpdate, flags);
-}

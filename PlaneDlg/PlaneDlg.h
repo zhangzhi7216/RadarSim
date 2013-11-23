@@ -7,9 +7,12 @@
 #include "../Sensor/Resource.h"
 #include "../Sensor/SensorCtrl.h"
 #include "../Sensor/SensorDlg.h"
+#include "../Sensor/InfraredCtrl.h"
+#include "../Sensor/InfraredDlg.h"
 
 #include "PlaneRadarProxy.h"
 #include "PlaneEsmProxy.h"
+#include "PlaneInfraredProxy.h"
 
 #include "Target.h"
 
@@ -27,7 +30,7 @@ public:
 // 对话框数据
 	enum { IDD = IDD_PLANE_DIALOG };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
 
@@ -61,6 +64,13 @@ public:
     PlaneEsmProxy m_PlaneEsmProxy;
     CSensorDlg m_EsmDlg;
     afx_msg void OnStnDblclickEsmCtrl();
+
+    bool m_ShowInfraredDlg;
+    Sensor m_Infrared;
+    CInfraredCtrl m_InfraredCtrl;
+    PlaneInfraredProxy m_PlaneInfraredProxy;
+    CInfraredDlg m_InfraredDlg;
+    afx_msg void OnStnDblclickInfraredCtrl();
 
     Plane m_Plane;
     afx_msg void OnTimer(UINT_PTR nIDEvent);

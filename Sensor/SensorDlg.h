@@ -32,12 +32,12 @@ public:
     CString m_Title;
     Sensor &m_Sensor;
     SensorClientProxy &m_ClientProxy;
-    CSensorCtrl m_Ctrl;
+    CSensorCtrl *m_Ctrl;
     afx_msg void OnClose();
     afx_msg void OnBnClickedSensorShowScanline();
 
     bool m_Initialized;
-    void Resize();
+    virtual void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnBnClickedSensorEnable();
     afx_msg void OnEnChangeSensorMaxDis();

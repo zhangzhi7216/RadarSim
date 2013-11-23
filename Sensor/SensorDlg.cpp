@@ -15,14 +15,15 @@ CSensorDlg::CSensorDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientP
     , m_Title(title)
     , m_Sensor(sensor)
     , m_ClientProxy(clientProxy)
-    , m_Ctrl(m_Sensor)
     , m_Initialized(false)
 {
+    m_Ctrl = new CSensorCtrl(m_Sensor);
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 CSensorDlg::~CSensorDlg()
 {
+    delete m_Ctrl;
 }
 
 void CSensorDlg::CreateDlg(CSensorDlg &dlg)
@@ -34,7 +35,7 @@ void CSensorDlg::CreateDlg(CSensorDlg &dlg)
 void CSensorDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_SENSOR, m_Ctrl);
+    DDX_Control(pDX, IDC_SENSOR, *m_Ctrl);
     DDX_Text(pDX, IDC_SENSOR_TYPE, Sensor::SensorTypeNames[m_Sensor.m_Type]);
     DDX_Check(pDX, IDC_SENSOR_ENABLE, m_Sensor.m_Enable);
     DDX_Text(pDX, IDC_SENSOR_MAX_DIS, m_Sensor.m_MaxDis);
@@ -187,8 +188,8 @@ void CSensorDlg::OnBnClickedSensorEnable()
 {
     // TODO: 在此添加控件通知处理程序代码
     m_Sensor.m_Enable = !m_Sensor.m_Enable;
-    m_Ctrl.BlendAll();
-    m_Ctrl.Invalidate();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
 }
@@ -197,8 +198,8 @@ void CSensorDlg::OnBnClickedSensorShowScanline()
 {
     // TODO: 在此添加控件通知处理程序代码
     m_Sensor.m_ShowScanline = !m_Sensor.m_ShowScanline;
-    m_Ctrl.BlendAll();
-    m_Ctrl.Invalidate();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
 }
@@ -207,9 +208,9 @@ void CSensorDlg::OnBnClickedSensorShowTrack()
 {
     // TODO: 在此添加控件通知处理程序代码
     m_Sensor.m_ShowTrack = !m_Sensor.m_ShowTrack;
-    m_Ctrl.DrawTargets();
-    m_Ctrl.BlendAll();
-    m_Ctrl.Invalidate();
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
     m_ClientProxy.DrawTargets();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
@@ -224,8 +225,8 @@ void CSensorDlg::OnEnChangeSensorMaxDis()
 
     // TODO:  在此添加控件通知处理程序代码
     m_Sensor.m_MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
-    m_Ctrl.BlendAll();
-    m_Ctrl.Invalidate();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
 }
@@ -249,9 +250,9 @@ void CSensorDlg::OnCbnSelchangeSensorTargetColor()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_Sensor.m_TargetColors[index] = (Sensor::TargetColor)m_TargetColor.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
         m_ClientProxy.DrawTargets();
         m_ClientProxy.BlendAll();
         m_ClientProxy.Invalidate();
@@ -260,9 +261,9 @@ void CSensorDlg::OnCbnSelchangeSensorTargetColor()
 
 void CSensorDlg::Reset()
 {
-    m_Ctrl.Reset();
+    m_Ctrl->Reset();
 
-    m_TargetId.Clear();
+    m_TargetId.ResetContent();
     m_TargetColor.SetCurSel(CB_ERR);
 
     UpdateData(FALSE);

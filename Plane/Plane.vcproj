@@ -204,6 +204,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\PlaneDlg\PlaneInfraredProxy.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\PlaneDlg\PlaneRadarProxy.cpp"
 				>
 			</File>
@@ -247,6 +251,10 @@
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\PlaneEsmProxy.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\PlaneInfraredProxy.h"
 				>
 			</File>
 			<File

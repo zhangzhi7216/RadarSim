@@ -31,10 +31,3 @@ void PlaneRadarProxy::Invalidate(BOOL bErase)
 {
     m_Dlg.m_RadarCtrl.Invalidate(bErase);
 }
-
-BOOL PlaneRadarProxy::RedrawWindow(LPCRECT lpRectUpdate,
-                                   CRgn* prgnUpdate,
-                                   UINT flags)
-{
-    return m_Dlg.m_RadarCtrl.RedrawWindow(lpRectUpdate, prgnUpdate, flags);
-}

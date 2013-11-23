@@ -10,7 +10,7 @@ class __declspec(dllexport) CSensorCtrl :
 {
 public:
     CSensorCtrl(Sensor &sensor);
-    ~CSensorCtrl(void);
+    virtual ~CSensorCtrl(void);
 
 public:
     Sensor &m_Sensor;
@@ -21,17 +21,17 @@ public:
     Image *m_ScanlineImg;
     int m_CurrentAngle;
 
-    void DrawBackground();
-    void DrawScanline();
-    void DrawTargets();
-    void BlendAll();
+    virtual void DrawBackground();
+    virtual void DrawScanline();
+    virtual void DrawTargets();
+    virtual void BlendAll();
 
 public:
     DECLARE_MESSAGE_MAP()
     afx_msg void OnPaint();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnSize(UINT nType, int cx, int cy);
-    void PreSubclassWindow();
+    virtual void PreSubclassWindow();
 
 public:
     void Reset();

@@ -191,6 +191,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\InfraredCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\InfraredDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Sensor.cpp"
 				>
 			</File>
@@ -236,6 +244,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\InfraredCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\InfraredDlg.h"
+				>
+			</File>
 			<File
 				RelativePath=".\Resource.h"
 				>

@@ -4,12 +4,12 @@
 
 class CPlaneDlg;
 
-class PlaneEsmProxy :
+class PlaneInfraredProxy :
     public SensorClientProxy
 {
 public:
-    PlaneEsmProxy(CPlaneDlg &dlg);
-    virtual ~PlaneEsmProxy(void);
+    PlaneInfraredProxy(CPlaneDlg &dlg);
+    virtual ~PlaneInfraredProxy(void);
 
     virtual void OnClose();
     virtual void DrawTargets();

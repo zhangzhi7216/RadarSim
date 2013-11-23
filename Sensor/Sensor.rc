@@ -140,6 +140,14 @@ BEGIN
     CONTROL         "œ‘ æπÏº£",IDC_SENSOR_SHOW_TRACK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,246,48,10
 END
 
+IDD_INFRARED_DLG DIALOGEX 0, 0, 316, 182
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Infrared"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "æ≤Ã¨",IDC_INFRARED,275,7,17,8
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -165,6 +173,20 @@ BEGIN
         HORZGUIDE, 165
         HORZGUIDE, 190
         HORZGUIDE, 213
+    END
+
+    IDD_INFRARED_DLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        VERTGUIDE, 17
+        VERTGUIDE, 78
+        TOPMARGIN, 7
+        HORZGUIDE, 31
+        HORZGUIDE, 71
+        HORZGUIDE, 95
+        HORZGUIDE, 116
+        HORZGUIDE, 140
+        HORZGUIDE, 165
     END
 END
 #endif    // APSTUDIO_INVOKED

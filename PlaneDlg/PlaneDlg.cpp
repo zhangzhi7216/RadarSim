@@ -13,9 +13,6 @@
 
 // CPlaneDlg 对话框
 
-
-
-
 CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CDialog(CPlaneDlg::IDD, pParent)
     , m_Title(title)
@@ -30,6 +27,11 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_EsmCtrl(m_Esm)
     , m_PlaneEsmProxy(*this)
     , m_EsmDlg(TEXT("ESM"), m_Esm, m_PlaneEsmProxy)
+    , m_ShowInfraredDlg(true)
+    , m_Infrared(Sensor::SensorTypeNonSource, m_Plane)
+    , m_InfraredCtrl(m_Infrared)
+    , m_PlaneInfraredProxy(*this)
+    , m_InfraredDlg(TEXT("红外"), m_Infrared, m_PlaneInfraredProxy)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -39,6 +41,7 @@ void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_RADAR_CTRL, m_RadarCtrl);
     DDX_Control(pDX, IDC_ESM_CTRL, m_EsmCtrl);
+    DDX_Control(pDX, IDC_INFRARED_CTRL, m_InfraredCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CPlaneDlg, CDialog)
@@ -48,6 +51,7 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CDialog)
     ON_WM_SIZE()
     ON_STN_DBLCLK(IDC_RADAR_CTRL, &CPlaneDlg::OnStnDblclickRadarCtrl)
     ON_STN_DBLCLK(IDC_ESM_CTRL, &CPlaneDlg::OnStnDblclickEsmCtrl)
+    ON_STN_DBLCLK(IDC_INFRARED_CTRL, &CPlaneDlg::OnStnDblclickInfraredCtrl)
     ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -83,6 +87,15 @@ BOOL CPlaneDlg::OnInitDialog()
     if (m_ShowEsmDlg)
     {
         m_EsmDlg.ShowWindow(SW_SHOW);
+    }
+    {
+        AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    }
+
+    CInfraredDlg::CreateDlg(m_InfraredDlg);
+    if (m_ShowInfraredDlg)
+    {
+        m_InfraredDlg.ShowWindow(SW_SHOW);
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -174,6 +187,32 @@ void CPlaneDlg::Resize()
     top = top + PAD * 2;
     height = height - PAD * 3;
     m_EsmCtrl.MoveWindow(left, top, width, height);
+
+    // Resize DataList.
+    left = left + width + PAD + PAD * 2;
+    width = rect.right - PAD - left;
+    top = rect.top + PAD;
+    height = (rect.bottom - rect.top) / 2 - PAD * 2;
+    GetDlgItem(IDC_DATALIST_CTRL_GRP)->MoveWindow(left, top, width, height);
+
+    left = left + PAD;
+    width = width - PAD * 2;
+    top = top + PAD * 2;
+    height = height - PAD * 3;
+    // DataList->MoveWindow(left, top, width, height);
+
+    // Resize Infrared.
+    left = left - PAD;
+    width = width + PAD * 2;
+    top = (rect.bottom - rect.top) / 2 + PAD;
+    height = (rect.bottom - rect.top) / 2 - PAD * 2;
+    GetDlgItem(IDC_INFRARED_CTRL_GRP)->MoveWindow(left, top, width, height);
+
+    left = left + PAD;
+    width = width - PAD * 2;
+    top = top + PAD * 2;
+    height = height - PAD * 3;
+    m_InfraredCtrl.MoveWindow(left, top, width, height);
 }
 
 void CPlaneDlg::OnSize(UINT nType, int cx, int cy)
@@ -216,6 +255,22 @@ void CPlaneDlg::OnStnDblclickEsmCtrl()
         m_ShowEsmDlg = true;
     }
 }
+
+void CPlaneDlg::OnStnDblclickInfraredCtrl()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    if (m_ShowInfraredDlg)
+    {
+        m_InfraredDlg.ShowWindow(SW_HIDE);
+        m_ShowInfraredDlg = false;
+    }
+    else
+    {
+        m_InfraredDlg.ShowWindow(SW_SHOW);
+        m_ShowInfraredDlg = true;
+    }
+}
+
 void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
@@ -224,10 +279,10 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 
     static int count = 0;
 
-    if (++count <= 200)
+    if (++count <= 20)
     {
         m_Plane.m_Targets[0].MoveTo(m_Plane.m_Targets[0].m_Position + Position(2, 3, 4));
-        m_Plane.m_Targets[1].MoveTo(m_Plane.m_Targets[1].m_Position + Position(3, 5, 4));
+        m_Plane.m_Targets[1].MoveTo(m_Plane.m_Targets[1].m_Position + Position(5, 4, 3));
 
         m_Plane.MoveTo(m_Plane.m_Position + Position(1, 1, 1));
 
@@ -235,21 +290,29 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         m_RadarCtrl.BlendAll();
         m_RadarCtrl.Invalidate();
 
-        m_RadarDlg.m_Ctrl.DrawTargets();
-        m_RadarDlg.m_Ctrl.BlendAll();
-        m_RadarDlg.m_Ctrl.Invalidate();
-
+        m_RadarDlg.m_Ctrl->DrawTargets();
+        m_RadarDlg.m_Ctrl->BlendAll();
+        m_RadarDlg.m_Ctrl->Invalidate();
 
         m_EsmCtrl.DrawTargets();
         m_EsmCtrl.BlendAll();
         m_EsmCtrl.Invalidate();
 
-        m_EsmDlg.m_Ctrl.DrawTargets();
-        m_EsmDlg.m_Ctrl.BlendAll();
-        m_EsmDlg.m_Ctrl.Invalidate();
+        m_EsmDlg.m_Ctrl->DrawTargets();
+        m_EsmDlg.m_Ctrl->BlendAll();
+        m_EsmDlg.m_Ctrl->Invalidate();
+
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+
+        m_InfraredDlg.m_Ctrl->DrawTargets();
+        m_InfraredDlg.m_Ctrl->BlendAll();
+        m_InfraredDlg.m_Ctrl->Invalidate();
     }
     else
     {
+        KillTimer(0);
         Reset();
     }
 }
@@ -264,18 +327,24 @@ void CPlaneDlg::Reset()
     m_EsmCtrl.Reset();
     m_RadarDlg.Reset();
     m_EsmDlg.Reset();
+    m_Infrared.Reset();
+    m_InfraredCtrl.Reset();
+    m_InfraredDlg.Reset();
 }
 
 void CPlaneDlg::AddTarget(Target &target)
 {
     m_Radar.AddTarget(target);
     m_Esm.AddTarget(target);
+    m_Infrared.AddTarget(target);
 
     m_Plane.AddTarget(target);
 
     m_RadarCtrl.AddTarget(target);
     m_EsmCtrl.AddTarget(target);
+    m_InfraredCtrl.AddTarget(target);
 
     m_RadarDlg.AddTarget(target);
     m_EsmDlg.AddTarget(target);
+    m_InfraredDlg.AddTarget(target);
 }
