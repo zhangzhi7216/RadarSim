@@ -9,14 +9,18 @@
 #include "../Sensor/SensorDlg.h"
 #include "../Sensor/InfraredCtrl.h"
 #include "../Sensor/InfraredDlg.h"
+#include "../Sensor/DataListCtrl.h"
+#include "../Sensor/DataListDlg.h"
 
 #include "PlaneRadarProxy.h"
 #include "PlaneEsmProxy.h"
 #include "PlaneInfraredProxy.h"
+#include "PlaneDataListProxy.h"
 
 #include "Target.h"
 
 #include <vector>
+#include "afxcmn.h"
 
 using namespace std;
 
@@ -71,6 +75,13 @@ public:
     PlaneInfraredProxy m_PlaneInfraredProxy;
     CInfraredDlg m_InfraredDlg;
     afx_msg void OnStnDblclickInfraredCtrl();
+
+    bool m_ShowDataListDlg;
+    DataList m_DataList;
+    CDataListCtrl m_DataListCtrl;
+    PlaneDataListProxy m_PlaneDataListProxy;
+    CDataListDlg m_DataListDlg;
+    afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 
     Plane m_Plane;
     afx_msg void OnTimer(UINT_PTR nIDEvent);

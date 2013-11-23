@@ -1,8 +1,11 @@
 #pragma once
+#include <afxwin.h>
 
 #include <vector>
-
 using namespace std;
+
+#include <GdiPlus.h>
+using namespace Gdiplus;
 
 #define PAD 10
 
@@ -10,6 +13,8 @@ using namespace std;
 #define TARGET_RADIUS 4
 #define TARGET_TITLE_PAD 2
 #define TARGET_TITLE_OFFSET 15
+
+#define LIST_ITEM_WIDTH 90
 
 typedef struct Point3D
 {
@@ -53,3 +58,18 @@ typedef struct Point3D
 } Position, Velocity, Acceleration;
 
 typedef vector<Position> Path;
+
+enum TargetColor
+{
+    TargetColorRed = 0,
+    TargetColorOrange,
+    TargetColorYellow,
+    TargetColorGreen,
+    TargetColorCyan,
+    TargetColorBlue,
+    TargetColorPurple,
+    TargetColorLast,
+};
+
+extern Color TargetColors[TargetColorLast];
+extern CString TargetColorNames[TargetColorLast];

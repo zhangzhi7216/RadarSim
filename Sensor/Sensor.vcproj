@@ -191,6 +191,18 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\DataListClientProxy.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DataListCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DataListDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\InfraredCtrl.cpp"
 				>
 			</File>
@@ -244,6 +256,18 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\DataListClientProxy.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DataListCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DataListDlg.h"
+				>
+			</File>
 			<File
 				RelativePath=".\InfraredCtrl.h"
 				>

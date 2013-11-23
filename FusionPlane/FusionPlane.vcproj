@@ -192,11 +192,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\Common\Defines.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FusionPlane.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\FusionPlaneDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\PlaneDataListProxy.cpp"
 				>
 			</File>
 			<File
@@ -251,6 +259,10 @@
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\FusionPlaneDlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\PlaneDataListProxy.h"
 				>
 			</File>
 			<File

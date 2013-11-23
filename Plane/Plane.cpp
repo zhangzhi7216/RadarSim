@@ -10,8 +10,6 @@
 #define new DEBUG_NEW
 #endif
 
-#include <GdiPlus.h>
-using namespace Gdiplus;
 
 // CPlaneApp
 
@@ -26,6 +24,8 @@ CPlaneApp::CPlaneApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+    srand((unsigned int)time(NULL));
+
     GdiplusStartupInput gdiplusStartupInput;
     ULONG_PTR gdiplusToken;
     GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);

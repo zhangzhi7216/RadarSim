@@ -3,7 +3,6 @@
 #include "Sensor.h"
 #include "SensorClientProxy.h"
 #include "SensorCtrl.h"
-#include "afxwin.h"
 
 // CSensorDlg ¶Ô»°¿ò
 

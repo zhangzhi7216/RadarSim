@@ -1,9 +1,5 @@
 #pragma once
 
-#include <afxwin.h>
-#include <GdiPlus.h>
-using namespace Gdiplus;
-
 #include "Defines.h"
 
 class Target

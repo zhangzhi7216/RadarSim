@@ -5,7 +5,7 @@
 #define IDR_MAINFRAME                   128
 #define IDD_SENSOR_DLG                  4000
 #define IDC_SENSOR                      4001
-#define IDD_INFRARED_DLG                4001
+#define IDD_DATALIST_DLG                4001
 #define IDC_SENSOR_GRP                  4002
 #define IDC_SENSOR_SHOW_SCANLINE        4003
 #define IDC_SENSOR_ENABLE               4004
@@ -30,8 +30,14 @@
 #define IDC_SENSOR_TARGET_ID            4023
 #define IDC_SENSOR_TARGET_ID_STATIC     4024
 #define IDC_SENSOR_TARGET_COLOR         4025
-#define IDC_INFRARED                    4025
 #define IDC_SENSOR_TARGET_COLOR_STATIC  4026
+#define IDC_DATALIST_TARGET_ID_STATIC   4027
+#define IDC_DATALIST_PARAM_GRP          4028
+#define IDC_DATALIST_TARGET_ID          4029
+#define IDC_DATALIST_TARGET_COLOR_STATIC 4030
+#define IDC_DATALIST_TARGET_COLOR       4031
+#define IDC_DATALIST_GRP                4032
+#define IDC_DATALIST                    4033
 
 // Next default values for new objects
 // 
@@ -39,7 +45,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        4002
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         4026
+#define _APS_NEXT_CONTROL_VALUE         4034
 #define _APS_NEXT_SYMED_VALUE           4000
 #endif
 #endif

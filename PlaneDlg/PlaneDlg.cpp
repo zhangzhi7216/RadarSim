@@ -32,6 +32,11 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_InfraredCtrl(m_Infrared)
     , m_PlaneInfraredProxy(*this)
     , m_InfraredDlg(TEXT("红外"), m_Infrared, m_PlaneInfraredProxy)
+    , m_ShowDataListDlg(true)
+    , m_DataList(m_Radar, m_Esm, m_Infrared, m_Plane)
+    , m_DataListCtrl(m_DataList)
+    , m_PlaneDataListProxy(*this)
+    , m_DataListDlg(TEXT("数据列表"), m_DataList, m_PlaneDataListProxy)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -42,6 +47,7 @@ void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_RADAR_CTRL, m_RadarCtrl);
     DDX_Control(pDX, IDC_ESM_CTRL, m_EsmCtrl);
     DDX_Control(pDX, IDC_INFRARED_CTRL, m_InfraredCtrl);
+    DDX_Control(pDX, IDC_DATALIST_CTRL, m_DataListCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CPlaneDlg, CDialog)
@@ -53,6 +59,7 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CDialog)
     ON_STN_DBLCLK(IDC_ESM_CTRL, &CPlaneDlg::OnStnDblclickEsmCtrl)
     ON_STN_DBLCLK(IDC_INFRARED_CTRL, &CPlaneDlg::OnStnDblclickInfraredCtrl)
     ON_WM_TIMER()
+    ON_NOTIFY(NM_DBLCLK, IDC_DATALIST_CTRL, &CPlaneDlg::OnNMDblclkDatalistCtrl)
 END_MESSAGE_MAP()
 
 
@@ -96,6 +103,15 @@ BOOL CPlaneDlg::OnInitDialog()
     if (m_ShowInfraredDlg)
     {
         m_InfraredDlg.ShowWindow(SW_SHOW);
+    }
+    {
+        AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    }
+
+    CDataListDlg::CreateDlg(m_DataListDlg);
+    if (m_ShowDataListDlg)
+    {
+        m_DataListDlg.ShowWindow(SW_SHOW);
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -199,7 +215,7 @@ void CPlaneDlg::Resize()
     width = width - PAD * 2;
     top = top + PAD * 2;
     height = height - PAD * 3;
-    // DataList->MoveWindow(left, top, width, height);
+    m_DataListCtrl.MoveWindow(left, top, width, height);
 
     // Resize Infrared.
     left = left - PAD;
@@ -271,6 +287,23 @@ void CPlaneDlg::OnStnDblclickInfraredCtrl()
     }
 }
 
+void CPlaneDlg::OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult)
+{
+    LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+    // TODO: 在此添加控件通知处理程序代码
+    // pResult = 0;
+    if (m_ShowDataListDlg)
+    {
+        m_DataListDlg.ShowWindow(SW_HIDE);
+        m_ShowDataListDlg = false;
+    }
+    else
+    {
+        m_DataListDlg.ShowWindow(SW_SHOW);
+        m_ShowDataListDlg = true;
+    }
+}
+
 void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
@@ -309,6 +342,9 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         m_InfraredDlg.m_Ctrl->DrawTargets();
         m_InfraredDlg.m_Ctrl->BlendAll();
         m_InfraredDlg.m_Ctrl->Invalidate();
+
+        m_DataListCtrl.AddTargetData();
+        m_DataListDlg.m_Ctrl->AddTargetData();
     }
     else
     {
@@ -323,13 +359,18 @@ void CPlaneDlg::Reset()
 
     m_Radar.Reset();
     m_Esm.Reset();
+    m_Infrared.Reset();
+    m_DataList.Reset();
+
     m_RadarCtrl.Reset();
     m_EsmCtrl.Reset();
+    m_InfraredCtrl.Reset();
+    m_DataListCtrl.Reset();
+
     m_RadarDlg.Reset();
     m_EsmDlg.Reset();
-    m_Infrared.Reset();
-    m_InfraredCtrl.Reset();
     m_InfraredDlg.Reset();
+    m_DataListDlg.Reset();
 }
 
 void CPlaneDlg::AddTarget(Target &target)
@@ -337,14 +378,17 @@ void CPlaneDlg::AddTarget(Target &target)
     m_Radar.AddTarget(target);
     m_Esm.AddTarget(target);
     m_Infrared.AddTarget(target);
+    m_DataList.AddTarget(target);
 
     m_Plane.AddTarget(target);
 
     m_RadarCtrl.AddTarget(target);
     m_EsmCtrl.AddTarget(target);
     m_InfraredCtrl.AddTarget(target);
+    m_DataListCtrl.AddTarget(target);
 
     m_RadarDlg.AddTarget(target);
     m_EsmDlg.AddTarget(target);
     m_InfraredDlg.AddTarget(target);
+    m_DataListDlg.AddTarget(target);
 }

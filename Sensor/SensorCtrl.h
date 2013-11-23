@@ -1,9 +1,6 @@
 #pragma once
-#include "afxwin.h"
+#include <afxwin.h>
 #include "../Common/Sensor.h"
-
-#include <GdiPlus.h>
-using namespace Gdiplus;
 
 class __declspec(dllexport) CSensorCtrl :
     public CStatic

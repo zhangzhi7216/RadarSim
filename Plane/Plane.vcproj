@@ -192,7 +192,15 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\Common\Defines.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Plane.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\PlaneDataListProxy.cpp"
 				>
 			</File>
 			<File
@@ -243,6 +251,10 @@
 			</File>
 			<File
 				RelativePath=".\Plane.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\PlaneDataListProxy.h"
 				>
 			</File>
 			<File
@@ -300,7 +312,7 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="Plane.rc"
+			Value="\Users\zanmato\Documents\GitHub\RadarSim\PlaneDlg\PlaneDlg.rc"
 		/>
 	</Globals>
 </VisualStudioProject>

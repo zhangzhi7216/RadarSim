@@ -82,9 +82,9 @@ BOOL CSensorDlg::OnInitDialog()
     SetWindowTextW(m_Title);
     GetDlgItem(IDC_SENSOR_GRP)->SetWindowTextW(m_Title);
 
-    for (int i = 0; i < Sensor::TargetColorLast; ++i)
+    for (int i = 0; i < TargetColorLast; ++i)
     {
-        m_TargetColor.InsertString(i, Sensor::TargetColorNames[i]);
+        m_TargetColor.InsertString(i, TargetColorNames[i]);
     }
 
     Resize();
@@ -249,7 +249,7 @@ void CSensorDlg::OnCbnSelchangeSensorTargetColor()
     int count = m_TargetId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_Sensor.m_TargetColors[index] = (Sensor::TargetColor)m_TargetColor.GetCurSel();
+        m_Sensor.m_TargetColors[index] = (TargetColor)m_TargetColor.GetCurSel();
         m_Ctrl->DrawTargets();
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();

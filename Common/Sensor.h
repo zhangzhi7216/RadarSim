@@ -1,6 +1,6 @@
 #pragma once
 
-#include <afxwin.h>
+#include "Defines.h"
 #include "Target.h"
 
 class Sensor
@@ -14,20 +14,6 @@ public:
     };
 
     static CString SensorTypeNames[SensorTypeLast];
-
-    enum TargetColor
-    {
-        TargetColorRed = 0,
-        TargetColorOrange,
-        TargetColorYellow,
-        TargetColorGreen,
-        TargetColorCyan,
-        TargetColorBlue,
-        TargetColorPurple,
-        TargetColorLast,
-    };
-    static Color TargetColors[TargetColorLast];
-    static CString TargetColorNames[TargetColorLast];
 
     Sensor(SensorType type, Plane &plane);
     virtual ~Sensor(void);

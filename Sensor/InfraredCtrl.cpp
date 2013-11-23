@@ -52,7 +52,7 @@ void CInfraredCtrl::DrawTargets()
 
     for (int i = 0; i < m_Sensor.m_Plane.m_Targets.size(); ++i)
     {
-        Pen pen(Sensor::TargetColors[m_Sensor.m_TargetColors[i]], TARGET_TRACK_WIDTH);
+        Pen pen(TargetColors[m_Sensor.m_TargetColors[i]], TARGET_TRACK_WIDTH);
         if (m_Sensor.m_ShowTrack)
         {
             for (int j = 1; j < m_Sensor.m_Plane.m_RelPositionPaths[i].size(); ++j)
@@ -65,7 +65,7 @@ void CInfraredCtrl::DrawTargets()
         }
         if (m_Sensor.m_Plane.m_DistancePaths[i].size() > 0 && m_Sensor.m_Plane.m_DistancePaths[i].back() <= m_Sensor.m_MaxDis)
         {
-            SolidBrush brush(Sensor::TargetColors[m_Sensor.m_TargetColors[i]]);
+            SolidBrush brush(TargetColors[m_Sensor.m_TargetColors[i]]);
             graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[i].back() - TARGET_RADIUS, m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_RADIUS, TARGET_RADIUS * 2, TARGET_RADIUS * 2);
             CString str;
             str.AppendFormat(TEXT("%d"), (int)(m_Sensor.m_Plane.m_RelPositionPaths[i].back().Z));
