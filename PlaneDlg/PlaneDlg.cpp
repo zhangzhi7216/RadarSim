@@ -40,12 +40,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-    m_Esm.m_ThetaRangeColor = Color::Red;
-    m_Esm.m_ShowHeight = FALSE;
-    m_Infrared.m_ShowScanline = FALSE;
-    m_Infrared.m_ShowThetaRange = FALSE;
-    m_Infrared.m_ThetaRangeColor = Color::Yellow;
-    m_Infrared.m_ShowHeight = FALSE;
+    ResetSensors();
 }
 
 void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
@@ -364,6 +359,21 @@ void CPlaneDlg::Reset()
 {
     m_Plane.Reset();
 
+    ResetSensors();
+
+    m_RadarCtrl.Reset();
+    m_EsmCtrl.Reset();
+    m_InfraredCtrl.Reset();
+    m_DataListCtrl.Reset();
+
+    m_RadarDlg.Reset();
+    m_EsmDlg.Reset();
+    m_InfraredDlg.Reset();
+    m_DataListDlg.Reset();
+}
+
+void CPlaneDlg::ResetSensors()
+{
     m_Radar.Reset();
     m_Esm.Reset();
     m_Infrared.Reset();
@@ -375,16 +385,6 @@ void CPlaneDlg::Reset()
     m_Infrared.m_ShowThetaRange = FALSE;
     m_Infrared.m_ThetaRangeColor = Color::Yellow;
     m_Infrared.m_ShowHeight = FALSE;
-
-    m_RadarCtrl.Reset();
-    m_EsmCtrl.Reset();
-    m_InfraredCtrl.Reset();
-    m_DataListCtrl.Reset();
-
-    m_RadarDlg.Reset();
-    m_EsmDlg.Reset();
-    m_InfraredDlg.Reset();
-    m_DataListDlg.Reset();
 }
 
 void CPlaneDlg::AddTarget(Target &target)

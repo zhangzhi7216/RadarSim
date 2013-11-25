@@ -5,7 +5,7 @@
 
 #include "SensorDlg.h"
 
-#include "EsmCtrl.h"
+#include "SensorCtrl.h"
 
 class __declspec(dllexport) CEsmDlg : public CSensorDlg
 {
@@ -17,5 +17,4 @@ public:
 
 protected:
     virtual BOOL OnInitDialog();
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
 };

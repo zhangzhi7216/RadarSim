@@ -7,6 +7,7 @@
 #include "../Sensor/Resource.h"
 #include "../Sensor/SensorCtrl.h"
 #include "../Sensor/SensorDlg.h"
+#include "../Sensor/EsmDlg.h"
 #include "../Sensor/InfraredCtrl.h"
 #include "../Sensor/InfraredDlg.h"
 #include "../Sensor/DataListCtrl.h"
@@ -66,7 +67,7 @@ public:
     Sensor m_Esm;
     CSensorCtrl m_EsmCtrl;
     PlaneEsmProxy m_PlaneEsmProxy;
-    CSensorDlg m_EsmDlg;
+    CEsmDlg m_EsmDlg;
     afx_msg void OnStnDblclickEsmCtrl();
 
     bool m_ShowInfraredDlg;
@@ -87,5 +88,6 @@ public:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 
     void Reset();
+    void ResetSensors();
     void AddTarget(Target &target);
 };

@@ -203,6 +203,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EsmDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\InfraredCtrl.cpp"
 				>
 			</File>
@@ -266,6 +270,10 @@
 			</File>
 			<File
 				RelativePath=".\DataListDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EsmDlg.h"
 				>
 			</File>
 			<File

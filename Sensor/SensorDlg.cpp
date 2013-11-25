@@ -225,8 +225,10 @@ void CSensorDlg::OnEnChangeSensorMaxDis()
 
     // TODO:  在此添加控件通知处理程序代码
     m_Sensor.m_MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
+    m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
 }
