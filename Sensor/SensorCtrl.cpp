@@ -7,6 +7,7 @@ CSensorCtrl::CSensorCtrl(Sensor &sensor)
 : m_Sensor(sensor)
 , m_Image(0)
 , m_BackgroundImg(NULL)
+, m_ThetaRangeImg(NULL)
 , m_TargetsImg(NULL)
 , m_ScanlineImg(NULL)
 , m_CurrentAngle(0)
@@ -24,6 +25,11 @@ CSensorCtrl::~CSensorCtrl(void)
     {
         delete m_BackgroundImg;
         m_BackgroundImg = NULL;
+    }
+    if (m_ThetaRangeImg)
+    {
+        delete m_ThetaRangeImg;
+        m_ThetaRangeImg = NULL;
     }
     if (m_TargetsImg)
     {
@@ -78,23 +84,6 @@ void CSensorCtrl::DrawBackground()
     m_BackgroundImg = backgroundImg;
 }
 
-PointF AzEl2XY(int size, int azimuth, int elevation)
-{
-    double angle = (270.0 + (double)azimuth);
-
-    angle *= 0.0174532925;
-
-    double r, x, y;
-
-    r = (double)size * 0.5;
-    r -= (r * (double)elevation / 90);
-
-    x = (((double)size * 0.5) + (r * cos(angle)));
-    y = (((double)size * 0.5) + (r * sin(angle)));
-
-    return PointF((float)x, (float)y);
-}
-
 void CSensorCtrl::DrawTargets()
 {
     RECT rect;
@@ -127,10 +116,13 @@ void CSensorCtrl::DrawTargets()
         {
             SolidBrush brush(TargetColors[m_Sensor.m_TargetColors[i]]);
             graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[i].back() - TARGET_RADIUS, m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_RADIUS, TARGET_RADIUS * 2, TARGET_RADIUS * 2);
-            CString str;
-            str.AppendFormat(TEXT("%d"), (int)(m_Sensor.m_Plane.m_RelPositionPaths[i].back().Z));
-            Font font(TEXT("Calibri"), 9);
-            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[i].back(), m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_TITLE_OFFSET), &brush);
+            if (m_Sensor.m_ShowHeight)
+            {
+                CString str;
+                str.AppendFormat(TEXT("%d"), (int)(m_Sensor.m_Plane.m_RelPositionPaths[i].back().Z));
+                Font font(TEXT("Calibri"), 9);
+                graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[i].back(), m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_TITLE_OFFSET), &brush);
+            }
         }
     }
 
@@ -139,6 +131,48 @@ void CSensorCtrl::DrawTargets()
         delete m_TargetsImg;
     }
     m_TargetsImg = targetsImg;
+}
+
+void CSensorCtrl::DrawThetaRange()
+{
+    RECT rect;
+    GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    int size = min(rect.right - rect.left, rect.bottom - rect.top);
+
+    Image *thetaRangeImg = new Bitmap(size, size);
+
+    Graphics graphics(thetaRangeImg);
+    Pen pen(m_Sensor.m_ThetaRangeColor);
+    graphics.SetCompositingQuality(CompositingQualityHighQuality);
+    graphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+    graphics.SetSmoothingMode(SmoothingModeAntiAlias);
+    graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
+
+    graphics.DrawPie(&pen, 0.0, 0.0, (float)(size - 1), (float)(size - 1), -m_Sensor.m_MaxTheta / 2, m_Sensor.m_MaxTheta);
+
+    if (m_ThetaRangeImg)
+    {
+        delete m_ThetaRangeImg;
+    }
+    m_ThetaRangeImg = thetaRangeImg;
+}
+
+PointF AzEl2XY(int size, int azimuth, int elevation)
+{
+    double angle = azimuth;
+
+    angle *= 0.0174532925;
+
+    double r, x, y;
+
+    r = (double)size * 0.5;
+    r -= (r * (double)elevation / 90);
+
+    x = (((double)size * 0.5) + (r * cos(angle)));
+    y = (((double)size * 0.5) + (r * sin(angle)));
+
+    return PointF((float)x, (float)y);
 }
 
 void CSensorCtrl::DrawScanline()
@@ -167,6 +201,10 @@ void CSensorCtrl::DrawScanline()
     Color colors[] = { Color(0, 0, 0, 0) };
     int count = 1;
     pgb.SetSurroundColors(colors, &count);
+    GraphicsPath pathSensor;
+    pathSensor.SetFillMode(FillModeWinding);
+    pathSensor.AddPie(-1.0, -1.0, (float)(size + 1), (float)(size + 1), -m_Sensor.m_MaxTheta / 2, m_Sensor.m_MaxTheta);
+    graphics.SetClip(&Region(&pathSensor));
     graphics.FillPath(&pgb, &gp);
     graphics.DrawLine(&Pen(lineColor), PointF((float)size / 2, (float)size / 2), pt);
 
@@ -186,18 +224,27 @@ void CSensorCtrl::BlendAll()
 
     Image *img = new Bitmap(size, size);
     Graphics graphics(img);
+
     GraphicsPath pathSensor;
     pathSensor.SetFillMode(FillModeWinding);
     pathSensor.AddEllipse(-1.0, -1.0, (float)(size + 1), (float)(size + 1));
     graphics.SetClip(&Region(&pathSensor));
+
     graphics.DrawImage(m_BackgroundImg, Point(0, 0));
     
     if (m_Sensor.m_Enable)
     {
-        graphics.DrawImage(m_TargetsImg, Point(0, 0));
-        if (m_Sensor.m_ShowScanline)
+        if (m_Sensor.m_ShowScanline && m_ScanlineImg != NULL)
         {
             graphics.DrawImage(m_ScanlineImg, Point(0, 0));
+        }
+        if (m_Sensor.m_ShowThetaRange && m_ThetaRangeImg != NULL)
+        {
+            graphics.DrawImage(m_ThetaRangeImg, Point(0, 0));
+        }
+        if (m_TargetsImg != NULL)
+        {
+            graphics.DrawImage(m_TargetsImg, Point(0, 0));
         }
     }
 
@@ -246,16 +293,21 @@ void CSensorCtrl::OnTimer(UINT_PTR nIDEvent)
 
     CStatic::OnTimer(nIDEvent);
 
-    m_CurrentAngle++;
-    if (m_CurrentAngle >= 360)
+    if (m_Sensor.m_Enable)
     {
-        m_CurrentAngle = 0;
+        if (m_Sensor.m_ShowScanline)
+        {
+            m_CurrentAngle++;
+            if (m_CurrentAngle >= 360)
+            {
+                m_CurrentAngle = 0;
+            }
+            DrawScanline();
+            BlendAll();
+
+            Invalidate();
+        }
     }
-
-    DrawScanline();
-    BlendAll();
-
-    Invalidate();
 }
 
 void CSensorCtrl::OnSize(UINT nType, int cx, int cy)
@@ -264,8 +316,18 @@ void CSensorCtrl::OnSize(UINT nType, int cx, int cy)
 
     // TODO: 在此处添加消息处理程序代码
     DrawBackground();
-    DrawScanline();
-    DrawTargets();
+    if (m_Sensor.m_Enable)
+    {
+        if (m_Sensor.m_ShowScanline)
+        {
+            DrawScanline();
+        }
+        if (m_Sensor.m_ShowThetaRange)
+        {
+            DrawThetaRange();
+        }
+        DrawTargets();
+    }
     BlendAll();
 }
 
@@ -279,8 +341,18 @@ void CSensorCtrl::PreSubclassWindow()
 void CSensorCtrl::Reset()
 {
     DrawBackground();
-    DrawScanline();
-    DrawTargets();
+    if (m_Sensor.m_Enable)
+    {
+        if (m_Sensor.m_ShowScanline)
+        {
+            DrawScanline();
+        }
+        if (m_Sensor.m_ShowThetaRange)
+        {
+            DrawThetaRange();
+        }
+        DrawTargets();
+    }
     BlendAll();
     Invalidate();
 }

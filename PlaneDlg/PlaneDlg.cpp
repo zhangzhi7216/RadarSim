@@ -39,6 +39,13 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, m_PlaneDataListProxy)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+    m_Esm.m_ThetaRangeColor = Color::Red;
+    m_Esm.m_ShowHeight = FALSE;
+    m_Infrared.m_ShowScanline = FALSE;
+    m_Infrared.m_ShowThetaRange = FALSE;
+    m_Infrared.m_ThetaRangeColor = Color::Yellow;
+    m_Infrared.m_ShowHeight = FALSE;
 }
 
 void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
@@ -361,6 +368,13 @@ void CPlaneDlg::Reset()
     m_Esm.Reset();
     m_Infrared.Reset();
     m_DataList.Reset();
+
+    m_Esm.m_ThetaRangeColor = Color::Red;
+    m_Esm.m_ShowHeight = FALSE;
+    m_Infrared.m_ShowScanline = FALSE;
+    m_Infrared.m_ShowThetaRange = FALSE;
+    m_Infrared.m_ThetaRangeColor = Color::Yellow;
+    m_Infrared.m_ShowHeight = FALSE;
 
     m_RadarCtrl.Reset();
     m_EsmCtrl.Reset();

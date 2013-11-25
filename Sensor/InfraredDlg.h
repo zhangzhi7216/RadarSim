@@ -18,7 +18,4 @@ public:
 protected:
     virtual BOOL OnInitDialog();
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV Ö§³Ö
-
-public:
-    virtual void Resize();
 };

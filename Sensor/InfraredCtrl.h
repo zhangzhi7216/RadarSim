@@ -16,11 +16,6 @@ public:
 public:
     DECLARE_MESSAGE_MAP()
     afx_msg void OnPaint();
-    afx_msg void OnSize(UINT nType, int cx, int cy);
     virtual void PreSubclassWindow();
-
-public:
-    void Reset();
-    void AddTarget(Target &target);
 };
 

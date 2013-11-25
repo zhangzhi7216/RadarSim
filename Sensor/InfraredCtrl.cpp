@@ -6,6 +6,7 @@
 CInfraredCtrl::CInfraredCtrl(Sensor &sensor)
 : CSensorCtrl(sensor)
 {
+    m_BackgroundImg = Image::FromFile(TEXT("InfraredBackground.bmp"));
 }
 
 CInfraredCtrl::~CInfraredCtrl(void)
@@ -14,26 +15,6 @@ CInfraredCtrl::~CInfraredCtrl(void)
 
 void CInfraredCtrl::DrawBackground()
 {
-    RECT rect;
-    GetWindowRect(&rect);
-    ScreenToClient(&rect);
-
-    Image *backgroundImg = new Bitmap(rect.right - rect.left, rect.bottom - rect.top);
-
-    Graphics graphics(backgroundImg);
-    graphics.SetCompositingQuality(CompositingQualityHighQuality);
-    graphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
-    graphics.SetSmoothingMode(SmoothingModeAntiAlias);
-    graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
-
-    Image *img = Image::FromFile(TEXT("InfraredBackground.bmp"));
-    graphics.DrawImage(img, 0, 0, rect.right - rect.left, rect.bottom - rect.top);
-
-    if (m_BackgroundImg)
-    {
-        delete m_BackgroundImg;
-    }
-    m_BackgroundImg = backgroundImg;
 }
 
 void CInfraredCtrl::DrawTargets()
@@ -42,7 +23,18 @@ void CInfraredCtrl::DrawTargets()
     GetWindowRect(&rect);
     ScreenToClient(&rect);
 
-    Image *targetsImg = new Bitmap(rect.right - rect.left, rect.bottom - rect.top);
+    UINT srcWidth = m_BackgroundImg->GetWidth(), srcHeight = m_BackgroundImg->GetHeight();
+    int width = rect.right - rect.left, height = rect.bottom - rect.top;
+    if ((double)width / (double)srcWidth > (double)height / (double)srcHeight)
+    {
+        width = height * ((double)srcWidth / (double)srcHeight);
+    }
+    else
+    {
+        height = width * ((double)srcHeight / (double)srcWidth);
+    }
+
+    Image *targetsImg = new Bitmap(width, height);
 
     Graphics graphics(targetsImg);
     graphics.SetCompositingQuality(CompositingQualityHighQuality);
@@ -67,10 +59,6 @@ void CInfraredCtrl::DrawTargets()
         {
             SolidBrush brush(TargetColors[m_Sensor.m_TargetColors[i]]);
             graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[i].back() - TARGET_RADIUS, m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_RADIUS, TARGET_RADIUS * 2, TARGET_RADIUS * 2);
-            CString str;
-            str.AppendFormat(TEXT("%d"), (int)(m_Sensor.m_Plane.m_RelPositionPaths[i].back().Z));
-            Font font(TEXT("Calibri"), 9);
-            graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[i].back(), m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_TITLE_OFFSET), &brush);
         }
     }
 
@@ -87,13 +75,27 @@ void CInfraredCtrl::BlendAll()
     GetWindowRect(&rect);
     ScreenToClient(&rect);
 
-    Image *img = new Bitmap(rect.right - rect.left, rect.bottom - rect.top);
+    UINT srcWidth = m_BackgroundImg->GetWidth(), srcHeight = m_BackgroundImg->GetHeight();
+    int width = rect.right - rect.left, height = rect.bottom - rect.top;
+    if ((double)width / (double)srcWidth > (double)height / (double)srcHeight)
+    {
+        width = height * ((double)srcWidth / (double)srcHeight);
+    }
+    else
+    {
+        height = width * ((double)srcHeight / (double)srcWidth);
+    }
+
+    Image *img = new Bitmap(width, height);
     Graphics graphics(img);
-    graphics.DrawImage(m_BackgroundImg, Point(0, 0));
+    graphics.DrawImage(m_BackgroundImg, 0, 0, width, height);
     
     if (m_Sensor.m_Enable)
     {
-        graphics.DrawImage(m_TargetsImg, Point(0, 0));
+        if (m_TargetsImg != NULL)
+        {
+            graphics.DrawImage(m_TargetsImg, Point(0, 0));
+        }
     }
 
     if (m_Image)
@@ -105,7 +107,6 @@ void CInfraredCtrl::BlendAll()
 
 BEGIN_MESSAGE_MAP(CInfraredCtrl, CSensorCtrl)
     ON_WM_PAINT()
-    ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 void CInfraredCtrl::OnPaint()
@@ -116,40 +117,17 @@ void CInfraredCtrl::OnPaint()
     RECT rect;
     GetWindowRect(&rect);
     ScreenToClient(&rect);
-    int width = rect.right - rect.left, height = rect.bottom - rect.top;
-    int left = rect.left, top = rect.top;
 
     if (m_Image)
     {
+        double left = rect.left + (double)(rect.right - rect.left - m_Image->GetWidth()) / 2,
+            top = rect.top + (double)(rect.bottom - rect.top - m_Image->GetHeight()) / 2;
         Gdiplus::Graphics graphics(dc.GetSafeHdc());
-        graphics.DrawImage(m_Image, Point(left, top));
+        graphics.DrawImage(m_Image, PointF(left, top));
     }
-}
-
-void CInfraredCtrl::OnSize(UINT nType, int cx, int cy)
-{
-    CStatic::OnSize(nType, cx, cy);
-
-    // TODO: 在此处添加消息处理程序代码
-    DrawBackground();
-    DrawScanline();
-    DrawTargets();
-    BlendAll();
 }
 
 void CInfraredCtrl::PreSubclassWindow()
 {
     CStatic::PreSubclassWindow();
-}
-
-void CInfraredCtrl::Reset()
-{
-    DrawBackground();
-    DrawTargets();
-    BlendAll();
-    Invalidate();
-}
-
-void CInfraredCtrl::AddTarget(Target &target)
-{
 }

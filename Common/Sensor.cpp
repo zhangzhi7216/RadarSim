@@ -7,13 +7,16 @@ Sensor::Sensor(SensorType type, Plane &plane)
 , m_Enable(TRUE)
 , m_MaxDis(100)
 , m_MaxTheta(120)
-, m_MaxPhi(90)
+, m_MaxPhi(120)
 , m_DisVar(0)
 , m_ThetaVar(0)
 , m_PhiVar(0)
 , m_ProDet(0)
 , m_ShowScanline(TRUE)
 , m_ShowTrack(TRUE)
+, m_ShowThetaRange(TRUE)
+, m_ThetaRangeColor(Color::Green)
+, m_ShowHeight(TRUE)
 , m_Plane(plane)
 {
 }
@@ -27,7 +30,7 @@ void Sensor::Reset()
     m_Enable = TRUE;
     m_MaxDis = 100;
     m_MaxTheta = 120;
-    m_MaxPhi = 90;
+    m_MaxPhi = 120;
     m_DisVar = 0;
     m_ThetaVar = 0;
     m_PhiVar = 0;

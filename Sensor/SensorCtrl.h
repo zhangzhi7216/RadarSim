@@ -14,11 +14,13 @@ public:
 
     Image *m_Image;
     Image *m_BackgroundImg;
+    Image *m_ThetaRangeImg;
     Image *m_TargetsImg;
     Image *m_ScanlineImg;
     int m_CurrentAngle;
 
     virtual void DrawBackground();
+    virtual void DrawThetaRange();
     virtual void DrawScanline();
     virtual void DrawTargets();
     virtual void BlendAll();

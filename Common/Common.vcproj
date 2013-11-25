@@ -167,6 +167,10 @@
 				RelativePath=".\Target.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\Utility.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -187,6 +191,10 @@
 			</File>
 			<File
 				RelativePath=".\Target.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.h"
 				>
 			</File>
 		</Filter>

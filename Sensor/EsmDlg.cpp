@@ -13,6 +13,7 @@ CInfraredDlg::CInfraredDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &cli
 {
     delete m_Ctrl;
     m_Ctrl = new CInfraredCtrl(sensor);
+    m_Sensor.m_ShowScanline = FALSE;
 }
 
 CInfraredDlg::~CInfraredDlg()

@@ -33,6 +33,9 @@ public:
 
     BOOL m_ShowScanline;
     BOOL m_ShowTrack;
+    BOOL m_ShowThetaRange;
+    Color m_ThetaRangeColor;
+    BOOL m_ShowHeight;
 
     vector<TargetColor> m_TargetColors;
 
