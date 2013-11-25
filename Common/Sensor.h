@@ -38,10 +38,13 @@ public:
     BOOL m_ShowHeight;
 
     vector<TargetColor> m_TargetColors;
+    vector<vector<double>> m_TargetDistances, m_TargetThetas, m_TargetPhis;
 
     Plane &m_Plane;
 
     void Reset();
     void AddTarget(Target &target);
+    void AddTargetData(int target, Position rel);
+    bool IsShowTargetData(int i, int j);
 };
 

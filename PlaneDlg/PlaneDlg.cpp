@@ -314,12 +314,29 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 
     static int count = 0;
 
-    if (++count <= 20)
+    if (++count <= 500)
     {
-        m_Plane.m_Targets[0].MoveTo(m_Plane.m_Targets[0].m_Position + Position(2, 3, 4));
-        m_Plane.m_Targets[1].MoveTo(m_Plane.m_Targets[1].m_Position + Position(5, 4, 3));
+#if 1
+        m_Targets[0].m_Position = m_Targets[0].m_Position + Position(rand() % 3, rand() % 3, rand() % 3);
+        m_Targets[1].m_Position = m_Targets[1].m_Position + Position(rand() % 3, rand() % 3, rand() % 3);
 
-        m_Plane.MoveTo(m_Plane.m_Position + Position(1, 1, 1));
+        m_Plane.m_Position = m_Plane.m_Position + Position(rand() % 3, rand() % 3, rand() % 3);
+#else
+        m_Targets[0].m_Position = m_Targets[0].m_Position + Position(0, 1, -1);
+        m_Targets[1].m_Position = m_Targets[1].m_Position + Position(-1, 1, 1);
+#endif
+
+        m_Plane.m_Position = m_Plane.m_Position + Position(0, 0, 0);
+
+        Position rel0 = m_Targets[0].m_Position - m_Plane.m_Position;
+        Position rel1 = m_Targets[1].m_Position - m_Plane.m_Position;
+
+        m_Radar.AddTargetData(0, rel0);
+        m_Esm.AddTargetData(0, rel0);
+        m_Infrared.AddTargetData(0, rel0);
+        m_Radar.AddTargetData(1, rel1);
+        m_Esm.AddTargetData(1, rel1);
+        m_Infrared.AddTargetData(1, rel1);
 
         m_RadarCtrl.DrawTargets();
         m_RadarCtrl.BlendAll();
@@ -389,12 +406,12 @@ void CPlaneDlg::ResetSensors()
 
 void CPlaneDlg::AddTarget(Target &target)
 {
+    m_Targets.push_back(target);
+
     m_Radar.AddTarget(target);
     m_Esm.AddTarget(target);
     m_Infrared.AddTarget(target);
     m_DataList.AddTarget(target);
-
-    m_Plane.AddTarget(target);
 
     m_RadarCtrl.AddTarget(target);
     m_EsmCtrl.AddTarget(target);

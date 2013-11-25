@@ -84,6 +84,39 @@ void CSensorCtrl::DrawBackground()
     m_BackgroundImg = backgroundImg;
 }
 
+static PointF AzEl2XY(int size, int azimuth, int elevation)
+{
+    double angle = azimuth + 270.0;
+
+    angle *= 0.0174532925;
+
+    double r, x, y;
+
+    r = (double)size * 0.5;
+    r -= (r * (double)elevation / 90);
+
+    x = (((double)size * 0.5) + (r * cos(angle)));
+    y = (((double)size * 0.5) + (r * sin(angle)));
+
+    return PointF((float)x, (float)y);
+}
+
+static PointF AzEl2XY2(int dis, int azimuth, int size)
+{
+    double angle = azimuth + 270.0;
+
+    angle *= 0.0174532925;
+
+    double r, x, y;
+
+    r = (double)dis;
+
+    x = (((double)size * 0.5) + (r * cos(angle)));
+    y = (((double)size * 0.5) + (r * sin(angle)));
+
+    return PointF((float)x, (float)y);
+}
+
 void CSensorCtrl::DrawTargets()
 {
     RECT rect;
@@ -99,29 +132,32 @@ void CSensorCtrl::DrawTargets()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    for (int i = 0; i < m_Sensor.m_Plane.m_Targets.size(); ++i)
+    for (int i = 0; i < m_Sensor.m_TargetDistances.size(); ++i)
     {
         Pen pen(TargetColors[m_Sensor.m_TargetColors[i]], TARGET_TRACK_WIDTH);
         if (m_Sensor.m_ShowTrack)
         {
-            for (int j = 1; j < m_Sensor.m_Plane.m_RelPositionPaths[i].size(); ++j)
+            for (int j = 1; j < m_Sensor.m_TargetThetas[i].size(); ++j)
             {
-                if (m_Sensor.m_Plane.m_DistancePaths[i][j - 1] <= m_Sensor.m_MaxDis && m_Sensor.m_Plane.m_DistancePaths[i][j] <= m_Sensor.m_MaxDis)
+                if (m_Sensor.IsShowTargetData(i, j - 1) && m_Sensor.IsShowTargetData(i, j))
                 {
-                    graphics.DrawLine(&pen, PointF(m_Sensor.m_Plane.m_ThetaPaths[i][j - 1], m_Sensor.m_Plane.m_PhiPaths[i][j - 1]), PointF(m_Sensor.m_Plane.m_ThetaPaths[i][j], m_Sensor.m_Plane.m_PhiPaths[i][j]));
+                    PointF pt0 = AzEl2XY2(m_Sensor.m_TargetDistances[i][j - 1] * (double)size / 2.0 / m_Sensor.m_MaxDis, m_Sensor.m_TargetThetas[i][j - 1], size);
+                    PointF pt1 = AzEl2XY2(m_Sensor.m_TargetDistances[i][j] * (double)size / 2.0 / m_Sensor.m_MaxDis, m_Sensor.m_TargetThetas[i][j], size);
+                    graphics.DrawLine(&pen, pt0, pt1);
                 }
             }
         }
-        if (m_Sensor.m_Plane.m_DistancePaths[i].size() > 0 && m_Sensor.m_Plane.m_DistancePaths[i].back() <= m_Sensor.m_MaxDis)
+        if (m_Sensor.IsShowTargetData(i, m_Sensor.m_TargetDistances[i].size() - 1))
         {
             SolidBrush brush(TargetColors[m_Sensor.m_TargetColors[i]]);
-            graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[i].back() - TARGET_RADIUS, m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_RADIUS, TARGET_RADIUS * 2, TARGET_RADIUS * 2);
+            PointF pt = AzEl2XY2(m_Sensor.m_TargetDistances[i].back() * (double)size / 2.0 / m_Sensor.m_MaxDis, m_Sensor.m_TargetThetas[i].back(), size);
+            graphics.FillEllipse(&brush, pt.X - TARGET_RADIUS, pt.Y - TARGET_RADIUS, (double)TARGET_RADIUS * 2, (double)TARGET_RADIUS * 2);
             if (m_Sensor.m_ShowHeight)
             {
                 CString str;
-                str.AppendFormat(TEXT("%d"), (int)(m_Sensor.m_Plane.m_RelPositionPaths[i].back().Z));
+                str.AppendFormat(TEXT("%d"), (int)(sin(m_Sensor.m_TargetPhis[i].back() * 0.0174532925) * m_Sensor.m_TargetDistances[i].back()));
                 Font font(TEXT("Calibri"), 9);
-                graphics.DrawString(str, str.GetLength(), &font, PointF(m_Sensor.m_Plane.m_ThetaPaths[i].back(), m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_TITLE_OFFSET), &brush);
+                graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - TARGET_TITLE_OFFSET), &brush);
             }
         }
     }
@@ -149,30 +185,13 @@ void CSensorCtrl::DrawThetaRange()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    graphics.DrawPie(&pen, 0.0, 0.0, (float)(size - 1), (float)(size - 1), -m_Sensor.m_MaxTheta / 2, m_Sensor.m_MaxTheta);
+    graphics.DrawPie(&pen, 0.0, 0.0, (float)(size - 1), (float)(size - 1), -m_Sensor.m_MaxTheta / 2 + 270, m_Sensor.m_MaxTheta);
 
     if (m_ThetaRangeImg)
     {
         delete m_ThetaRangeImg;
     }
     m_ThetaRangeImg = thetaRangeImg;
-}
-
-PointF AzEl2XY(int size, int azimuth, int elevation)
-{
-    double angle = azimuth;
-
-    angle *= 0.0174532925;
-
-    double r, x, y;
-
-    r = (double)size * 0.5;
-    r -= (r * (double)elevation / 90);
-
-    x = (((double)size * 0.5) + (r * cos(angle)));
-    y = (((double)size * 0.5) + (r * sin(angle)));
-
-    return PointF((float)x, (float)y);
 }
 
 void CSensorCtrl::DrawScanline()
@@ -203,7 +222,7 @@ void CSensorCtrl::DrawScanline()
     pgb.SetSurroundColors(colors, &count);
     GraphicsPath pathSensor;
     pathSensor.SetFillMode(FillModeWinding);
-    pathSensor.AddPie(-1.0, -1.0, (float)(size + 1), (float)(size + 1), -m_Sensor.m_MaxTheta / 2, m_Sensor.m_MaxTheta);
+    pathSensor.AddPie(-1.0, -1.0, (float)(size + 1), (float)(size + 1), -m_Sensor.m_MaxTheta / 2 + 270, m_Sensor.m_MaxTheta);
     graphics.SetClip(&Region(&pathSensor));
     graphics.FillPath(&pgb, &gp);
     graphics.DrawLine(&Pen(lineColor), PointF((float)size / 2, (float)size / 2), pt);
@@ -351,7 +370,6 @@ void CSensorCtrl::Reset()
         {
             DrawThetaRange();
         }
-        DrawTargets();
     }
     BlendAll();
     Invalidate();

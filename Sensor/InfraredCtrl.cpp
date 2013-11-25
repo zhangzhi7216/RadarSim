@@ -42,23 +42,36 @@ void CInfraredCtrl::DrawTargets()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    for (int i = 0; i < m_Sensor.m_Plane.m_Targets.size(); ++i)
+    for (int i = 0; i < m_Sensor.m_TargetDistances.size(); ++i)
     {
         Pen pen(TargetColors[m_Sensor.m_TargetColors[i]], TARGET_TRACK_WIDTH);
         if (m_Sensor.m_ShowTrack)
         {
-            for (int j = 1; j < m_Sensor.m_Plane.m_RelPositionPaths[i].size(); ++j)
+            for (int j = 1; j < m_Sensor.m_TargetThetas[i].size(); ++j)
             {
-                if (m_Sensor.m_Plane.m_DistancePaths[i][j - 1] <= m_Sensor.m_MaxDis && m_Sensor.m_Plane.m_DistancePaths[i][j] <= m_Sensor.m_MaxDis)
+                if (m_Sensor.IsShowTargetData(i, j - 1) && m_Sensor.IsShowTargetData(i, j))
                 {
-                    graphics.DrawLine(&pen, PointF(m_Sensor.m_Plane.m_ThetaPaths[i][j - 1], m_Sensor.m_Plane.m_PhiPaths[i][j - 1]), PointF(m_Sensor.m_Plane.m_ThetaPaths[i][j], m_Sensor.m_Plane.m_PhiPaths[i][j]));
+                    PointF pt0((double)width / 2 + m_Sensor.m_TargetThetas[i][j - 1] / m_Sensor.m_MaxTheta * (double)width,
+                        (double)height / 2 - m_Sensor.m_TargetPhis[i][j - 1] / m_Sensor.m_MaxPhi * (double)height);
+                    PointF pt1((double)width / 2 + m_Sensor.m_TargetThetas[i][j] / m_Sensor.m_MaxTheta * (double)width,
+                        (double)height / 2 - m_Sensor.m_TargetPhis[i][j] / m_Sensor.m_MaxPhi * (double)height);
+                    graphics.DrawLine(&pen, pt0, pt1);
                 }
             }
         }
-        if (m_Sensor.m_Plane.m_DistancePaths[i].size() > 0 && m_Sensor.m_Plane.m_DistancePaths[i].back() <= m_Sensor.m_MaxDis)
+        if (m_Sensor.IsShowTargetData(i, m_Sensor.m_TargetDistances[i].size() - 1))
         {
             SolidBrush brush(TargetColors[m_Sensor.m_TargetColors[i]]);
-            graphics.FillEllipse(&brush, m_Sensor.m_Plane.m_ThetaPaths[i].back() - TARGET_RADIUS, m_Sensor.m_Plane.m_PhiPaths[i].back() - TARGET_RADIUS, TARGET_RADIUS * 2, TARGET_RADIUS * 2);
+            PointF pt((double)width / 2 + m_Sensor.m_TargetThetas[i].back() / m_Sensor.m_MaxTheta * (double)width,
+                (double)height / 2 - m_Sensor.m_TargetPhis[i].back() / m_Sensor.m_MaxPhi * (double)height);
+            graphics.FillEllipse(&brush, pt.X - TARGET_RADIUS, pt.Y - TARGET_RADIUS, (double)TARGET_RADIUS * 2, (double)TARGET_RADIUS * 2);
+            if (m_Sensor.m_ShowHeight)
+            {
+                CString str;
+                str.AppendFormat(TEXT("%d"), (int)(m_Sensor.m_TargetPhis[i].back()));
+                Font font(TEXT("Calibri"), 9);
+                graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - TARGET_TITLE_OFFSET), &brush);
+            }
         }
     }
 

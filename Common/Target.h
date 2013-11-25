@@ -27,14 +27,6 @@ public:
     TargetType m_Type;
 
     Position m_Position;
-    Path m_Path;
-
-    vector<Target> m_Targets;
-    vector<Path> m_RelPositionPaths;
-    vector<vector<double>> m_DistancePaths, m_ThetaPaths, m_PhiPaths;
-
-    void AddTarget(Target &target);
-    void MoveTo(const Position &position);
 
     void Reset();
 };

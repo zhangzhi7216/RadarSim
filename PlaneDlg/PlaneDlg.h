@@ -85,6 +85,7 @@ public:
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 
     Plane m_Plane;
+    vector<Target> m_Targets;
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 
     void Reset();

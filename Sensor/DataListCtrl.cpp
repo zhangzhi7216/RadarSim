@@ -33,53 +33,60 @@ void CDataListCtrl::AddTarget(Target &target)
 
 void CDataListCtrl::AddTargetData()
 {
-    for (int i = 0; i < m_DataList.m_Plane.m_Targets.size(); ++i)
+    for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
     {
         int row = InsertItem(0, TEXT(""));
         SetItemData(row, TargetColors[m_DataList.m_TargetColors[i]].ToCOLORREF());
         if (m_DataList.m_Esm.m_Enable)
         {
-            if (m_DataList.m_Plane.m_ThetaPaths[i].back() <= m_DataList.m_Esm.m_MaxTheta)
+            if (m_DataList.m_Esm.m_TargetDistances[i].back() <= m_DataList.m_Esm.m_MaxDis
+                && m_DataList.m_Esm.m_TargetThetas[i].back() <= m_DataList.m_Esm.m_MaxTheta
+                && m_DataList.m_Esm.m_TargetPhis[i].back() <= m_DataList.m_Esm.m_MaxPhi)
             {
                 CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Plane.m_ThetaPaths[i].back());
+                str.AppendFormat(TEXT("%f"), m_DataList.m_Esm.m_TargetThetas[i].back());
                 SetItemText(row, ColumnEsmTheta, str);
             }
         }
         if (m_DataList.m_Infrared.m_Enable)
         {
-            if (m_DataList.m_Plane.m_ThetaPaths[i].back() <= m_DataList.m_Infrared.m_MaxTheta)
+            if (m_DataList.m_Infrared.m_TargetDistances[i].back() <= m_DataList.m_Infrared.m_MaxDis
+                && m_DataList.m_Infrared.m_TargetThetas[i].back() <= m_DataList.m_Infrared.m_MaxTheta
+                && m_DataList.m_Infrared.m_TargetPhis[i].back() <= m_DataList.m_Infrared.m_MaxPhi)
             {
-                CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Plane.m_ThetaPaths[i].back());
-                SetItemText(row, ColumnInfraredTheta, str);
-            }
-            if (m_DataList.m_Plane.m_PhiPaths[i].back() <= m_DataList.m_Infrared.m_MaxPhi)
-            {
-                CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Plane.m_PhiPaths[i].back());
-                SetItemText(row, ColumnInfraredPhi, str);
+                {
+                    CString str;
+                    str.AppendFormat(TEXT("%f"), m_DataList.m_Infrared.m_TargetThetas[i].back());
+                    SetItemText(row, ColumnInfraredTheta, str);
+                }
+                {
+                    CString str;
+                    str.AppendFormat(TEXT("%f"), m_DataList.m_Infrared.m_TargetPhis[i].back());
+                    SetItemText(row, ColumnInfraredPhi, str);
+                }
             }
         }
         if (m_DataList.m_Radar.m_Enable)
         {
-            if (m_DataList.m_Plane.m_DistancePaths[i].back() <= m_DataList.m_Radar.m_MaxDis)
+            if (m_DataList.m_Radar.m_TargetDistances[i].back() <= m_DataList.m_Radar.m_MaxDis
+                && m_DataList.m_Radar.m_TargetThetas[i].back() <= m_DataList.m_Radar.m_MaxTheta
+                && m_DataList.m_Radar.m_TargetPhis[i].back() <= m_DataList.m_Radar.m_MaxPhi)
             {
-                CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Plane.m_DistancePaths[i].back());
-                SetItemText(row, ColumnRadarDistance, str);
-            }
-            if (m_DataList.m_Plane.m_ThetaPaths[i].back() <= m_DataList.m_Radar.m_MaxTheta)
-            {
-                CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Plane.m_ThetaPaths[i].back());
-                SetItemText(row, ColumnRadarTheta, str);
-            }
-            if (m_DataList.m_Plane.m_PhiPaths[i].back() <= m_DataList.m_Radar.m_MaxPhi)
-            {
-                CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Plane.m_PhiPaths[i].back());
-                SetItemText(row, ColumnRadarPhi, str);
+                {
+                    CString str;
+                    str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetDistances[i].back());
+                    SetItemText(row, ColumnRadarDistance, str);
+                }
+                {
+                    CString str;
+                    str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetThetas[i].back());
+                    SetItemText(row, ColumnRadarTheta, str);
+                }
+                {
+                    CString str;
+                    str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetPhis[i].back());
+                    SetItemText(row, ColumnRadarPhi, str);
+                }
             }
         }
     }
