@@ -17,6 +17,11 @@ void PlaneInfraredProxy::OnClose()
     m_Dlg.OnStnDblclickInfraredCtrl();
 }
 
+void PlaneInfraredProxy::DrawThetaRange()
+{
+    m_Dlg.m_InfraredCtrl.DrawThetaRange();
+}
+
 void PlaneInfraredProxy::DrawTargets()
 {
     m_Dlg.m_InfraredCtrl.DrawTargets();

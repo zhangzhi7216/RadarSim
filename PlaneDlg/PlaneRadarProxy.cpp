@@ -17,6 +17,11 @@ void PlaneRadarProxy::OnClose()
     m_Dlg.OnStnDblclickRadarCtrl();
 }
 
+void PlaneRadarProxy::DrawThetaRange()
+{
+    m_Dlg.m_RadarCtrl.DrawThetaRange();
+}
+
 void PlaneRadarProxy::DrawTargets()
 {
     m_Dlg.m_RadarCtrl.DrawTargets();

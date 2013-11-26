@@ -17,6 +17,11 @@ void PlaneEsmProxy::OnClose()
     m_Dlg.OnStnDblclickEsmCtrl();
 }
 
+void PlaneEsmProxy::DrawThetaRange()
+{
+    m_Dlg.m_EsmCtrl.DrawThetaRange();
+}
+
 void PlaneEsmProxy::DrawTargets()
 {
     m_Dlg.m_EsmCtrl.DrawTargets();

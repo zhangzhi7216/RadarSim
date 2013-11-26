@@ -62,6 +62,12 @@ BEGIN_MESSAGE_MAP(CSensorDlg, CDialog)
     ON_EN_CHANGE(IDC_SENSOR_MAX_DIS, &CSensorDlg::OnEnChangeSensorMaxDis)
     ON_CBN_SELCHANGE(IDC_SENSOR_TARGET_ID, &CSensorDlg::OnCbnSelchangeSensorTargetId)
     ON_CBN_SELCHANGE(IDC_SENSOR_TARGET_COLOR, &CSensorDlg::OnCbnSelchangeSensorTargetColor)
+    ON_EN_CHANGE(IDC_SENSOR_MAX_THETA, &CSensorDlg::OnEnChangeSensorMaxTheta)
+    ON_EN_CHANGE(IDC_SENSOR_MAX_PHI, &CSensorDlg::OnEnChangeSensorMaxPhi)
+    ON_EN_CHANGE(IDC_SENSOR_DIS_VAR, &CSensorDlg::OnEnChangeSensorDisVar)
+    ON_EN_CHANGE(IDC_SENSOR_THETA_VAR, &CSensorDlg::OnEnChangeSensorThetaVar)
+    ON_EN_CHANGE(IDC_SENSOR_PHI_VAR, &CSensorDlg::OnEnChangeSensorPhiVar)
+    ON_EN_CHANGE(IDC_SENSOR_PRO_DET, &CSensorDlg::OnEnChangeSensorProDet)
 END_MESSAGE_MAP()
 
 
@@ -216,23 +222,6 @@ void CSensorDlg::OnBnClickedSensorShowTrack()
     m_ClientProxy.Invalidate();
 }
 
-void CSensorDlg::OnEnChangeSensorMaxDis()
-{
-    // TODO:  如果该控件是 RICHEDIT 控件，它将不
-    // 发送此通知，除非重写 CDialog::OnInitDialog()
-    // 函数并调用 CRichEditCtrl().SetEventMask()，
-    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
-
-    // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
-    m_Ctrl->DrawTargets();
-    m_Ctrl->BlendAll();
-    m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
-}
-
 void CSensorDlg::OnCbnSelchangeSensorTargetId()
 {
     // TODO: 在此添加控件通知处理程序代码
@@ -276,4 +265,125 @@ void CSensorDlg::AddTarget(Target &target)
     CString str;
     str.AppendFormat(TEXT("%d"), target.m_Id);
     m_TargetId.InsertString(m_TargetId.GetCount(), str);
+}
+
+void CSensorDlg::OnEnChangeSensorMaxDis()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
+}
+
+void CSensorDlg::OnEnChangeSensorMaxTheta()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_MaxTheta = GetDlgItemInt(IDC_SENSOR_MAX_THETA);
+    m_Ctrl->DrawThetaRange();
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawThetaRange();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
+}
+
+void CSensorDlg::OnEnChangeSensorMaxPhi()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_MaxPhi = GetDlgItemInt(IDC_SENSOR_MAX_PHI);
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
+}
+
+void CSensorDlg::OnEnChangeSensorDisVar()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_DisVar = GetDlgItemInt(IDC_SENSOR_DIS_VAR);
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
+}
+
+void CSensorDlg::OnEnChangeSensorThetaVar()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_ThetaVar = GetDlgItemInt(IDC_SENSOR_THETA_VAR);
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
+}
+
+void CSensorDlg::OnEnChangeSensorPhiVar()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_PhiVar = GetDlgItemInt(IDC_SENSOR_PHI_VAR);
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
+}
+
+void CSensorDlg::OnEnChangeSensorProDet()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CDialog::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_Sensor.m_ProDet = GetDlgItemInt(IDC_SENSOR_PRO_DET);
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+    m_ClientProxy.DrawTargets();
+    m_ClientProxy.BlendAll();
+    m_ClientProxy.Invalidate();
 }

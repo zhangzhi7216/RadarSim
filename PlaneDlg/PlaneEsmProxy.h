@@ -12,6 +12,7 @@ public:
     virtual ~PlaneEsmProxy(void);
 
     virtual void OnClose();
+    virtual void DrawThetaRange();
     virtual void DrawTargets();
     virtual void BlendAll();
     virtual void Invalidate(BOOL bErase = 1);

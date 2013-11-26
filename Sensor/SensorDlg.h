@@ -48,4 +48,10 @@ public:
 
     void Reset();
     void AddTarget(Target &target);
+    afx_msg void OnEnChangeSensorMaxTheta();
+    afx_msg void OnEnChangeSensorMaxPhi();
+    afx_msg void OnEnChangeSensorDisVar();
+    afx_msg void OnEnChangeSensorThetaVar();
+    afx_msg void OnEnChangeSensorPhiVar();
+    afx_msg void OnEnChangeSensorProDet();
 };
