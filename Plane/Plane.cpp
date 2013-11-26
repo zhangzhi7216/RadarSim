@@ -4,6 +4,7 @@
 
 #include "stdafx.h"
 #include "Plane.h"
+#include "../PlaneDlg/Resource.h"
 #include "PlaneDlg.h"
 
 #ifdef _DEBUG
@@ -24,17 +25,13 @@ CPlaneApp::CPlaneApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
-    srand((unsigned int)time(NULL));
 
-    GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+    GlobalInit();
 }
 
 CPlaneApp::~CPlaneApp()
 {
-    ULONG_PTR gdiplusToken = NULL; 
-    GdiplusShutdown(gdiplusToken);
+    GlobalShut();
 }
 
 // 唯一的一个 CPlaneApp 对象
@@ -74,7 +71,6 @@ BOOL CPlaneApp::InitInstance()
 	// TODO: 应适当修改该字符串，
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
-
 
 	CPlaneDlg dlg(TEXT("我机"));
 	m_pMainWnd = &dlg;

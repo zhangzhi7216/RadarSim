@@ -1,63 +1,70 @@
-// Sensor.cpp : 定义 DLL 的初始化例程。
-//
-
 #include "stdafx.h"
 #include "Sensor.h"
+#include "Utility.h"
+using namespace Utility;
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
+CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
 
-//
-//TODO: 如果此 DLL 相对于 MFC DLL 是动态链接的，
-//		则从此 DLL 导出的任何调入
-//		MFC 的函数必须将 AFX_MANAGE_STATE 宏添加到
-//		该函数的最前面。
-//
-//		例如:
-//
-//		extern "C" BOOL PASCAL EXPORT ExportedFunction()
-//		{
-//			AFX_MANAGE_STATE(AfxGetStaticModuleState());
-//			// 此处为普通函数体
-//		}
-//
-//		此宏先于任何 MFC 调用
-//		出现在每个函数中十分重要。这意味着
-//		它必须作为函数中的第一个语句
-//		出现，甚至先于所有对象变量声明，
-//		这是因为它们的构造函数可能生成 MFC
-//		DLL 调用。
-//
-//		有关其他详细信息，
-//		请参阅 MFC 技术说明 33 和 58。
-//
-
-// CSensorApp
-
-BEGIN_MESSAGE_MAP(CSensorApp, CWinApp)
-END_MESSAGE_MAP()
-
-
-// CSensorApp 构造
-
-CSensorApp::CSensorApp()
+Sensor::Sensor(SensorType type, Plane &plane)
+: m_Type(type)
+, m_Enable(TRUE)
+, m_MaxDis(1000)
+, m_MaxTheta(360)
+, m_MaxPhi(360)
+, m_DisVar(0)
+, m_ThetaVar(0)
+, m_PhiVar(0)
+, m_ProDet(0)
+, m_ShowScanline(TRUE)
+, m_ShowTrack(TRUE)
+, m_ShowThetaRange(TRUE)
+, m_ThetaRangeColor(Color::Green)
+, m_ShowHeight(TRUE)
 {
-	// TODO: 在此处添加构造代码，
-	// 将所有重要的初始化放置在 InitInstance 中
 }
 
-
-// 唯一的一个 CSensorApp 对象
-
-CSensorApp theApp;
-
-
-// CSensorApp 初始化
-
-BOOL CSensorApp::InitInstance()
+Sensor::~Sensor(void)
 {
-	CWinApp::InitInstance();
+}
 
-	return TRUE;
+void Sensor::Reset()
+{
+    m_Enable = TRUE;
+    m_MaxDis = 1000;
+    m_MaxTheta = 360;
+    m_MaxPhi = 360;
+    m_DisVar = 0;
+    m_ThetaVar = 0;
+    m_PhiVar = 0;
+    m_ProDet = 0;
+    m_ShowScanline = TRUE;
+    m_ShowTrack = TRUE;
+    m_TargetColors.clear();
+}
+
+void Sensor::AddTarget(Target &target)
+{
+    m_TargetColors.push_back((TargetColor)(rand() % TargetColorLast));
+    m_TargetDistances.push_back(vector<double>());
+    m_TargetThetas.push_back(vector<double>());
+    m_TargetPhis.push_back(vector<double>());
+}
+
+void Sensor::AddTargetData(int target, Position rel)
+{
+    m_TargetDistances[target].push_back(Distance(rel));
+    m_TargetThetas[target].push_back(Theta(rel));
+    m_TargetPhis[target].push_back(Phi(rel));
+}
+
+bool Sensor::IsShowTargetData(int i, int j)
+{
+    if (i >= m_TargetDistances.size() || i >= m_TargetThetas.size() || i >= m_TargetPhis.size()
+        || j >= m_TargetDistances[i].size() || j >= m_TargetThetas[i].size() || j >= m_TargetPhis[i].size())
+    {
+        return false;
+    }
+
+    double d = m_TargetDistances[i][j], t = m_TargetThetas[i][j], p = m_TargetPhis[i][j];
+    return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi;
 }

@@ -1,7 +1,8 @@
 #include "StdAfx.h"
 #include "SensorClientProxy.h"
 
-SensorClientProxy::SensorClientProxy(void)
+SensorClientProxy::SensorClientProxy(CStateMapCtrl &stateMapCtrl)
+: m_StateMapCtrl(stateMapCtrl)
 {
 }
 

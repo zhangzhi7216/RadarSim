@@ -37,6 +37,9 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_DataListCtrl(m_DataList)
     , m_PlaneDataListProxy(*this)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, m_PlaneDataListProxy)
+    , m_ShowStateMapDlg(true)
+    , m_StateMap(m_Radar, m_Esm, m_Infrared, m_Plane)
+    , m_StateMapDlg(TEXT("态势"), m_StateMap)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -114,6 +117,15 @@ BOOL CPlaneDlg::OnInitDialog()
     if (m_ShowDataListDlg)
     {
         m_DataListDlg.ShowWindow(SW_SHOW);
+    }
+    {
+        AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    }
+
+    CStateMapDlg::CreateDlg(m_StateMapDlg);
+    if (m_ShowStateMapDlg)
+    {
+        m_StateMapDlg.ShowWindow(SW_SHOW);
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -337,6 +349,9 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         m_Radar.AddTargetData(1, rel1);
         m_Esm.AddTargetData(1, rel1);
         m_Infrared.AddTargetData(1, rel1);
+        m_StateMap.AddPlaneData(m_Plane.m_Position);
+        m_StateMap.AddTargetData(0, m_Targets[0].m_Position);
+        m_StateMap.AddTargetData(1, m_Targets[1].m_Position);
 
         m_RadarCtrl.DrawTargets();
         m_RadarCtrl.BlendAll();
@@ -364,6 +379,10 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 
         m_DataListCtrl.AddTargetData();
         m_DataListDlg.m_Ctrl->AddTargetData();
+
+        m_StateMapDlg.m_Ctrl.DrawTargets();
+        m_StateMapDlg.m_Ctrl.BlendAll();
+        m_StateMapDlg.m_Ctrl.Invalidate();
     }
     else
     {
@@ -412,6 +431,7 @@ void CPlaneDlg::AddTarget(Target &target)
     m_Esm.AddTarget(target);
     m_Infrared.AddTarget(target);
     m_DataList.AddTarget(target);
+    m_StateMap.AddTarget(target);
 
     m_RadarCtrl.AddTarget(target);
     m_EsmCtrl.AddTarget(target);
@@ -422,4 +442,5 @@ void CPlaneDlg::AddTarget(Target &target)
     m_EsmDlg.AddTarget(target);
     m_InfraredDlg.AddTarget(target);
     m_DataListDlg.AddTarget(target);
+    m_StateMapDlg.AddTarget(target);
 }

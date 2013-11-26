@@ -4,7 +4,7 @@
 #include "Sensor.h"
 #include "Target.h"
 
-class DataList
+class __declspec(dllexport) DataList
 {
 public:
     DataList(Sensor &radar, Sensor &esm, Sensor &infrared, Plane &plane);

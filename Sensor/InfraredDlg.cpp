@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "Sensor.h"
+#include "SensorApp.h"
 #include "InfraredDlg.h"
 
 

@@ -4,7 +4,8 @@
 #include "PlaneDlg.h"
 
 PlaneInfraredProxy::PlaneInfraredProxy(CPlaneDlg &dlg)
-: m_Dlg(dlg)
+: SensorClientProxy(dlg.m_StateMapDlg.m_Ctrl)
+, m_Dlg(dlg)
 {
 }
 

@@ -3,6 +3,7 @@
 //
 
 #include "stdafx.h"
+#include "../PlaneDlg/Resource.h"
 #include "FusionPlane.h"
 #include "FusionPlaneDlg.h"
 

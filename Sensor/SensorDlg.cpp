@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "Sensor.h"
+#include "SensorApp.h"
 #include "SensorDlg.h"
 
 
@@ -198,6 +198,10 @@ void CSensorDlg::OnBnClickedSensorEnable()
     m_Ctrl->Invalidate();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
+
+    m_ClientProxy.m_StateMapCtrl.DrawTargets();
+    m_ClientProxy.m_StateMapCtrl.BlendAll();
+    m_ClientProxy.m_StateMapCtrl.Invalidate();
 }
 
 void CSensorDlg::OnBnClickedSensorShowScanline()
@@ -282,6 +286,10 @@ void CSensorDlg::OnEnChangeSensorMaxDis()
     m_ClientProxy.DrawTargets();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
+
+    m_ClientProxy.m_StateMapCtrl.DrawTargets();
+    m_ClientProxy.m_StateMapCtrl.BlendAll();
+    m_ClientProxy.m_StateMapCtrl.Invalidate();
 }
 
 void CSensorDlg::OnEnChangeSensorMaxTheta()
@@ -301,6 +309,10 @@ void CSensorDlg::OnEnChangeSensorMaxTheta()
     m_ClientProxy.DrawTargets();
     m_ClientProxy.BlendAll();
     m_ClientProxy.Invalidate();
+
+    m_ClientProxy.m_StateMapCtrl.DrawTargets();
+    m_ClientProxy.m_StateMapCtrl.BlendAll();
+    m_ClientProxy.m_StateMapCtrl.Invalidate();
 }
 
 void CSensorDlg::OnEnChangeSensorMaxPhi()

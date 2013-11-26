@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Defines.h"
-
 namespace Utility
 {
     double Distance(const Position &rel);

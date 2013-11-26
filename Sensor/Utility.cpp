@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "Utility.h"
 
 #include <math.h>

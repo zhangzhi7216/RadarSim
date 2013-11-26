@@ -1,9 +1,11 @@
 #pragma once
 
+#include "StateMapCtrl.h"
+
 class __declspec(dllexport) SensorClientProxy
 {
 public:
-    SensorClientProxy(void);
+    SensorClientProxy(CStateMapCtrl &stateMapCtrl);
     virtual ~SensorClientProxy(void);
 
     virtual void OnClose() = 0;
@@ -11,4 +13,5 @@ public:
     virtual void DrawTargets() = 0;
     virtual void BlendAll() = 0;
     virtual void Invalidate(BOOL bErase = 1) = 0;
+    CStateMapCtrl &m_StateMapCtrl;
 };

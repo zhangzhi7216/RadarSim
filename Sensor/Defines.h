@@ -16,7 +16,7 @@ using namespace Gdiplus;
 
 #define LIST_ITEM_WIDTH 90
 
-typedef struct Point3D
+typedef struct __declspec(dllexport) Point3D
 {
     Point3D()
     {
@@ -73,3 +73,35 @@ enum TargetColor
 
 extern Color TargetColors[TargetColorLast];
 extern CString TargetColorNames[TargetColorLast];
+
+enum StateMapBackground
+{
+    StateMapBackground0 = 0,
+    StateMapBackground1,
+    StateMapBackground2,
+    StateMapBackground3,
+    StateMapBackground4,
+    StateMapBackgroundLast,
+};
+
+extern Image *StateMapBackgrounds[StateMapBackgroundLast];
+extern CString StateMapBackgroundNames[StateMapBackgroundLast];
+
+enum TargetType
+{
+    TargetTypeHeli = 0,
+    TargetTypeFighter,
+    TargetTypeAew,
+    TargetTypeBomber,
+    TargetTypeShipboard,
+    TargetTypeTank,
+    TargetTypePanzer,
+    TargetTypeMissile,
+    TargetTypeLast,
+};
+
+extern Image *TargetTypeImages[TargetTypeLast];
+extern CString TargetTypeNames[TargetTypeLast];
+
+void __declspec(dllexport) GlobalInit();
+void __declspec(dllexport) GlobalShut();

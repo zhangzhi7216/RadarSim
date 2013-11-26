@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Common"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Common"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -191,6 +191,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\DataList.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\DataListClientProxy.cpp"
 				>
 			</File>
@@ -200,6 +204,10 @@
 			</File>
 			<File
 				RelativePath=".\DataListDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Defines.cpp"
 				>
 			</File>
 			<File
@@ -223,6 +231,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SensorApp.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SensorClientProxy.cpp"
 				>
 			</File>
@@ -232,6 +244,18 @@
 			</File>
 			<File
 				RelativePath=".\SensorDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StateMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StateMapCtrl.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StateMapDlg.cpp"
 				>
 			</File>
 			<File
@@ -254,12 +278,24 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\Target.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\DataList.h"
+				>
+			</File>
 			<File
 				RelativePath=".\DataListClientProxy.h"
 				>
@@ -270,6 +306,10 @@
 			</File>
 			<File
 				RelativePath=".\DataListDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Defines.h"
 				>
 			</File>
 			<File
@@ -293,6 +333,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\SensorApp.h"
+				>
+			</File>
+			<File
 				RelativePath=".\SensorClientProxy.h"
 				>
 			</File>
@@ -305,11 +349,31 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StateMap.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StateMapCtrl.h"
+				>
+			</File>
+			<File
+				RelativePath=".\StateMapDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<File
+				RelativePath=".\Target.h"
+				>
+			</File>
+			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Utility.h"
 				>
 			</File>
 		</Filter>

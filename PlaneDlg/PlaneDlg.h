@@ -12,6 +12,8 @@
 #include "../Sensor/InfraredDlg.h"
 #include "../Sensor/DataListCtrl.h"
 #include "../Sensor/DataListDlg.h"
+#include "../Sensor/StateMapCtrl.h"
+#include "../Sensor/StateMapDlg.h"
 
 #include "PlaneRadarProxy.h"
 #include "PlaneEsmProxy.h"
@@ -50,11 +52,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
-
     bool m_Initialized;
     CString m_Title;
     void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
+
+    Plane m_Plane;
+    vector<Target> m_Targets;
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
 
     bool m_ShowRadarDlg;
     Sensor m_Radar;
@@ -84,9 +89,9 @@ public:
     CDataListDlg m_DataListDlg;
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 
-    Plane m_Plane;
-    vector<Target> m_Targets;
-    afx_msg void OnTimer(UINT_PTR nIDEvent);
+    bool m_ShowStateMapDlg;
+    StateMap m_StateMap;
+    CStateMapDlg m_StateMapDlg;
 
     void Reset();
     void ResetSensors();

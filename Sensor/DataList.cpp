@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "DataList.h"
 
 DataList::DataList(Sensor &radar, Sensor &esm, Sensor &infrared, Plane &plane)

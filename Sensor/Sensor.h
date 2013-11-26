@@ -1,27 +1,47 @@
-// Sensor.h : Sensor DLL 的主头文件
-//
-
 #pragma once
 
-#ifndef __AFXWIN_H__
-	#error "在包含此文件之前包含“stdafx.h”以生成 PCH 文件"
-#endif
+#include "Target.h"
 
-#include "resource.h"		// 主符号
-
-
-// CSensorApp
-// 有关此类实现的信息，请参阅 Sensor.cpp
-//
-
-class CSensorApp : public CWinApp
+class __declspec(dllexport) Sensor
 {
 public:
-	CSensorApp();
+    enum SensorType
+    {
+        SensorTypeSource = 0,
+        SensorTypeNonSource,
+        SensorTypeLast,
+    };
 
-// 重写
-public:
-	virtual BOOL InitInstance();
+    static CString SensorTypeNames[SensorTypeLast];
 
-	DECLARE_MESSAGE_MAP()
+    Sensor(SensorType type, Plane &plane);
+    virtual ~Sensor(void);
+
+    SensorType m_Type;
+    BOOL m_Enable;
+
+    double m_MaxDis;
+    double m_MaxTheta;
+    double m_MaxPhi;
+
+    double m_DisVar;
+    double m_ThetaVar;
+    double m_PhiVar;
+
+    double m_ProDet;
+
+    BOOL m_ShowScanline;
+    BOOL m_ShowTrack;
+    BOOL m_ShowThetaRange;
+    Color m_ThetaRangeColor;
+    BOOL m_ShowHeight;
+
+    vector<TargetColor> m_TargetColors;
+    vector<vector<double>> m_TargetDistances, m_TargetThetas, m_TargetPhis;
+
+    void Reset();
+    void AddTarget(Target &target);
+    void AddTargetData(int target, Position rel);
+    bool IsShowTargetData(int i, int j);
 };
+

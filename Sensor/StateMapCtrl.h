@@ -1,36 +1,29 @@
 #pragma once
 #include <afxwin.h>
-#include "Sensor.h"
+#include "StateMap.h"
 
-class __declspec(dllexport) CSensorCtrl :
+class __declspec(dllexport) CStateMapCtrl :
     public CStatic
 {
 public:
-    CSensorCtrl(Sensor &sensor);
-    virtual ~CSensorCtrl(void);
+    CStateMapCtrl(StateMap &stateMap);
+    virtual ~CStateMapCtrl(void);
 
 public:
-    Sensor &m_Sensor;
+    StateMap &m_StateMap;
 
     Image *m_Image;
     Image *m_BackgroundImg;
-    Image *m_ThetaRangeImg;
     Image *m_TargetsImg;
-    Image *m_ScanlineImg;
-    int m_CurrentAngle;
 
     virtual void DrawBackground();
-    virtual void DrawThetaRange();
-    virtual void DrawScanline();
     virtual void DrawTargets();
     virtual void BlendAll();
 
 public:
     DECLARE_MESSAGE_MAP()
     afx_msg void OnPaint();
-    afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnSize(UINT nType, int cx, int cy);
-    virtual void PreSubclassWindow();
 
 public:
     void Reset();

@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../FusionPlane;"
+				AdditionalIncludeDirectories="../Sensor; ../PlaneDlg; ../FusionPlane;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -128,7 +128,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../FusionPlane;"
+				AdditionalIncludeDirectories="../Sensor; ../PlaneDlg; ../FusionPlane;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
@@ -191,10 +191,6 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File
-				RelativePath="..\Common\Defines.cpp"
-				>
-			</File>
 			<File
 				RelativePath=".\FusionPlane.cpp"
 				>
