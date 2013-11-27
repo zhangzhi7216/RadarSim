@@ -35,13 +35,12 @@ void CDataListCtrl::AddTargetData()
 {
     for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
     {
+        int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;
         int row = InsertItem(0, TEXT(""));
         SetItemData(row, TargetColors[m_DataList.m_TargetColors[i]].ToCOLORREF());
         if (m_DataList.m_Esm.m_Enable)
         {
-            if (m_DataList.m_Esm.m_TargetDistances[i].back() <= m_DataList.m_Esm.m_MaxDis
-                && m_DataList.m_Esm.m_TargetThetas[i].back() <= m_DataList.m_Esm.m_MaxTheta
-                && m_DataList.m_Esm.m_TargetPhis[i].back() <= m_DataList.m_Esm.m_MaxPhi)
+            if (m_DataList.m_Esm.IsShowTargetData(i, j))
             {
                 CString str;
                 str.AppendFormat(TEXT("%f"), m_DataList.m_Esm.m_TargetThetas[i].back());
@@ -50,9 +49,7 @@ void CDataListCtrl::AddTargetData()
         }
         if (m_DataList.m_Infrared.m_Enable)
         {
-            if (m_DataList.m_Infrared.m_TargetDistances[i].back() <= m_DataList.m_Infrared.m_MaxDis
-                && m_DataList.m_Infrared.m_TargetThetas[i].back() <= m_DataList.m_Infrared.m_MaxTheta
-                && m_DataList.m_Infrared.m_TargetPhis[i].back() <= m_DataList.m_Infrared.m_MaxPhi)
+            if (m_DataList.m_Infrared.IsShowTargetData(i, j))
             {
                 {
                     CString str;
@@ -68,9 +65,7 @@ void CDataListCtrl::AddTargetData()
         }
         if (m_DataList.m_Radar.m_Enable)
         {
-            if (m_DataList.m_Radar.m_TargetDistances[i].back() <= m_DataList.m_Radar.m_MaxDis
-                && m_DataList.m_Radar.m_TargetThetas[i].back() <= m_DataList.m_Radar.m_MaxTheta
-                && m_DataList.m_Radar.m_TargetPhis[i].back() <= m_DataList.m_Radar.m_MaxPhi)
+            if (m_DataList.m_Radar.IsShowTargetData(i, j))
             {
                 {
                     CString str;

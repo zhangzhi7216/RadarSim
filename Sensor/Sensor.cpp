@@ -8,8 +8,8 @@ CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
 Sensor::Sensor(SensorType type, Plane &plane)
 : m_Type(type)
 , m_Enable(TRUE)
-, m_MaxDis(1000)
-, m_MaxTheta(360)
+, m_MaxDis(300)
+, m_MaxTheta(120)
 , m_MaxPhi(360)
 , m_DisVar(0)
 , m_ThetaVar(0)
@@ -30,8 +30,8 @@ Sensor::~Sensor(void)
 void Sensor::Reset()
 {
     m_Enable = TRUE;
-    m_MaxDis = 1000;
-    m_MaxTheta = 360;
+    m_MaxDis = 300;
+    m_MaxTheta = 120;
     m_MaxPhi = 360;
     m_DisVar = 0;
     m_ThetaVar = 0;

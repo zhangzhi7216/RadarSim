@@ -137,8 +137,13 @@ BOOL CPlaneDlg::OnInitDialog()
     target0.m_Id = 3;
     target1.m_Id = 4;
 
+    target0.m_Position = Position(150, 150, 150);
+    target1.m_Position = Position(200, 200, 200);
+
     AddTarget(target0);
     AddTarget(target1);
+
+    m_Plane.m_Position = Position(100, 100, 100);
 
     // DebugÓÃµÄTimer
     SetTimer(0, 800, NULL);
@@ -414,6 +419,11 @@ void CPlaneDlg::ResetSensors()
     m_Esm.Reset();
     m_Infrared.Reset();
     m_DataList.Reset();
+
+    m_Esm.m_MaxDis = 250;
+    m_Esm.m_MaxTheta = 90;
+    m_Infrared.m_MaxDis = 350;
+    m_Infrared.m_MaxTheta = 60;
 
     m_Esm.m_ThetaRangeColor = Color::Red;
     m_Esm.m_ShowHeight = FALSE;

@@ -85,6 +85,14 @@ void GlobalInit()
 
 void GlobalShut()
 {
+    for (int i = StateMapBackground0; i < StateMapBackgroundLast; ++i)
+    {
+        delete StateMapBackgrounds[i];
+    }
+    for (int i = TargetTypeHeli; i < TargetTypeLast; ++i)
+    {
+        delete TargetTypeImages[i];
+    }
     ULONG_PTR gdiplusToken = NULL; 
     GdiplusShutdown(gdiplusToken);
 }

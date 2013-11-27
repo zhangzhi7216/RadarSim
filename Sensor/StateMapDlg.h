@@ -2,6 +2,7 @@
 
 #include "StateMap.h"
 #include "StateMapCtrl.h"
+#include "afxwin.h"
 
 class __declspec(dllexport) CStateMapDlg : public CDialog
 {
@@ -28,7 +29,25 @@ public:
     CString m_Title;
     StateMap &m_StateMap;
     CStateMapCtrl m_Ctrl;
+    afx_msg void OnClose();
+
     bool m_Initialized;
+    virtual void Resize();
+    afx_msg void OnSize(UINT nType, int cx, int cy);
     void Reset();
     void AddTarget(Target &target);
+    CComboBox m_Background;
+    CComboBox m_PlaneType;
+    CComboBox m_PlaneColor;
+    CComboBox m_TargetId;
+    CComboBox m_TargetType;
+    CComboBox m_TargetColor;
+    afx_msg void OnBnClickedStatemapShowTrack();
+    afx_msg void OnBnClickedStatemapShowThetaRange();
+    afx_msg void OnCbnSelchangeStatemapBackground();
+    afx_msg void OnCbnSelchangeStatemapPlaneType();
+    afx_msg void OnCbnSelchangeStatemapPlaneColor();
+    afx_msg void OnCbnSelchangeStatemapTargetId();
+    afx_msg void OnCbnSelchangeStatemapTargetType();
+    afx_msg void OnCbnSelchangeStatemapTargetColor();
 };

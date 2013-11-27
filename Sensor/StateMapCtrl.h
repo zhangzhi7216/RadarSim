@@ -14,6 +14,7 @@ public:
 
     Image *m_Image;
     Image *m_BackgroundImg;
+    Image *m_OldBackgroundImg;
     Image *m_TargetsImg;
 
     virtual void DrawBackground();
