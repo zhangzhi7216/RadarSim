@@ -4,8 +4,10 @@
 
 #pragma once
 
-class ServerSocket;
-class ClientSocket;
+class DataCenterSocket;
+class PlaneSocket;
+
+#include <map>
 
 // CDataCenterDlg ¶Ô»°¿ò
 class CDataCenterDlg : public CDialog
@@ -32,10 +34,11 @@ protected:
     afx_msg LRESULT OnNetwork(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 
-    ServerSocket *m_Socket;
-    vector<ClientSocket *> m_PlaneClients;
-    vector<ClientSocket *> m_FusionClients;
+    DataCenterSocket *m_DataCenterSocket;
+    map<int, PlaneSocket *> m_PlaneSockets;
+    // vector<PlaneSocket *> m_FusionClients;
 
 public:
-    void OnAccept();
+    void AddPlaneSocket(int id, PlaneSocket *socket);
+    void RemovePlaneSocket(int id);
 };

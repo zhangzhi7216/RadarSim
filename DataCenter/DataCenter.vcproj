@@ -190,10 +190,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\ClientSocket.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\DataCenter.cpp"
 				>
 			</File>
@@ -202,7 +198,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\ServerSocket.cpp"
+				RelativePath=".\DataCenterSocket.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PlaneSocket.cpp"
 				>
 			</File>
 			<File
@@ -232,10 +232,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\ClientSocket.h"
-				>
-			</File>
-			<File
 				RelativePath=".\DataCenter.h"
 				>
 			</File>
@@ -244,11 +240,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Resource.h"
+				RelativePath=".\DataCenterSocket.h"
 				>
 			</File>
 			<File
-				RelativePath=".\ServerSocket.h"
+				RelativePath=".\PlaneSocket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File

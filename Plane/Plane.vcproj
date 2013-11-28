@@ -200,6 +200,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\PlaneDlg\PlaneSocket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -231,6 +235,10 @@
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\PlaneDlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\PlaneSocket.h"
 				>
 			</File>
 			<File

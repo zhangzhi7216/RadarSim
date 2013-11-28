@@ -2,12 +2,12 @@
 
 class CDataCenterDlg;
 
-class ServerSocket :
+class DataCenterSocket :
     public CSocket
 {
 public:
-    ServerSocket(CDataCenterDlg *dlg);
-    ~ServerSocket(void);
+    DataCenterSocket(CDataCenterDlg *dlg);
+    ~DataCenterSocket(void);
 
     void OnAccept(int nErrorCode);
 

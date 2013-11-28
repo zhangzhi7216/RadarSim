@@ -6,8 +6,10 @@
 #include "DataCenter.h"
 #include "DataCenterDlg.h"
 
-#include "ServerSocket.h"
-#include "ClientSocket.h"
+#include "DataCenterSocket.h"
+#include "PlaneSocket.h"
+
+#include <algorithm>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,7 +25,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDataCenterDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-    m_Socket = new ServerSocket(this);
+    m_DataCenterSocket = new DataCenterSocket(this);
 }
 
 void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
@@ -50,17 +52,20 @@ BOOL CDataCenterDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
-    if (FALSE == m_Socket->Create(DATA_CENTER_PORT))
+    if (!m_DataCenterSocket->Create(DATA_CENTER_PORT))
     {
-        return FALSE;
+        AfxMessageBox(TEXT("套接字创建失败"));
+        exit(-1);
     }
-    if (FALSE == m_Socket->Listen())
+    if (!m_DataCenterSocket->Listen())
     {
-        return FALSE;
+        AfxMessageBox(TEXT("监听失败"));
+        exit(-1);
     }
-    if (FALSE == m_Socket->AsyncSelect(FD_ACCEPT))
+    if (!m_DataCenterSocket->AsyncSelect(FD_ACCEPT))
     {
-        return FALSE;
+        AfxMessageBox(TEXT("选择失败"));
+        exit(-1);
     }
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
@@ -102,11 +107,22 @@ HCURSOR CDataCenterDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CDataCenterDlg::OnAccept()
+void CDataCenterDlg::AddPlaneSocket(int id, PlaneSocket *socket)
 {
-    ClientSocket *socket = new ClientSocket;
-    if (m_Socket->Accept(*socket))
+    RemovePlaneSocket(id);
+    m_PlaneSockets[id] = socket;
+    CString msg;
+    msg.AppendFormat(TEXT("成功接收id%d"), id);
+    AfxMessageBox(msg);
+}
+
+void CDataCenterDlg::RemovePlaneSocket(int id)
+{
+    map<int, PlaneSocket *>::iterator it = m_PlaneSockets.find(id);
+    if (it != m_PlaneSockets.end())
     {
-        AfxMessageBox(TEXT("连接成功"));
+        it->second->Close();
+        delete it->second;
+        m_PlaneSockets.erase(it);
     }
 }

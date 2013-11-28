@@ -20,6 +20,8 @@
 #include <vector>
 #include "CommonDlg.h"
 
+#include "PlaneSocket.h"
+
 using namespace std;
 
 // CPlaneDlg ¶Ô»°¿ò
@@ -111,4 +113,8 @@ public:
     virtual void OnSubDlgPhiVar(void *subDlg);
 
     virtual void OnSubDlgProDet(void *subDlg);
+
+    PlaneSocket *m_DataCenterSocket;
+    void ConnectDataCenter();
+    void ConnectFusionPlane(CString addr, int port);
 };

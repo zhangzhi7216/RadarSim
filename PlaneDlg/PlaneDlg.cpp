@@ -36,6 +36,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_ShowStateMapDlg(true)
     , m_StateMap(m_Radar, m_Esm, m_Infrared, m_Plane)
     , m_StateMapDlg(TEXT("态势"), m_StateMap)
+    , m_DataCenterSocket(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -87,16 +88,6 @@ BOOL CPlaneDlg::OnInitDialog()
 
     Resize();
 
-    CSocket *socket = new CSocket;
-    if (FALSE == socket->Create())
-    {
-        return FALSE;
-    }
-    if (FALSE == socket->Connect(TEXT("localhost"), DATA_CENTER_PORT))
-    {
-        return FALSE;
-    }
-
     CSensorDlg::CreateDlg(m_RadarDlg);
     if (m_ShowRadarDlg)
     {
@@ -142,6 +133,7 @@ BOOL CPlaneDlg::OnInitDialog()
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
 
+    ConnectDataCenter();
     // 初始化我机和目标
     /*
     Target target0, target1;
@@ -732,4 +724,29 @@ void CPlaneDlg::OnSubDlgProDet(void *subDlg)
         m_InfraredCtrl.BlendAll();
         m_InfraredCtrl.Invalidate();
     }
+}
+
+void CPlaneDlg::ConnectDataCenter()
+{
+    if(m_DataCenterSocket)
+    {
+        delete m_DataCenterSocket;
+    }
+    m_DataCenterSocket = new PlaneSocket(this);
+    if (!m_DataCenterSocket->Create())
+    {
+        AfxMessageBox(TEXT("创建套接字失败"));
+    }
+    while (!m_DataCenterSocket->Connect(TEXT("localhost"), DATA_CENTER_PORT))
+    {
+    }
+    m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+    m_DataCenterSocket->SendId(100);
+}
+
+void CPlaneDlg::ConnectFusionPlane(CString addr, int port)
+{
+    CString msg;
+    msg.AppendFormat(TEXT("融合机地址：%s 端口：%d"), addr, port);
+    AfxMessageBox(msg);
 }
