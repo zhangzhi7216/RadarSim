@@ -4,6 +4,8 @@
 
 #pragma once
 
+class ServerSocket;
+class ClientSocket;
 
 // CDataCenterDlg ¶Ô»°¿ò
 class CDataCenterDlg : public CDialog
@@ -27,5 +29,13 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
+    afx_msg LRESULT OnNetwork(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
+
+    ServerSocket *m_Socket;
+    vector<ClientSocket *> m_PlaneClients;
+    vector<ClientSocket *> m_FusionClients;
+
+public:
+    void OnAccept();
 };

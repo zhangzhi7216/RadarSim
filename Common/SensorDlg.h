@@ -1,8 +1,10 @@
 #pragma once
 
 #include "Sensor.h"
-#include "SensorClientProxy.h"
 #include "SensorCtrl.h"
+#include "CommonDlg.h"
+
+#include "Common.h"
 
 // CSensorDlg 对话框
 
@@ -11,7 +13,7 @@ class __declspec(dllexport) CSensorDlg : public CDialog
 	DECLARE_DYNAMIC(CSensorDlg)
 
 public:
-	CSensorDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientProxy, CWnd* pParent = NULL);   // 标准构造函数
+	CSensorDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CSensorDlg();
 
     static void CreateDlg(CSensorDlg &dlg);
@@ -30,7 +32,7 @@ protected:
 public:
     CString m_Title;
     Sensor &m_Sensor;
-    SensorClientProxy &m_ClientProxy;
+    CCommonDlg *m_Dlg;
     CSensorCtrl *m_Ctrl;
     afx_msg void OnClose();
     afx_msg void OnBnClickedSensorShowScanline();

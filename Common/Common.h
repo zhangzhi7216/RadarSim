@@ -14,10 +14,10 @@
 // 有关此类实现的信息，请参阅 Sensor.cpp
 //
 
-class CSensorApp : public CWinApp
+class CCommonApp : public CWinApp
 {
 public:
-	CSensorApp();
+	CCommonApp();
 
 // 重写
 public:

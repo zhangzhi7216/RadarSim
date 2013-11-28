@@ -10,7 +10,7 @@
 class __declspec(dllexport) CInfraredDlg : public CSensorDlg
 {
 public:
-	CInfraredDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientProxy, CWnd* pParent = NULL);   // 标准构造函数
+	CInfraredDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CInfraredDlg();
 
     static void CreateDlg(CInfraredDlg &dlg);

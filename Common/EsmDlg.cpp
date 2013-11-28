@@ -2,14 +2,13 @@
 //
 
 #include "stdafx.h"
-#include "SensorApp.h"
 #include "EsmDlg.h"
 
 
 // CInfraredDlg ¶Ô»°¿ò
 
-CEsmDlg::CEsmDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientProxy, CWnd* pParent /*=NULL*/)
-	: CSensorDlg(title, sensor, clientProxy, pParent)
+CEsmDlg::CEsmDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pParent /*=NULL*/)
+	: CSensorDlg(title, sensor, dlg, pParent)
 {
 }
 

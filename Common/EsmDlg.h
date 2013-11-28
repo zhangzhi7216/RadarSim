@@ -10,7 +10,7 @@
 class __declspec(dllexport) CEsmDlg : public CSensorDlg
 {
 public:
-	CEsmDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientProxy, CWnd* pParent = NULL);   // 标准构造函数
+	CEsmDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CEsmDlg();
 
     static void CreateDlg(CEsmDlg &dlg);

@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Sensor; ../PlaneDlg; ../Plane;"
+				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../Plane;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -128,7 +128,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Sensor; ../PlaneDlg; ../Plane;"
+				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../Plane;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
@@ -196,23 +196,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneDataListProxy.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\PlaneDlg\PlaneDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneEsmProxy.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneInfraredProxy.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneRadarProxy.cpp"
 				>
 			</File>
 			<File
@@ -246,23 +230,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneDataListProxy.h"
-				>
-			</File>
-			<File
 				RelativePath="..\PlaneDlg\PlaneDlg.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneEsmProxy.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneInfraredProxy.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneRadarProxy.h"
 				>
 			</File>
 			<File

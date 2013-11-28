@@ -2,14 +2,13 @@
 //
 
 #include "stdafx.h"
-#include "SensorApp.h"
 #include "InfraredDlg.h"
 
 
 // CInfraredDlg ¶Ô»°¿ò
 
-CInfraredDlg::CInfraredDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientProxy, CWnd* pParent /*=NULL*/)
-	: CSensorDlg(title, sensor, clientProxy, pParent)
+CInfraredDlg::CInfraredDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pParent /*=NULL*/)
+	: CSensorDlg(title, sensor, dlg, pParent)
 {
     delete m_Ctrl;
     m_Ctrl = new CInfraredCtrl(sensor);

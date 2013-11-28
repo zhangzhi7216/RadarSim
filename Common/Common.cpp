@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SensorApp.h"
+#include "Common.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,13 +35,13 @@
 
 // CSensorApp
 
-BEGIN_MESSAGE_MAP(CSensorApp, CWinApp)
+BEGIN_MESSAGE_MAP(CCommonApp, CWinApp)
 END_MESSAGE_MAP()
 
 
 // CSensorApp 构造
 
-CSensorApp::CSensorApp()
+CCommonApp::CCommonApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
@@ -50,12 +50,12 @@ CSensorApp::CSensorApp()
 
 // 唯一的一个 CSensorApp 对象
 
-CSensorApp theApp;
+CCommonApp theApp;
 
 
 // CSensorApp 初始化
 
-BOOL CSensorApp::InitInstance()
+BOOL CCommonApp::InitInstance()
 {
 	CWinApp::InitInstance();
 

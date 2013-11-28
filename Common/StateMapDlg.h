@@ -2,7 +2,8 @@
 
 #include "StateMap.h"
 #include "StateMapCtrl.h"
-#include "afxwin.h"
+
+#include "Common.h"
 
 class __declspec(dllexport) CStateMapDlg : public CDialog
 {

@@ -103,5 +103,9 @@ enum TargetType
 extern Image *TargetTypeImages[TargetTypeLast];
 extern CString TargetTypeNames[TargetTypeLast];
 
+#define PLANE_COUNT 1
+#define FUSION_PLANE_COUNT 1
+#define DATA_CENTER_PORT 10086
+
 void __declspec(dllexport) GlobalInit();
 void __declspec(dllexport) GlobalShut();

@@ -6,6 +6,9 @@
 #include "DataCenter.h"
 #include "DataCenterDlg.h"
 
+#include "ServerSocket.h"
+#include "ClientSocket.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -20,6 +23,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDataCenterDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+    m_Socket = new ServerSocket(this);
 }
 
 void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
@@ -45,7 +49,19 @@ BOOL CDataCenterDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	// TODO: 在此添加额外的初始化代码
+    // TODO: 在此添加额外的初始化代码
+    if (FALSE == m_Socket->Create(DATA_CENTER_PORT))
+    {
+        return FALSE;
+    }
+    if (FALSE == m_Socket->Listen())
+    {
+        return FALSE;
+    }
+    if (FALSE == m_Socket->AsyncSelect(FD_ACCEPT))
+    {
+        return FALSE;
+    }
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -86,3 +102,11 @@ HCURSOR CDataCenterDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CDataCenterDlg::OnAccept()
+{
+    ClientSocket *socket = new ClientSocket;
+    if (m_Socket->Accept(*socket))
+    {
+        AfxMessageBox(TEXT("连接成功"));
+    }
+}

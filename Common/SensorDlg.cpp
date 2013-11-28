@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "SensorApp.h"
 #include "SensorDlg.h"
 
 
@@ -10,11 +9,11 @@
 
 IMPLEMENT_DYNAMIC(CSensorDlg, CDialog)
 
-CSensorDlg::CSensorDlg(LPCWSTR title, Sensor &sensor, SensorClientProxy &clientProxy, CWnd* pParent /*=NULL*/)
+CSensorDlg::CSensorDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pParent /*=NULL*/)
 	: CDialog(CSensorDlg::IDD, pParent)
     , m_Title(title)
     , m_Sensor(sensor)
-    , m_ClientProxy(clientProxy)
+    , m_Dlg(dlg)
     , m_Initialized(false)
 {
     m_Ctrl = new CSensorCtrl(m_Sensor);
@@ -110,7 +109,7 @@ void CSensorDlg::OnClose()
     // TODO: 在此添加消息处理程序代码和/或调用默认值
 
     // CDialog::OnClose();
-    m_ClientProxy.OnClose();
+    m_Dlg->OnSubDlgClose(this);
 }
 
 void CSensorDlg::Resize()
@@ -196,12 +195,8 @@ void CSensorDlg::OnBnClickedSensorEnable()
     m_Sensor.m_Enable = !m_Sensor.m_Enable;
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
 
-    m_ClientProxy.m_StateMapCtrl.DrawTargets();
-    m_ClientProxy.m_StateMapCtrl.BlendAll();
-    m_ClientProxy.m_StateMapCtrl.Invalidate();
+    m_Dlg->OnSubDlgEnable(this);
 }
 
 void CSensorDlg::OnBnClickedSensorShowScanline()
@@ -210,8 +205,8 @@ void CSensorDlg::OnBnClickedSensorShowScanline()
     m_Sensor.m_ShowScanline = !m_Sensor.m_ShowScanline;
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgShowScanline(this);
 }
 
 void CSensorDlg::OnBnClickedSensorShowTrack()
@@ -221,9 +216,8 @@ void CSensorDlg::OnBnClickedSensorShowTrack()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgShowTrack(this);
 }
 
 void CSensorDlg::OnCbnSelchangeSensorTargetId()
@@ -248,9 +242,8 @@ void CSensorDlg::OnCbnSelchangeSensorTargetColor()
         m_Ctrl->DrawTargets();
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
-        m_ClientProxy.DrawTargets();
-        m_ClientProxy.BlendAll();
-        m_ClientProxy.Invalidate();
+
+        m_Dlg->OnSubDlgTargetColor(this);
     }
 }
 
@@ -283,13 +276,8 @@ void CSensorDlg::OnEnChangeSensorMaxDis()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
 
-    m_ClientProxy.m_StateMapCtrl.DrawTargets();
-    m_ClientProxy.m_StateMapCtrl.BlendAll();
-    m_ClientProxy.m_StateMapCtrl.Invalidate();
+    m_Dlg->OnSubDlgMaxDis(this);
 }
 
 void CSensorDlg::OnEnChangeSensorMaxTheta()
@@ -305,14 +293,8 @@ void CSensorDlg::OnEnChangeSensorMaxTheta()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawThetaRange();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
 
-    m_ClientProxy.m_StateMapCtrl.DrawTargets();
-    m_ClientProxy.m_StateMapCtrl.BlendAll();
-    m_ClientProxy.m_StateMapCtrl.Invalidate();
+    m_Dlg->OnSubDlgMaxTheta(this);
 }
 
 void CSensorDlg::OnEnChangeSensorMaxPhi()
@@ -327,9 +309,8 @@ void CSensorDlg::OnEnChangeSensorMaxPhi()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgMaxPhi(this);
 }
 
 void CSensorDlg::OnEnChangeSensorDisVar()
@@ -344,9 +325,8 @@ void CSensorDlg::OnEnChangeSensorDisVar()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgDisVar(this);
 }
 
 void CSensorDlg::OnEnChangeSensorThetaVar()
@@ -361,9 +341,8 @@ void CSensorDlg::OnEnChangeSensorThetaVar()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgThetaVar(this);
 }
 
 void CSensorDlg::OnEnChangeSensorPhiVar()
@@ -378,9 +357,8 @@ void CSensorDlg::OnEnChangeSensorPhiVar()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgPhiVar(this);
 }
 
 void CSensorDlg::OnEnChangeSensorProDet()
@@ -395,7 +373,6 @@ void CSensorDlg::OnEnChangeSensorProDet()
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
-    m_ClientProxy.DrawTargets();
-    m_ClientProxy.BlendAll();
-    m_ClientProxy.Invalidate();
+
+    m_Dlg->OnSubDlgProDet(this);
 }

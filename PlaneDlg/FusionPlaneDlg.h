@@ -3,7 +3,6 @@
 //
 
 #pragma once
-#include "afxwin.h"
 #include "PlaneDlg.h"
 
 // CFusionPlaneDlg ¶Ô»°¿ò

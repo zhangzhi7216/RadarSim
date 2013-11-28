@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Common.h"
+
 #include "DataList.h"
-#include "DataListClientProxy.h"
 #include "DataListCtrl.h"
+#include "CommonDlg.h"
 
 // CDataListDlg 对话框
 
@@ -11,7 +13,7 @@ class __declspec(dllexport) CDataListDlg : public CDialog
 	DECLARE_DYNAMIC(CDataListDlg)
 
 public:
-	CDataListDlg(LPCWSTR title, DataList &dataList, DataListClientProxy &clientProxy, CWnd* pParent = NULL);   // 标准构造函数
+	CDataListDlg(LPCWSTR title, DataList &dataList, CCommonDlg *dlg, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CDataListDlg();
 
     static void CreateDlg(CDataListDlg &dlg);
@@ -30,7 +32,7 @@ protected:
 public:
     CString m_Title;
     DataList &m_DataList;
-    DataListClientProxy &m_ClientProxy;
+    CCommonDlg *m_Dlg;
     CDataListCtrl *m_Ctrl;
     afx_msg void OnClose();
 

@@ -14,34 +14,35 @@
 // CPlaneDlg 对话框
 
 CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
-	: CDialog(CPlaneDlg::IDD, pParent)
+    : CCommonDlg(CPlaneDlg::IDD, pParent)
     , m_Title(title)
     , m_Initialized(false)
     , m_ShowRadarDlg(true)
     , m_Radar(Sensor::SensorTypeSource, m_Plane)
     , m_RadarCtrl(m_Radar)
-    , m_PlaneRadarProxy(*this)
-    , m_RadarDlg(TEXT("雷达"), m_Radar, m_PlaneRadarProxy)
+    , m_RadarDlg(TEXT("雷达"), m_Radar, this)
     , m_ShowEsmDlg(true)
     , m_Esm(Sensor::SensorTypeNonSource, m_Plane)
     , m_EsmCtrl(m_Esm)
-    , m_PlaneEsmProxy(*this)
-    , m_EsmDlg(TEXT("ESM"), m_Esm, m_PlaneEsmProxy)
+    , m_EsmDlg(TEXT("ESM"), m_Esm, this)
     , m_ShowInfraredDlg(true)
     , m_Infrared(Sensor::SensorTypeNonSource, m_Plane)
     , m_InfraredCtrl(m_Infrared)
-    , m_PlaneInfraredProxy(*this)
-    , m_InfraredDlg(TEXT("红外"), m_Infrared, m_PlaneInfraredProxy)
+    , m_InfraredDlg(TEXT("红外"), m_Infrared, this)
     , m_ShowDataListDlg(true)
     , m_DataList(m_Radar, m_Esm, m_Infrared, m_Plane)
     , m_DataListCtrl(m_DataList)
-    , m_PlaneDataListProxy(*this)
-    , m_DataListDlg(TEXT("数据列表"), m_DataList, m_PlaneDataListProxy)
+    , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
     , m_ShowStateMapDlg(true)
     , m_StateMap(m_Radar, m_Esm, m_Infrared, m_Plane)
     , m_StateMapDlg(TEXT("态势"), m_StateMap)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
+    m_RadarDlg.m_Dlg = this;
+    m_EsmDlg.m_Dlg = this;
+    m_InfraredDlg.m_Dlg = this;
+    m_DataListDlg.m_Dlg = this;
 
     ResetSensors();
 }
@@ -55,7 +56,7 @@ void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_DATALIST_CTRL, m_DataListCtrl);
 }
 
-BEGIN_MESSAGE_MAP(CPlaneDlg, CDialog)
+BEGIN_MESSAGE_MAP(CPlaneDlg, CCommonDlg)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
@@ -72,7 +73,7 @@ END_MESSAGE_MAP()
 
 BOOL CPlaneDlg::OnInitDialog()
 {
-	CDialog::OnInitDialog();
+	CCommonDlg::OnInitDialog();
 
 	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
@@ -85,6 +86,16 @@ BOOL CPlaneDlg::OnInitDialog()
     SetWindowTextW(m_Title);
 
     Resize();
+
+    CSocket *socket = new CSocket;
+    if (FALSE == socket->Create())
+    {
+        return FALSE;
+    }
+    if (FALSE == socket->Connect(TEXT("localhost"), DATA_CENTER_PORT))
+    {
+        return FALSE;
+    }
 
     CSensorDlg::CreateDlg(m_RadarDlg);
     if (m_ShowRadarDlg)
@@ -132,6 +143,7 @@ BOOL CPlaneDlg::OnInitDialog()
     }
 
     // 初始化我机和目标
+    /*
     Target target0, target1;
 
     target0.m_Id = 3;
@@ -144,9 +156,10 @@ BOOL CPlaneDlg::OnInitDialog()
     AddTarget(target1);
 
     m_Plane.m_Position = Position(100, 100, 100);
+    */
 
     // Debug用的Timer
-    SetTimer(0, 800, NULL);
+    // SetTimer(0, 800, NULL);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -453,4 +466,270 @@ void CPlaneDlg::AddTarget(Target &target)
     m_InfraredDlg.AddTarget(target);
     m_DataListDlg.AddTarget(target);
     m_StateMapDlg.AddTarget(target);
+}
+
+void CPlaneDlg::OnSubDlgClose(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        OnStnDblclickRadarCtrl();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        OnStnDblclickEsmCtrl();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        OnStnDblclickInfraredCtrl();
+    }
+    else if (subDlg == (void *)&m_DataListDlg)
+    {
+        OnNMDblclkDatalistCtrl(0, 0);
+    }
+}
+
+void CPlaneDlg::OnSubDlgEnable(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::OnSubDlgShowScanline(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgShowTrack(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgTargetColor(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgMaxDis(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::OnSubDlgMaxTheta(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawThetaRange();
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawThetaRange();
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawThetaRange();
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::OnSubDlgMaxPhi(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgDisVar(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgThetaVar(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgPhiVar(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
+}
+
+void CPlaneDlg::OnSubDlgProDet(void *subDlg)
+{
+    if (subDlg == (void *)&m_RadarDlg)
+    {
+        m_RadarCtrl.DrawTargets();
+        m_RadarCtrl.BlendAll();
+        m_RadarCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_EsmDlg)
+    {
+        m_EsmCtrl.DrawTargets();
+        m_EsmCtrl.BlendAll();
+        m_EsmCtrl.Invalidate();
+    }
+    else if (subDlg == (void *)&m_InfraredDlg)
+    {
+        m_InfraredCtrl.DrawTargets();
+        m_InfraredCtrl.BlendAll();
+        m_InfraredCtrl.Invalidate();
+    }
 }

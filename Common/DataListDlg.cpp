@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-#include "SensorApp.h"
 #include "DataListDlg.h"
 
 
@@ -10,11 +9,11 @@
 
 IMPLEMENT_DYNAMIC(CDataListDlg, CDialog)
 
-CDataListDlg::CDataListDlg(LPCWSTR title, DataList &dataList, DataListClientProxy &clientProxy, CWnd* pParent /*=NULL*/)
+CDataListDlg::CDataListDlg(LPCWSTR title, DataList &dataList, CCommonDlg *dlg, CWnd* pParent /*=NULL*/)
 	: CDialog(CDataListDlg::IDD, pParent)
     , m_Title(title)
     , m_DataList(dataList)
-    , m_ClientProxy(clientProxy)
+    , m_Dlg(dlg)
     , m_Initialized(false)
 {
     m_Ctrl = new CDataListCtrl(m_DataList);
@@ -89,7 +88,7 @@ void CDataListDlg::OnClose()
     // TODO: 在此添加消息处理程序代码和/或调用默认值
 
     // CDialog::OnClose();
-    m_ClientProxy.OnClose();
+    m_Dlg->OnSubDlgClose(this);
 }
 
 void CDataListDlg::Resize()
@@ -151,7 +150,7 @@ void CDataListDlg::OnCbnSelchangeSensorTargetColor()
     {
         m_DataList.m_TargetColors[index] = (TargetColor)m_TargetColor.GetCurSel();
         m_Ctrl->Invalidate();
-        m_ClientProxy.Invalidate();
+        m_Dlg->OnSubDlgTargetColor(this);
     }
 }
 

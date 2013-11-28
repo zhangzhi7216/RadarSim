@@ -3,32 +3,27 @@
 //
 
 #pragma once
-#include "afxwin.h"
-#include "../Sensor/Resource.h"
-#include "../Sensor/SensorCtrl.h"
-#include "../Sensor/SensorDlg.h"
-#include "../Sensor/EsmDlg.h"
-#include "../Sensor/InfraredCtrl.h"
-#include "../Sensor/InfraredDlg.h"
-#include "../Sensor/DataListCtrl.h"
-#include "../Sensor/DataListDlg.h"
-#include "../Sensor/StateMapCtrl.h"
-#include "../Sensor/StateMapDlg.h"
-
-#include "PlaneRadarProxy.h"
-#include "PlaneEsmProxy.h"
-#include "PlaneInfraredProxy.h"
-#include "PlaneDataListProxy.h"
+#include "../Common/Resource.h"
+#include "../Common/SensorCtrl.h"
+#include "../Common/SensorDlg.h"
+#include "../Common/EsmDlg.h"
+#include "../Common/InfraredCtrl.h"
+#include "../Common/InfraredDlg.h"
+#include "../Common/DataListCtrl.h"
+#include "../Common/DataListDlg.h"
+#include "../Common/StateMapCtrl.h"
+#include "../Common/StateMapDlg.h"
+#include "../Common/CommonDlg.h"
 
 #include "Target.h"
 
 #include <vector>
-#include "afxcmn.h"
+#include "CommonDlg.h"
 
 using namespace std;
 
 // CPlaneDlg 对话框
-class CPlaneDlg : public CDialog
+class CPlaneDlg : public CCommonDlg
 {
 // 构造
 public:
@@ -64,28 +59,24 @@ public:
     bool m_ShowRadarDlg;
     Sensor m_Radar;
     CSensorCtrl m_RadarCtrl;
-    PlaneRadarProxy m_PlaneRadarProxy;
     CSensorDlg m_RadarDlg;
-    afx_msg void OnStnDblclickRadarCtrl();
+    virtual afx_msg void OnStnDblclickRadarCtrl();
 
     bool m_ShowEsmDlg;
     Sensor m_Esm;
     CSensorCtrl m_EsmCtrl;
-    PlaneEsmProxy m_PlaneEsmProxy;
     CEsmDlg m_EsmDlg;
     afx_msg void OnStnDblclickEsmCtrl();
 
     bool m_ShowInfraredDlg;
     Sensor m_Infrared;
     CInfraredCtrl m_InfraredCtrl;
-    PlaneInfraredProxy m_PlaneInfraredProxy;
     CInfraredDlg m_InfraredDlg;
     afx_msg void OnStnDblclickInfraredCtrl();
 
     bool m_ShowDataListDlg;
     DataList m_DataList;
     CDataListCtrl m_DataListCtrl;
-    PlaneDataListProxy m_PlaneDataListProxy;
     CDataListDlg m_DataListDlg;
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 
@@ -96,4 +87,28 @@ public:
     void Reset();
     void ResetSensors();
     void AddTarget(Target &target);
+
+    virtual void OnSubDlgClose(void *subDlg);
+
+    virtual void OnSubDlgEnable(void *subDlg);
+
+    virtual void OnSubDlgShowScanline(void *subDlg);
+
+    virtual void OnSubDlgShowTrack(void *subDlg);
+
+    virtual void OnSubDlgTargetColor(void *subDlg);
+
+    virtual void OnSubDlgMaxDis(void *subDlg);
+
+    virtual void OnSubDlgMaxTheta(void *subDlg);
+
+    virtual void OnSubDlgMaxPhi(void *subDlg);
+
+    virtual void OnSubDlgDisVar(void *subDlg);
+
+    virtual void OnSubDlgThetaVar(void *subDlg);
+
+    virtual void OnSubDlgPhiVar(void *subDlg);
+
+    virtual void OnSubDlgProDet(void *subDlg);
 };

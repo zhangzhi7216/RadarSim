@@ -2,9 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SensorApp.h"
 #include "StateMapDlg.h"
-
 
 // CStateMapDlg ¶Ô»°¿ò
 

@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Sensor"
+	Name="Common"
 	ProjectGUID="{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}"
-	RootNamespace="Sensor"
+	RootNamespace="Common"
 	Keyword="MFCDLLProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -70,7 +70,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="2"
-				ModuleDefinitionFile=".\Sensor.def"
+				ModuleDefinitionFile=".\Common.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -152,7 +152,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="gdiplus.lib"
 				LinkIncremental="1"
-				ModuleDefinitionFile=".\Sensor.def"
+				ModuleDefinitionFile=".\Common.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -191,11 +191,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\DataList.cpp"
+				RelativePath=".\Common.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\DataListClientProxy.cpp"
+				RelativePath=".\Common.def"
+				>
+			</File>
+			<File
+				RelativePath=".\CommonDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\DataList.cpp"
 				>
 			</File>
 			<File
@@ -224,18 +232,6 @@
 			</File>
 			<File
 				RelativePath=".\Sensor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Sensor.def"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorApp.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorClientProxy.cpp"
 				>
 			</File>
 			<File
@@ -293,11 +289,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\DataList.h"
+				RelativePath=".\Common.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DataListClientProxy.h"
+				RelativePath=".\CommonDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DataList.h"
 				>
 			</File>
 			<File
@@ -330,14 +330,6 @@
 			</File>
 			<File
 				RelativePath=".\Sensor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorApp.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorClientProxy.h"
 				>
 			</File>
 			<File
@@ -383,15 +375,15 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\res\Sensor.ico"
+				RelativePath=".\res\Common.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\Sensor.rc"
+				RelativePath=".\Common.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\res\Sensor.rc2"
+				RelativePath=".\res\Common.rc2"
 				>
 			</File>
 		</Filter>
@@ -403,7 +395,7 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="Sensor.rc"
+			Value="Common.rc"
 		/>
 	</Globals>
 </VisualStudioProject>

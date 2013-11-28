@@ -54,7 +54,7 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\Sensor.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
+    "#include ""res\\Common.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
     "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
     "#endif\r\n"
     "\0"
@@ -88,9 +88,9 @@ BEGIN
             VALUE "CompanyName", "TODO: <公司名>"
             VALUE "FileDescription", "TODO: <文件说明>"
             VALUE "FileVersion", "1.0.0.1"
-            VALUE "InternalName", "Sensor.dll"
+            VALUE "InternalName", "Common.dll"
             VALUE "LegalCopyright", "TODO: (C) <公司名>。保留所有权利。"
-            VALUE "OriginalFilename", "Sensor.dll"
+            VALUE "OriginalFilename", "Common.dll"
             VALUE "ProductName", "TODO: <产品名>"
             VALUE "ProductVersion", "1.0.0.1"
         END
@@ -241,7 +241,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\Sensor.ico"
+IDR_MAINFRAME           ICON                    "res\\Common.ico"
 #endif    // 中文(中华人民共和国) resources
 /////////////////////////////////////////////////////////////////////////////
 
@@ -260,7 +260,7 @@ IDR_MAINFRAME           ICON                    "res\\Sensor.ico"
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 LANGUAGE 4, 2
 #pragma code_page(936)
-#include "res\Sensor.rc2"  // 非 Microsoft Visual C++ 编辑的资源
+#include "res\Common.rc2"  // 非 Microsoft Visual C++ 编辑的资源
 #include "l.CHS\afxres.rc"      // 标准组件
 #endif
 

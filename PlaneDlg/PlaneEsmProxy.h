@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Sensor/SensorClientProxy.h"
+#include "../Common/SensorClientProxy.h"
 
 class CPlaneDlg;
 
