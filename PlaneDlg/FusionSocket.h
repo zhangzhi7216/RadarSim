@@ -2,13 +2,14 @@
 
 class CPlaneDlg;
 
-class PlaneSocket :
+class FusionSocket :
     public CSocket
 {
 public:
-    PlaneSocket(CPlaneDlg *dlg);
-    ~PlaneSocket(void);
+    FusionSocket(CPlaneDlg *dlg);
+    ~FusionSocket(void);
 
+    void OnAccept(int nErrorCode);
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 

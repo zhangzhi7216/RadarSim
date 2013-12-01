@@ -103,9 +103,15 @@ enum TargetType
 extern Image *TargetTypeImages[TargetTypeLast];
 extern CString TargetTypeNames[TargetTypeLast];
 
-#define PLANE_COUNT 1
-#define FUSION_PLANE_COUNT 1
+#define PLANE_COUNT 3
+#define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086
+
+enum PacketType
+{
+    PacketTypeImFusion = 0,
+    PacketTypeFusionAddr = 0,
+};
 
 void __declspec(dllexport) GlobalInit();
 void __declspec(dllexport) GlobalShut();

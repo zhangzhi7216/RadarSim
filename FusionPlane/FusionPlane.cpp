@@ -27,15 +27,12 @@ CFusionPlaneApp::CFusionPlaneApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
-    GdiplusStartupInput gdiplusStartupInput;
-    ULONG_PTR gdiplusToken;
-    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+    GlobalInit();
 }
 
 CFusionPlaneApp::~CFusionPlaneApp()
 {
-    ULONG_PTR gdiplusToken = NULL; 
-    GdiplusShutdown(gdiplusToken);
+    GlobalShut();
 }
 
 // 唯一的一个 CFusionPlaneApp 对象

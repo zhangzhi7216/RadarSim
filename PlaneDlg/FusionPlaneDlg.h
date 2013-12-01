@@ -5,6 +5,8 @@
 #pragma once
 #include "PlaneDlg.h"
 
+#include <afxmt.h>
+
 // CFusionPlaneDlg ¶Ô»°¿ò
 class CFusionPlaneDlg : public CPlaneDlg
 {
@@ -24,4 +26,13 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+
+    virtual void ConnectDataCenter();
+    virtual void ConnectFusion(const CString &addr, int port);
+    virtual void AddPlaneSocket();
+    virtual void ResetSockets();
+
+    FusionSocket *m_FusionSocket;
+    vector<PlaneSocket *> m_PlaneSockets;
+    CCriticalSection m_Lock;
 };

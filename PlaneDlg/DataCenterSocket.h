@@ -2,15 +2,17 @@
 
 class CPlaneDlg;
 
-class PlaneSocket :
+class DataCenterSocket :
     public CSocket
 {
 public:
-    PlaneSocket(CPlaneDlg *dlg);
-    ~PlaneSocket(void);
+    DataCenterSocket(CPlaneDlg *dlg);
+    ~DataCenterSocket(void);
 
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
+
+    void SendFusionAddr(int port);
 
 public:
     CPlaneDlg *m_Dlg;

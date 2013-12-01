@@ -20,6 +20,8 @@
 #include <vector>
 #include "CommonDlg.h"
 
+#include "DataCenterSocket.h"
+#include "FusionSocket.h"
 #include "PlaneSocket.h"
 
 using namespace std;
@@ -86,7 +88,7 @@ public:
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
 
-    void Reset();
+    void ResetCtrls();
     void ResetSensors();
     void AddTarget(Target &target);
 
@@ -114,7 +116,11 @@ public:
 
     virtual void OnSubDlgProDet(void *subDlg);
 
-    PlaneSocket *m_DataCenterSocket;
-    void ConnectDataCenter();
-    void ConnectFusionPlane(CString addr, int port);
+    virtual void ResetSockets();
+    virtual void ConnectDataCenter();
+    virtual void ConnectFusion(const CString &addr, int port);
+    virtual void AddPlaneSocket();
+
+    DataCenterSocket *m_DataCenterSocket;
+    FusionSocket *m_FusionSocket;
 };

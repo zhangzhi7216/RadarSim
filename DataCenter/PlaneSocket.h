@@ -9,19 +9,15 @@ public:
     PlaneSocket(CDataCenterDlg *dlg);
     ~PlaneSocket(void);
 
-    enum Stage
-    {
-        STAGE_RECV_ID,
-    };
-
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
+    void SendFusionAddr(const CString &addr, int port);
     void SendPlaneData();
 
 protected:
-    Stage m_Stage;
-    int m_Id;
     CDataCenterDlg *m_Dlg;
+    bool m_IsFusion;
+    bool m_FusionAddrSent;
 };
 

@@ -18,8 +18,10 @@
 
 CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(title, pParent)
+    , m_FusionSocket(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+    m_FusionSocket = new FusionSocket(this);
 }
 
 BEGIN_MESSAGE_MAP(CFusionPlaneDlg, CPlaneDlg)
@@ -33,6 +35,22 @@ END_MESSAGE_MAP()
 
 BOOL CFusionPlaneDlg::OnInitDialog()
 {
+    if (!m_FusionSocket->Create())
+    {
+        AfxMessageBox(TEXT("套接字创建失败"));
+        exit(-1);
+    }
+    if (!m_FusionSocket->Listen())
+    {
+        AfxMessageBox(TEXT("监听失败"));
+        exit(-1);
+    }
+    if (!m_FusionSocket->AsyncSelect(FD_ACCEPT))
+    {
+        AfxMessageBox(TEXT("选择失败"));
+        exit(-1);
+    }
+
 	CPlaneDlg::OnInitDialog();
 
 	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
@@ -79,4 +97,42 @@ void CFusionPlaneDlg::OnPaint()
 HCURSOR CFusionPlaneDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
+}
+
+void CFusionPlaneDlg::ConnectDataCenter()
+{
+    CPlaneDlg::ConnectDataCenter();
+    CString addr;
+    UINT port;
+    m_FusionSocket->GetSockName(addr, port);
+    m_DataCenterSocket->SendFusionAddr(port);
+}
+
+void CFusionPlaneDlg::ConnectFusion(const CString &addr, int port)
+{
+}
+
+void CFusionPlaneDlg::AddPlaneSocket()
+{
+    m_Lock.Lock();
+    PlaneSocket *socket = new PlaneSocket(this);
+    if (m_DataCenterSocket->Accept(*socket))
+    {
+        socket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+    }
+    m_PlaneSockets.push_back(socket);
+    m_Lock.Unlock();
+}
+
+void CFusionPlaneDlg::ResetSockets()
+{
+    m_Lock.Lock();
+    CPlaneDlg::ResetSockets();
+    for (int i = 0; i < m_PlaneSockets.size(); ++i)
+    {
+        m_PlaneSockets[i]->Close();
+        delete m_PlaneSockets[i];
+    }
+    m_PlaneSockets.clear();
+    m_Lock.Unlock();
 }

@@ -23,6 +23,7 @@
 
 CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CDataCenterDlg::IDD, pParent)
+    , m_FusionConnected(false)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
@@ -107,22 +108,44 @@ HCURSOR CDataCenterDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CDataCenterDlg::AddPlaneSocket(int id, PlaneSocket *socket)
+void CDataCenterDlg::AddPlaneSocket()
 {
-    RemovePlaneSocket(id);
-    m_PlaneSockets[id] = socket;
-    CString msg;
-    msg.AppendFormat(TEXT("成功接收id%d"), id);
-    AfxMessageBox(msg);
+    m_Lock.Lock();
+    PlaneSocket *socket = new PlaneSocket(this);
+    if (m_DataCenterSocket->Accept(*socket))
+    {
+        socket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+    }
+    m_PlaneSockets.push_back(socket);
+    if (m_FusionConnected)
+    {
+        socket->SendFusionAddr(m_FusionAddr, m_FusionPort);
+    }
+    m_Lock.Unlock();
 }
 
-void CDataCenterDlg::RemovePlaneSocket(int id)
+void CDataCenterDlg::SetFusionAddr(const CString &addr, int port)
 {
-    map<int, PlaneSocket *>::iterator it = m_PlaneSockets.find(id);
-    if (it != m_PlaneSockets.end())
+    m_FusionAddr = addr;
+    m_FusionPort = port;
+    m_FusionConnected = true;
+
+    for (int i = 0; i < m_PlaneSockets.size(); ++i)
     {
-        it->second->Close();
-        delete it->second;
-        m_PlaneSockets.erase(it);
+        m_PlaneSockets[i]->SendFusionAddr(m_FusionAddr, m_FusionPort);
     }
+}
+
+void CDataCenterDlg::ResetSockets()
+{
+    m_Lock.Lock();
+    for (int i = 0; i < m_PlaneSockets.size(); ++i)
+    {
+        m_PlaneSockets[i]->Close();
+        delete m_PlaneSockets[i];
+    }
+    m_PlaneSockets.clear();
+
+    m_FusionConnected = false;
+    m_Lock.Unlock();
 }

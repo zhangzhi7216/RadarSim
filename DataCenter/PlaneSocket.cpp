@@ -6,8 +6,8 @@
 
 PlaneSocket::PlaneSocket(CDataCenterDlg *dlg)
 : m_Dlg(dlg)
-, m_Stage(STAGE_RECV_ID)
-, m_Id(0)
+, m_IsFusion(false)
+, m_FusionAddrSent(false)
 {
 }
 
@@ -15,24 +15,52 @@ PlaneSocket::~PlaneSocket(void)
 {
 }
 
+void PlaneSocket::SendFusionAddr(const CString &addr, int port)
+{
+    if (!m_IsFusion)
+    {
+        if (!m_FusionAddrSent)
+        {
+            CSocketFile file(this);
+            CArchive ar(&file, CArchive::store);
+            ar << PacketTypeFusionAddr << addr << port;
+            ar.Flush();
+            m_FusionAddrSent = true;
+        }
+    }
+}
+
 void PlaneSocket::OnReceive(int nErrorCode)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::load);
-    switch (m_Stage)
+
+    int type;
+    ar >> type;
+    switch (type)
     {
-    case STAGE_RECV_ID:
-        ar >> m_Id;
-        ar.Flush();
-        m_Dlg->AddPlaneSocket(m_Id, this);
+    case PacketTypeImFusion:
+        {
+            CString addr;
+            UINT port;
+            GetPeerName(addr, port);
+            ar >> port;
+            ar.Flush();
+            m_IsFusion = true;
+            m_Dlg->SetFusionAddr(addr, port);
+        }
+        break;
+    default:
+        // AfxMessageBox(TEXT("未知数据包类型"));
         break;
     }
 }
 
 void PlaneSocket::OnClose(int nErrorCode)
 {
-    Close();
-    m_Dlg->RemovePlaneSocket(m_Id);
+    m_IsFusion = false;
+    m_FusionAddrSent = false;
+    m_Dlg->ResetSockets();
 }
 
 void PlaneSocket::SendPlaneData()

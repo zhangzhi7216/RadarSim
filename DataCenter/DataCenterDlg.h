@@ -1,13 +1,12 @@
-
 // DataCenterDlg.h : 头文件
 //
 
 #pragma once
 
+#include <afxmt.h>
+
 class DataCenterSocket;
 class PlaneSocket;
-
-#include <map>
 
 // CDataCenterDlg 对话框
 class CDataCenterDlg : public CDialog
@@ -35,10 +34,14 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
     DataCenterSocket *m_DataCenterSocket;
-    map<int, PlaneSocket *> m_PlaneSockets;
-    // vector<PlaneSocket *> m_FusionClients;
+    vector<PlaneSocket *> m_PlaneSockets;
+    bool m_FusionConnected;
+    CString m_FusionAddr;
+    int m_FusionPort;
 
 public:
-    void AddPlaneSocket(int id, PlaneSocket *socket);
-    void RemovePlaneSocket(int id);
+    void AddPlaneSocket();
+    void SetFusionAddr(const CString &addr, int port);
+    void ResetSockets();
+    CCriticalSection m_Lock;
 };

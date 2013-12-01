@@ -192,11 +192,19 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\PlaneDlg\DataCenterSocket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FusionPlane.cpp"
 				>
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\FusionPlaneDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\FusionSocket.cpp"
 				>
 			</File>
 			<File
@@ -234,11 +242,19 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath="..\PlaneDlg\DataCenterSocket.h"
+				>
+			</File>
+			<File
 				RelativePath=".\FusionPlane.h"
 				>
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\FusionPlaneDlg.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\FusionSocket.h"
 				>
 			</File>
 			<File

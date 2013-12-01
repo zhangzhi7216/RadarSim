@@ -5,7 +5,6 @@
 
 PlaneSocket::PlaneSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
-, m_Stage(STAGE_RECV_FUSION_PLANE)
 {
 }
 
@@ -17,30 +16,15 @@ void PlaneSocket::OnReceive(int nErrorCode)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::load);
-    switch (m_Stage)
-    {
-    case STAGE_RECV_FUSION_PLANE:
-        CString addr;
-        int port;
-        ar >> addr;
-        ar >> port;
-        ar.Flush();
-        m_Dlg->ConnectFusionPlane(addr, port);
-        break;
-    }
 }
 
 void PlaneSocket::OnClose(int nErrorCode)
 {
-    Close();
-    m_Dlg->ConnectDataCenter();
-}
-
-void PlaneSocket::SendId(int id)
-{
-    CSocketFile file(this);
-    CArchive ar(&file, CArchive::store);
-
-    ar << id;
-    ar.Flush();
+    static bool closing = false;
+    if (!closing)
+    {
+        closing = true;
+        AfxMessageBox(TEXT("与飞机的连接断开"));
+        m_Dlg->ResetSockets();
+    }
 }
