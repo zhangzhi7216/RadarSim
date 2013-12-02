@@ -4,6 +4,7 @@
 #include "StateMapCtrl.h"
 
 #include "Common.h"
+#include "afxwin.h"
 
 class __declspec(dllexport) CStateMapDlg : public CDialog
 {
@@ -36,6 +37,7 @@ public:
     virtual void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
     void Reset();
+    void AddPlane(Plane &plane);
     void AddTarget(Target &target);
     CComboBox m_Background;
     CComboBox m_PlaneType;
@@ -51,4 +53,6 @@ public:
     afx_msg void OnCbnSelchangeStatemapTargetId();
     afx_msg void OnCbnSelchangeStatemapTargetType();
     afx_msg void OnCbnSelchangeStatemapTargetColor();
+    CComboBox m_PlaneId;
+    afx_msg void OnCbnSelchangeStatemapPlaneId();
 };

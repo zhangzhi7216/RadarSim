@@ -5,7 +5,7 @@ using namespace Utility;
 
 CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
 
-Sensor::Sensor(SensorType type, Plane &plane)
+Sensor::Sensor(SensorType type)
 : m_Type(type)
 , m_Enable(TRUE)
 , m_MaxDis(300)
@@ -67,4 +67,27 @@ bool Sensor::IsShowTargetData(int i, int j)
 
     double d = m_TargetDistances[i][j], t = m_TargetThetas[i][j], p = m_TargetPhis[i][j];
     return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi;
+}
+
+CArchive & operator << (CArchive &ar, Sensor &sensor)
+{
+    int type = (int)sensor.m_Type;
+    ar << type << sensor.m_Enable
+        << sensor.m_MaxDis << sensor.m_MaxTheta << sensor.m_MaxPhi
+        << sensor.m_DisVar << sensor.m_ThetaVar << sensor.m_PhiVar
+        << sensor.m_ProDet;
+
+    return ar;
+}
+
+CArchive & operator >> (CArchive &ar, Sensor &sensor)
+{
+    int type;
+    ar >> type >> sensor.m_Enable
+        >> sensor.m_MaxDis >> sensor.m_MaxTheta >> sensor.m_MaxPhi
+        >> sensor.m_DisVar >> sensor.m_ThetaVar >> sensor.m_PhiVar
+        >> sensor.m_ProDet;
+    sensor.m_Type = (Sensor::SensorType)type;
+
+    return ar;
 }

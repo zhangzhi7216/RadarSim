@@ -14,7 +14,7 @@ public:
 
     static CString SensorTypeNames[SensorTypeLast];
 
-    Sensor(SensorType type, Plane &plane);
+    Sensor(SensorType type);
     virtual ~Sensor(void);
 
     SensorType m_Type;
@@ -45,3 +45,6 @@ public:
     bool IsShowTargetData(int i, int j);
 };
 
+__declspec(dllexport) CArchive & operator << (CArchive &ar, Sensor &sensor);
+
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, Sensor &sensor);

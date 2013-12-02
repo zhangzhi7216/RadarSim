@@ -90,6 +90,7 @@ public:
 
     void ResetCtrls();
     void ResetSensors();
+    void AddPlane(Plane &plane);
     void AddTarget(Target &target);
 
     virtual void OnSubDlgClose(void *subDlg);

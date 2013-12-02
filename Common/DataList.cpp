@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #include "DataList.h"
 
-DataList::DataList(Sensor &radar, Sensor &esm, Sensor &infrared, Plane &plane)
+DataList::DataList(Sensor &radar, Sensor &esm, Sensor &infrared)
 : m_Radar(radar)
 , m_Esm(esm)
 , m_Infrared(infrared)
-, m_Plane(plane)
 {
 }
 

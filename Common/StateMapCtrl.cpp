@@ -68,80 +68,84 @@ void CStateMapCtrl::DrawTargets()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    Pen pen(TargetColors[m_StateMap.m_PlaneColor], TARGET_TRACK_WIDTH);
-    if (m_StateMap.m_ShowTrack)
+    for (int i = 0; i < m_StateMap.m_PlaneTypes.size(); ++i)
     {
-        for (int i = 1; i < m_StateMap.m_PlanePath.size(); ++i)
+        Pen pen(TargetColors[m_StateMap.m_PlaneColors[i]], TARGET_TRACK_WIDTH);
+        if (m_StateMap.m_ShowTrack)
         {
-            PointF pt0(m_StateMap.m_PlanePath[i - 1].X / m_StateMap.m_MaxX * (double)width,
-                m_StateMap.m_PlanePath[i - 1].Y / m_StateMap.m_MaxY * (double)height);
-            PointF pt1(m_StateMap.m_PlanePath[i].X / m_StateMap.m_MaxX * (double)width,
-                m_StateMap.m_PlanePath[i].Y / m_StateMap.m_MaxY * (double)height);
-            graphics.DrawLine(&pen, pt0, pt1);
+            for (int j = 1; j < m_StateMap.m_PlanePaths[i].size(); ++j)
+            {
+                PointF pt0(m_StateMap.m_PlanePaths[i][j - 1].X / m_StateMap.m_MaxX * (double)width,
+                    m_StateMap.m_PlanePaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
+                PointF pt1(m_StateMap.m_PlanePaths[i][j].X / m_StateMap.m_MaxX * (double)width,
+                    m_StateMap.m_PlanePaths[i][j].Y / m_StateMap.m_MaxY * (double)height);
+                graphics.DrawLine(&pen, pt0, pt1);
+            }
+        }
+
+        if (m_StateMap.m_PlanePaths[i].size() > 0)
+        {
+            if (m_StateMap.m_PlanePaths[i].size() > 1)
+            {
+                Position end = m_StateMap.m_PlanePaths[i].back();
+                Position start = m_StateMap.m_PlanePaths[i][m_StateMap.m_PlanePaths[i].size() - 2];
+                double angle = Theta(end - start);
+                graphics.RotateTransform(angle, MatrixOrderAppend);
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+            }
+            Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
+            PointF pt(0.0, 0.0);
+            graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
+            if (m_StateMap.m_ShowThetaRange)
+            {
+                if (m_StateMap.m_Radar.m_Enable)
+                {
+                    Pen pen(m_StateMap.m_Radar.m_ThetaRangeColor);
+                    graphics.DrawPie(&pen,
+                        (float)(pt.X - m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Radar.m_MaxTheta / 2.0,
+                        m_StateMap.m_Radar.m_MaxTheta);
+                }
+                if (m_StateMap.m_Esm.m_Enable)
+                {
+                    Pen pen(m_StateMap.m_Esm.m_ThetaRangeColor);
+                    graphics.DrawPie(&pen,
+                        (float)(pt.X - m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Esm.m_MaxTheta / 2.0,
+                        m_StateMap.m_Esm.m_MaxTheta);
+                }
+                if (m_StateMap.m_Infrared.m_Enable)
+                {
+                    Pen pen(m_StateMap.m_Infrared.m_ThetaRangeColor);
+                    graphics.DrawPie(&pen,
+                        (float)(pt.X - m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Infrared.m_MaxTheta / 2.0,
+                        m_StateMap.m_Infrared.m_MaxTheta);
+                }
+            }
+            if (m_StateMap.m_PlanePaths[i].size() > 1)
+            {
+                graphics.ResetTransform();
+            }
         }
     }
 
-    if (m_StateMap.m_PlanePath.size() > 0)
-    {
-        if (m_StateMap.m_PlanePath.size() > 1)
-        {
-            Position end = m_StateMap.m_PlanePath.back();
-            Position start = m_StateMap.m_PlanePath[m_StateMap.m_PlanePath.size() - 2];
-            double angle = Theta(end - start);
-            graphics.RotateTransform(angle, MatrixOrderAppend);
-            graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-        }
-        Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneType];
-        PointF pt(0.0, 0.0);
-        graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
-        if (m_StateMap.m_ShowThetaRange)
-        {
-            if (m_StateMap.m_Radar.m_Enable)
-            {
-                Pen pen(m_StateMap.m_Radar.m_ThetaRangeColor);
-                graphics.DrawPie(&pen,
-                    (float)(pt.X - m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                    (float)(pt.Y - m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                    (float)(m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                    (float)(m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                    -m_StateMap.m_Radar.m_MaxTheta / 2.0,
-                    m_StateMap.m_Radar.m_MaxTheta);
-            }
-            if (m_StateMap.m_Esm.m_Enable)
-            {
-                Pen pen(m_StateMap.m_Esm.m_ThetaRangeColor);
-                graphics.DrawPie(&pen,
-                    (float)(pt.X - m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                    (float)(pt.Y - m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                    (float)(m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                    (float)(m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                    -m_StateMap.m_Esm.m_MaxTheta / 2.0,
-                    m_StateMap.m_Esm.m_MaxTheta);
-            }
-            if (m_StateMap.m_Infrared.m_Enable)
-            {
-                Pen pen(m_StateMap.m_Infrared.m_ThetaRangeColor);
-                graphics.DrawPie(&pen,
-                    (float)(pt.X - m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                    (float)(pt.Y - m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                    (float)(m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                    (float)(m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                    -m_StateMap.m_Infrared.m_MaxTheta / 2.0,
-                    m_StateMap.m_Infrared.m_MaxTheta);
-            }
-        }
-        if (m_StateMap.m_PlanePath.size() > 1)
-        {
-            graphics.ResetTransform();
-        }
-    }
 
-    if (m_StateMap.m_ShowTrack)
+    for (int i = 0; i < m_StateMap.m_TargetTypes.size(); ++i)
     {
-        for (int i = 0; i < m_StateMap.m_TargetTypes.size(); ++i)
+        if (m_StateMap.m_ShowTrack)
         {
             Pen pen(TargetColors[m_StateMap.m_TargetColors[i]], TARGET_TRACK_WIDTH);
-            for (int j = 1; j < m_StateMap.m_PlanePath.size(); ++j)
+            for (int j = 1; j < m_StateMap.m_TargetPaths[i].size(); ++j)
             {
                 PointF pt0(m_StateMap.m_TargetPaths[i][j - 1].X / m_StateMap.m_MaxX * (double)width,
                     m_StateMap.m_TargetPaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
@@ -150,9 +154,6 @@ void CStateMapCtrl::DrawTargets()
                 graphics.DrawLine(&pen, pt0, pt1);
             }
         }
-    }
-    for (int i = 0; i < m_StateMap.m_TargetTypes.size(); ++i)
-    {
         if (m_StateMap.m_TargetPaths[i].size() > 0)
         {
             if (m_StateMap.m_TargetPaths[i].size() > 1)

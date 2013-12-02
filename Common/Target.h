@@ -16,3 +16,6 @@ public:
 
 typedef Target Plane;
 
+__declspec(dllexport) CArchive & operator << (CArchive &ar, Target &target);
+
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, Target &target);

@@ -16,7 +16,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(中华人民共和国) resources
+// Chinese (P.R.C.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
 #ifdef _WIN32
@@ -54,8 +54,8 @@ BEGIN
     "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)\r\n"
     "LANGUAGE 4, 2\r\n"
     "#pragma code_page(936)\r\n"
-    "#include ""res\\Common.rc2""  // 非 Microsoft Visual C++ 编辑的资源\r\n"
-    "#include ""l.CHS\\afxres.rc""      // 标准组件\r\n"
+    "#include ""res\\Common.rc2""  // ·? Microsoft Visual C++ ±à?-μ?×ê?′\r\n"
+    "#include ""l.CHS\\afxres.rc""      // ±ê×?×é?t\r\n"
     "#endif\r\n"
     "\0"
 END
@@ -163,19 +163,21 @@ BEGIN
     GROUPBOX        "态势",IDC_STATEMAP_GRP,388,253,48,40
     GROUPBOX        "参数",IDC_STATEMAP_PARAM_GRP,7,7,137,286
     CONTROL         "显示探测范围",IDC_STATEMAP_SHOW_THETA_RANGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,52,64,10
-    COMBOBOX        IDC_STATEMAP_TARGET_ID,78,140,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "目标选择：",IDC_STATEMAP_TARGET_ID_STATIC,17,141,41,8
-    COMBOBOX        IDC_STATEMAP_TARGET_TYPE,78,165,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "目标图标：",IDC_STATEMAP_TARGET_TYPE_STATIC,17,165,41,8
+    COMBOBOX        IDC_STATEMAP_TARGET_ID,78,162,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "目标选择：",IDC_STATEMAP_TARGET_ID_STATIC,17,162,41,8
+    COMBOBOX        IDC_STATEMAP_TARGET_TYPE,78,186,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "目标图标：",IDC_STATEMAP_TARGET_TYPE_STATIC,17,186,41,8
     CONTROL         "显示轨迹",IDC_STATEMAP_SHOW_TRACK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,17,31,48,10
     COMBOBOX        IDC_STATEMAP_BACKGROUND,78,71,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     LTEXT           "地图选择：",IDC_STATEMAP_BACKGROUND_STATIC,17,71,41,8
-    COMBOBOX        IDC_STATEMAP_PLANE_TYPE,78,95,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "我机图标：",IDC_STATEMAP_PLANE_TYPE_STATIC,17,95,41,8
-    COMBOBOX        IDC_STATEMAP_PLANE_COLOR,78,116,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "我机颜色：",IDC_STATEMAP_PLANE_COLOR_STATIC,17,116,41,8
-    COMBOBOX        IDC_STATEMAP_TARGET_COLOR,78,190,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "目标颜色：",IDC_STATEMAP_TARGET_COLOR_STATIC,17,190,41,8
+    COMBOBOX        IDC_STATEMAP_PLANE_TYPE,78,116,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "我机图标：",IDC_STATEMAP_PLANE_TYPE_STATIC,17,116,41,8
+    COMBOBOX        IDC_STATEMAP_PLANE_COLOR,78,138,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "我机颜色：",IDC_STATEMAP_PLANE_COLOR_STATIC,17,138,41,8
+    COMBOBOX        IDC_STATEMAP_TARGET_COLOR,78,212,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "目标颜色：",IDC_STATEMAP_TARGET_COLOR_STATIC,17,212,41,8
+    COMBOBOX        IDC_STATEMAP_PLANE_ID,78,95,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "我机选择：",IDC_STATEMAP_PLANE_ID_STATIC,17,95,41,8
 END
 
 
@@ -242,7 +244,7 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\Common.ico"
-#endif    // 中文(中华人民共和国) resources
+#endif    // Chinese (P.R.C.) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

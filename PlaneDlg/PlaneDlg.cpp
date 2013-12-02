@@ -18,23 +18,23 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_Title(title)
     , m_Initialized(false)
     , m_ShowRadarDlg(false)
-    , m_Radar(Sensor::SensorTypeSource, m_Plane)
+    , m_Radar(Sensor::SensorTypeSource)
     , m_RadarCtrl(m_Radar)
     , m_RadarDlg(TEXT("雷达"), m_Radar, this)
     , m_ShowEsmDlg(false)
-    , m_Esm(Sensor::SensorTypeNonSource, m_Plane)
+    , m_Esm(Sensor::SensorTypeNonSource)
     , m_EsmCtrl(m_Esm)
     , m_EsmDlg(TEXT("ESM"), m_Esm, this)
     , m_ShowInfraredDlg(false)
-    , m_Infrared(Sensor::SensorTypeNonSource, m_Plane)
+    , m_Infrared(Sensor::SensorTypeNonSource)
     , m_InfraredCtrl(m_Infrared)
     , m_InfraredDlg(TEXT("红外"), m_Infrared, this)
     , m_ShowDataListDlg(false)
-    , m_DataList(m_Radar, m_Esm, m_Infrared, m_Plane)
+    , m_DataList(m_Radar, m_Esm, m_Infrared)
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
-    , m_ShowStateMapDlg(false)
-    , m_StateMap(m_Radar, m_Esm, m_Infrared, m_Plane)
+    , m_ShowStateMapDlg(true)
+    , m_StateMap(m_Radar, m_Esm, m_Infrared)
     , m_StateMapDlg(TEXT("态势"), m_StateMap)
     , m_DataCenterSocket(0)
     , m_FusionSocket(0)
@@ -139,7 +139,6 @@ BOOL CPlaneDlg::OnInitDialog()
     ResetSockets();
     ConnectDataCenter();
     // 初始化我机和目标
-    /*
     Target target0, target1;
 
     target0.m_Id = 3;
@@ -148,6 +147,7 @@ BOOL CPlaneDlg::OnInitDialog()
     target0.m_Position = Position(150, 150, 150);
     target1.m_Position = Position(200, 200, 200);
 
+    AddPlane(m_Plane);
     AddTarget(target0);
     AddTarget(target1);
 
@@ -156,7 +156,6 @@ BOOL CPlaneDlg::OnInitDialog()
 
     // Debug用的Timer
     SetTimer(0, 800, NULL);
-    */
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -363,7 +362,7 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         m_Radar.AddTargetData(1, rel1);
         m_Esm.AddTargetData(1, rel1);
         m_Infrared.AddTargetData(1, rel1);
-        m_StateMap.AddPlaneData(m_Plane.m_Position);
+        m_StateMap.AddPlaneData(0, m_Plane.m_Position);
         m_StateMap.AddTargetData(0, m_Targets[0].m_Position);
         m_StateMap.AddTargetData(1, m_Targets[1].m_Position);
 
@@ -440,6 +439,12 @@ void CPlaneDlg::ResetSensors()
     m_Infrared.m_ShowThetaRange = FALSE;
     m_Infrared.m_ThetaRangeColor = Color::Yellow;
     m_Infrared.m_ShowHeight = FALSE;
+}
+
+void CPlaneDlg::AddPlane(Plane &plane)
+{
+    m_StateMap.AddPlane(plane);
+    m_StateMapDlg.AddPlane(plane);
 }
 
 void CPlaneDlg::AddTarget(Target &target)

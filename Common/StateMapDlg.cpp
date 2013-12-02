@@ -40,6 +40,7 @@ void CStateMapDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_STATEMAP_TARGET_ID, m_TargetId);
     DDX_Control(pDX, IDC_STATEMAP_TARGET_TYPE, m_TargetType);
     DDX_Control(pDX, IDC_STATEMAP_TARGET_COLOR, m_TargetColor);
+    DDX_Control(pDX, IDC_STATEMAP_PLANE_ID, m_PlaneId);
 }
 BEGIN_MESSAGE_MAP(CStateMapDlg, CDialog)
     ON_WM_CLOSE()
@@ -52,6 +53,7 @@ BEGIN_MESSAGE_MAP(CStateMapDlg, CDialog)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_ID, &CStateMapDlg::OnCbnSelchangeStatemapTargetId)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_TYPE, &CStateMapDlg::OnCbnSelchangeStatemapTargetType)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_COLOR, &CStateMapDlg::OnCbnSelchangeStatemapTargetColor)
+    ON_CBN_SELCHANGE(IDC_STATEMAP_PLANE_ID, &CStateMapDlg::OnCbnSelchangeStatemapPlaneId)
 END_MESSAGE_MAP()
 
 
@@ -81,12 +83,12 @@ BOOL CStateMapDlg::OnInitDialog()
     {
         m_PlaneType.InsertString(i, TargetTypeNames[i]);
     }
-    m_PlaneType.SetCurSel(m_StateMap.m_PlaneType);
+    // m_PlaneType.SetCurSel(m_StateMap.m_PlaneType);
     for (int i = 0; i < TargetColorLast; ++i)
     {
         m_PlaneColor.InsertString(i, TargetColorNames[i]);
     }
-    m_PlaneColor.SetCurSel(m_StateMap.m_PlaneColor);
+    // m_PlaneColor.SetCurSel(m_StateMap.m_PlaneColor);
     for (int i = 0; i < TargetTypeLast; ++i)
     {
         m_TargetType.InsertString(i, TargetTypeNames[i]);
@@ -140,6 +142,10 @@ void CStateMapDlg::Resize()
     GetDlgItem(IDC_STATEMAP_BACKGROUND)->MoveWindow(left + width, top, width, height);
 
     top = top + height + PAD;
+    GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->MoveWindow(left, top, width, height);
+    GetDlgItem(IDC_STATEMAP_PLANE_ID)->MoveWindow(left + width, top, width, height);
+
+    top = top + height + PAD;
     GetDlgItem(IDC_STATEMAP_PLANE_TYPE_STATIC)->MoveWindow(left, top, width, height);
     GetDlgItem(IDC_STATEMAP_PLANE_TYPE)->MoveWindow(left + width, top, width, height);
 
@@ -180,14 +186,22 @@ void CStateMapDlg::Reset()
 
     m_Background.SetCurSel(m_StateMap.m_Background);
     
-    m_PlaneType.SetCurSel(m_StateMap.m_PlaneType);
-    m_PlaneColor.SetCurSel(m_StateMap.m_PlaneColor);
+    m_PlaneId.ResetContent();
+    m_PlaneType.SetCurSel(CB_ERR);
+    m_PlaneColor.SetCurSel(CB_ERR);
 
     m_TargetId.ResetContent();
     m_TargetType.SetCurSel(CB_ERR);
     m_TargetColor.SetCurSel(CB_ERR);
 
     UpdateData(FALSE);
+}
+
+void CStateMapDlg::AddPlane(Plane &plane)
+{
+    CString str;
+    str.AppendFormat(TEXT("%d"), plane.m_Id);
+    m_PlaneId.InsertString(m_PlaneId.GetCount(), str);
 }
 
 void CStateMapDlg::AddTarget(Target &target)
@@ -229,14 +243,26 @@ void CStateMapDlg::OnCbnSelchangeStatemapBackground()
     }
 }
 
+void CStateMapDlg::OnCbnSelchangeStatemapPlaneId()
+{
+    // TODO: Add your control notification handler code here
+    int index = m_PlaneId.GetCurSel();
+    int count = m_PlaneId.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_PlaneType.SetCurSel(m_StateMap.m_PlaneTypes[index]);
+        m_PlaneColor.SetCurSel(m_StateMap.m_PlaneColors[index]);
+    }
+}
+
 void CStateMapDlg::OnCbnSelchangeStatemapPlaneType()
 {
     // TODO: 在此添加控件通知处理程序代码
-    int index = m_PlaneType.GetCurSel();
-    int count = m_PlaneType.GetCount();
+    int index = m_PlaneId.GetCurSel();
+    int count = m_PlaneId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_PlaneType = (TargetType)index;
+        m_StateMap.m_PlaneTypes[index] = (TargetType)m_PlaneType.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -246,11 +272,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneType()
 void CStateMapDlg::OnCbnSelchangeStatemapPlaneColor()
 {
     // TODO: 在此添加控件通知处理程序代码
-    int index = m_PlaneColor.GetCurSel();
-    int count = m_PlaneColor.GetCount();
+    int index = m_PlaneId.GetCurSel();
+    int count = m_PlaneId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_PlaneColor = (TargetColor)index;
+        m_StateMap.m_PlaneColors[index] = (TargetColor)m_PlaneColor.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();

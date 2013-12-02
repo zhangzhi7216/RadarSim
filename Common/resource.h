@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by Sensor.rc
+// Used by Common.rc
 //
 #define IDR_MAINFRAME                   128
 #define IDD_SENSOR_DLG                  4000
@@ -45,6 +45,8 @@
 #define IDC_DATALIST_GRP                4032
 #define IDC_STATEMAP_PLANE_COLOR_STATIC 4032
 #define IDC_DATALIST                    4033
+#define IDC_STATEMAP_PLANE_TYPE2        4033
+#define IDC_STATEMAP_PLANE_ID           4033
 #define IDC_STATEMAP                    4034
 #define IDC_STATEMAP_GRP                4035
 #define IDC_STATEMAP_SHOW_THETA_RANGE   4036
@@ -56,6 +58,7 @@
 #define IDC_STATEMAP_TARGET_COLOR       4042
 #define IDC_STATEMAP_TARGET_COLOR_STATIC 4043
 #define IDC_STATEMAP_PARAM_GRP          4044
+#define IDC_STATEMAP_PLANE_ID_STATIC    4045
 
 // Next default values for new objects
 // 
