@@ -781,6 +781,7 @@ void CPlaneDlg::SetPlane(Plane &plane)
 {
     m_Plane.m_Id = plane.m_Id;
     m_Plane.m_Type = plane.m_Type;
+    m_Plane.m_Position = plane.m_Position;
 
     AddPlane(m_Plane);
 }
@@ -878,6 +879,7 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMap.m_MaxX = stateMap.m_MaxX;
     m_StateMap.m_MaxY = stateMap.m_MaxY;
 
+    m_StateMapDlg.m_Ctrl.DrawBackground();
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();

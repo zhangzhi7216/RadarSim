@@ -38,6 +38,14 @@ void PlaneSocket::SendPlane(Plane &plane)
     ar.Flush();
 }
 
+void PlaneSocket::SendTarget(Target &target)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeTarget << target;
+    ar.Flush();
+}
+
 void PlaneSocket::SendRadar(Sensor &radar)
 {
     CSocketFile file(this);

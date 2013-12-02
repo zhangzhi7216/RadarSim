@@ -192,9 +192,27 @@ void CDataCenterDlg::GeneratePlaneClients()
     }
 }
 
+void CDataCenterDlg::GenerateTargets()
+{
+    Target target0, target1;
+
+    target0.m_Id = 3;
+    target1.m_Id = 4;
+
+    target0.m_Type = TargetTypePanzer;
+    target1.m_Type = TargetTypeMissile;
+
+    target0.m_Position = Position(150, 150, 150);
+    target1.m_Position = Position(200, 200, 200);
+
+    m_Targets.push_back(target0);
+    m_Targets.push_back(target1);
+}
+
 void CDataCenterDlg::StartSim()
 {
     GeneratePlaneClients();
+    GenerateTargets();
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         m_PlaneSockets[i]->SendPlane(m_PlaneClients[i].m_Plane);
@@ -202,5 +220,9 @@ void CDataCenterDlg::StartSim()
         m_PlaneSockets[i]->SendEsm(m_PlaneClients[i].m_Esm);
         m_PlaneSockets[i]->SendInfrared(m_PlaneClients[i].m_Infrared);
         m_PlaneSockets[i]->SendStateMap(m_PlaneClients[i].m_StateMap);
+        for (int j = 0; j < m_Targets.size(); ++j)
+        {
+            m_PlaneSockets[i]->SendTarget(m_Targets[j]);
+        }
     }
 }

@@ -48,6 +48,8 @@ public:
     CCriticalSection m_Lock;
     afx_msg void OnBnClickedOk();
     PlaneClient m_PlaneClients[PLANE_COUNT];
+    vector<Target> m_Targets;
     void GeneratePlaneClients();
+    void GenerateTargets();
     void StartSim();
 };

@@ -21,7 +21,7 @@ void Target::Reset()
 CArchive & operator << (CArchive &ar, Target &target)
 {
     int type = (int)target.m_Type;
-    ar << target.m_Id << type;
+    ar << target.m_Id << type << target.m_Position;
 
     return ar;
 }
@@ -29,7 +29,7 @@ CArchive & operator << (CArchive &ar, Target &target)
 CArchive & operator >> (CArchive &ar, Target &target)
 {
     int type;
-    ar >> target.m_Id >> type;
+    ar >> target.m_Id >> type >> target.m_Position;
     target.m_Type = (TargetType)type;
 
     return ar;

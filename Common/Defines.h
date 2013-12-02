@@ -57,6 +57,10 @@ typedef struct __declspec(dllexport) Point3D
     double Z;
 } Position, Velocity, Acceleration;
 
+__declspec(dllexport) CArchive & operator << (CArchive &ar, Position &pos);
+
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, Position &pos);
+
 typedef vector<Position> Path;
 
 enum TargetColor
@@ -103,7 +107,7 @@ enum TargetType
 extern Image *TargetTypeImages[TargetTypeLast];
 extern CString TargetTypeNames[TargetTypeLast];
 
-#define PLANE_COUNT 3
+#define PLANE_COUNT 2
 #define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086
 
@@ -112,6 +116,7 @@ enum PacketType
     PacketTypeImFusion = 0,
     PacketTypeFusionAddr,
     PacketTypePlane,
+    PacketTypeTarget,
     PacketTypeRadar,
     PacketTypeEsm,
     PacketTypeInfrared,

@@ -59,6 +59,20 @@ CString TargetTypeNames[] =
     TEXT("µ¼µ¯"),
 };
 
+CArchive & operator << (CArchive &ar, Position &pos)
+{
+    ar << pos.X << pos.Y << pos.Z;
+
+    return ar;
+}
+
+CArchive & operator >> (CArchive &ar, Position &pos)
+{
+    ar >> pos.X >> pos.Y >> pos.Z;
+
+    return ar;
+}
+
 void GlobalInit()
 {
     srand((unsigned int)time(NULL));

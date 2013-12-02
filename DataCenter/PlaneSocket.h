@@ -18,6 +18,7 @@ public:
 
     void SendFusionAddr(const CString &addr, int port);
     void SendPlane(Plane &plane);
+    void SendTarget(Target &target);
     void SendRadar(Sensor &radar);
     void SendEsm(Sensor &esm);
     void SendInfrared(Sensor &infrared);

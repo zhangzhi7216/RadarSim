@@ -36,6 +36,13 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             m_Dlg->SetPlane(plane);
         }
         break;
+    case PacketTypeTarget:
+        {
+            Target target;
+            ar >> target;
+            m_Dlg->AddTarget(target);
+        }
+        break;
     case PacketTypeRadar:
         {
             Sensor radar(Sensor::SensorTypeNonSource);
