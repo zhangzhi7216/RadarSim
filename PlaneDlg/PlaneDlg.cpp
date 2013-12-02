@@ -138,6 +138,8 @@ BOOL CPlaneDlg::OnInitDialog()
     ResetCtrls();
     ResetSockets();
     ConnectDataCenter();
+
+#if 0
     // 初始化我机和目标
     Target target0, target1;
 
@@ -152,10 +154,11 @@ BOOL CPlaneDlg::OnInitDialog()
     AddTarget(target1);
 
     m_Plane.m_Position = Position(100, 100, 100);
-    
 
     // Debug用的Timer
     SetTimer(0, 800, NULL);
+#endif
+
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -772,4 +775,110 @@ void CPlaneDlg::ResetSockets()
 
 void CPlaneDlg::AddPlaneSocket()
 {
+}
+
+void CPlaneDlg::SetPlane(Plane &plane)
+{
+    m_Plane.m_Id = plane.m_Id;
+    m_Plane.m_Type = plane.m_Type;
+
+    AddPlane(m_Plane);
+}
+
+void CPlaneDlg::SetRadar(Sensor &radar)
+{
+    m_Radar.m_Type = radar.m_Type;
+    m_Radar.m_Enable = radar.m_Enable;
+    m_Radar.m_MaxDis = radar.m_MaxDis;
+    m_Radar.m_MaxTheta = radar.m_MaxTheta;
+    m_Radar.m_MaxPhi = radar.m_MaxPhi;
+    m_Radar.m_DisVar = radar.m_DisVar;
+    m_Radar.m_ThetaVar = radar.m_ThetaVar;
+    m_Radar.m_PhiVar = radar.m_PhiVar;
+    m_Radar.m_ProDet = radar.m_ProDet;
+
+    m_RadarCtrl.DrawThetaRange();
+    m_RadarCtrl.DrawTargets();
+    m_RadarCtrl.BlendAll();
+    m_RadarCtrl.Invalidate();
+
+    m_RadarDlg.m_Ctrl->DrawThetaRange();
+    m_RadarDlg.m_Ctrl->DrawTargets();
+    m_RadarDlg.m_Ctrl->BlendAll();
+    m_RadarDlg.m_Ctrl->Invalidate();
+
+    m_RadarDlg.UpdateData(FALSE);
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::SetEsm(Sensor &esm)
+{
+    m_Esm.m_Type = esm.m_Type;
+    m_Esm.m_Enable = esm.m_Enable;
+    m_Esm.m_MaxDis = esm.m_MaxDis;
+    m_Esm.m_MaxTheta = esm.m_MaxTheta;
+    m_Esm.m_MaxPhi = esm.m_MaxPhi;
+    m_Esm.m_DisVar = esm.m_DisVar;
+    m_Esm.m_ThetaVar = esm.m_ThetaVar;
+    m_Esm.m_PhiVar = esm.m_PhiVar;
+    m_Esm.m_ProDet = esm.m_ProDet;
+
+    m_EsmCtrl.DrawThetaRange();
+    m_EsmCtrl.DrawTargets();
+    m_EsmCtrl.BlendAll();
+    m_EsmCtrl.Invalidate();
+
+    m_EsmDlg.m_Ctrl->DrawThetaRange();
+    m_EsmDlg.m_Ctrl->DrawTargets();
+    m_EsmDlg.m_Ctrl->BlendAll();
+    m_EsmDlg.m_Ctrl->Invalidate();
+
+    m_EsmDlg.UpdateData(FALSE);
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::SetInfrared(Sensor &infrared)
+{
+    m_Infrared.m_Type = infrared.m_Type;
+    m_Infrared.m_Enable = infrared.m_Enable;
+    m_Infrared.m_MaxDis = infrared.m_MaxDis;
+    m_Infrared.m_MaxTheta = infrared.m_MaxTheta;
+    m_Infrared.m_MaxPhi = infrared.m_MaxPhi;
+    m_Infrared.m_DisVar = infrared.m_DisVar;
+    m_Infrared.m_ThetaVar = infrared.m_ThetaVar;
+    m_Infrared.m_PhiVar = infrared.m_PhiVar;
+    m_Infrared.m_ProDet = infrared.m_ProDet;
+
+    m_InfraredCtrl.DrawThetaRange();
+    m_InfraredCtrl.DrawTargets();
+    m_InfraredCtrl.BlendAll();
+    m_InfraredCtrl.Invalidate();
+
+    m_InfraredDlg.m_Ctrl->DrawThetaRange();
+    m_InfraredDlg.m_Ctrl->DrawTargets();
+    m_InfraredDlg.m_Ctrl->BlendAll();
+    m_InfraredDlg.m_Ctrl->Invalidate();
+
+    m_InfraredDlg.UpdateData(FALSE);
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::SetStateMap(StateMap &stateMap)
+{
+    m_StateMap.m_Background = stateMap.m_Background;
+    m_StateMap.m_MaxX = stateMap.m_MaxX;
+    m_StateMap.m_MaxY = stateMap.m_MaxY;
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
 }

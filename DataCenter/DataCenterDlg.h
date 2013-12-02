@@ -5,6 +5,8 @@
 
 #include <afxmt.h>
 
+#include "PlaneClient.h"
+
 class DataCenterSocket;
 class PlaneSocket;
 
@@ -30,7 +32,6 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
-    afx_msg LRESULT OnNetwork(WPARAM wParam, LPARAM lParam);
 	DECLARE_MESSAGE_MAP()
 
     DataCenterSocket *m_DataCenterSocket;
@@ -43,5 +44,10 @@ public:
     void AddPlaneSocket();
     void SetFusionAddr(const CString &addr, int port);
     void ResetSockets();
+    void ResetCtrls();
     CCriticalSection m_Lock;
+    afx_msg void OnBnClickedOk();
+    PlaneClient m_PlaneClients[PLANE_COUNT];
+    void GeneratePlaneClients();
+    void StartSim();
 };

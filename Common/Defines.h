@@ -110,7 +110,12 @@ extern CString TargetTypeNames[TargetTypeLast];
 enum PacketType
 {
     PacketTypeImFusion = 0,
-    PacketTypeFusionAddr = 1,
+    PacketTypeFusionAddr,
+    PacketTypePlane,
+    PacketTypeRadar,
+    PacketTypeEsm,
+    PacketTypeInfrared,
+    PacketTypeStateMap,
 };
 
 void __declspec(dllexport) GlobalInit();

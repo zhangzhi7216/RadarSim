@@ -202,6 +202,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\PlaneClient.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\PlaneSocket.cpp"
 				>
 			</File>
@@ -241,6 +245,10 @@
 			</File>
 			<File
 				RelativePath=".\DataCenterSocket.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PlaneClient.h"
 				>
 			</File>
 			<File
@@ -284,5 +292,9 @@
 		</File>
 	</Files>
 	<Globals>
+		<Global
+			Name="RESOURCE_FILE"
+			Value="DataCenter.rc"
+		/>
 	</Globals>
 </VisualStudioProject>

@@ -30,6 +30,46 @@ void PlaneSocket::SendFusionAddr(const CString &addr, int port)
     }
 }
 
+void PlaneSocket::SendPlane(Plane &plane)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypePlane << plane;
+    ar.Flush();
+}
+
+void PlaneSocket::SendRadar(Sensor &radar)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeRadar << radar;
+    ar.Flush();
+}
+
+void PlaneSocket::SendEsm(Sensor &esm)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeEsm << esm;
+    ar.Flush();
+}
+
+void PlaneSocket::SendInfrared(Sensor &infrared)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeInfrared << infrared;
+    ar.Flush();
+}
+
+void PlaneSocket::SendStateMap(StateMap &stateMap)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeStateMap << stateMap;
+    ar.Flush();
+}
+
 void PlaneSocket::OnReceive(int nErrorCode)
 {
     CSocketFile file(this);
@@ -60,6 +100,7 @@ void PlaneSocket::OnClose(int nErrorCode)
 {
     m_IsFusion = false;
     m_FusionAddrSent = false;
+    m_Dlg->ResetCtrls();
     m_Dlg->ResetSockets();
 }
 

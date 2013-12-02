@@ -121,6 +121,11 @@ public:
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void AddPlaneSocket();
+    virtual void SetPlane(Plane &plane);
+    virtual void SetRadar(Sensor &radar);
+    virtual void SetEsm(Sensor &esm);
+    virtual void SetInfrared(Sensor &infrared);
+    virtual void SetStateMap(StateMap &stateMap);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

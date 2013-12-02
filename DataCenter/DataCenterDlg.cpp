@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
+    ON_BN_CLICKED(IDOK, &CDataCenterDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -68,6 +69,9 @@ BOOL CDataCenterDlg::OnInitDialog()
         AfxMessageBox(TEXT("选择失败"));
         exit(-1);
     }
+
+    ResetCtrls();
+    ResetSockets();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -122,6 +126,10 @@ void CDataCenterDlg::AddPlaneSocket()
         socket->SendFusionAddr(m_FusionAddr, m_FusionPort);
     }
     m_Lock.Unlock();
+    if (m_FusionConnected && m_PlaneSockets.size() == PLANE_COUNT)
+    {
+        GetDlgItem(IDOK)->EnableWindow(TRUE);
+    }
 }
 
 void CDataCenterDlg::SetFusionAddr(const CString &addr, int port)
@@ -133,6 +141,10 @@ void CDataCenterDlg::SetFusionAddr(const CString &addr, int port)
     for (int i = 0; i < m_PlaneSockets.size(); ++i)
     {
         m_PlaneSockets[i]->SendFusionAddr(m_FusionAddr, m_FusionPort);
+    }
+    if (m_FusionConnected && m_PlaneSockets.size() == PLANE_COUNT)
+    {
+        GetDlgItem(IDOK)->EnableWindow(TRUE);
     }
 }
 
@@ -148,4 +160,47 @@ void CDataCenterDlg::ResetSockets()
 
     m_FusionConnected = false;
     m_Lock.Unlock();
+}
+
+void CDataCenterDlg::ResetCtrls()
+{
+    GetDlgItem(IDOK)->EnableWindow(FALSE);
+}
+
+void CDataCenterDlg::OnBnClickedOk()
+{
+    // TODO: Add your control notification handler code here
+    // OnOK();
+    StartSim();
+}
+
+void CDataCenterDlg::GeneratePlaneClients()
+{
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        m_PlaneClients[i].m_Plane.m_Id = i;
+        m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
+        m_PlaneClients[i].m_Radar.m_MaxDis += i * 10;
+        m_PlaneClients[i].m_Radar.m_MaxTheta += i * 10;
+        m_PlaneClients[i].m_Esm.m_MaxDis = 250 + i * 10;
+        m_PlaneClients[i].m_Esm.m_MaxTheta = 90 + i * 10;
+        m_PlaneClients[i].m_Infrared.m_MaxDis = 350 + i * 10;
+        m_PlaneClients[i].m_Infrared.m_MaxTheta = 60 + i * 10;
+        m_PlaneClients[i].m_StateMap.m_Background = StateMapBackground3;
+        m_PlaneClients[i].m_StateMap.m_MaxX = 800;
+        m_PlaneClients[i].m_StateMap.m_MaxY = 800;
+    }
+}
+
+void CDataCenterDlg::StartSim()
+{
+    GeneratePlaneClients();
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        m_PlaneSockets[i]->SendPlane(m_PlaneClients[i].m_Plane);
+        m_PlaneSockets[i]->SendRadar(m_PlaneClients[i].m_Radar);
+        m_PlaneSockets[i]->SendEsm(m_PlaneClients[i].m_Esm);
+        m_PlaneSockets[i]->SendInfrared(m_PlaneClients[i].m_Infrared);
+        m_PlaneSockets[i]->SendStateMap(m_PlaneClients[i].m_StateMap);
+    }
 }
