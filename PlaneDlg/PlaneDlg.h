@@ -90,7 +90,7 @@ public:
 
     void ResetCtrls();
     void ResetSensors();
-    void AddPlane(Plane &plane);
+    void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
     void AddTarget(Target &target);
 
     virtual void OnSubDlgClose(void *subDlg);
@@ -126,6 +126,7 @@ public:
     virtual void SetEsm(Sensor &esm);
     virtual void SetInfrared(Sensor &infrared);
     virtual void SetStateMap(StateMap &stateMap);
+    virtual void AddTrueData(Position &planePos, Position *targetPos);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

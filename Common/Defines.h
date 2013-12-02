@@ -108,6 +108,7 @@ extern Image *TargetTypeImages[TargetTypeLast];
 extern CString TargetTypeNames[TargetTypeLast];
 
 #define PLANE_COUNT 2
+#define TARGET_COUNT 3
 #define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086
 
@@ -121,6 +122,7 @@ enum PacketType
     PacketTypeEsm,
     PacketTypeInfrared,
     PacketTypeStateMap,
+    PacketTypeTrueData,
 };
 
 void __declspec(dllexport) GlobalInit();

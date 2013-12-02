@@ -34,7 +34,6 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
     , m_ShowStateMapDlg(true)
-    , m_StateMap(m_Radar, m_Esm, m_Infrared)
     , m_StateMapDlg(TEXT("态势"), m_StateMap)
     , m_DataCenterSocket(0)
     , m_FusionSocket(0)
@@ -407,6 +406,53 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
     }
 }
 
+void CPlaneDlg::AddTrueData(Position &planePos, Position *targetPos)
+{
+    m_StateMap.AddPlaneData(0, planePos);
+
+    for (int i = 0; i < TARGET_COUNT; ++i)
+    {
+        Position rel = targetPos[i] - planePos;
+
+        m_Radar.AddTargetData(i, rel);
+        m_Esm.AddTargetData(i, rel);
+        m_Infrared.AddTargetData(i, rel);
+
+        m_StateMap.AddTargetData(i, targetPos[i]);
+    }
+
+    m_RadarCtrl.DrawTargets();
+    m_RadarCtrl.BlendAll();
+    m_RadarCtrl.Invalidate();
+
+    m_RadarDlg.m_Ctrl->DrawTargets();
+    m_RadarDlg.m_Ctrl->BlendAll();
+    m_RadarDlg.m_Ctrl->Invalidate();
+
+    m_EsmCtrl.DrawTargets();
+    m_EsmCtrl.BlendAll();
+    m_EsmCtrl.Invalidate();
+
+    m_EsmDlg.m_Ctrl->DrawTargets();
+    m_EsmDlg.m_Ctrl->BlendAll();
+    m_EsmDlg.m_Ctrl->Invalidate();
+
+    m_InfraredCtrl.DrawTargets();
+    m_InfraredCtrl.BlendAll();
+    m_InfraredCtrl.Invalidate();
+
+    m_InfraredDlg.m_Ctrl->DrawTargets();
+    m_InfraredDlg.m_Ctrl->BlendAll();
+    m_InfraredDlg.m_Ctrl->Invalidate();
+
+    m_DataListCtrl.AddTargetData();
+    m_DataListDlg.m_Ctrl->AddTargetData();
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
 void CPlaneDlg::ResetCtrls()
 {
     m_Plane.Reset();
@@ -444,9 +490,9 @@ void CPlaneDlg::ResetSensors()
     m_Infrared.m_ShowHeight = FALSE;
 }
 
-void CPlaneDlg::AddPlane(Plane &plane)
+void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
 {
-    m_StateMap.AddPlane(plane);
+    m_StateMap.AddPlane(plane, radar, esm, infrared);
     m_StateMapDlg.AddPlane(plane);
 }
 
@@ -744,7 +790,7 @@ void CPlaneDlg::ConnectDataCenter()
     {
     }
     m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
-    AfxMessageBox(TEXT("连接到数据中心"));
+    // AfxMessageBox(TEXT("连接到数据中心"));
 }
 
 void CPlaneDlg::ConnectFusion(const CString &addr, int port)
@@ -753,7 +799,7 @@ void CPlaneDlg::ConnectFusion(const CString &addr, int port)
     {
     }
     m_FusionSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
-    AfxMessageBox(TEXT("连接到融合机"));
+    // AfxMessageBox(TEXT("连接到融合机"));
 }
 
 void CPlaneDlg::ResetSockets()
@@ -783,7 +829,7 @@ void CPlaneDlg::SetPlane(Plane &plane)
     m_Plane.m_Type = plane.m_Type;
     m_Plane.m_Position = plane.m_Position;
 
-    AddPlane(m_Plane);
+    AddPlane(m_Plane, &m_Radar, &m_Esm, &m_Infrared);
 }
 
 void CPlaneDlg::SetRadar(Sensor &radar)
@@ -797,6 +843,8 @@ void CPlaneDlg::SetRadar(Sensor &radar)
     m_Radar.m_ThetaVar = radar.m_ThetaVar;
     m_Radar.m_PhiVar = radar.m_PhiVar;
     m_Radar.m_ProDet = radar.m_ProDet;
+    m_Radar.m_ThetaRangeColor = radar.m_ThetaRangeColor;
+    m_Radar.m_ShowHeight = radar.m_ShowHeight;
 
     m_RadarCtrl.DrawThetaRange();
     m_RadarCtrl.DrawTargets();
@@ -826,6 +874,8 @@ void CPlaneDlg::SetEsm(Sensor &esm)
     m_Esm.m_ThetaVar = esm.m_ThetaVar;
     m_Esm.m_PhiVar = esm.m_PhiVar;
     m_Esm.m_ProDet = esm.m_ProDet;
+    m_Esm.m_ThetaRangeColor = esm.m_ThetaRangeColor;
+    m_Esm.m_ShowHeight = esm.m_ShowHeight;
 
     m_EsmCtrl.DrawThetaRange();
     m_EsmCtrl.DrawTargets();
@@ -855,6 +905,8 @@ void CPlaneDlg::SetInfrared(Sensor &infrared)
     m_Infrared.m_ThetaVar = infrared.m_ThetaVar;
     m_Infrared.m_PhiVar = infrared.m_PhiVar;
     m_Infrared.m_ProDet = infrared.m_ProDet;
+    m_Infrared.m_ThetaRangeColor = infrared.m_ThetaRangeColor;
+    m_Infrared.m_ShowHeight = infrared.m_ShowHeight;
 
     m_InfraredCtrl.DrawThetaRange();
     m_InfraredCtrl.DrawTargets();

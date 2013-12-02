@@ -11,9 +11,6 @@
 #define new DEBUG_NEW
 #endif
 
-#include <GdiPlus.h>
-using namespace Gdiplus;
-
 // CFusionPlaneApp
 
 BEGIN_MESSAGE_MAP(CFusionPlaneApp, CWinAppEx)

@@ -1,15 +1,12 @@
 #include "stdafx.h"
 #include "StateMap.h"
 
-StateMap::StateMap(Sensor &radar, Sensor &esm, Sensor &infrared)
+StateMap::StateMap()
 : m_MaxX(1000)
 , m_MaxY(1000)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
 , m_Background(StateMapBackground0)
-, m_Radar(radar)
-, m_Esm(esm)
-, m_Infrared(infrared)
 {
 }
 
@@ -28,6 +25,10 @@ void StateMap::Reset()
     m_TargetTypes.clear();
     m_TargetColors.clear();
     m_TargetPaths.clear();
+
+    m_Radars.clear();
+    m_Esms.clear();
+    m_Infrareds.clear();
 }
 
 void StateMap::AddPlaneData(int plane, Position pos)
@@ -35,11 +36,15 @@ void StateMap::AddPlaneData(int plane, Position pos)
     m_PlanePaths[plane].push_back(pos);
 }
 
-void StateMap::AddPlane(Plane &plane)
+void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
 {
     m_PlaneTypes.push_back(plane.m_Type);
     m_PlaneColors.push_back((TargetColor)(rand() % TargetColorLast));
     m_PlanePaths.push_back(Path());
+
+    m_Radars.push_back(radar);
+    m_Esms.push_back(esm);
+    m_Infrareds.push_back(infrared);
 }
 
 void StateMap::AddTarget(Target &target)

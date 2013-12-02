@@ -72,10 +72,14 @@ bool Sensor::IsShowTargetData(int i, int j)
 CArchive & operator << (CArchive &ar, Sensor &sensor)
 {
     int type = (int)sensor.m_Type;
+    COLORREF color = sensor.m_ThetaRangeColor.ToCOLORREF();
     ar << type << sensor.m_Enable
         << sensor.m_MaxDis << sensor.m_MaxTheta << sensor.m_MaxPhi
         << sensor.m_DisVar << sensor.m_ThetaVar << sensor.m_PhiVar
-        << sensor.m_ProDet;
+        << sensor.m_ProDet
+        << color
+        << sensor.m_ShowThetaRange
+        << sensor.m_ShowHeight;
 
     return ar;
 }
@@ -83,11 +87,16 @@ CArchive & operator << (CArchive &ar, Sensor &sensor)
 CArchive & operator >> (CArchive &ar, Sensor &sensor)
 {
     int type;
+    COLORREF color;
     ar >> type >> sensor.m_Enable
         >> sensor.m_MaxDis >> sensor.m_MaxTheta >> sensor.m_MaxPhi
         >> sensor.m_DisVar >> sensor.m_ThetaVar >> sensor.m_PhiVar
-        >> sensor.m_ProDet;
+        >> sensor.m_ProDet
+        >> color
+        >> sensor.m_ShowThetaRange
+        >> sensor.m_ShowHeight;
     sensor.m_Type = (Sensor::SensorType)type;
+    sensor.m_ThetaRangeColor.SetFromCOLORREF(color);
 
     return ar;
 }

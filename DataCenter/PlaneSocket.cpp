@@ -78,6 +78,18 @@ void PlaneSocket::SendStateMap(StateMap &stateMap)
     ar.Flush();
 }
 
+void PlaneSocket::SendTrueData(int plane, int index)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeTrueData << m_Dlg->m_PlaneDatas[plane][index];
+    for (int i = 0; i < TARGET_COUNT; ++i)
+    {
+        ar << m_Dlg->m_TargetDatas[i][index];
+    }
+    ar.Flush();
+}
+
 void PlaneSocket::OnReceive(int nErrorCode)
 {
     CSocketFile file(this);
@@ -93,7 +105,6 @@ void PlaneSocket::OnReceive(int nErrorCode)
             UINT port;
             GetPeerName(addr, port);
             ar >> port;
-            ar.Flush();
             m_IsFusion = true;
             m_Dlg->SetFusionAddr(addr, port);
         }
@@ -102,6 +113,10 @@ void PlaneSocket::OnReceive(int nErrorCode)
         // AfxMessageBox(TEXT("未知数据包类型"));
         break;
     }
+
+    ar.Flush();
+    AsyncSelect(FD_READ);
+    CSocket::OnReceive(nErrorCode);
 }
 
 void PlaneSocket::OnClose(int nErrorCode)
@@ -110,8 +125,5 @@ void PlaneSocket::OnClose(int nErrorCode)
     m_FusionAddrSent = false;
     m_Dlg->ResetCtrls();
     m_Dlg->ResetSockets();
-}
-
-void PlaneSocket::SendPlaneData()
-{
+    CSocket::OnClose(nErrorCode);
 }

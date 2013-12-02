@@ -5,6 +5,8 @@
 
 #include <afxmt.h>
 
+#include "../Common/StateMap.h"
+#include "../Common/StateMapDlg.h"
 #include "PlaneClient.h"
 
 class DataCenterSocket;
@@ -34,6 +36,10 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+    bool m_ShowStateMapDlg;
+    StateMap m_StateMap;
+    CStateMapDlg m_StateMapDlg;
+
     DataCenterSocket *m_DataCenterSocket;
     vector<PlaneSocket *> m_PlaneSockets;
     bool m_FusionConnected;
@@ -48,8 +54,12 @@ public:
     CCriticalSection m_Lock;
     afx_msg void OnBnClickedOk();
     PlaneClient m_PlaneClients[PLANE_COUNT];
-    vector<Target> m_Targets;
+    Target m_Targets[TARGET_COUNT];
     void GeneratePlaneClients();
     void GenerateTargets();
+    void GenerateSimData();
+    Path m_PlaneDatas[PLANE_COUNT];
+    Path m_TargetDatas[TARGET_COUNT];
     void StartSim();
+    afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

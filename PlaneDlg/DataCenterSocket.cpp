@@ -66,17 +66,31 @@ void DataCenterSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeStateMap:
         {
-            Sensor foo(Sensor::SensorTypeNonSource);
-            StateMap stateMap(foo, foo, foo);
+            StateMap stateMap;
             ar >> stateMap;
             m_Dlg->SetStateMap(stateMap);
+        }
+        break;
+    case PacketTypeTrueData:
+        {
+            Position planePos;
+            Position targetPos[TARGET_COUNT];
+            ar >> planePos;
+            for (int i = 0; i < TARGET_COUNT; ++i)
+            {
+                ar >> targetPos[i];
+            }
+            m_Dlg->AddTrueData(planePos, targetPos);
         }
         break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;
     }
+
     ar.Flush();
+    AsyncSelect(FD_READ);
+    CSocket::OnReceive(nErrorCode);
 }
 
 void DataCenterSocket::OnClose(int nErrorCode)
@@ -84,6 +98,8 @@ void DataCenterSocket::OnClose(int nErrorCode)
     AfxMessageBox(TEXT("与数据中心的连接断开"));
     m_Dlg->ResetSockets();
     m_Dlg->ConnectDataCenter();
+
+    CSocket::OnClose(nErrorCode);
 }
 
 void DataCenterSocket::SendFusionAddr(int port)

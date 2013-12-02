@@ -98,38 +98,38 @@ void CStateMapCtrl::DrawTargets()
             graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
             if (m_StateMap.m_ShowThetaRange)
             {
-                if (m_StateMap.m_Radar.m_Enable)
+                if (m_StateMap.m_Radars[i]->m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Radar.m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Radars[i]->m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Radar.m_MaxTheta / 2.0,
-                        m_StateMap.m_Radar.m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Radars[i]->m_MaxTheta / 2.0,
+                        m_StateMap.m_Radars[i]->m_MaxTheta);
                 }
-                if (m_StateMap.m_Esm.m_Enable)
+                if (m_StateMap.m_Esms[i]->m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Esm.m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Esms[i]->m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Esm.m_MaxTheta / 2.0,
-                        m_StateMap.m_Esm.m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Esms[i]->m_MaxTheta / 2.0,
+                        m_StateMap.m_Esms[i]->m_MaxTheta);
                 }
-                if (m_StateMap.m_Infrared.m_Enable)
+                if (m_StateMap.m_Infrareds[i]->m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Infrared.m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Infrareds[i]->m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Infrared.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Infrared.m_MaxTheta / 2.0,
-                        m_StateMap.m_Infrared.m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Infrareds[i]->m_MaxTheta / 2.0,
+                        m_StateMap.m_Infrareds[i]->m_MaxTheta);
                 }
             }
             if (m_StateMap.m_PlanePaths[i].size() > 1)

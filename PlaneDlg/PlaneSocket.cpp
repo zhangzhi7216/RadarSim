@@ -16,15 +16,14 @@ void PlaneSocket::OnReceive(int nErrorCode)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::load);
+
+    ar.Flush();
+    CSocket::OnReceive(nErrorCode);
 }
 
 void PlaneSocket::OnClose(int nErrorCode)
 {
-    static bool closing = false;
-    if (!closing)
-    {
-        closing = true;
-        AfxMessageBox(TEXT("与飞机的连接断开"));
-        m_Dlg->ResetSockets();
-    }
+    AfxMessageBox(TEXT("与飞机的连接断开"));
+    m_Dlg->ResetSockets();
+    CSocket::OnClose(nErrorCode);
 }

@@ -6,7 +6,7 @@
 class __declspec(dllexport) StateMap
 {
 public:
-    StateMap(Sensor &radar, Sensor &esm, Sensor &infrared);
+    StateMap();
     virtual ~StateMap(void);
 
     double m_MaxX, m_MaxY;
@@ -20,14 +20,16 @@ public:
     vector<TargetColor> m_PlaneColors;
     vector<Path> m_PlanePaths;
 
+    vector<Sensor *> m_Radars;
+    vector<Sensor *> m_Esms;
+    vector<Sensor *> m_Infrareds;
+
     vector<TargetType> m_TargetTypes;
     vector<TargetColor> m_TargetColors;
     vector<Path> m_TargetPaths;
 
-    Sensor &m_Radar, &m_Esm, &m_Infrared;
-
     void Reset();
-    void AddPlane(Plane &plane);
+    void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
     void AddPlaneData(int plane, Position pos);
     void AddTarget(Target &target);
     void AddTargetData(int target, Position pos);

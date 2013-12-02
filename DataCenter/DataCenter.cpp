@@ -24,8 +24,13 @@ CDataCenterApp::CDataCenterApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
+    GlobalInit();
 }
 
+CDataCenterApp::~CDataCenterApp()
+{
+    GlobalShut();
+}
 
 // 唯一的一个 CDataCenterApp 对象
 

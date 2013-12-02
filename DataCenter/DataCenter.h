@@ -19,6 +19,7 @@ class CDataCenterApp : public CWinAppEx
 {
 public:
 	CDataCenterApp();
+	~CDataCenterApp();
 
 // ÖØÐ´
 	public:
