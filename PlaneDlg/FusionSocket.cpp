@@ -23,6 +23,15 @@ void FusionSocket::OnReceive(int nErrorCode)
     CSocketFile file(this);
     CArchive ar(&file, CArchive::load);
 
+    int type;
+    ar >> type;
+    switch (type)
+    {
+    default:
+        AfxMessageBox(TEXT("未知数据包类型"));
+        break;
+    }
+
     ar.Flush();
     AsyncSelect(FD_READ);
     CSocket::OnReceive(nErrorCode);
@@ -34,4 +43,12 @@ void FusionSocket::OnClose(int nErrorCode)
     m_Dlg->ResetSockets();
     m_Dlg->ConnectDataCenter();
     CSocket::OnClose(nErrorCode);
+}
+
+void FusionSocket::SendNoiseData(NoiseDataPacket &packet)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeNoiseData << packet;
+    ar.Flush();
 }

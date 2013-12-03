@@ -64,5 +64,7 @@ public:
     void GenerateTrueData();
 
     void StartSim();
+    void PauseSim();
+    void ResumeSim();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

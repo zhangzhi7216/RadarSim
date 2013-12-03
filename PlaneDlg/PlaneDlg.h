@@ -129,6 +129,9 @@ public:
     virtual void SetInfrared(Sensor &infrared);
     virtual void SetStateMap(StateMap &stateMap);
     virtual void AddTrueData(TrueDataPacket &packet);
+    virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
+    virtual void AddNoiseData(NoiseDataPacket &packet);
+    virtual void SendNoiseData(NoiseDataPacket &packet);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

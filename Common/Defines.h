@@ -123,6 +123,8 @@ enum PacketType
     PacketTypeInfrared,
     PacketTypeStateMap,
     PacketTypeTrueData,
+    PacketTypeNoiseData,
+    PacketTypeFusionData,
 };
 
 void __declspec(dllexport) GlobalInit();

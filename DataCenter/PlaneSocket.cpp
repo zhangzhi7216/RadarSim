@@ -105,8 +105,13 @@ void PlaneSocket::OnReceive(int nErrorCode)
             m_Dlg->SetFusionAddr(addr, port);
         }
         break;
+    case PacketTypeFusionData:
+        {
+            m_Dlg->ResumeSim();
+        }
+        break;
     default:
-        // AfxMessageBox(TEXT("未知数据包类型"));
+        AfxMessageBox(TEXT("未知数据包类型"));
         break;
     }
 

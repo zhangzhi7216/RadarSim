@@ -452,7 +452,33 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
 
-    // m_FusionSocket->Send
+}
+
+void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket)
+{
+    noisePacket.m_PlaneTrueData = packet.m_PlaneTrueData;
+    noisePacket.m_TargetNoiseDatas.clear();
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
+    {
+        NoiseDataFrame frame;
+        frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
+        frame.m_Dis = m_Radar.m_TargetDistances[i].back();
+        frame.m_DisVar = m_Radar.m_DisVar;
+        frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
+        frame.m_ThetaVar = m_Infrared.m_ThetaVar;
+        frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
+        frame.m_PhiVar = m_Infrared.m_PhiVar;
+        noisePacket.m_TargetNoiseDatas.push_back(frame);
+    }
+}
+
+void CPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
+{
+    m_FusionSocket->SendNoiseData(packet);
+}
+
+void CPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
+{
 }
 
 void CPlaneDlg::ResetCtrls()

@@ -30,6 +30,10 @@ protected:
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void AddPlaneSocket();
+    virtual void AddNoiseData(NoiseDataPacket &packet);
+    virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void DoFusion();
+    vector<NoiseDataPacket> m_NoiseDatas;
     virtual void ResetSockets();
 
     FusionSocket *m_FusionSocket;

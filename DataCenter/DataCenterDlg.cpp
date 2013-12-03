@@ -330,15 +330,25 @@ void CDataCenterDlg::StartSim()
     SetTimer(WM_TIME_FRAME, 500, NULL);
 }
 
+void CDataCenterDlg::PauseSim()
+{
+    KillTimer(WM_TIME_FRAME);
+}
+
+void CDataCenterDlg::ResumeSim()
+{
+    SetTimer(WM_TIME_FRAME, 500, NULL);
+}
+
 void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
 
     CDialog::OnTimer(nIDEvent);
+    PauseSim();
 
     if (nIDEvent == WM_TIME_FRAME)
     {
-
         static int index = 0;
         if (index == TIME_FRAMES)
         {

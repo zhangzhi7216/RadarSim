@@ -116,12 +116,32 @@ void CFusionPlaneDlg::AddPlaneSocket()
 {
     m_Lock.Lock();
     PlaneSocket *socket = new PlaneSocket(this);
-    if (m_DataCenterSocket->Accept(*socket))
+    if (m_FusionSocket->Accept(*socket))
     {
         socket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
     }
     m_PlaneSockets.push_back(socket);
     m_Lock.Unlock();
+}
+
+void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
+{
+    m_NoiseDatas.push_back(packet);
+    if (m_NoiseDatas.size() == m_PlaneSockets.size() + 1)
+    {
+        DoFusion();
+    }
+}
+
+void CFusionPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
+{
+    AddNoiseData(packet);
+}
+
+void CFusionPlaneDlg::DoFusion()
+{
+    m_NoiseDatas.clear();
+    m_DataCenterSocket->SendFusionData();
 }
 
 void CFusionPlaneDlg::ResetSockets()

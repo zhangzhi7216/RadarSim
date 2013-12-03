@@ -13,6 +13,7 @@ public:
     void OnClose(int nErrorCode);
 
     void SendFusionAddr(int port);
+    void SendFusionData();
 
 public:
     CPlaneDlg *m_Dlg;

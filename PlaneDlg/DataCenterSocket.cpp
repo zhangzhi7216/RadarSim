@@ -77,6 +77,9 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             TrueDataPacket packet;
             ar >> packet;
             m_Dlg->AddTrueData(packet);
+            NoiseDataPacket noisePacket;
+            m_Dlg->PackNoiseData(packet, noisePacket);
+            m_Dlg->SendNoiseData(noisePacket);
         }
         break;
     default:
@@ -104,5 +107,14 @@ void DataCenterSocket::SendFusionAddr(int port)
     CArchive ar(&file, CArchive::store);
 
     ar << PacketTypeImFusion << port;
+    ar.Flush();
+}
+
+void DataCenterSocket::SendFusionData()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeFusionData;
     ar.Flush();
 }

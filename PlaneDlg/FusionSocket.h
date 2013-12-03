@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DataPacket.h"
+
 class CPlaneDlg;
 
 class FusionSocket :
@@ -13,7 +15,7 @@ public:
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
-    // void SendNoiseData(vector<>
+    void SendNoiseData(NoiseDataPacket &packet);
 
 public:
     CPlaneDlg *m_Dlg;
