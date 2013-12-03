@@ -8,4 +8,6 @@ namespace Utility
     double Distance(const Position &src, const Position &dst);
     double Theta(const Position &src, const Position &dst);
     double Phi(const Position &src, const Position &dst);
+
+    double WhiteNoise(double value, double var);
 };

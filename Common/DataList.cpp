@@ -19,5 +19,5 @@ void DataList::Reset()
 
 void DataList::AddTarget(Target &target)
 {
-    m_TargetColors.push_back((TargetColor)(rand() % TargetColorLast));
+    m_TargetColors.push_back(target.m_Color);
 }

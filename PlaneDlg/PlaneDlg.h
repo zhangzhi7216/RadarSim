@@ -24,6 +24,8 @@
 #include "FusionSocket.h"
 #include "PlaneSocket.h"
 
+#include "DataPacket.h"
+
 using namespace std;
 
 // CPlaneDlg ¶Ô»°¿ò
@@ -126,7 +128,7 @@ public:
     virtual void SetEsm(Sensor &esm);
     virtual void SetInfrared(Sensor &infrared);
     virtual void SetStateMap(StateMap &stateMap);
-    virtual void AddTrueData(Position &planePos, Position *targetPos);
+    virtual void AddTrueData(TrueDataPacket &packet);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

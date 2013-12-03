@@ -13,6 +13,8 @@ public:
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
+    // void SendNoiseData(vector<>
+
 public:
     CPlaneDlg *m_Dlg;
 };

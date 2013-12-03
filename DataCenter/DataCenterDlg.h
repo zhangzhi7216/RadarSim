@@ -8,6 +8,8 @@
 #include "../Common/StateMap.h"
 #include "../Common/StateMapDlg.h"
 #include "PlaneClient.h"
+#include "TargetClient.h"
+
 
 class DataCenterSocket;
 class PlaneSocket;
@@ -41,10 +43,10 @@ protected:
     CStateMapDlg m_StateMapDlg;
 
     DataCenterSocket *m_DataCenterSocket;
-    vector<PlaneSocket *> m_PlaneSockets;
     bool m_FusionConnected;
     CString m_FusionAddr;
     int m_FusionPort;
+    int m_ConnectedPlanes;
 
 public:
     void AddPlaneSocket();
@@ -53,13 +55,14 @@ public:
     void ResetCtrls();
     CCriticalSection m_Lock;
     afx_msg void OnBnClickedOk();
+
     PlaneClient m_PlaneClients[PLANE_COUNT];
-    Target m_Targets[TARGET_COUNT];
+    vector<TargetClient> m_TargetClients;
+
     void GeneratePlaneClients();
-    void GenerateTargets();
-    void GenerateSimData();
-    Path m_PlaneDatas[PLANE_COUNT];
-    Path m_TargetDatas[TARGET_COUNT];
+    void GenerateTargetClients();
+    void GenerateTrueData();
+
     void StartSim();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

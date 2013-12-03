@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DataPacket.h"
+
 class CPlaneDlg;
 
 class PlaneSocket :

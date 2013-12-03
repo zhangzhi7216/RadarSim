@@ -4,6 +4,7 @@
 Target::Target()
 : m_Id(0)
 , m_Type(TargetTypeHeli)
+, m_Color(TargetColorOrange)
 {
 }
 
@@ -21,16 +22,18 @@ void Target::Reset()
 CArchive & operator << (CArchive &ar, Target &target)
 {
     int type = (int)target.m_Type;
-    ar << target.m_Id << type << target.m_Position;
+    int color = (int)target.m_Color;
+    ar << target.m_Id << type << target.m_Position << color;
 
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, Target &target)
 {
-    int type;
-    ar >> target.m_Id >> type >> target.m_Position;
+    int type, color;
+    ar >> target.m_Id >> type >> target.m_Position >> color;
     target.m_Type = (TargetType)type;
+    target.m_Color = (TargetColor)color;
 
     return ar;
 }

@@ -11,6 +11,8 @@ public:
 
     Position m_Position;
 
+    TargetColor m_Color;
+
     void Reset();
 };
 

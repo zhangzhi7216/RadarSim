@@ -37,4 +37,9 @@ namespace Utility
         Position rel = dst - src;
         return Phi(rel);
     }
+
+    double WhiteNoise(double value, double var)
+    {
+        return value + (double)rand() / (double)RAND_MAX * var;
+    }
 };

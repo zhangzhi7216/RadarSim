@@ -3,6 +3,7 @@
 #include "Target.h"
 #include "Sensor.h"
 #include "StateMap.h"
+#include "DataPacket.h"
 
 class CDataCenterDlg;
 
@@ -23,7 +24,7 @@ public:
     void SendEsm(Sensor &esm);
     void SendInfrared(Sensor &infrared);
     void SendStateMap(StateMap &stateMap);
-    void SendTrueData(int plane, int index);
+    void SendTrueData(TrueDataPacket &packet);
 
 protected:
     CDataCenterDlg *m_Dlg;

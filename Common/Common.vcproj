@@ -215,6 +215,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DataPacket.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Defines.cpp"
 				>
 			</File>
@@ -306,6 +310,10 @@
 			</File>
 			<File
 				RelativePath=".\DataListDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DataPacket.h"
 				>
 			</File>
 			<File

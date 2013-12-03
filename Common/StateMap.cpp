@@ -39,7 +39,7 @@ void StateMap::AddPlaneData(int plane, Position pos)
 void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
 {
     m_PlaneTypes.push_back(plane.m_Type);
-    m_PlaneColors.push_back((TargetColor)(rand() % TargetColorLast));
+    m_PlaneColors.push_back(plane.m_Color);
     m_PlanePaths.push_back(Path());
 
     m_Radars.push_back(radar);
@@ -50,7 +50,7 @@ void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrar
 void StateMap::AddTarget(Target &target)
 {
     m_TargetTypes.push_back(target.m_Type);
-    m_TargetColors.push_back((TargetColor)(rand() % TargetColorLast));
+    m_TargetColors.push_back(target.m_Color);
     m_TargetPaths.push_back(Path());
 }
 

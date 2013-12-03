@@ -2,6 +2,7 @@
 #include "DataCenterSocket.h"
 #include "Resource.h"
 #include "PlaneDlg.h"
+#include "DataPacket.h"
 
 DataCenterSocket::DataCenterSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
@@ -73,14 +74,9 @@ void DataCenterSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeTrueData:
         {
-            Position planePos;
-            Position targetPos[TARGET_COUNT];
-            ar >> planePos;
-            for (int i = 0; i < TARGET_COUNT; ++i)
-            {
-                ar >> targetPos[i];
-            }
-            m_Dlg->AddTrueData(planePos, targetPos);
+            TrueDataPacket packet;
+            ar >> packet;
+            m_Dlg->AddTrueData(packet);
         }
         break;
     default:

@@ -78,15 +78,11 @@ void PlaneSocket::SendStateMap(StateMap &stateMap)
     ar.Flush();
 }
 
-void PlaneSocket::SendTrueData(int plane, int index)
+void PlaneSocket::SendTrueData(TrueDataPacket &packet)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeTrueData << m_Dlg->m_PlaneDatas[plane][index];
-    for (int i = 0; i < TARGET_COUNT; ++i)
-    {
-        ar << m_Dlg->m_TargetDatas[i][index];
-    }
+    ar << PacketTypeTrueData << packet;
     ar.Flush();
 }
 

@@ -33,9 +33,9 @@ void Sensor::Reset()
     m_MaxDis = 300;
     m_MaxTheta = 120;
     m_MaxPhi = 360;
-    m_DisVar = 0;
-    m_ThetaVar = 0;
-    m_PhiVar = 0;
+    m_DisVar = 1;
+    m_ThetaVar = 1;
+    m_PhiVar = 1;
     m_ProDet = 0;
     m_ShowScanline = TRUE;
     m_ShowTrack = TRUE;
@@ -44,7 +44,7 @@ void Sensor::Reset()
 
 void Sensor::AddTarget(Target &target)
 {
-    m_TargetColors.push_back((TargetColor)(rand() % TargetColorLast));
+    m_TargetColors.push_back(target.m_Color);
     m_TargetDistances.push_back(vector<double>());
     m_TargetThetas.push_back(vector<double>());
     m_TargetPhis.push_back(vector<double>());
@@ -52,9 +52,9 @@ void Sensor::AddTarget(Target &target)
 
 void Sensor::AddTargetData(int target, Position rel)
 {
-    m_TargetDistances[target].push_back(Distance(rel));
-    m_TargetThetas[target].push_back(Theta(rel));
-    m_TargetPhis[target].push_back(Phi(rel));
+    m_TargetDistances[target].push_back(WhiteNoise(Distance(rel), m_DisVar));
+    m_TargetThetas[target].push_back(WhiteNoise(Theta(rel), m_ThetaVar));
+    m_TargetPhis[target].push_back(WhiteNoise(Phi(rel), m_PhiVar));
 }
 
 bool Sensor::IsShowTargetData(int i, int j)

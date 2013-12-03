@@ -406,19 +406,19 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
     }
 }
 
-void CPlaneDlg::AddTrueData(Position &planePos, Position *targetPos)
+void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
-    m_StateMap.AddPlaneData(0, planePos);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
 
-    for (int i = 0; i < TARGET_COUNT; ++i)
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
-        Position rel = targetPos[i] - planePos;
+        Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
 
         m_Radar.AddTargetData(i, rel);
         m_Esm.AddTargetData(i, rel);
         m_Infrared.AddTargetData(i, rel);
 
-        m_StateMap.AddTargetData(i, targetPos[i]);
+        m_StateMap.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
     }
 
     m_RadarCtrl.DrawTargets();
@@ -451,6 +451,8 @@ void CPlaneDlg::AddTrueData(Position &planePos, Position *targetPos)
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
+
+    // m_FusionSocket->Send
 }
 
 void CPlaneDlg::ResetCtrls()
