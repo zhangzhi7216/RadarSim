@@ -6,6 +6,9 @@
 #include "PlaneDlg.h"
 
 #include <afxmt.h>
+#include <map>
+
+using namespace std;
 
 // CFusionPlaneDlg ¶Ô»°¿ò
 class CFusionPlaneDlg : public CPlaneDlg
@@ -33,7 +36,7 @@ protected:
     virtual void AddNoiseData(NoiseDataPacket &packet);
     virtual void SendNoiseData(NoiseDataPacket &packet);
     virtual void DoFusion();
-    vector<NoiseDataPacket> m_NoiseDatas;
+    map<int, NoiseDataPacket> m_NoiseDatas;
     virtual void ResetSockets();
 
     FusionSocket *m_FusionSocket;

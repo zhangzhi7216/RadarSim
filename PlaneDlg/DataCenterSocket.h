@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DataPacket.h"
+
 class CPlaneDlg;
 
 class DataCenterSocket :
@@ -13,7 +15,7 @@ public:
     void OnClose(int nErrorCode);
 
     void SendFusionAddr(int port);
-    void SendFusionData();
+    void SendFusionData(FusionDataPacket &packet);
 
 public:
     CPlaneDlg *m_Dlg;

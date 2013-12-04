@@ -462,6 +462,7 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
     {
         NoiseDataFrame frame;
         frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
+        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
         frame.m_Dis = m_Radar.m_TargetDistances[i].back();
         frame.m_DisVar = m_Radar.m_DisVar;
         frame.m_Theta = m_Infrared.m_TargetThetas[i].back();

@@ -18,4 +18,6 @@ public:
 
     PlaneSocket *m_PlaneSocket;
     vector<TrueDataFrame> m_PlaneTrueDatas;
+
+    static int s_PlaneCount;
 };

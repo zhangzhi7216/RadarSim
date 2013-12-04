@@ -11,5 +11,7 @@ public:
 
     Target m_Target;
     vector<TrueDataFrame> m_TargetTrueDatas;
+
+    static int s_TargetCount;
 };
 

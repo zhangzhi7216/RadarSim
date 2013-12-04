@@ -6,6 +6,8 @@
 #include "FusionPlane.h"
 #include "FusionPlaneDlg.h"
 
+#include <assert.h>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -126,7 +128,7 @@ void CFusionPlaneDlg::AddPlaneSocket()
 
 void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
 {
-    m_NoiseDatas.push_back(packet);
+    m_NoiseDatas.insert(make_pair(packet.m_PlaneTrueData.m_Id, packet));
     if (m_NoiseDatas.size() == m_PlaneSockets.size() + 1)
     {
         DoFusion();
@@ -140,8 +142,30 @@ void CFusionPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
 
 void CFusionPlaneDlg::DoFusion()
 {
+    FusionDataPacket packet;
+    int nTargets = m_NoiseDatas.begin()->second.m_TargetNoiseDatas.size();
+    int nPlanes = m_NoiseDatas.size();
+    for (int i = 0; i < nTargets; ++i)
+    {
+        NoiseDataFrame frame;
+        assert(m_NoiseDatas.begin()->second.m_TargetNoiseDatas.size() > i);
+        frame.m_Time = m_NoiseDatas.begin()->second.m_TargetNoiseDatas[i].m_Time;
+        frame.m_Id = m_NoiseDatas.begin()->second.m_TargetNoiseDatas[i].m_Id;
+        for (map<int, NoiseDataPacket>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+        {
+            frame += it->second.m_TargetNoiseDatas[i];
+        }
+        frame /= nPlanes;
+        packet.m_FusionDatas.push_back(frame);
+        frame = m_NoiseDatas.begin()->second.m_TargetNoiseDatas[i];
+        packet.m_FilterDatas.push_back(frame);
+    }
+    for (map<int, NoiseDataPacket>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+    {
+        packet.m_NoiseDatas.push_back(it->second);
+    }
     m_NoiseDatas.clear();
-    m_DataCenterSocket->SendFusionData();
+    m_DataCenterSocket->SendFusionData(packet);
 }
 
 void CFusionPlaneDlg::ResetSockets()

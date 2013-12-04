@@ -2,7 +2,6 @@
 #include "DataCenterSocket.h"
 #include "Resource.h"
 #include "PlaneDlg.h"
-#include "DataPacket.h"
 
 DataCenterSocket::DataCenterSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
@@ -110,11 +109,11 @@ void DataCenterSocket::SendFusionAddr(int port)
     ar.Flush();
 }
 
-void DataCenterSocket::SendFusionData()
+void DataCenterSocket::SendFusionData(FusionDataPacket &packet)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
 
-    ar << PacketTypeFusionData;
+    ar << PacketTypeFusionData << packet;
     ar.Flush();
 }

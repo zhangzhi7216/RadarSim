@@ -107,7 +107,9 @@ void PlaneSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeFusionData:
         {
-            m_Dlg->ResumeSim();
+            FusionDataPacket packet;
+            ar >> packet;
+            m_Dlg->AddFusionData(packet);
         }
         break;
     default:

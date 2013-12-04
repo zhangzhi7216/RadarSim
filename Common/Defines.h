@@ -42,9 +42,41 @@ typedef struct __declspec(dllexport) Point3D
         return Point3D(X + point.X, Y + point.Y, Z + point.Z);
     }
 
+    Point3D &operator+=(const Point3D& point)
+    {
+        X += point.X;
+        Y += point.Y;
+        Z += point.Z;
+        return *this;
+    }
+
     Point3D operator-(const Point3D& point) const
     {
         return Point3D(X - point.X, Y - point.Y, Z - point.Z);
+    }
+
+    Point3D &operator-=(const Point3D& point)
+    {
+        X -= point.X;
+        Y -= point.Y;
+        Z -= point.Z;
+        return *this;
+    }
+
+    Point3D &operator*=(double n)
+    {
+        X *= n;
+        Y *= n;
+        Z *= n;
+        return *this;
+    }
+
+    Point3D &operator/=(double n)
+    {
+        X /= n;
+        Y /= n;
+        Z /= n;
+        return *this;
     }
 
     bool Equals(const Point3D& point)

@@ -10,7 +10,6 @@
 #include "PlaneClient.h"
 #include "TargetClient.h"
 
-
 class DataCenterSocket;
 class PlaneSocket;
 
@@ -62,9 +61,12 @@ public:
     void GeneratePlaneClients();
     void GenerateTargetClients();
     void GenerateTrueData();
+    void AddFusionData(FusionDataPacket &packet);
+    vector<FusionDataPacket> m_FusionDatas;
 
     void StartSim();
     void PauseSim();
     void ResumeSim();
+    void FinishSim();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 };

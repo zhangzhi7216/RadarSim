@@ -218,7 +218,6 @@ void CDataCenterDlg::GeneratePlaneClients()
 {
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_PlaneClients[i].m_Plane.m_Id = i;
         m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
         m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 500 * i, 100);
         m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
@@ -246,7 +245,6 @@ void CDataCenterDlg::GenerateTargetClients()
     for (int i = 0; i < TARGET_COUNT; ++i)
     {
         TargetClient client;
-        client.m_Target.m_Id = 10 + rand() % 5 + rand() % 5;
         client.m_Target.m_Type = (TargetType)((int)TargetTypeShipboard + rand() % ((int)TargetTypeMissile - (int)TargetTypeShipboard + 1));
         client.m_Target.m_Position = Position(150, 150 + 150 * i, 150) + Position(10 * (rand() % 3), 10 * (rand() % 3), 10 * (rand() % 3));
         client.m_Target.m_Color = (TargetColor)(i + PLANE_COUNT);
@@ -274,6 +272,7 @@ void CDataCenterDlg::GenerateTrueData()
             m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
             TrueDataFrame frame;
             frame.m_Time = i;
+            frame.m_Id = m_PlaneClients[j].m_Plane.m_Id;
             frame.m_Pos = m_PlaneClients[j].m_Plane.m_Position;
             m_PlaneClients[j].m_PlaneTrueDatas.push_back(frame);
         }
@@ -282,10 +281,17 @@ void CDataCenterDlg::GenerateTrueData()
             m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(rand() % 3, 0, 0);
             TrueDataFrame frame;
             frame.m_Time = i;
+            frame.m_Id = m_TargetClients[j].m_Target.m_Id;
             frame.m_Pos = m_TargetClients[j].m_Target.m_Position;
             m_TargetClients[j].m_TargetTrueDatas.push_back(frame);
         }
     }
+}
+
+void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
+{
+    m_FusionDatas.push_back(packet);
+    ResumeSim();
 }
 
 void CDataCenterDlg::StartSim()
@@ -326,6 +332,7 @@ void CDataCenterDlg::StartSim()
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
 
+    m_FusionDatas.clear();
     GenerateTrueData();
     SetTimer(WM_TIME_FRAME, 500, NULL);
 }
@@ -337,7 +344,12 @@ void CDataCenterDlg::PauseSim()
 
 void CDataCenterDlg::ResumeSim()
 {
-    SetTimer(WM_TIME_FRAME, 500, NULL);
+    SetTimer(WM_TIME_FRAME, 250, NULL);
+}
+
+void CDataCenterDlg::FinishSim()
+{
+    // Save dat files.
 }
 
 void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
