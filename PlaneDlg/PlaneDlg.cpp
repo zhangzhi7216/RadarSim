@@ -34,7 +34,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
     , m_ShowStateMapDlg(true)
-    , m_StateMapDlg(TEXT("态势"), m_StateMap)
+    , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_DataCenterSocket(0)
     , m_FusionSocket(0)
 {
@@ -68,6 +68,7 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CCommonDlg)
     ON_STN_DBLCLK(IDC_INFRARED_CTRL, &CPlaneDlg::OnStnDblclickInfraredCtrl)
     ON_WM_TIMER()
     ON_NOTIFY(NM_DBLCLK, IDC_DATALIST_CTRL, &CPlaneDlg::OnNMDblclkDatalistCtrl)
+    ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -497,6 +498,8 @@ void CPlaneDlg::ResetCtrls()
     m_EsmDlg.Reset();
     m_InfraredDlg.Reset();
     m_DataListDlg.Reset();
+
+    m_StateMapDlg.Reset();
 }
 
 void CPlaneDlg::ResetSensors()
@@ -505,6 +508,8 @@ void CPlaneDlg::ResetSensors()
     m_Esm.Reset();
     m_Infrared.Reset();
     m_DataList.Reset();
+
+    m_StateMap.Reset();
 
     m_Esm.m_MaxDis = 250;
     m_Esm.m_MaxTheta = 90;
@@ -517,6 +522,8 @@ void CPlaneDlg::ResetSensors()
     m_Infrared.m_ShowThetaRange = FALSE;
     m_Infrared.m_ThetaRangeColor = Color::Yellow;
     m_Infrared.m_ShowHeight = FALSE;
+
+    m_StateMap.m_Background = StateMapBackground0;
 }
 
 void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
@@ -564,6 +571,10 @@ void CPlaneDlg::OnSubDlgClose(void *subDlg)
     else if (subDlg == (void *)&m_DataListDlg)
     {
         OnNMDblclkDatalistCtrl(0, 0);
+    }
+    else if (subDlg == (void *)&m_StateMapDlg)
+    {
+        OnLButtonDblClk(0, 0);
     }
 }
 
@@ -856,6 +867,7 @@ void CPlaneDlg::SetPlane(Plane &plane)
 {
     m_Plane.m_Id = plane.m_Id;
     m_Plane.m_Type = plane.m_Type;
+    m_Plane.m_Color = plane.m_Color;
     m_Plane.m_Position = plane.m_Position;
 
     AddPlane(m_Plane, &m_Radar, &m_Esm, &m_Infrared);
@@ -964,4 +976,21 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+    if (m_ShowStateMapDlg)
+    {
+        m_StateMapDlg.ShowWindow(SW_HIDE);
+        m_ShowStateMapDlg = false;
+    }
+    else
+    {
+        m_StateMapDlg.ShowWindow(SW_SHOW);
+        m_ShowStateMapDlg = true;
+    }
+
+    CCommonDlg::OnLButtonDblClk(nFlags, point);
 }

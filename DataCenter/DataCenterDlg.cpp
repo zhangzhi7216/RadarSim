@@ -20,14 +20,17 @@
 // CDataCenterDlg 对话框
 
 
+#define TIME_FRAMES 100
+#define WM_TIME_FRAME (WM_USER + 1)
 
 
 CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
-	: CDialog(CDataCenterDlg::IDD, pParent)
+	: CCommonDlg(CDataCenterDlg::IDD, pParent)
     , m_FusionConnected(false)
     , m_ConnectedPlanes(0)
     , m_ShowStateMapDlg(true)
-    , m_StateMapDlg(TEXT("态势"), m_StateMap)
+    , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
+    , m_CurrentFrame(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
@@ -44,6 +47,7 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
 	//}}AFX_MSG_MAP
     ON_BN_CLICKED(IDOK, &CDataCenterDlg::OnBnClickedOk)
     ON_WM_TIMER()
+    ON_WM_MBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -126,6 +130,20 @@ HCURSOR CDataCenterDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CDataCenterDlg::OnSubDlgClose(void *subDlg)
+{
+    /*
+    if (subDlg == (void *)&m_DataListDlg)
+    {
+        OnNMDblclkDatalistCtrl(0, 0);
+    }
+    */
+    if (subDlg == (void *)&m_StateMapDlg)
+    {
+        OnLButtonDblClk(0, 0);
+    }
+}
+
 void CDataCenterDlg::AddPlaneSocket()
 {
     m_Lock.Lock();
@@ -204,7 +222,17 @@ void CDataCenterDlg::ResetSockets()
 
 void CDataCenterDlg::ResetCtrls()
 {
-    GetDlgItem(IDOK)->EnableWindow(FALSE);
+    if (m_FusionConnected && m_ConnectedPlanes != PLANE_COUNT)
+    {
+        GetDlgItem(IDOK)->EnableWindow(FALSE);
+    }
+
+    // m_DataList.Reset();
+    // m_DataListCtrl.Reset();
+    // m_DataListDlg.Reset();
+
+    m_StateMap.Reset();
+    m_StateMapDlg.Reset();
 }
 
 void CDataCenterDlg::OnBnClickedOk()
@@ -221,8 +249,8 @@ void CDataCenterDlg::GeneratePlaneClients()
         m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
         m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 500 * i, 100);
         m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
-        m_PlaneClients[i].m_Radar.m_MaxDis += i * 10;
-        m_PlaneClients[i].m_Radar.m_MaxTheta += i * 10;
+        m_PlaneClients[i].m_Radar.m_MaxDis = 300 + i * 10;
+        m_PlaneClients[i].m_Radar.m_MaxTheta = 120 + i * 10;
         m_PlaneClients[i].m_Esm.m_MaxDis = 250 + i * 10;
         m_PlaneClients[i].m_Esm.m_MaxTheta = 90 + i * 10;
         m_PlaneClients[i].m_Esm.m_ThetaRangeColor = Color::Red;
@@ -234,7 +262,7 @@ void CDataCenterDlg::GeneratePlaneClients()
         m_PlaneClients[i].m_Infrared.m_ThetaRangeColor = Color::Yellow;
         m_PlaneClients[i].m_Infrared.m_ShowHeight = FALSE;
         m_PlaneClients[i].m_StateMap.m_Background = StateMapBackground3;
-        m_PlaneClients[i].m_StateMap.m_MaxX = 800;
+        m_PlaneClients[i].m_StateMap.m_MaxX = 1200;
         m_PlaneClients[i].m_StateMap.m_MaxY = 800;
     }
 }
@@ -251,9 +279,6 @@ void CDataCenterDlg::GenerateTargetClients()
         m_TargetClients.push_back(client);
     }
 }
-
-#define TIME_FRAMES 1000
-#define WM_TIME_FRAME (WM_USER + 1)
 
 void CDataCenterDlg::GenerateTrueData()
 {
@@ -300,6 +325,7 @@ void CDataCenterDlg::StartSim()
     GenerateTargetClients();
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
+        m_PlaneClients[i].m_PlaneSocket->SendReset();
         m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
         m_PlaneClients[i].m_PlaneSocket->SendRadar(m_PlaneClients[i].m_Radar);
         m_PlaneClients[i].m_PlaneSocket->SendEsm(m_PlaneClients[i].m_Esm);
@@ -310,6 +336,8 @@ void CDataCenterDlg::StartSim()
             m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
         }
     }
+
+    ResetCtrls();
 
     m_StateMap.m_Background = StateMapBackground3;
     m_StateMap.m_MaxX = 1200;
@@ -334,6 +362,7 @@ void CDataCenterDlg::StartSim()
 
     m_FusionDatas.clear();
     GenerateTrueData();
+    m_CurrentFrame = 0;
     SetTimer(WM_TIME_FRAME, 500, NULL);
 }
 
@@ -361,10 +390,9 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
 
     if (nIDEvent == WM_TIME_FRAME)
     {
-        static int index = 0;
-        if (index == TIME_FRAMES)
+        if (m_CurrentFrame == TIME_FRAMES)
         {
-            index == 0;
+            m_CurrentFrame == 0;
             KillTimer(WM_TIME_FRAME);
             return;
         }
@@ -372,27 +400,44 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
             TrueDataPacket packet;
-            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[index];
+            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[m_CurrentFrame];
             for (int j = 0; j < m_TargetClients.size(); ++j)
             {
-                packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[index]);
+                packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[m_CurrentFrame]);
             }
             m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
         }
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+            m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[m_CurrentFrame].m_Pos);
         }
         for (int i = 0; i < TARGET_COUNT; ++i)
         {
-            m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
+            m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[m_CurrentFrame].m_Pos);
         }
 
         m_StateMapDlg.m_Ctrl.DrawTargets();
         m_StateMapDlg.m_Ctrl.BlendAll();
         m_StateMapDlg.m_Ctrl.Invalidate();
 
-        ++index;
+        ++m_CurrentFrame;
     }
+}
+
+void CDataCenterDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+    if (m_ShowStateMapDlg)
+    {
+        m_StateMapDlg.ShowWindow(SW_HIDE);
+        m_ShowStateMapDlg = false;
+    }
+    else
+    {
+        m_StateMapDlg.ShowWindow(SW_SHOW);
+        m_ShowStateMapDlg = true;
+    }
+
+    CCommonDlg::OnMButtonDblClk(nFlags, point);
 }

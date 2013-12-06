@@ -8,10 +8,11 @@
 
 IMPLEMENT_DYNAMIC(CStateMapDlg, CDialog)
 
-CStateMapDlg::CStateMapDlg(LPCWSTR title, StateMap &stateMap, CWnd* pParent /*=NULL*/)
+CStateMapDlg::CStateMapDlg(LPCWSTR title, StateMap &stateMap, CCommonDlg *dlg, CWnd* pParent /*=NULL*/)
 	: CDialog(CStateMapDlg::IDD, pParent)
     , m_Title(title)
     , m_StateMap(stateMap)
+    , m_Dlg(dlg)
     , m_Initialized(false)
     , m_Ctrl(stateMap)
 {
@@ -115,7 +116,7 @@ void CStateMapDlg::OnClose()
     // TODO: 在此添加消息处理程序代码和/或调用默认值
 
     // CDialog::OnClose();
-    // m_ClientProxy.OnClose();
+    m_Dlg->OnSubDlgClose(this);
 }
 
 void CStateMapDlg::Resize()

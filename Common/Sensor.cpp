@@ -40,6 +40,9 @@ void Sensor::Reset()
     m_ShowScanline = TRUE;
     m_ShowTrack = TRUE;
     m_TargetColors.clear();
+    m_TargetDistances.clear();
+    m_TargetThetas.clear();
+    m_TargetPhis.clear();
 }
 
 void Sensor::AddTarget(Target &target)

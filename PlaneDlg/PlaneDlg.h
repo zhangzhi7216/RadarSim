@@ -135,4 +135,5 @@ public:
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;
+    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };

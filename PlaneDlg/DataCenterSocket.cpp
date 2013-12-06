@@ -29,6 +29,11 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             m_Dlg->ConnectFusion(addr, port);
         }
         break;
+    case PacketTypeReset:
+        {
+            m_Dlg->ResetCtrls();
+        }
+        break;
     case PacketTypePlane:
         {
             Plane plane;

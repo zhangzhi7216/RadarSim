@@ -10,11 +10,13 @@
 #include "PlaneClient.h"
 #include "TargetClient.h"
 
+#include "CommonDlg.h"
+
 class DataCenterSocket;
 class PlaneSocket;
 
 // CDataCenterDlg 对话框
-class CDataCenterDlg : public CDialog
+class CDataCenterDlg : public CCommonDlg
 {
 // 构造
 public:
@@ -46,6 +48,7 @@ protected:
     CString m_FusionAddr;
     int m_FusionPort;
     int m_ConnectedPlanes;
+    void OnSubDlgClose(void *subDlg);
 
 public:
     void AddPlaneSocket();
@@ -69,4 +72,6 @@ public:
     void ResumeSim();
     void FinishSim();
     afx_msg void OnTimer(UINT_PTR nIDEvent);
+    afx_msg void OnMButtonDblClk(UINT nFlags, CPoint point);
+    int m_CurrentFrame;
 };

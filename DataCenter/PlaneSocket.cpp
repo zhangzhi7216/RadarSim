@@ -30,6 +30,14 @@ void PlaneSocket::SendFusionAddr(const CString &addr, int port)
     }
 }
 
+void PlaneSocket::SendReset()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeReset;
+    ar.Flush();
+}
+
 void PlaneSocket::SendPlane(Plane &plane)
 {
     CSocketFile file(this);

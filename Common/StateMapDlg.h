@@ -4,6 +4,7 @@
 #include "StateMapCtrl.h"
 
 #include "Common.h"
+#include "CommonDlg.h"
 #include "afxwin.h"
 
 class __declspec(dllexport) CStateMapDlg : public CDialog
@@ -11,7 +12,7 @@ class __declspec(dllexport) CStateMapDlg : public CDialog
 	DECLARE_DYNAMIC(CStateMapDlg)
 
 public:
-	CStateMapDlg(LPCWSTR title, StateMap &stateMap, CWnd* pParent = NULL);   // 标准构造函数
+	CStateMapDlg(LPCWSTR title, StateMap &stateMap, CCommonDlg *dlg, CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~CStateMapDlg();
 
     static void CreateDlg(CStateMapDlg &dlg);
@@ -55,4 +56,6 @@ public:
     afx_msg void OnCbnSelchangeStatemapTargetColor();
     CComboBox m_PlaneId;
     afx_msg void OnCbnSelchangeStatemapPlaneId();
+
+    CCommonDlg *m_Dlg;
 };
