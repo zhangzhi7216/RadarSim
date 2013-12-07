@@ -82,6 +82,10 @@ BEGIN
     GROUPBOX        "红外",IDC_INFRARED_CTRL_GRP,426,238,124,92,BS_NOTIFY
     GROUPBOX        "数据列表",IDC_DATALIST_CTRL_GRP,426,7,124,92,BS_NOTIFY
     CONTROL         "",IDC_DATALIST_CTRL,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,297,31,70,50
+    LTEXT           "融合算法：",IDC_FUSION_ALGO_STATIC,307,113,35,13,SS_CENTERIMAGE
+    COMBOBOX        IDC_FUSION_ALGO,357,115,41,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "引导算法：",IDC_NAVI_ALGO_STATIC,311,146,35,13,SS_CENTERIMAGE
+    COMBOBOX        IDC_NAVI_ALGO,361,149,41,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
 END
 
 
@@ -151,6 +155,47 @@ END
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 IDR_MAINFRAME           ICON                    "res\\PlaneDlg.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_PLANE_DIALOG DLGINIT
+BEGIN
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0031, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0032, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0033, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0034, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0035, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0036, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0037, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0038, 
+    IDC_FUSION_ALGO, 0x403, 2, 0
+0x0039, 
+    IDC_FUSION_ALGO, 0x403, 3, 0
+0x3031, "\000" 
+    IDC_NAVI_ALGO, 0x403, 2, 0
+0x0031, 
+    IDC_NAVI_ALGO, 0x403, 2, 0
+0x0032, 
+    IDC_NAVI_ALGO, 0x403, 2, 0
+0x0033, 
+    IDC_NAVI_ALGO, 0x403, 2, 0
+0x0034, 
+    IDC_NAVI_ALGO, 0x403, 2, 0
+0x0035, 
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //

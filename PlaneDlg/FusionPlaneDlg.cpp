@@ -22,6 +22,7 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(title, pParent)
     , m_FusionSocket(0)
 {
+    m_DlgType = DlgTypeFusionPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_FusionSocket = new FusionSocket(this);
 }

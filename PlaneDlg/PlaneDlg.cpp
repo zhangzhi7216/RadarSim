@@ -17,6 +17,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     : CCommonDlg(CPlaneDlg::IDD, pParent)
     , m_Title(title)
     , m_Initialized(false)
+    , m_DlgType(DlgTypePlane)
     , m_ShowRadarDlg(false)
     , m_Radar(Sensor::SensorTypeSource)
     , m_RadarCtrl(m_Radar)
@@ -87,6 +88,12 @@ BOOL CPlaneDlg::OnInitDialog()
     m_Initialized = true;
 
     SetWindowTextW(m_Title);
+
+    GetDlgItem(IDC_FUSION_ALGO_STATIC)->ShowWindow(FALSE);
+    GetDlgItem(IDC_FUSION_ALGO)->ShowWindow(FALSE);
+
+    GetDlgItem(IDC_NAVI_ALGO_STATIC)->ShowWindow(FALSE);
+    GetDlgItem(IDC_NAVI_ALGO)->ShowWindow(FALSE);
 
     Resize();
 
@@ -241,10 +248,30 @@ void CPlaneDlg::Resize()
     height = (rect.bottom - rect.top) / 2 - PAD * 2;
     GetDlgItem(IDC_DATALIST_CTRL_GRP)->MoveWindow(left, top, width, height);
 
+    // Resize fusion & navi algo.
     left = left + PAD;
-    width = width - PAD * 2;
     top = top + PAD * 2;
+    width = width - PAD * 2;
     height = height - PAD * 3;
+
+    if (m_DlgType == DlgTypeFusionPlane)
+    {
+        GetDlgItem(IDC_FUSION_ALGO_STATIC)->ShowWindow(TRUE);
+        GetDlgItem(IDC_FUSION_ALGO)->ShowWindow(TRUE);
+        GetDlgItem(IDC_FUSION_ALGO_STATIC)->MoveWindow(left, top, width / 2, 20);
+        GetDlgItem(IDC_FUSION_ALGO)->MoveWindow(left + width / 2, top, width / 2, 20);
+        top = top + PAD + 20;
+        height = height - 20 - PAD;
+    }
+    else if (m_DlgType == DlgTypeAttackPlane)
+    {
+        GetDlgItem(IDC_NAVI_ALGO_STATIC)->ShowWindow(TRUE);
+        GetDlgItem(IDC_NAVI_ALGO)->ShowWindow(TRUE);
+        GetDlgItem(IDC_NAVI_ALGO_STATIC)->MoveWindow(left, top, width / 2, 20);
+        GetDlgItem(IDC_NAVI_ALGO)->MoveWindow(left + width / 2, top, width / 2, 20);
+        top = top + PAD + 20;
+        height = height - 20 - PAD;
+    }
     m_DataListCtrl.MoveWindow(left, top, width, height);
 
     // Resize Infrared.
@@ -534,6 +561,20 @@ void CPlaneDlg::ResetSensors()
 
 void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
 {
+    CString newTitle = m_Title;
+    newTitle.AppendFormat(TEXT("%d"), plane.m_Id);
+    SetWindowTextW(newTitle);
+    CString newSubDlgTitle = newTitle + TEXT("雷达");
+    m_RadarDlg.SetWindowTextW(newSubDlgTitle);
+    newSubDlgTitle = newTitle + TEXT("ESM");
+    m_EsmDlg.SetWindowTextW(newSubDlgTitle);
+    newSubDlgTitle = newTitle + TEXT("红外");
+    m_InfraredDlg.SetWindowTextW(newSubDlgTitle);
+    newSubDlgTitle = newTitle + TEXT("数据列表");
+    m_DataListDlg.SetWindowTextW(newSubDlgTitle);
+    newSubDlgTitle = newTitle + TEXT("态势");
+    m_StateMapDlg.SetWindowTextW(newSubDlgTitle);
+
     m_StateMap.AddPlane(plane, radar, esm, infrared);
     m_StateMapDlg.AddPlane(plane);
 }

@@ -58,6 +58,14 @@ public:
     void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
 
+    enum DlgType
+    {
+        DlgTypePlane,
+        DlgTypeFusionPlane,
+        DlgTypeAttackPlane,
+    };
+    DlgType m_DlgType;
+
     Plane m_Plane;
     vector<Target> m_Targets;
     afx_msg void OnTimer(UINT_PTR nIDEvent);

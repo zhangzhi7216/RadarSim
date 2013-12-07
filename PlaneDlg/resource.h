@@ -13,6 +13,11 @@
 #define IDC_INFRARED_CTRL_GRP           1005
 #define IDC_DATALIST_CTRL_GRP           1006
 #define IDC_DATALIST_CTRL               1007
+#define IDC_FUSION_ALGO_STATIC          4087
+#define IDC_NAVI_ALGO_STATIC            4088
+#define IDC_FUSION_ALGO                 4089
+#define IDC_DC_GLOBAL_ALGO2             4090
+#define IDC_NAVI_ALGO                   4090
 
 // Next default values for new objects
 // 
