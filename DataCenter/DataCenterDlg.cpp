@@ -20,7 +20,7 @@
 // CDataCenterDlg ¶Ô»°¿ò
 
 
-#define TIME_FRAMES 100
+#define TIME_FRAMES 1000
 #define WM_TIME_FRAME (WM_USER + 1)
 
 
@@ -247,7 +247,7 @@ void CDataCenterDlg::GeneratePlaneClients()
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
-        m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 500 * i, 100);
+        m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 200 * i, 100);
         m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
         m_PlaneClients[i].m_Radar.m_MaxDis = 300 + i * 10;
         m_PlaneClients[i].m_Radar.m_MaxTheta = 120 + i * 10;

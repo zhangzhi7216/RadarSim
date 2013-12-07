@@ -17,9 +17,6 @@ class CFusionPlaneDlg : public CPlaneDlg
 public:
 	CFusionPlaneDlg(LPCWSTR title, CWnd* pParent = NULL);	// 标准构造函数
 
-// 对话框数据
-	enum { IDD = IDD_FUSION_PLANE_DIALOG };
-
 // 实现
 protected:
 	HICON m_hIcon;

@@ -136,6 +136,16 @@ void CStateMapCtrl::DrawTargets()
             {
                 graphics.ResetTransform();
             }
+            if (m_StateMap.m_ShowHeight)
+            {
+                SolidBrush brush(TargetColors[m_StateMap.m_PlaneColors[i]]);
+                CString str;
+                str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_PlanePaths[i].back().Z);
+                Font font(TEXT("Calibri"), 9);
+                PointF pt(m_StateMap.m_PlanePaths[i].back().X / m_StateMap.m_MaxX * (double)width,
+                    m_StateMap.m_PlanePaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
+                graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - planeImg->GetHeight()), &brush);
+            }
         }
     }
 
@@ -170,6 +180,16 @@ void CStateMapCtrl::DrawTargets()
             if (m_StateMap.m_TargetPaths[i].size() > 1)
             {
                 graphics.ResetTransform();
+            }
+            if (m_StateMap.m_ShowHeight)
+            {
+                SolidBrush brush(TargetColors[m_StateMap.m_TargetColors[i]]);
+                CString str;
+                str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_TargetPaths[i].back().Z);
+                Font font(TEXT("Calibri"), 9);
+                PointF pt(m_StateMap.m_TargetPaths[i].back().X / m_StateMap.m_MaxX * (double)width,
+                    m_StateMap.m_TargetPaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
+                graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - targetImg->GetHeight()), &brush);
             }
         }
     }

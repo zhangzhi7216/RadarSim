@@ -139,7 +139,7 @@ enum TargetType
 extern Image *TargetTypeImages[TargetTypeLast];
 extern CString TargetTypeNames[TargetTypeLast];
 
-#define PLANE_COUNT 2
+#define PLANE_COUNT 3
 #define TARGET_COUNT 3
 #define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086

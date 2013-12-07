@@ -3,7 +3,6 @@
 // Used by PlaneDlg.rc
 //
 #define IDD_PLANE_DIALOG                101
-#define IDD_FUSION_PLANE_DIALOG         102
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128
 #define IDC_RADAR_CTRL                  1000

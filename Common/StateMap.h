@@ -13,6 +13,7 @@ public:
 
     BOOL m_ShowTrack;
     BOOL m_ShowThetaRange;
+    BOOL m_ShowHeight;
 
     StateMapBackground m_Background;
 

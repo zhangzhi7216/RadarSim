@@ -18,6 +18,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FusionPlane", "FusionPlane\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcproj", "{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AttackPlane", "AttackPlane\AttackPlane.vcproj", "{95634317-F988-4E52-9553-1A6EFA6818F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -40,6 +45,10 @@ Global
 		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Debug|Win32.Build.0 = Debug|Win32
 		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Release|Win32.ActiveCfg = Release|Win32
 		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}.Release|Win32.Build.0 = Release|Win32
+		{95634317-F988-4E52-9553-1A6EFA6818F0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{95634317-F988-4E52-9553-1A6EFA6818F0}.Debug|Win32.Build.0 = Debug|Win32
+		{95634317-F988-4E52-9553-1A6EFA6818F0}.Release|Win32.ActiveCfg = Release|Win32
+		{95634317-F988-4E52-9553-1A6EFA6818F0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -129,7 +129,7 @@ void CFusionPlaneDlg::AddPlaneSocket()
 void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
 {
     m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
-    if (m_NoiseDatas.size() == m_PlaneSockets.size() + 1)
+    if (m_NoiseDatas.size() == m_PlaneSockets.size())
     {
         DoFusion();
     }

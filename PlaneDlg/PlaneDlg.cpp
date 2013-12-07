@@ -977,6 +977,7 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMap.m_Background = stateMap.m_Background;
     m_StateMap.m_MaxX = stateMap.m_MaxX;
     m_StateMap.m_MaxY = stateMap.m_MaxY;
+    m_StateMap.m_ShowHeight = stateMap.m_ShowHeight;
 
     m_StateMapDlg.m_Ctrl.DrawBackground();
     m_StateMapDlg.m_Ctrl.DrawTargets();

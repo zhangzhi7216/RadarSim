@@ -6,6 +6,7 @@ StateMap::StateMap()
 , m_MaxY(1000)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
+, m_ShowHeight(TRUE)
 , m_Background(StateMapBackground0)
 {
 }
@@ -62,7 +63,7 @@ void StateMap::AddTargetData(int target, Position pos)
 CArchive & operator << (CArchive &ar, StateMap &stateMap)
 {
     int background = (int)stateMap.m_Background;
-    ar << background << stateMap.m_MaxX << stateMap.m_MaxY;
+    ar << background << stateMap.m_MaxX << stateMap.m_MaxY << stateMap.m_ShowHeight;
 
     return ar;
 }
@@ -70,7 +71,7 @@ CArchive & operator << (CArchive &ar, StateMap &stateMap)
 CArchive & operator >> (CArchive &ar, StateMap &stateMap)
 {
     int background;
-    ar >> background >> stateMap.m_MaxX >> stateMap.m_MaxY;
+    ar >> background >> stateMap.m_MaxX >> stateMap.m_MaxY >> stateMap.m_ShowHeight;
     stateMap.m_Background = (StateMapBackground)background;
 
     return ar;
