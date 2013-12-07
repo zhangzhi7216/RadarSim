@@ -27,6 +27,18 @@ CArchive & operator >> (CArchive &ar, NoiseDataFrame &frame)
     return ar;
 }
 
+CArchive & operator << (CArchive &ar, ControlDataFrame &frame)
+{
+    ar << frame.m_Time << frame.m_Id << frame.m_C1;
+    return ar;
+}
+
+CArchive & operator >> (CArchive &ar, ControlDataFrame &frame)
+{
+    ar >> frame.m_Time >> frame.m_Id >> frame.m_C1;
+    return ar;
+}
+
 template <class T>
 __declspec(dllexport) CArchive & operator << (CArchive &ar, vector<T> &v);
 template <class T>
@@ -65,5 +77,17 @@ CArchive & operator << (CArchive &ar, FusionDataPacket &packet)
 CArchive & operator >> (CArchive &ar, FusionDataPacket &packet)
 {
     ar >> packet.m_FusionDatas >> packet.m_FilterDatas >> packet.m_NoiseDatas;
+    return ar;
+}
+
+CArchive & operator << (CArchive &ar, ControlDataPacket &packet)
+{
+    ar << packet.m_ControlData;
+    return ar;
+}
+
+CArchive & operator >> (CArchive &ar, ControlDataPacket &packet)
+{
+    ar >> packet.m_ControlData;
     return ar;
 }

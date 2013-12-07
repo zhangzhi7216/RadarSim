@@ -14,6 +14,7 @@ void CDataListCtrl::PreSubclassWindow()
 {
     CListCtrl::PreSubclassWindow();
 
+    InsertColumn(ColumnEsmTheta, TEXT("时间(s)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
     InsertColumn(ColumnEsmTheta, TEXT("ESM方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
     InsertColumn(ColumnInfraredTheta, TEXT("红外方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
     InsertColumn(ColumnInfraredPhi, TEXT("红外俯仰角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
@@ -38,6 +39,9 @@ void CDataListCtrl::AddTargetData()
         int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;
         int row = InsertItem(0, TEXT(""));
         SetItemData(row, TargetColors[m_DataList.m_TargetColors[i]].ToCOLORREF());
+        CString str;
+        str.AppendFormat(TEXT("%d"), m_DataList.m_Times[i].back());
+        SetItemText(row, ColumnTime, str);
         if (m_DataList.m_Esm.m_Enable)
         {
             if (m_DataList.m_Esm.IsShowTargetData(i, j))

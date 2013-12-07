@@ -418,6 +418,7 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         m_Radar.AddTargetData(i, rel);
         m_Esm.AddTargetData(i, rel);
         m_Infrared.AddTargetData(i, rel);
+        m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
 
         m_StateMap.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
     }
@@ -479,8 +480,13 @@ void CPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
     m_FusionSocket->SendNoiseData(packet);
 }
 
-void CPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
+void CPlaneDlg::AddNoiseData(SocketPacketPair spp)
 {
+}
+
+void CPlaneDlg::AddControlData(ControlDataPacket &packet)
+{
+    // FIXME: do what?
 }
 
 void CPlaneDlg::ResetCtrls()

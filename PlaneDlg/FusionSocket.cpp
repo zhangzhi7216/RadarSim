@@ -27,6 +27,13 @@ void FusionSocket::OnReceive(int nErrorCode)
     ar >> type;
     switch (type)
     {
+    case PacketTypeControlData:
+        {
+            ControlDataPacket packet;
+            ar >> packet;
+            m_Dlg->AddControlData(packet);
+        }
+        break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;

@@ -7,7 +7,8 @@ class __declspec(dllexport) CDataListCtrl : public CListCtrl
 public:
     enum ColumnIndex
     {
-        ColumnEsmTheta = 0,
+        ColumnTime = 0,
+        ColumnEsmTheta,
         ColumnInfraredTheta,
         ColumnInfraredPhi,
         ColumnRadarDistance,

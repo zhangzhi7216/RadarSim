@@ -126,9 +126,9 @@ void CFusionPlaneDlg::AddPlaneSocket()
     m_Lock.Unlock();
 }
 
-void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
+void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
 {
-    m_NoiseDatas.insert(make_pair(packet.m_PlaneTrueData.m_Id, packet));
+    m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
     if (m_NoiseDatas.size() == m_PlaneSockets.size() + 1)
     {
         DoFusion();
@@ -137,34 +137,47 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
 
 void CFusionPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
 {
-    AddNoiseData(packet);
+    AddNoiseData(make_pair((PlaneSocket *)NULL, packet));
 }
 
 void CFusionPlaneDlg::DoFusion()
 {
     FusionDataPacket packet;
-    int nTargets = m_NoiseDatas.begin()->second.m_TargetNoiseDatas.size();
+    int nTargets = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size();
     int nPlanes = m_NoiseDatas.size();
     for (int i = 0; i < nTargets; ++i)
     {
         NoiseDataFrame frame;
-        assert(m_NoiseDatas.begin()->second.m_TargetNoiseDatas.size() > i);
-        frame.m_Time = m_NoiseDatas.begin()->second.m_TargetNoiseDatas[i].m_Time;
-        frame.m_Id = m_NoiseDatas.begin()->second.m_TargetNoiseDatas[i].m_Id;
-        for (map<int, NoiseDataPacket>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+        assert(m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size() > i);
+        frame.m_Time = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas[i].m_Time;
+        frame.m_Id = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas[i].m_Id;
+        for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
         {
-            frame += it->second.m_TargetNoiseDatas[i];
+            frame += it->second.second.m_TargetNoiseDatas[i];
         }
         frame /= nPlanes;
         packet.m_FusionDatas.push_back(frame);
-        frame = m_NoiseDatas.begin()->second.m_TargetNoiseDatas[i];
+        frame = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas[i];
         packet.m_FilterDatas.push_back(frame);
     }
-    for (map<int, NoiseDataPacket>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
     {
-        packet.m_NoiseDatas.push_back(it->second);
+        packet.m_NoiseDatas.push_back(it->second.second);
     }
+
+    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+    {
+        ControlDataPacket packet;
+        packet.m_ControlData.m_Time = it->second.second.m_PlaneTrueData.m_Time;
+        packet.m_ControlData.m_Id = it->second.second.m_PlaneTrueData.m_Id;
+        if (it->second.first)
+        {
+            it->second.first->SendControlData(packet);
+        }
+    }
+
     m_NoiseDatas.clear();
+
     m_DataCenterSocket->SendFusionData(packet);
 }
 

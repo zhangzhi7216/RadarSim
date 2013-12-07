@@ -158,6 +158,7 @@ enum PacketType
     PacketTypeTrueData,
     PacketTypeNoiseData,
     PacketTypeFusionData,
+    PacketTypeControlData,
 };
 
 void __declspec(dllexport) GlobalInit();

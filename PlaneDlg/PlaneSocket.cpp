@@ -25,7 +25,7 @@ void PlaneSocket::OnReceive(int nErrorCode)
         {
             NoiseDataPacket packet;
             ar >> packet;
-            m_Dlg->AddNoiseData(packet);
+            m_Dlg->AddNoiseData(make_pair(this, packet));
         }
         break;
     default:
@@ -43,4 +43,12 @@ void PlaneSocket::OnClose(int nErrorCode)
     AfxMessageBox(TEXT("与飞机的连接断开"));
     m_Dlg->ResetSockets();
     CSocket::OnClose(nErrorCode);
+}
+
+void PlaneSocket::SendControlData(ControlDataPacket &packet)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeControlData << packet;
+    ar.Flush();
 }

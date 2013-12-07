@@ -15,9 +15,16 @@ DataList::~DataList(void)
 void DataList::Reset()
 {
     m_TargetColors.clear();
+    m_Times.clear();
 }
 
 void DataList::AddTarget(Target &target)
 {
     m_TargetColors.push_back(target.m_Color);
+    m_Times.push_back(vector<int>());
+}
+
+void DataList::AddTargetData(int target, int time)
+{
+    m_Times[target].push_back(time);
 }

@@ -130,8 +130,10 @@ public:
     virtual void SetStateMap(StateMap &stateMap);
     virtual void AddTrueData(TrueDataPacket &packet);
     virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
-    virtual void AddNoiseData(NoiseDataPacket &packet);
+    typedef pair<PlaneSocket *, NoiseDataPacket> SocketPacketPair;
+    virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void AddControlData(ControlDataPacket &packet);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

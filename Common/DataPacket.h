@@ -90,6 +90,16 @@ struct __declspec(dllexport) NoiseDataFrame
 __declspec(dllexport) CArchive & operator << (CArchive &ar, NoiseDataFrame &frame);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, NoiseDataFrame &frame);
 
+struct __declspec(dllexport) ControlDataFrame
+{
+    int m_Time;
+    int m_Id;
+    double m_C1;
+    ControlDataFrame() : m_Time(0), m_Id(0), m_C1(1) {}
+};
+__declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataFrame &frame);
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataFrame &frame);
+
 template <class T>
 __declspec(dllexport) CArchive & operator << (CArchive &ar, vector<T> &v)
 {
@@ -138,3 +148,10 @@ struct __declspec(dllexport) FusionDataPacket
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, FusionDataPacket &packet);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, FusionDataPacket &packet);
+
+struct __declspec(dllexport) ControlDataPacket
+{
+    ControlDataFrame m_ControlData;
+};
+__declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataPacket &packet);
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataPacket &packet);

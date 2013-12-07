@@ -13,7 +13,9 @@ public:
     Sensor &m_Radar, &m_Esm, &m_Infrared;
 
     vector<TargetColor> m_TargetColors;
+    vector<vector<int>> m_Times;
 
     void Reset();
     void AddTarget(Target &target);
+    void AddTargetData(int target, int time);
 };

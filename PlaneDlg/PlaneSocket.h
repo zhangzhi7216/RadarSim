@@ -14,6 +14,8 @@ public:
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
+    void SendControlData(ControlDataPacket &packet);
+
 public:
     CPlaneDlg *m_Dlg;
 };
