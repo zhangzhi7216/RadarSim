@@ -6,7 +6,7 @@ StateMap::StateMap()
 , m_MaxY(1000)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
-, m_ShowHeight(TRUE)
+, m_ShowHeight(FALSE)
 , m_Background(StateMapBackground0)
 {
 }

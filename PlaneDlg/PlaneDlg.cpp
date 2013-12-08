@@ -1039,6 +1039,4 @@ void CPlaneDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
         m_StateMapDlg.ShowWindow(SW_SHOW);
         m_ShowStateMapDlg = true;
     }
-
-    CCommonDlg::OnLButtonDblClk(nFlags, point);
 }

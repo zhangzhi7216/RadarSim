@@ -294,7 +294,8 @@ void CDataCenterDlg::GenerateTrueData()
     {
         for (int j = 0; j < PLANE_COUNT; ++j)
         {
-            m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
+            // m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
+            m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(3, 3, 3);
             TrueDataFrame frame;
             frame.m_Time = i;
             frame.m_Id = m_PlaneClients[j].m_Plane.m_Id;
@@ -303,7 +304,7 @@ void CDataCenterDlg::GenerateTrueData()
         }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
-            m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(rand() % 3, 0, 0);
+            m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(3, 0, 0);
             TrueDataFrame frame;
             frame.m_Time = i;
             frame.m_Id = m_TargetClients[j].m_Target.m_Id;
