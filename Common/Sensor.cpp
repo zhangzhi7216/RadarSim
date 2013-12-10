@@ -5,7 +5,7 @@ using namespace Utility;
 
 CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
 
-Sensor::Sensor(SensorType type)
+Sensor::Sensor(SensorType type, Plane &plane)
 : m_Type(type)
 , m_Enable(TRUE)
 , m_MaxDis(300)
@@ -20,6 +20,7 @@ Sensor::Sensor(SensorType type)
 , m_ShowThetaRange(TRUE)
 , m_ThetaRangeColor(Color::Green)
 , m_ShowHeight(TRUE)
+, m_Plane(plane)
 {
 }
 
@@ -55,7 +56,8 @@ void Sensor::AddTarget(Target &target)
 
 void Sensor::AddTargetData(int target, Position rel)
 {
-    double d = Distance(rel), t = Theta(rel), p = Phi(rel);
+    // 角度采与机头的相对夹角
+    double d = Distance(rel), t = Theta(rel) - Theta(m_Plane.m_HeadDir), p = Phi(rel) - Phi(m_Plane.m_HeadDir);
     if (IsInRange(target, d, t, p))
     {
         double sample = (double)rand();

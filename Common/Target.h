@@ -11,7 +11,11 @@ public:
 
     Position m_Position;
 
+    Point3D m_HeadDir;
+
     TargetColor m_Color;
+
+    void MoveTo(const Position &pos);
 
     void Reset();
 };

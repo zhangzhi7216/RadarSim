@@ -14,7 +14,7 @@ public:
 
     static CString SensorTypeNames[SensorTypeLast];
 
-    Sensor(SensorType type);
+    Sensor(SensorType type, Plane &plane);
     virtual ~Sensor(void);
 
     SensorType m_Type;
@@ -38,6 +38,7 @@ public:
 
     vector<TargetColor> m_TargetColors;
     vector<vector<double>> m_TargetDistances, m_TargetThetas, m_TargetPhis;
+    Plane &m_Plane;
 
     void Reset();
     void AddTarget(Target &target);

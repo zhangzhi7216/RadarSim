@@ -50,21 +50,24 @@ void DataCenterSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeRadar:
         {
-            Sensor radar(Sensor::SensorTypeNonSource);
+            Plane foo;
+            Sensor radar(Sensor::SensorTypeNonSource, foo);
             ar >> radar;
             m_Dlg->SetRadar(radar);
         }
         break;
     case PacketTypeEsm:
         {
-            Sensor esm(Sensor::SensorTypeNonSource);
+            Plane foo;
+            Sensor esm(Sensor::SensorTypeNonSource, foo);
             ar >> esm;
             m_Dlg->SetEsm(esm);
         }
         break;
     case PacketTypeInfrared:
         {
-            Sensor infrared(Sensor::SensorTypeNonSource);
+            Plane foo;
+            Sensor infrared(Sensor::SensorTypeNonSource, foo);
             ar >> infrared;
             m_Dlg->SetInfrared(infrared);
         }

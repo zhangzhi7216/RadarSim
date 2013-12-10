@@ -19,15 +19,15 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_Initialized(false)
     , m_DlgType(DlgTypePlane)
     , m_ShowRadarDlg(false)
-    , m_Radar(Sensor::SensorTypeSource)
+    , m_Radar(Sensor::SensorTypeSource, m_Plane)
     , m_RadarCtrl(m_Radar)
     , m_RadarDlg(TEXT("À×´ï"), m_Radar, this)
     , m_ShowEsmDlg(false)
-    , m_Esm(Sensor::SensorTypeNonSource)
+    , m_Esm(Sensor::SensorTypeNonSource, m_Plane)
     , m_EsmCtrl(m_Esm)
     , m_EsmDlg(TEXT("ESM"), m_Esm, this)
     , m_ShowInfraredDlg(false)
-    , m_Infrared(Sensor::SensorTypeNonSource)
+    , m_Infrared(Sensor::SensorTypeNonSource, m_Plane)
     , m_InfraredCtrl(m_Infrared)
     , m_InfraredDlg(TEXT("ºìÍâ"), m_Infrared, this)
     , m_ShowDataListDlg(false)
@@ -436,6 +436,8 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
 
 void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
+    m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
+
     m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
 
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
@@ -916,6 +918,7 @@ void CPlaneDlg::SetPlane(Plane &plane)
     m_Plane.m_Type = plane.m_Type;
     m_Plane.m_Color = plane.m_Color;
     m_Plane.m_Position = plane.m_Position;
+    m_Plane.m_HeadDir = plane.m_HeadDir;
 
     AddPlane(m_Plane, &m_Radar, &m_Esm, &m_Infrared);
 }
