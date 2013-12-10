@@ -55,9 +55,29 @@ void Sensor::AddTarget(Target &target)
 
 void Sensor::AddTargetData(int target, Position rel)
 {
-    m_TargetDistances[target].push_back(WhiteNoise(Distance(rel), m_DisVar));
-    m_TargetThetas[target].push_back(WhiteNoise(Theta(rel), m_ThetaVar));
-    m_TargetPhis[target].push_back(WhiteNoise(Phi(rel), m_PhiVar));
+    double d = Distance(rel), t = Theta(rel), p = Phi(rel);
+    if (IsInRange(target, d, t, p))
+    {
+        m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
+        m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
+        m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+    }
+    else
+    {
+        m_TargetDistances[target].push_back(0);
+        m_TargetThetas[target].push_back(0);
+        m_TargetPhis[target].push_back(0);
+    }
+}
+
+bool Sensor::IsInRange(int i, double d, double t, double p)
+{
+    if (i >= m_TargetDistances.size() || i >= m_TargetThetas.size() || i >= m_TargetPhis.size())
+    {
+        return false;
+    }
+
+    return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi / 2;
 }
 
 bool Sensor::IsShowTargetData(int i, int j)
@@ -69,7 +89,7 @@ bool Sensor::IsShowTargetData(int i, int j)
     }
 
     double d = m_TargetDistances[i][j], t = m_TargetThetas[i][j], p = m_TargetPhis[i][j];
-    return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi;
+    return !(d == 0 && t == 0 && p == 0);
 }
 
 CArchive & operator << (CArchive &ar, Sensor &sensor)

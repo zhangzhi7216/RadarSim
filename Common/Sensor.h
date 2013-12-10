@@ -42,6 +42,7 @@ public:
     void Reset();
     void AddTarget(Target &target);
     void AddTargetData(int target, Position rel);
+    bool IsInRange(int i, double d, double t, double p);
     bool IsShowTargetData(int i, int j);
 };
 
