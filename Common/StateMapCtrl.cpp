@@ -76,9 +76,9 @@ void CStateMapCtrl::DrawTargets()
             for (int j = 1; j < m_StateMap.m_PlanePaths[i].size(); ++j)
             {
                 PointF pt0(m_StateMap.m_PlanePaths[i][j - 1].X / m_StateMap.m_MaxX * (double)width,
-                    m_StateMap.m_PlanePaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
+                    (double)height - m_StateMap.m_PlanePaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
                 PointF pt1(m_StateMap.m_PlanePaths[i][j].X / m_StateMap.m_MaxX * (double)width,
-                    m_StateMap.m_PlanePaths[i][j].Y / m_StateMap.m_MaxY * (double)height);
+                    (double)height - m_StateMap.m_PlanePaths[i][j].Y / m_StateMap.m_MaxY * (double)height);
                 graphics.DrawLine(&pen, pt0, pt1);
             }
         }
@@ -89,9 +89,9 @@ void CStateMapCtrl::DrawTargets()
             {
                 Position end = m_StateMap.m_PlanePaths[i].back();
                 Position start = m_StateMap.m_PlanePaths[i][m_StateMap.m_PlanePaths[i].size() - 2];
-                double angle = Theta(end - start);
+                double angle = -Theta(end - start);
                 graphics.RotateTransform(angle, MatrixOrderAppend);
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
             Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
             PointF pt(0.0, 0.0);
@@ -143,7 +143,7 @@ void CStateMapCtrl::DrawTargets()
                 str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_PlanePaths[i].back().Z);
                 Font font(TEXT("Calibri"), 9);
                 PointF pt(m_StateMap.m_PlanePaths[i].back().X / m_StateMap.m_MaxX * (double)width,
-                    m_StateMap.m_PlanePaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
+                    (double)height - m_StateMap.m_PlanePaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
                 graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - planeImg->GetHeight()), &brush);
             }
         }
@@ -158,9 +158,9 @@ void CStateMapCtrl::DrawTargets()
             for (int j = 1; j < m_StateMap.m_TargetPaths[i].size(); ++j)
             {
                 PointF pt0(m_StateMap.m_TargetPaths[i][j - 1].X / m_StateMap.m_MaxX * (double)width,
-                    m_StateMap.m_TargetPaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
+                    (double)height - m_StateMap.m_TargetPaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
                 PointF pt1(m_StateMap.m_TargetPaths[i][j].X / m_StateMap.m_MaxX * (double)width,
-                    m_StateMap.m_TargetPaths[i][j].Y / m_StateMap.m_MaxY * (double)height);
+                    (double)height - m_StateMap.m_TargetPaths[i][j].Y / m_StateMap.m_MaxY * (double)height);
                 graphics.DrawLine(&pen, pt0, pt1);
             }
         }
@@ -170,9 +170,9 @@ void CStateMapCtrl::DrawTargets()
             {
                 Position end = m_StateMap.m_TargetPaths[i].back();
                 Position start = m_StateMap.m_TargetPaths[i][m_StateMap.m_TargetPaths[i].size() - 2];
-                double angle = Theta(end - start);
+                double angle = -Theta(end - start);
                 graphics.RotateTransform(angle, MatrixOrderAppend);
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
             Image *targetImg = TargetTypeImages[m_StateMap.m_TargetTypes[i]];
             PointF pt(0.0, 0.0);
@@ -188,7 +188,7 @@ void CStateMapCtrl::DrawTargets()
                 str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_TargetPaths[i].back().Z);
                 Font font(TEXT("Calibri"), 9);
                 PointF pt(m_StateMap.m_TargetPaths[i].back().X / m_StateMap.m_MaxX * (double)width,
-                    m_StateMap.m_TargetPaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
+                    (double)height - m_StateMap.m_TargetPaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
                 graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - targetImg->GetHeight()), &brush);
             }
         }
