@@ -364,7 +364,7 @@ void CDataCenterDlg::StartSim()
     m_FusionDatas.clear();
     GenerateTrueData();
     m_CurrentFrame = 0;
-    SetTimer(WM_TIME_FRAME, 500, NULL);
+    SetTimer(WM_TIME_FRAME, 800, NULL);
 }
 
 void CDataCenterDlg::PauseSim()
@@ -374,7 +374,7 @@ void CDataCenterDlg::PauseSim()
 
 void CDataCenterDlg::ResumeSim()
 {
-    SetTimer(WM_TIME_FRAME, 250, NULL);
+    SetTimer(WM_TIME_FRAME, 800, NULL);
 }
 
 void CDataCenterDlg::FinishSim()

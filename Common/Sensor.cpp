@@ -14,7 +14,7 @@ Sensor::Sensor(SensorType type)
 , m_DisVar(0)
 , m_ThetaVar(0)
 , m_PhiVar(0)
-, m_ProDet(0)
+, m_ProDet(100)
 , m_ShowScanline(TRUE)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
@@ -58,9 +58,14 @@ void Sensor::AddTargetData(int target, Position rel)
     double d = Distance(rel), t = Theta(rel), p = Phi(rel);
     if (IsInRange(target, d, t, p))
     {
-        m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
-        m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
-        m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+        double sample = (double)rand();
+        if (sample <= (double)RAND_MAX * m_ProDet / 100.0)
+        {
+            // FIXME: 野值、延迟应该加在这里
+            m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
+            m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
+            m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+        }
     }
     else
     {
