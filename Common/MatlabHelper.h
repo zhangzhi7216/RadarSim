@@ -13,6 +13,8 @@
 #include <vector>
 #include <string>
 
+#include <engine.h>
+
 using namespace std;
 
 typedef mxArray Array;
@@ -49,7 +51,7 @@ namespace MatlabHelper
         INT32 size, INT32 start);
     void DestroyArray(Array *a);
 
-    bool RunFunc(const wstring &dllFileName, const wstring &funcName, vector<Array *> &outputList, vector<Array *> &inputList);
+    bool RunFunc(LPCWSTR dllFileName, LPCWSTR funcName, vector<Array *> &outputList, vector<Array *> &inputList);
     bool RealRunFunc(HINSTANCE algorithmDllHandle, const string &fullFuncName, vector<Array *> &outputList, vector<Array *> &inputList, bool &result);
 };
 

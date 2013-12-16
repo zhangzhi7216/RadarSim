@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "Defines.h"
+#include <mclmcrrt.h>
 
 Color TargetColors[] =
 {
@@ -95,6 +96,8 @@ void GlobalInit()
     TargetTypeImages[TargetTypeTank] = Image::FromFile(TEXT("Tank.ico"));
     TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.ico"));
     TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.ico"));
+
+    mclInitializeApplication(NULL, 0);
 }
 
 void GlobalShut()
@@ -109,4 +112,6 @@ void GlobalShut()
     }
     ULONG_PTR gdiplusToken = NULL; 
     GdiplusShutdown(gdiplusToken);
+
+    mclTerminateApplication();
 }

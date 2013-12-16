@@ -16,6 +16,7 @@ class CAttackPlaneDlg : public CPlaneDlg
 // 构造
 public:
 	CAttackPlaneDlg(LPCWSTR title, CWnd* pParent = NULL);	// 标准构造函数
+	~CAttackPlaneDlg();	// 标准构造函数
 
 // 实现
 protected:

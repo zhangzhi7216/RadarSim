@@ -235,6 +235,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MatlabDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MatlabHelper.cpp"
 				>
 			</File>
@@ -334,6 +338,10 @@
 			</File>
 			<File
 				RelativePath=".\InfraredDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MatlabDlg.h"
 				>
 			</File>
 			<File

@@ -34,6 +34,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_DataList(m_Radar, m_Esm, m_Infrared)
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
+    , m_MatlabDlg(NULL)
     , m_ShowStateMapDlg(true)
     , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_DataCenterSocket(0)
@@ -124,6 +125,9 @@ BOOL CPlaneDlg::OnInitDialog()
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
 
+    if (m_MatlabDlg)
+    {
+    }
     CDataListDlg::CreateDlg(m_DataListDlg);
     if (m_ShowDataListDlg)
     {
@@ -351,12 +355,26 @@ void CPlaneDlg::OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult)
     // pResult = 0;
     if (m_ShowDataListDlg)
     {
-        m_DataListDlg.ShowWindow(SW_HIDE);
+        if (m_MatlabDlg)
+        {
+            m_MatlabDlg->Hide();
+        }
+        else
+        {
+            m_DataListDlg.ShowWindow(SW_HIDE);
+        }
         m_ShowDataListDlg = false;
     }
     else
     {
-        m_DataListDlg.ShowWindow(SW_SHOW);
+        if (m_MatlabDlg)
+        {
+            m_MatlabDlg->Show();
+        }
+        else
+        {
+            m_DataListDlg.ShowWindow(SW_SHOW);
+        }
         m_ShowDataListDlg = true;
     }
 }
@@ -438,6 +456,10 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
     m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
 
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
+    }
     m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
 
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
@@ -448,7 +470,10 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         m_Esm.AddTargetData(i, rel);
         m_Infrared.AddTargetData(i, rel);
         m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
-
+        if (m_MatlabDlg)
+        {
+            m_MatlabDlg->AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
+        }
         m_StateMap.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
     }
 
@@ -532,6 +557,10 @@ void CPlaneDlg::ResetCtrls()
     m_RadarDlg.Reset();
     m_EsmDlg.Reset();
     m_InfraredDlg.Reset();
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->Reset();
+    }
     m_DataListDlg.Reset();
 
     m_StateMapDlg.Reset();
@@ -577,6 +606,10 @@ void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infra
     newSubDlgTitle = newTitle + TEXT("态势");
     m_StateMapDlg.SetWindowTextW(newSubDlgTitle);
 
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->AddPlane(plane);
+    }
     m_StateMap.AddPlane(plane, radar, esm, infrared);
     m_StateMapDlg.AddPlane(plane);
 }
@@ -601,6 +634,11 @@ void CPlaneDlg::AddTarget(Target &target)
     m_InfraredDlg.AddTarget(target);
     m_DataListDlg.AddTarget(target);
     m_StateMapDlg.AddTarget(target);
+
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->AddTarget(target);
+    }
 }
 
 void CPlaneDlg::OnSubDlgClose(void *subDlg)

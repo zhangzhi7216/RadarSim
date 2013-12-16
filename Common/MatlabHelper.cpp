@@ -151,9 +151,9 @@ void DestroyArray(Array *a)
     mxDestroyArray(a);
 }
 
-bool RunFunc(const wstring &dllFileName, const wstring &funcName, vector<Array *> &outputList, vector<Array *> &inputList)
+bool RunFunc(LPCWSTR dllFileName, LPCWSTR funcName, vector<Array *> &outputList, vector<Array *> &inputList)
 {
-    HINSTANCE algorithmDllHandle = LoadLibrary(dllFileName.c_str());
+    HINSTANCE algorithmDllHandle = LoadLibrary(dllFileName);
 
     if (!algorithmDllHandle)
     {
@@ -161,7 +161,8 @@ bool RunFunc(const wstring &dllFileName, const wstring &funcName, vector<Array *
     }
 
     bool result;
-    string sFuncName(funcName.begin(), funcName.end());
+    wstring wsFuncName(funcName);
+    string sFuncName(wsFuncName.begin(), wsFuncName.end());
 
     string initializeFuncName = sFuncName;
     initializeFuncName += InitializeFuncPrefix;
