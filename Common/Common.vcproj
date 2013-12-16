@@ -68,7 +68,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="gdiplus.lib"
+				AdditionalDependencies="gdiplus.lib mclmcrrt.lib libmx.lib libmat.lib libeng.lib"
 				LinkIncremental="2"
 				ModuleDefinitionFile=".\Common.def"
 				GenerateDebugInformation="true"
@@ -235,6 +235,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MatlabHelper.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Sensor.cpp"
 				>
 			</File>
@@ -330,6 +334,10 @@
 			</File>
 			<File
 				RelativePath=".\InfraredDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MatlabHelper.h"
 				>
 			</File>
 			<File
