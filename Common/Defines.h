@@ -63,6 +63,10 @@ typedef struct __declspec(dllexport) Point3D
         return *this;
     }
 
+    Point3D operator*(double n) const
+    {
+        return Point3D(X * n, Y * n, Z * n);
+    }
     Point3D &operator*=(double n)
     {
         X *= n;
@@ -71,6 +75,10 @@ typedef struct __declspec(dllexport) Point3D
         return *this;
     }
 
+    Point3D operator/(double n) const
+    {
+        return Point3D(X / n, Y / n, Z / n);
+    }
     Point3D &operator/=(double n)
     {
         X /= n;
@@ -139,6 +147,16 @@ enum TargetType
 extern Image *TargetTypeImages[TargetTypeLast];
 extern CString TargetTypeNames[TargetTypeLast];
 
+enum TargetMoveType
+{
+    TargetMoveTypeUniVel = 0,
+    TargetMoveTypeUniAcc,
+    TargetMoveTypeUniCir,
+    TargetMoveTypeLast,
+};
+
+extern CString TargetMoveTypeNames[TargetMoveTypeLast];
+
 #define PLANE_COUNT 3
 #define TARGET_COUNT 3
 #define DATA_CENTER_ADDR TEXT("localhost")
@@ -155,11 +173,21 @@ enum PacketType
     PacketTypeEsm,
     PacketTypeInfrared,
     PacketTypeStateMap,
+    PacketTypeGlobalData,
     PacketTypeTrueData,
     PacketTypeNoiseData,
     PacketTypeFusionData,
     PacketTypeControlData,
 };
+
+enum NoiseType
+{
+    NoiseTypeWhite = 0,
+    NoiseTypeColor,
+    NoiseTypeMult,
+    NoiseTypeLast,
+};
+extern CString NoiseTypeNames[NoiseTypeLast];
 
 void __declspec(dllexport) GlobalInit();
 void __declspec(dllexport) GlobalShut();

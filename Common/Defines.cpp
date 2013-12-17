@@ -60,6 +60,20 @@ CString TargetTypeNames[] =
     TEXT("导弹"),
 };
 
+CString TargetMoveTypeNames[] =
+{
+    TEXT("匀速直线运动"),
+    TEXT("匀加速直线运动"),
+    TEXT("匀速圆周运动"),
+};
+
+CString NoiseTypeNames[] =
+{
+    TEXT("白噪声"),
+    TEXT("色噪声"),
+    TEXT("乘性噪声"),
+};
+
 CArchive & operator << (CArchive &ar, Position &pos)
 {
     ar << pos.X << pos.Y << pos.Z;

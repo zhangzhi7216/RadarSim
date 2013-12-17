@@ -1067,6 +1067,15 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMapDlg.m_Ctrl.Invalidate();
 }
 
+void CPlaneDlg::SetGlobalData(GlobalDataPacket &packet)
+{
+    m_GlobalData = packet;
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->SetSize((m_GlobalData.m_EndTime - m_GlobalData.m_StartTime + 1) / m_GlobalData.m_Interval);
+    }
+}
+
 void CPlaneDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值

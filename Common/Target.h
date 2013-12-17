@@ -10,11 +10,16 @@ public:
     TargetType m_Type;
 
     Position m_Position;
+    Velocity m_Vel;
+    Acceleration m_Acc;
 
     Point3D m_HeadDir;
 
+    TargetMoveType m_MoveType;
+
     TargetColor m_Color;
 
+    void Move(double t);
     void MoveTo(const Position &pos);
 
     void Reset();

@@ -25,6 +25,7 @@ public:
     void SendEsm(Sensor &esm);
     void SendInfrared(Sensor &infrared);
     void SendStateMap(StateMap &stateMap);
+    void SendGlobalData(GlobalDataPacket &packet);
     void SendTrueData(TrueDataPacket &packet);
 
 protected:

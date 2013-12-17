@@ -79,6 +79,13 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             m_Dlg->SetStateMap(stateMap);
         }
         break;
+    case PacketTypeGlobalData:
+        {
+            GlobalDataPacket packet;
+            ar >> packet;
+            m_Dlg->SetGlobalData(packet);
+        }
+        break;
     case PacketTypeTrueData:
         {
             TrueDataPacket packet;

@@ -20,7 +20,8 @@
 // CDataCenterDlg ¶Ô»°¿ò
 
 
-#define TIME_FRAMES 1000
+#define TIMES 10
+#define TIME_FRAMES 100
 #define WM_TIME_FRAME (WM_USER + 1)
 
 
@@ -247,6 +248,10 @@ void CDataCenterDlg::GeneratePlaneClients()
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
+        m_PlaneClients[i].m_Plane.m_MoveType = (TargetMoveType)(i % 2);
+        m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 200 * i, 100);
+        m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, ((double)rand() - (double)RAND_MAX / 2) / ((double)RAND_MAX / 2) * 2, rand() % 3);
+        m_PlaneClients[i].m_Plane.m_Acc = Position(rand() % 1, rand() % 1, rand() % 1);
         m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 200 * i, 100);
         m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
         m_PlaneClients[i].m_Radar.m_MaxDis = 300 + i * 10;
@@ -274,7 +279,9 @@ void CDataCenterDlg::GenerateTargetClients()
     {
         TargetClient client;
         client.m_Target.m_Type = (TargetType)((int)TargetTypeShipboard + rand() % ((int)TargetTypeMissile - (int)TargetTypeShipboard + 1));
+        client.m_Target.m_MoveType = TargetMoveTypeUniVel;
         client.m_Target.m_Position = Position(150, 150 + 150 * i, 150) + Position(10 * (rand() % 3), 10 * (rand() % 3), 10 * (rand() % 3));
+        client.m_Target.m_Vel = Position(rand() % 3, 0, 0);
         client.m_Target.m_Color = (TargetColor)(i + PLANE_COUNT);
         m_TargetClients.push_back(client);
     }
@@ -290,11 +297,12 @@ void CDataCenterDlg::GenerateTrueData()
     {
         m_TargetClients[i].m_TargetTrueDatas.clear();
     }
-    for (int i = 0; i < TIME_FRAMES; ++i)
+    for (int i = m_GlobalData.m_StartTime; i < m_GlobalData.m_EndTime + 1; i += m_GlobalData.m_Interval)
     {
         for (int j = 0; j < PLANE_COUNT; ++j)
         {
-            m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
+            m_PlaneClients[j].m_Plane.Move(m_GlobalData.m_Interval);
+            // m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
             // m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(3, 3, 3);
             TrueDataFrame frame;
             frame.m_Time = i;
@@ -304,7 +312,8 @@ void CDataCenterDlg::GenerateTrueData()
         }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
-            m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(3, 0, 0);
+            m_TargetClients[j].m_Target.Move(m_GlobalData.m_Interval);
+            // m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(3, 0, 0);
             TrueDataFrame frame;
             frame.m_Time = i;
             frame.m_Id = m_TargetClients[j].m_Target.m_Id;
@@ -312,6 +321,10 @@ void CDataCenterDlg::GenerateTrueData()
             m_TargetClients[j].m_TargetTrueDatas.push_back(frame);
         }
     }
+}
+
+void CDataCenterDlg::GenerateGlobalData()
+{
 }
 
 void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
@@ -322,49 +335,53 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
 void CDataCenterDlg::StartSim()
 {
-    GeneratePlaneClients();
-    GenerateTargetClients();
-    for (int i = 0; i < PLANE_COUNT; ++i)
+    for (int i = 0; i < m_GlobalData.m_Times; ++i)
     {
-        m_PlaneClients[i].m_PlaneSocket->SendReset();
-        m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
-        m_PlaneClients[i].m_PlaneSocket->SendRadar(m_PlaneClients[i].m_Radar);
-        m_PlaneClients[i].m_PlaneSocket->SendEsm(m_PlaneClients[i].m_Esm);
-        m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_PlaneClients[i].m_Infrared);
-        m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
-        for (int j = 0; j < m_TargetClients.size(); ++j)
+        GeneratePlaneClients();
+        GenerateTargetClients();
+        for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
+            m_PlaneClients[i].m_PlaneSocket->SendReset();
+            m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
+            m_PlaneClients[i].m_PlaneSocket->SendRadar(m_PlaneClients[i].m_Radar);
+            m_PlaneClients[i].m_PlaneSocket->SendEsm(m_PlaneClients[i].m_Esm);
+            m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_PlaneClients[i].m_Infrared);
+            m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
+            m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
+            for (int j = 0; j < m_TargetClients.size(); ++j)
+            {
+                m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
+            }
         }
+
+        ResetCtrls();
+
+        m_StateMap.m_Background = StateMapBackground3;
+        m_StateMap.m_MaxX = 1200;
+        m_StateMap.m_MaxY = 800;
+
+        for (int i = 0; i < PLANE_COUNT; ++i)
+        {
+            m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_PlaneClients[i].m_Radar, &m_PlaneClients[i].m_Esm, &m_PlaneClients[i].m_Infrared);
+            m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
+        }
+
+        for (int i = 0; i < m_TargetClients.size(); ++i)
+        {
+            m_StateMap.AddTarget(m_TargetClients[i].m_Target);
+            m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
+        }
+
+        m_StateMapDlg.m_Ctrl.DrawBackground();
+        m_StateMapDlg.m_Ctrl.DrawTargets();
+        m_StateMapDlg.m_Ctrl.BlendAll();
+        m_StateMapDlg.m_Ctrl.Invalidate();
+
+        m_FusionDatas.clear();
+        GenerateTrueData();
+        m_CurrentFrame = 0;
+        SetTimer(WM_TIME_FRAME, 800, NULL);
     }
-
-    ResetCtrls();
-
-    m_StateMap.m_Background = StateMapBackground3;
-    m_StateMap.m_MaxX = 1200;
-    m_StateMap.m_MaxY = 800;
-
-    for (int i = 0; i < PLANE_COUNT; ++i)
-    {
-        m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_PlaneClients[i].m_Radar, &m_PlaneClients[i].m_Esm, &m_PlaneClients[i].m_Infrared);
-        m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
-    }
-
-    for (int i = 0; i < m_TargetClients.size(); ++i)
-    {
-        m_StateMap.AddTarget(m_TargetClients[i].m_Target);
-        m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
-    }
-
-    m_StateMapDlg.m_Ctrl.DrawBackground();
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
-
-    m_FusionDatas.clear();
-    GenerateTrueData();
-    m_CurrentFrame = 0;
-    SetTimer(WM_TIME_FRAME, 800, NULL);
 }
 
 void CDataCenterDlg::PauseSim()

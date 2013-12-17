@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Target.h"
+#include <afxmt.h>
 
 #include "MatlabHelper.h"
 
@@ -21,16 +22,18 @@ public:
     void AddPlaneData(int plane, Position pos);
     void AddTarget(Target &target);
     void AddTargetData(int target, Position pos);
-    void SetSize(int size) { m_Size = size; }
+    void SetSize(int size);
 
     LPCWSTR m_DllFileName;
     LPCWSTR m_FuncName;
-    Array *m_Input;
+    Array *m_PlaneInput;
+    Array *m_TargetInput;
 
     int m_Size;
 
     Engine *m_Engine;
     HANDLE m_Thread;
+    CCriticalSection m_Lock;
     static DWORD WINAPI MatlabRun(LPVOID lparam);
 };
 

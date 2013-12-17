@@ -101,6 +101,8 @@ public:
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
 
+    GlobalDataPacket m_GlobalData;
+
     void ResetCtrls();
     void ResetSensors();
     void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
@@ -139,6 +141,7 @@ public:
     virtual void SetEsm(Sensor &esm);
     virtual void SetInfrared(Sensor &infrared);
     virtual void SetStateMap(StateMap &stateMap);
+    virtual void SetGlobalData(GlobalDataPacket &packet);
     virtual void AddTrueData(TrueDataPacket &packet);
     virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
     typedef pair<PlaneSocket *, NoiseDataPacket> SocketPacketPair;

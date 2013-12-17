@@ -86,6 +86,14 @@ void PlaneSocket::SendStateMap(StateMap &stateMap)
     ar.Flush();
 }
 
+void PlaneSocket::SendGlobalData(GlobalDataPacket &packet)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeGlobalData << packet;
+    ar.Flush();
+}
+
 void PlaneSocket::SendTrueData(TrueDataPacket &packet)
 {
     CSocketFile file(this);

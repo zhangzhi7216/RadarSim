@@ -9,6 +9,7 @@
 #include "../Common/StateMapDlg.h"
 #include "PlaneClient.h"
 #include "TargetClient.h"
+#include "../Common/DataPacket.h"
 
 #include "CommonDlg.h"
 
@@ -64,6 +65,8 @@ public:
     void GeneratePlaneClients();
     void GenerateTargetClients();
     void GenerateTrueData();
+    void GenerateGlobalData();
+    GlobalDataPacket m_GlobalData;
     void AddFusionData(FusionDataPacket &packet);
     vector<FusionDataPacket> m_FusionDatas;
 
