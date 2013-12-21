@@ -88,7 +88,7 @@ CArchive & operator >> (CArchive &ar, Position &pos)
     return ar;
 }
 
-CString AlgoConfigFileName(TEXT("algorithm_config.ini"));
+CString ConfigFileName(TEXT("config.ini"));
 
 void GlobalInit()
 {

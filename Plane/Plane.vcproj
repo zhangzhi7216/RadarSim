@@ -198,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\PlaneDlg\IpDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Plane.cpp"
 				>
 			</File>
@@ -241,6 +245,10 @@
 			</File>
 			<File
 				RelativePath="..\PlaneDlg\FusionSocket.h"
+				>
+			</File>
+			<File
+				RelativePath="..\PlaneDlg\IpDlg.h"
 				>
 			</File>
 			<File

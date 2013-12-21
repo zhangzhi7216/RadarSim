@@ -7,9 +7,9 @@
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128
 #define IDC_DC_TARGET_ADD               1000
-#define IDC_DC_READ_CONFIG              1007
-#define IDC_DC_TARGET_ADD3              1008
-#define IDC_DC_READ_DATA                1008
+#define IDC_MATLAB_DLG_BUTTON           1001
+#define IDC_MATLAB_DLG_STATE_MAP        1002
+#define IDC_STATE_MAP_DLG_BUTTON        1002
 #define IDC_DC_SENSOR_ENABLE            4004
 #define IDC_DC_SENSOR_PARAM_GRP         4005
 #define IDC_DC_PLANE_PARAM_GRP          4006
@@ -93,8 +93,9 @@
 #define IDC_DC_GLOBAL_PARAM_GRP         4084
 #define IDC_DC_GLOBAL_CYCLE_STATIC      4085
 #define IDC_DC_GLOBAL_CYCLE             4086
-#define IDC_DC_GLOBAL_ALGO_STATIC       4087
-#define IDC_DC_GLOBAL_ALGO              4089
+#define IDC_DC_GLOBAL_FUSION_ALGO_STATIC 4087
+#define IDC_DC_STATE_MAP_PARAM_GRP      4088
+#define IDC_DC_GLOBAL_FUSION_ALGO       4089
 #define IDC_DC_GLOBAL_NOISE_STATIC      4090
 #define IDC_DC_GLOBAL_NOISE             4091
 #define IDC_DC_GLOBAL_WILD_STATIC       4092
@@ -105,6 +106,17 @@
 #define IDC_DC_GLOBAL_START_TIME        4097
 #define IDC_DC_GLOBAL_END_TIME_STATIC   4098
 #define IDC_DC_GLOBAL_END_TIME          4099
+#define IDC_DC_GLOBAL_NAVI_ALGO_STATIC  4100
+#define IDC_DC_GLOBAL_NAVI_ALGO         4101
+#define IDC_DC_GLOBAL_ROUNDS_STATIC     4102
+#define IDC_DC_GLOBAL_ROUNDS            4103
+#define IDC_DC_STATE_MAP_BKG            4104
+#define IDC_DC_STATE_MAP_BKG_STATIC     4105
+#define IDC_DC_STATE_MAP_MAX_X_STATIC   4106
+#define IDC_DC_SENSOR_PRO_DET2          4107
+#define IDC_DC_STATE_MAP_MAX_X          4107
+#define IDC_DC_STATE_MAP_MAX_Y_STATIC   4108
+#define IDC_DC_STATE_MAP_MAX_Y          4109
 
 // Next default values for new objects
 // 
@@ -112,7 +124,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1001
+#define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

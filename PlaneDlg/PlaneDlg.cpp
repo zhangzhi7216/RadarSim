@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "../PlaneDlg/Resource.h"
 #include "PlaneDlg.h"
+#include "IpDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -152,6 +153,7 @@ BOOL CPlaneDlg::OnInitDialog()
 
     ResetCtrls();
     ResetSockets();
+
     ConnectDataCenter();
 
 #if 0
@@ -454,7 +456,6 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         KillTimer(0);
         ResetCtrls();
     }
-    LPCWSTR p = AlgoConfigFileName;
 }
 
 void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
@@ -918,8 +919,18 @@ void CPlaneDlg::OnSubDlgProDet(void *subDlg)
 
 void CPlaneDlg::ConnectDataCenter()
 {
-    while (!m_DataCenterSocket->Connect(DATA_CENTER_ADDR, DATA_CENTER_PORT))
+    CIpDlg dlg(DATA_CENTER_ADDR, DATA_CENTER_PORT);
+    if (IDOK == dlg.DoModal())
     {
+        if (!m_DataCenterSocket->Connect(dlg.m_HostName, dlg.m_Port))
+        {
+            AfxMessageBox(TEXT("连接到数据中心失败."));
+            exit(-1);
+        }
+    }
+    else
+    {
+        exit(-1);
     }
     m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
     // AfxMessageBox(TEXT("连接到数据中心"));

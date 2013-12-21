@@ -206,6 +206,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\PlaneDlg\IpDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\PlaneDlg\PlaneDlg.cpp"
 				>
 			</File>
@@ -256,6 +260,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\PlaneDlg\IpDlg.h"
+				>
+			</File>
+			<File
 				RelativePath="..\PlaneDlg\PlaneDlg.h"
 				>
 			</File>
@@ -302,7 +310,7 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="AttackPlaneDlg.rc"
+			Value="\Users\zanmato\Documents\GitHub\RadarSim\PlaneDlg\PlaneDlg.rc"
 		/>
 	</Globals>
 </VisualStudioProject>

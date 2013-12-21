@@ -525,7 +525,7 @@ void CDataCenterDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
 
 void CDataCenterDlg::ReadAlgoConfigFile()
 {
-    wifstream in(AlgoConfigFileName);
+    wifstream in(ConfigFileName);
     in.imbue(locale("chs"));
 
     wstring nextLine = TEXT("");

@@ -207,7 +207,7 @@ enum FusionLocalAlgoType
     FusionLocalAlgoTypeLast,
 };
 
-extern CString __declspec(dllimport) AlgoConfigFileName;
+extern CString __declspec(dllimport) ConfigFileName;
 
 void __declspec(dllexport) GlobalInit();
 void __declspec(dllexport) GlobalShut();
