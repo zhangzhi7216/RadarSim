@@ -384,7 +384,7 @@ void CDataCenterDlg::StartSim()
         m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
         if (m_PlaneClients[i].m_PlaneSocket->IsFusion())
         {
-            m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[2]);
+            m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[3]);
         }
         if (m_PlaneClients[i].m_PlaneSocket->IsAttack())
         {
