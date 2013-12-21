@@ -2,8 +2,8 @@
 #include "StateMap.h"
 
 StateMap::StateMap()
-: m_MaxX(1000)
-, m_MaxY(1000)
+: m_MaxX(1200)
+, m_MaxY(900)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
 , m_ShowHeight(FALSE)

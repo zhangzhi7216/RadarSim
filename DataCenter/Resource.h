@@ -2,7 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by DataCenter.rc
 //
-#define IDD_DATACENTER_DIALOG           102
 #define IDD_DATACENTER_DLG              102
 #define IDP_SOCKETS_INIT_FAILED         103
 #define IDR_MAINFRAME                   128

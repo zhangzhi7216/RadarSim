@@ -39,7 +39,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_FusionConnected(false)
     , m_ConnectedPlanes(0)
     , m_ShowStateMapDlg(true)
-    , m_ShowMatlabDlg(true)
+    , m_ShowMatlabDlg(false)
     , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_CurrentFrame(0)
     , m_CurrentRound(0)
@@ -62,7 +62,17 @@ CDataCenterDlg::~CDataCenterDlg()
 
 void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
+    CDialog::DoDataExchange(pDX);
+    DDX_Text(pDX, IDC_DC_GLOBAL_ROUNDS, m_GlobalData.m_Rounds);
+    DDX_Text(pDX, IDC_DC_GLOBAL_CYCLE, m_GlobalData.m_Interval);
+    DDX_Text(pDX, IDC_DC_GLOBAL_START_TIME, m_GlobalData.m_StartTime);
+    DDX_Text(pDX, IDC_DC_GLOBAL_END_TIME, m_GlobalData.m_EndTime);
+    DDX_Control(pDX, IDC_DC_GLOBAL_NOISE, m_NoiseType);
+    DDX_Control(pDX, IDC_DC_STATE_MAP_BKG, m_StateMapBkg);
+    DDX_Text(pDX, IDC_DC_STATE_MAP_MAX_X, m_StateMap.m_MaxX);
+    DDX_Text(pDX, IDC_DC_STATE_MAP_MAX_Y, m_StateMap.m_MaxY);
+    DDX_Control(pDX, IDC_DC_GLOBAL_FUSION_ALGO, m_FusionAlgoSel);
+    DDX_Control(pDX, IDC_DC_GLOBAL_NAVI_ALGO, m_NaviAlgoSel);
 }
 
 BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
@@ -72,6 +82,10 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_BN_CLICKED(IDOK, &CDataCenterDlg::OnBnClickedOk)
     ON_WM_TIMER()
     ON_WM_MBUTTONDBLCLK()
+    ON_CBN_SELCHANGE(IDC_DC_GLOBAL_NOISE, &CDataCenterDlg::OnCbnSelchangeDcGlobalNoise)
+    ON_CBN_SELCHANGE(IDC_DC_STATE_MAP_BKG, &CDataCenterDlg::OnCbnSelchangeDcStateMapBkg)
+    ON_BN_CLICKED(IDC_STATE_MAP_DLG_BUTTON, &CDataCenterDlg::OnBnClickedStateMapDlgButton)
+    ON_BN_CLICKED(IDC_MATLAB_DLG_BUTTON, &CDataCenterDlg::OnBnClickedMatlabDlgButton)
 END_MESSAGE_MAP()
 
 
@@ -85,6 +99,42 @@ BOOL CDataCenterDlg::OnInitDialog()
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
+
+    ReadConfigFile();
+
+    if (m_FusionAlgos.size() == 0)
+    {
+        AfxMessageBox(TEXT("未能读取任何融合算法."));
+        exit(-1);
+    }
+    for (int i = 0; i < m_FusionAlgos.size(); ++i)
+    {
+        m_FusionAlgoSel.InsertString(i, m_FusionAlgos[i]->m_Name);
+    }
+    m_FusionAlgoSel.SetCurSel(0);
+
+    if (0 && m_NaviAlgos.size() == 0)
+    {
+        AfxMessageBox(TEXT("未能读取任何导航算法."));
+        exit(-1);
+    }
+    for (int i = 0; i < m_NaviAlgos.size(); ++i)
+    {
+        m_NaviAlgoSel.InsertString(i, m_NaviAlgos[i]->m_Name);
+    }
+    m_NaviAlgoSel.SetCurSel(0);
+
+    for (int i = 0; i < StateMapBackgroundLast; ++i)
+    {
+        m_StateMapBkg.InsertString(i, StateMapBackgroundNames[i]);
+    }
+    m_StateMapBkg.SetCurSel(m_StateMap.m_Background);
+
+    for (int i = 0; i < NoiseTypeLast; ++i)
+    {
+        m_NoiseType.InsertString(i, NoiseTypeNames[i]);
+    }
+    m_NoiseType.SetCurSel(m_GlobalData.m_NoiseType);
 
     // TODO: 在此添加额外的初始化代码
     if (!m_DataCenterSocket->Create(DATA_CENTER_PORT))
@@ -100,18 +150,6 @@ BOOL CDataCenterDlg::OnInitDialog()
     if (!m_DataCenterSocket->AsyncSelect(FD_ACCEPT))
     {
         AfxMessageBox(TEXT("选择失败."));
-        exit(-1);
-    }
-
-    ReadAlgoConfigFile();
-    if (m_FusionAlgos.size() == 0)
-    {
-        AfxMessageBox(TEXT("未能读取任何融合算法."));
-        exit(-1);
-    }
-    if (0 && m_NaviAlgos.size() == 0)
-    {
-        AfxMessageBox(TEXT("未能读取任何导航算法."));
         exit(-1);
     }
 
@@ -277,6 +315,7 @@ void CDataCenterDlg::OnBnClickedOk()
     // TODO: Add your control notification handler code here
     // OnOK();
     m_CurrentRound = 0;
+    UpdateData();
     StartSim();
 }
 
@@ -386,11 +425,29 @@ void CDataCenterDlg::StartSim()
         m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
         if (m_PlaneClients[i].m_PlaneSocket->IsFusion())
         {
-            m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[3]);
+            int index = m_FusionAlgoSel.GetCurSel();
+            int count = m_FusionAlgoSel.GetCount();
+            if ((index != CB_ERR) && (count >= 1))
+            {
+            }
+            else
+            {
+                index = 0;
+            }
+            m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[index]);
         }
         if (m_PlaneClients[i].m_PlaneSocket->IsAttack())
         {
-            // m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[0]);
+            int index = m_NaviAlgoSel.GetCurSel();
+            int count = m_NaviAlgoSel.GetCount();
+            if ((index != CB_ERR) && (count >= 1))
+            {
+            }
+            else
+            {
+                index = 0;
+            }
+            // m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[index]);
         }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
@@ -400,10 +457,6 @@ void CDataCenterDlg::StartSim()
     }
 
     ResetCtrls();
-
-    m_StateMap.m_Background = StateMapBackground3;
-    m_StateMap.m_MaxX = 1200;
-    m_StateMap.m_MaxY = 800;
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
@@ -523,7 +576,7 @@ void CDataCenterDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
     CCommonDlg::OnMButtonDblClk(nFlags, point);
 }
 
-void CDataCenterDlg::ReadAlgoConfigFile()
+void CDataCenterDlg::ReadConfigFile()
 {
     wifstream in(ConfigFileName);
     in.imbue(locale("chs"));
@@ -582,7 +635,7 @@ void CDataCenterDlg::ReadAlgoConfigFile()
                     wstring name, dllFileName, funcName;
                     ist >> name >> dllFileName >> funcName;
                     FusionAlgo *algo;// = new FusionLocalAlgo(name.c_str(), (FusionLocalAlgoType)localType);
-                    m_FusionAlgos.push_back(algo);
+                    // m_FusionAlgos.push_back(algo);
                 }
                 break;
             default:
@@ -598,4 +651,57 @@ void CDataCenterDlg::ReadAlgoConfigFile()
     }
 
     in.close();
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcGlobalNoise()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_NoiseType.GetCurSel();
+    int count = m_NoiseType.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_GlobalData.m_NoiseType = (NoiseType)index;
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcStateMapBkg()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_StateMapBkg.GetCurSel();
+    int count = m_StateMapBkg.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_StateMap.m_Background = (StateMapBackground)index;
+    }
+}
+
+void CDataCenterDlg::OnBnClickedStateMapDlgButton()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    if (m_ShowStateMapDlg)
+    {
+        m_StateMapDlg.ShowWindow(SW_HIDE);
+        m_ShowStateMapDlg = false;
+    }
+    else
+    {
+        m_StateMapDlg.ShowWindow(SW_SHOW);
+        m_ShowStateMapDlg = true;
+    }
+}
+
+void CDataCenterDlg::OnBnClickedMatlabDlgButton()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    if (m_ShowMatlabDlg)
+    {
+        m_MatlabDlg.Hide();
+
+        m_ShowMatlabDlg = false;
+    }
+    else
+    {
+        m_MatlabDlg.Show();
+        m_ShowMatlabDlg = true;
+    }
 }

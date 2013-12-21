@@ -16,6 +16,7 @@
 #include "NaviAlgo.h"
 
 #include "CommonDlg.h"
+#include "afxwin.h"
 
 class DataCenterSocket;
 class PlaneSocket;
@@ -29,7 +30,7 @@ public:
     ~CDataCenterDlg();
 
 // 对话框数据
-	enum { IDD = IDD_DATACENTER_DIALOG };
+	enum { IDD = IDD_DATACENTER_DLG };
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
@@ -87,7 +88,16 @@ public:
     int m_CurrentFrame;
     int m_CurrentRound;
 
+    void ReadConfigFile();
+
     vector<FusionAlgo *> m_FusionAlgos;
     vector<NaviAlgo *> m_NaviAlgos;
-    void ReadAlgoConfigFile();
+    CComboBox m_NoiseType;
+    afx_msg void OnCbnSelchangeDcGlobalNoise();
+    CComboBox m_StateMapBkg;
+    afx_msg void OnCbnSelchangeDcStateMapBkg();
+    CComboBox m_FusionAlgoSel;
+    CComboBox m_NaviAlgoSel;
+    afx_msg void OnBnClickedStateMapDlgButton();
+    afx_msg void OnBnClickedMatlabDlgButton();
 };

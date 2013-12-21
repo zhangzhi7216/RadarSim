@@ -129,7 +129,7 @@ enum StateMapBackground
 };
 
 extern Image *StateMapBackgrounds[StateMapBackgroundLast];
-extern CString StateMapBackgroundNames[StateMapBackgroundLast];
+extern CString __declspec(dllimport) StateMapBackgroundNames[StateMapBackgroundLast];
 
 enum TargetType
 {
@@ -190,7 +190,7 @@ enum NoiseType
     NoiseTypeMult,
     NoiseTypeLast,
 };
-extern CString NoiseTypeNames[NoiseTypeLast];
+extern CString __declspec(dllimport) NoiseTypeNames[NoiseTypeLast];
 
 enum FusionAlgoType
 {
