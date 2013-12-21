@@ -10,6 +10,7 @@
 #include "PlaneClient.h"
 #include "TargetClient.h"
 #include "../Common/DataPacket.h"
+#include "../Common/MatlabDlg.h"
 
 #include "CommonDlg.h"
 

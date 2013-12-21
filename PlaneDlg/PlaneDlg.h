@@ -67,6 +67,7 @@ public:
     };
     DlgType m_DlgType;
 
+    GlobalDataPacket m_GlobalData;
     Plane m_Plane;
     vector<Target> m_Targets;
     afx_msg void OnTimer(UINT_PTR nIDEvent);
@@ -100,8 +101,6 @@ public:
     bool m_ShowStateMapDlg;
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
-
-    GlobalDataPacket m_GlobalData;
 
     void ResetCtrls();
     void ResetSensors();

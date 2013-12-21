@@ -51,7 +51,8 @@ void DataCenterSocket::OnReceive(int nErrorCode)
     case PacketTypeRadar:
         {
             Plane foo;
-            Sensor radar(Sensor::SensorTypeNonSource, foo);
+            GlobalDataPacket bar;
+            Sensor radar(Sensor::SensorTypeNonSource, foo, bar);
             ar >> radar;
             m_Dlg->SetRadar(radar);
         }
@@ -59,7 +60,8 @@ void DataCenterSocket::OnReceive(int nErrorCode)
     case PacketTypeEsm:
         {
             Plane foo;
-            Sensor esm(Sensor::SensorTypeNonSource, foo);
+            GlobalDataPacket bar;
+            Sensor esm(Sensor::SensorTypeNonSource, foo, bar);
             ar >> esm;
             m_Dlg->SetEsm(esm);
         }
@@ -67,7 +69,8 @@ void DataCenterSocket::OnReceive(int nErrorCode)
     case PacketTypeInfrared:
         {
             Plane foo;
-            Sensor infrared(Sensor::SensorTypeNonSource, foo);
+            GlobalDataPacket bar;
+            Sensor infrared(Sensor::SensorTypeNonSource, foo, bar);
             ar >> infrared;
             m_Dlg->SetInfrared(infrared);
         }

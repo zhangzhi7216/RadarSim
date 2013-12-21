@@ -5,7 +5,7 @@ using namespace Utility;
 
 CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
 
-Sensor::Sensor(SensorType type, Plane &plane)
+Sensor::Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData)
 : m_Type(type)
 , m_Enable(TRUE)
 , m_MaxDis(300)
@@ -20,6 +20,7 @@ Sensor::Sensor(SensorType type, Plane &plane)
 , m_ShowThetaRange(TRUE)
 , m_ThetaRangeColor(Color::Green)
 , m_ShowHeight(TRUE)
+, m_GlobalData(globalData)
 , m_Plane(plane)
 {
 }
@@ -63,10 +64,37 @@ void Sensor::AddTargetData(int target, Position rel)
         double sample = (double)rand();
         if (sample <= (double)RAND_MAX * m_ProDet / 100.0)
         {
-            // FIXME: 野值、延迟应该加在这里
-            m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
-            m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
-            m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+            if (m_GlobalData.m_Delay)
+            {
+                // 在这里加延迟.
+            }
+            if (m_GlobalData.m_WildValue)
+            {
+                // 在这里加野值.
+            }
+            switch (m_GlobalData.m_NoiseType)
+            {
+            case NoiseTypeWhite:
+                m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
+                m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
+                m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+                break;
+            case NoiseTypeColor:
+                m_TargetDistances[target].push_back(ColorNoise(d, m_DisVar));
+                m_TargetThetas[target].push_back(ColorNoise(t, m_ThetaVar));
+                m_TargetPhis[target].push_back(ColorNoise(p, m_PhiVar));
+                break;
+            case NoiseTypeMult:
+                m_TargetDistances[target].push_back(MultNoise(d, m_DisVar));
+                m_TargetThetas[target].push_back(MultNoise(t, m_ThetaVar));
+                m_TargetPhis[target].push_back(MultNoise(p, m_PhiVar));
+                break;
+            default:
+                m_TargetDistances[target].push_back(d);
+                m_TargetThetas[target].push_back(t);
+                m_TargetPhis[target].push_back(p);
+                break;
+            }
         }
     }
     else

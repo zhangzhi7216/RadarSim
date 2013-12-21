@@ -10,4 +10,6 @@ namespace Utility
     double Phi(const Position &src, const Position &dst);
 
     double WhiteNoise(double value, double var);
+    double ColorNoise(double value, double var);
+    double MultNoise(double value, double var);
 };

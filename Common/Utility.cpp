@@ -42,4 +42,14 @@ namespace Utility
     {
         return value + (double)rand() / (double)RAND_MAX * var;
     }
+    double ColorNoise(double value, double var)
+    {
+        // 在这里加色噪声.
+        return value + (double)rand() / (double)RAND_MAX * var;
+    }
+    double MultNoise(double value, double var)
+    {
+        // 在这里加乘性噪声.
+        return value + (double)rand() / (double)RAND_MAX * var;
+    }
 };
