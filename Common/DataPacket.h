@@ -158,7 +158,7 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataPacket &p
 
 struct __declspec(dllexport) GlobalDataPacket
 {
-    int m_Times;
+    int m_Rounds;
     int m_Interval;
     NoiseType m_NoiseType;
     bool m_WildValue;
@@ -166,8 +166,8 @@ struct __declspec(dllexport) GlobalDataPacket
     int m_StartTime;
     int m_EndTime;
     GlobalDataPacket()
-        : m_Times(10)
-        , m_Interval(2)
+        : m_Rounds(10)
+        , m_Interval(20)
         , m_NoiseType(NoiseTypeWhite)
         , m_WildValue(false)
         , m_Delay(false)

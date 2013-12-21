@@ -20,6 +20,7 @@
 
 CAttackPlaneDlg::CAttackPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(title, pParent)
+    , m_NaviAlgo(NULL)
 {
     m_DlgType = DlgTypeAttackPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -92,6 +93,28 @@ HCURSOR CAttackPlaneDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CAttackPlaneDlg::ConnectDataCenter()
+{
+    CPlaneDlg::ConnectDataCenter();
+    m_DataCenterSocket->SendAttack();
+}
+
 void CAttackPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
 {
+}
+
+void CAttackPlaneDlg::SetNaviAlgo(NaviAlgo *algo)
+{
+    if (m_NaviAlgo)
+    {
+        delete m_NaviAlgo;
+        m_NaviAlgo = NULL;
+    }
+    m_NaviAlgo = algo;
+    if (!m_NaviAlgo->Init())
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("导航算法%s初始化失败."), m_NaviAlgo->m_Name);
+    }
+    GetDlgItem(IDC_NAVI_ALGO)->SetWindowText(m_NaviAlgo->m_Name);
 }

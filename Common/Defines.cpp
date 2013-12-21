@@ -88,6 +88,8 @@ CArchive & operator >> (CArchive &ar, Position &pos)
     return ar;
 }
 
+CString AlgoConfigFileName(TEXT("algorithm_config.ini"));
+
 void GlobalInit()
 {
     srand((unsigned int)time(NULL));

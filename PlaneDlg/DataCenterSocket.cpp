@@ -2,6 +2,8 @@
 #include "DataCenterSocket.h"
 #include "Resource.h"
 #include "PlaneDlg.h"
+#include "FusionLocalAlgo.h"
+#include "FusionVcAlgo.h"
 
 DataCenterSocket::DataCenterSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
@@ -82,6 +84,48 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             m_Dlg->SetStateMap(stateMap);
         }
         break;
+    case PacketTypeFusionAlgo:
+        {
+            int type;
+            ar >> type;
+            switch (type)
+            {
+            case FusionAlgoTypeLocal:
+                {
+                    FusionAlgo *algo = new FusionLocalAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetFusionAlgo(algo);
+                }
+                break;
+            case FusionAlgoTypeVc:
+                {
+                    FusionAlgo *algo = new FusionVcAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetFusionAlgo(algo);
+                }
+                break;
+            case FusionAlgoTypeMatlab:
+                {
+                    FusionAlgo *algo;// = new FusionLocalAlgo(name.c_str(), (FusionLocalAlgoType)localType);
+                    ar >> *algo;
+                    m_Dlg->SetFusionAlgo(algo);
+                }
+                break;
+            default:
+                CString msg;
+                msg.AppendFormat(TEXT("未知融合算法类型%d."), type);
+                AfxMessageBox(msg);
+                break;
+            }
+        }
+        break;
+    case PacketTypeNaviAlgo:
+        {
+            StateMap stateMap;
+            ar >> stateMap;
+            m_Dlg->SetStateMap(stateMap);
+        }
+        break;
     case PacketTypeGlobalData:
         {
             GlobalDataPacket packet;
@@ -124,6 +168,15 @@ void DataCenterSocket::SendFusionAddr(int port)
     CArchive ar(&file, CArchive::store);
 
     ar << PacketTypeImFusion << port;
+    ar.Flush();
+}
+
+void DataCenterSocket::SendAttack()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeImAttack;
     ar.Flush();
 }
 

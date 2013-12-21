@@ -21,6 +21,7 @@
 CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(title, pParent)
     , m_FusionSocket(0)
+    , m_FusionAlgo(NULL)
 {
     m_DlgType = DlgTypeFusionPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -141,45 +142,53 @@ void CFusionPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
     AddNoiseData(make_pair((PlaneSocket *)NULL, packet));
 }
 
+void CFusionPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
+{
+    if (m_FusionAlgo)
+    {
+        delete m_FusionAlgo;
+        m_FusionAlgo = NULL;
+    }
+    m_FusionAlgo = algo;
+    if (!m_FusionAlgo->Init())
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("融合算法%s初始化失败."), m_FusionAlgo->m_Name);
+    }
+    GetDlgItem(IDC_FUSION_ALGO)->SetWindowText(m_FusionAlgo->m_Name);
+}
+
 void CFusionPlaneDlg::DoFusion()
 {
-    FusionDataPacket packet;
-    int nTargets = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size();
-    int nPlanes = m_NoiseDatas.size();
-    for (int i = 0; i < nTargets; ++i)
+    if (!m_FusionAlgo)
     {
-        NoiseDataFrame frame;
-        assert(m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size() > i);
-        frame.m_Time = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas[i].m_Time;
-        frame.m_Id = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas[i].m_Id;
-        for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
-        {
-            frame += it->second.second.m_TargetNoiseDatas[i];
-        }
-        frame /= nPlanes;
-        packet.m_FusionDatas.push_back(frame);
-        frame = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas[i];
-        packet.m_FilterDatas.push_back(frame);
+        AfxMessageBox(TEXT("尚未指定融合算法."));
+        return;
     }
+    vector<NoiseDataPacket> input;
     for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
     {
-        packet.m_NoiseDatas.push_back(it->second.second);
+        input.push_back(it->second.second);
+    }
+    FusionOutput output;
+    if (!m_FusionAlgo->Run(input, output))
+    {
+        AfxMessageBox(TEXT("融合算法运行错误."));
+        return;
     }
 
-    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+    int i = 0;
+    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end() && i < output.m_ControlDatas.size(); ++it, ++i)
     {
-        ControlDataPacket packet;
-        packet.m_ControlData.m_Time = it->second.second.m_PlaneTrueData.m_Time;
-        packet.m_ControlData.m_Id = it->second.second.m_PlaneTrueData.m_Id;
         if (it->second.first)
         {
-            it->second.first->SendControlData(packet);
+            it->second.first->SendControlData(output.m_ControlDatas[i]);
         }
     }
 
     m_NoiseDatas.clear();
 
-    m_DataCenterSocket->SendFusionData(packet);
+    m_DataCenterSocket->SendFusionData(output.m_FusionData);
 }
 
 void CFusionPlaneDlg::ResetSockets()

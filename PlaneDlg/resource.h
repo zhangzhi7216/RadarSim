@@ -16,14 +16,13 @@
 #define IDC_FUSION_ALGO_STATIC          4087
 #define IDC_NAVI_ALGO_STATIC            4088
 #define IDC_FUSION_ALGO                 4089
-#define IDC_DC_GLOBAL_ALGO2             4090
 #define IDC_NAVI_ALGO                   4090
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        129
+#define _APS_NEXT_RESOURCE_VALUE        130
 #define _APS_NEXT_COMMAND_VALUE         32771
 #define _APS_NEXT_CONTROL_VALUE         1008
 #define _APS_NEXT_SYMED_VALUE           101

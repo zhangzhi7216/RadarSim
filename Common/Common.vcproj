@@ -227,6 +227,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FusionAlgo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FusionLocalAlgo.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FusionVcAlgo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\InfraredCtrl.cpp"
 				>
 			</File>
@@ -240,6 +252,10 @@
 			</File>
 			<File
 				RelativePath=".\MatlabHelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\NaviAlgo.cpp"
 				>
 			</File>
 			<File
@@ -333,6 +349,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FusionAlgo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FusionLocalAlgo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FusionVcAlgo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\GeneralAlgo.h"
+				>
+			</File>
+			<File
 				RelativePath=".\InfraredCtrl.h"
 				>
 			</File>
@@ -346,6 +378,10 @@
 			</File>
 			<File
 				RelativePath=".\MatlabHelper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\NaviAlgo.h"
 				>
 			</File>
 			<File

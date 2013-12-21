@@ -12,6 +12,15 @@
 #include <algorithm>
 #include <math.h>
 
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+#include "FusionLocalAlgo.h"
+#include "FusionVcAlgo.h"
+
+using namespace std;
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -32,9 +41,22 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_ShowStateMapDlg(true)
     , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_CurrentFrame(0)
+    , m_CurrentRound(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
+}
+
+CDataCenterDlg::~CDataCenterDlg()
+{
+    for (int i = 0; i < m_FusionAlgos.size(); ++i)
+    {
+        delete m_FusionAlgos[i];
+    }
+    for (int i = 0; i < m_NaviAlgos.size(); ++i)
+    {
+        delete m_NaviAlgos[i];
+    }
 }
 
 void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
@@ -66,17 +88,29 @@ BOOL CDataCenterDlg::OnInitDialog()
     // TODO: 在此添加额外的初始化代码
     if (!m_DataCenterSocket->Create(DATA_CENTER_PORT))
     {
-        AfxMessageBox(TEXT("套接字创建失败"));
+        AfxMessageBox(TEXT("套接字创建失败."));
         exit(-1);
     }
     if (!m_DataCenterSocket->Listen())
     {
-        AfxMessageBox(TEXT("监听失败"));
+        AfxMessageBox(TEXT("监听失败."));
         exit(-1);
     }
     if (!m_DataCenterSocket->AsyncSelect(FD_ACCEPT))
     {
-        AfxMessageBox(TEXT("选择失败"));
+        AfxMessageBox(TEXT("选择失败."));
+        exit(-1);
+    }
+
+    ReadAlgoConfigFile();
+    if (m_FusionAlgos.size() == 0)
+    {
+        AfxMessageBox(TEXT("未能读取任何融合算法."));
+        exit(-1);
+    }
+    if (0 && m_NaviAlgos.size() == 0)
+    {
+        AfxMessageBox(TEXT("未能读取任何导航算法."));
         exit(-1);
     }
 
@@ -240,6 +274,7 @@ void CDataCenterDlg::OnBnClickedOk()
 {
     // TODO: Add your control notification handler code here
     // OnOK();
+    m_CurrentRound = 0;
     StartSim();
 }
 
@@ -249,10 +284,10 @@ void CDataCenterDlg::GeneratePlaneClients()
     {
         m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
         m_PlaneClients[i].m_Plane.m_MoveType = (TargetMoveType)(i % 2);
-        m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 200 * i, 100);
-        m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, ((double)rand() - (double)RAND_MAX / 2) / ((double)RAND_MAX / 2) * 2, rand() % 3);
+        m_PlaneClients[i].m_Plane.m_Position = Position(100, 10 + 200 * i, 100);
+        // m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, ((double)rand() - (double)RAND_MAX / 2) / ((double)RAND_MAX / 2) * 2, rand() % 3);
+        m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, 0, rand() % 3);
         m_PlaneClients[i].m_Plane.m_Acc = Position(rand() % 1, rand() % 1, rand() % 1);
-        m_PlaneClients[i].m_Plane.m_Position = Position(100, 100 + 200 * i, 100);
         m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
         m_PlaneClients[i].m_Radar.m_MaxDis = 300 + i * 10;
         m_PlaneClients[i].m_Radar.m_MaxTheta = 120 + i * 10;
@@ -280,8 +315,8 @@ void CDataCenterDlg::GenerateTargetClients()
         TargetClient client;
         client.m_Target.m_Type = (TargetType)((int)TargetTypeShipboard + rand() % ((int)TargetTypeMissile - (int)TargetTypeShipboard + 1));
         client.m_Target.m_MoveType = TargetMoveTypeUniVel;
-        client.m_Target.m_Position = Position(150, 150 + 150 * i, 150) + Position(10 * (rand() % 3), 10 * (rand() % 3), 10 * (rand() % 3));
-        client.m_Target.m_Vel = Position(rand() % 3, 0, 0);
+        client.m_Target.m_Position = Position(130, 150 + 150 * i, 150) + Position(10 * (rand() % 3), 10 * (rand() % 3), 10 * (rand() % 3));
+        client.m_Target.m_Vel = Position(i + 1, 0, rand() % 3);
         client.m_Target.m_Color = (TargetColor)(i + PLANE_COUNT);
         m_TargetClients.push_back(client);
     }
@@ -335,53 +370,60 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
 void CDataCenterDlg::StartSim()
 {
-    for (int i = 0; i < m_GlobalData.m_Times; ++i)
+    m_CurrentFrame = m_GlobalData.m_StartTime;
+
+    GeneratePlaneClients();
+    GenerateTargetClients();
+    for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        GeneratePlaneClients();
-        GenerateTargetClients();
-        for (int i = 0; i < PLANE_COUNT; ++i)
+        m_PlaneClients[i].m_PlaneSocket->SendReset();
+        m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
+        m_PlaneClients[i].m_PlaneSocket->SendRadar(m_PlaneClients[i].m_Radar);
+        m_PlaneClients[i].m_PlaneSocket->SendEsm(m_PlaneClients[i].m_Esm);
+        m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_PlaneClients[i].m_Infrared);
+        m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
+        if (m_PlaneClients[i].m_PlaneSocket->IsFusion())
         {
-            m_PlaneClients[i].m_PlaneSocket->SendReset();
-            m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
-            m_PlaneClients[i].m_PlaneSocket->SendRadar(m_PlaneClients[i].m_Radar);
-            m_PlaneClients[i].m_PlaneSocket->SendEsm(m_PlaneClients[i].m_Esm);
-            m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_PlaneClients[i].m_Infrared);
-            m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
-            m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
-            for (int j = 0; j < m_TargetClients.size(); ++j)
-            {
-                m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
-            }
+            m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[2]);
         }
-
-        ResetCtrls();
-
-        m_StateMap.m_Background = StateMapBackground3;
-        m_StateMap.m_MaxX = 1200;
-        m_StateMap.m_MaxY = 800;
-
-        for (int i = 0; i < PLANE_COUNT; ++i)
+        if (m_PlaneClients[i].m_PlaneSocket->IsAttack())
         {
-            m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_PlaneClients[i].m_Radar, &m_PlaneClients[i].m_Esm, &m_PlaneClients[i].m_Infrared);
-            m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
+            // m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[0]);
         }
-
-        for (int i = 0; i < m_TargetClients.size(); ++i)
+        m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
+        for (int j = 0; j < m_TargetClients.size(); ++j)
         {
-            m_StateMap.AddTarget(m_TargetClients[i].m_Target);
-            m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
+            m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
         }
-
-        m_StateMapDlg.m_Ctrl.DrawBackground();
-        m_StateMapDlg.m_Ctrl.DrawTargets();
-        m_StateMapDlg.m_Ctrl.BlendAll();
-        m_StateMapDlg.m_Ctrl.Invalidate();
-
-        m_FusionDatas.clear();
-        GenerateTrueData();
-        m_CurrentFrame = 0;
-        SetTimer(WM_TIME_FRAME, 800, NULL);
     }
+
+    ResetCtrls();
+
+    m_StateMap.m_Background = StateMapBackground3;
+    m_StateMap.m_MaxX = 1200;
+    m_StateMap.m_MaxY = 800;
+
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_PlaneClients[i].m_Radar, &m_PlaneClients[i].m_Esm, &m_PlaneClients[i].m_Infrared);
+        m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
+    }
+
+    for (int i = 0; i < m_TargetClients.size(); ++i)
+    {
+        m_StateMap.AddTarget(m_TargetClients[i].m_Target);
+        m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
+    }
+
+    m_StateMapDlg.m_Ctrl.DrawBackground();
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+
+    m_FusionDatas.clear();
+    GenerateTrueData();
+    m_CurrentFrame = 0;
+    SetTimer(WM_TIME_FRAME, 800, NULL);
 }
 
 void CDataCenterDlg::PauseSim()
@@ -396,7 +438,15 @@ void CDataCenterDlg::ResumeSim()
 
 void CDataCenterDlg::FinishSim()
 {
-    // Save dat files.
+    m_CurrentRound++;
+    if (m_CurrentRound >= m_GlobalData.m_Rounds)
+    {
+    }
+    else
+    {
+        StartSim();
+    }
+    // Save dat files at last.
 }
 
 void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
@@ -408,38 +458,39 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
 
     if (nIDEvent == WM_TIME_FRAME)
     {
-        if (m_CurrentFrame == TIME_FRAMES)
+        if (m_CurrentFrame > m_GlobalData.m_EndTime)
         {
-            m_CurrentFrame == 0;
-            KillTimer(WM_TIME_FRAME);
+            FinishSim();
             return;
         }
+
+        int index = m_CurrentFrame / m_GlobalData.m_Interval;
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
             TrueDataPacket packet;
-            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[m_CurrentFrame];
+            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[index];
             for (int j = 0; j < m_TargetClients.size(); ++j)
             {
-                packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[m_CurrentFrame]);
+                packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[index]);
             }
             m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
         }
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[m_CurrentFrame].m_Pos);
+            m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
         }
         for (int i = 0; i < TARGET_COUNT; ++i)
         {
-            m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[m_CurrentFrame].m_Pos);
+            m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
         }
 
         m_StateMapDlg.m_Ctrl.DrawTargets();
         m_StateMapDlg.m_Ctrl.BlendAll();
         m_StateMapDlg.m_Ctrl.Invalidate();
 
-        ++m_CurrentFrame;
+        m_CurrentFrame += m_GlobalData.m_Interval;
     }
 }
 
@@ -458,4 +509,81 @@ void CDataCenterDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
     }
 
     CCommonDlg::OnMButtonDblClk(nFlags, point);
+}
+
+void CDataCenterDlg::ReadAlgoConfigFile()
+{
+    wifstream in(AlgoConfigFileName);
+    in.imbue(locale("chs"));
+
+    wstring nextLine = TEXT("");
+
+    while(in || nextLine.length() > 0)
+    {
+        wstring line;
+        if(nextLine.length() > 0)
+        {
+            line = nextLine;  // we read ahead; use it now
+            nextLine = L"";
+        }
+        else
+        {
+            getline(in, line);
+        }
+
+        line = line.substr(0, line.find(TEXT("#")));
+
+        if (line.length() == 0)
+        {
+            continue;
+        }
+
+        wistringstream ist(line);
+        wstring key;
+        ist >> key;
+        if (key == TEXT("FUSION_ALGO"))
+        {
+            int type;
+            ist >> type;
+            switch (type)
+            {
+            case FusionAlgoTypeLocal:
+                {
+                    wstring name;
+                    int localType;
+                    ist >> name;
+                    ist >> localType;
+                    FusionAlgo *algo = new FusionLocalAlgo(name.c_str(), (FusionLocalAlgoType)localType);
+                    m_FusionAlgos.push_back(algo);
+                }
+                break;
+            case FusionAlgoTypeVc:
+                {
+                    wstring name, dllFileName, funcName;
+                    ist >> name >> dllFileName >> funcName;
+                    FusionAlgo *algo = new FusionVcAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
+                    m_FusionAlgos.push_back(algo);
+                }
+                break;
+            case FusionAlgoTypeMatlab:
+                {
+                    wstring name, dllFileName, funcName;
+                    ist >> name >> dllFileName >> funcName;
+                    FusionAlgo *algo;// = new FusionLocalAlgo(name.c_str(), (FusionLocalAlgoType)localType);
+                    m_FusionAlgos.push_back(algo);
+                }
+                break;
+            default:
+                CString msg;
+                msg.AppendFormat(TEXT("未知融合算法类型%d."), type);
+                AfxMessageBox(msg);
+                break;
+            }
+        }
+        else if (key == TEXT("NAVI_ALGO"))
+        {
+        }
+    }
+
+    in.close();
 }

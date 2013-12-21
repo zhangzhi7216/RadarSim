@@ -27,6 +27,9 @@
 
 #include "DataPacket.h"
 
+#include "FusionAlgo.h"
+#include "NaviAlgo.h"
+
 using namespace std;
 
 // CPlaneDlg ¶Ô»°¿ò
@@ -140,6 +143,8 @@ public:
     virtual void SetEsm(Sensor &esm);
     virtual void SetInfrared(Sensor &infrared);
     virtual void SetStateMap(StateMap &stateMap);
+    virtual void SetFusionAlgo(FusionAlgo *algo);
+    virtual void SetNaviAlgo(NaviAlgo *algo);
     virtual void SetGlobalData(GlobalDataPacket &packet);
     virtual void AddTrueData(TrueDataPacket &packet);
     virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);

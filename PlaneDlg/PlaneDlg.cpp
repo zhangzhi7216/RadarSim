@@ -450,6 +450,7 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         KillTimer(0);
         ResetCtrls();
     }
+    LPCWSTR p = AlgoConfigFileName;
 }
 
 void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
@@ -1065,6 +1066,14 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
+void CPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
+{
+}
+
+void CPlaneDlg::SetNaviAlgo(NaviAlgo *algo)
+{
 }
 
 void CPlaneDlg::SetGlobalData(GlobalDataPacket &packet)

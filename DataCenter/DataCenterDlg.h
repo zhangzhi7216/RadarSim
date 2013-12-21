@@ -12,6 +12,9 @@
 #include "../Common/DataPacket.h"
 #include "../Common/MatlabDlg.h"
 
+#include "FusionAlgo.h"
+#include "NaviAlgo.h"
+
 #include "CommonDlg.h"
 
 class DataCenterSocket;
@@ -23,6 +26,7 @@ class CDataCenterDlg : public CCommonDlg
 // 构造
 public:
 	CDataCenterDlg(CWnd* pParent = NULL);	// 标准构造函数
+    ~CDataCenterDlg();
 
 // 对话框数据
 	enum { IDD = IDD_DATACENTER_DIALOG };
@@ -78,4 +82,9 @@ public:
     afx_msg void OnTimer(UINT_PTR nIDEvent);
     afx_msg void OnMButtonDblClk(UINT nFlags, CPoint point);
     int m_CurrentFrame;
+    int m_CurrentRound;
+
+    vector<FusionAlgo *> m_FusionAlgos;
+    vector<NaviAlgo *> m_NaviAlgos;
+    void ReadAlgoConfigFile();
 };

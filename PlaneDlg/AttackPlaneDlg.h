@@ -28,5 +28,8 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+    virtual void ConnectDataCenter();
     virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void SetNaviAlgo(NaviAlgo *algo);
+    NaviAlgo *m_NaviAlgo;
 };

@@ -93,6 +93,11 @@ void CStateMapCtrl::DrawTargets()
                 graphics.RotateTransform(angle, MatrixOrderAppend);
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
+            else
+            {
+                Position end = m_StateMap.m_PlanePaths[i].back();
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+            }
             Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
             PointF pt(0.0, 0.0);
             graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
@@ -132,10 +137,9 @@ void CStateMapCtrl::DrawTargets()
                         m_StateMap.m_Infrareds[i]->m_MaxTheta);
                 }
             }
-            if (m_StateMap.m_PlanePaths[i].size() > 1)
-            {
-                graphics.ResetTransform();
-            }
+
+            graphics.ResetTransform();
+
             if (m_StateMap.m_ShowHeight)
             {
                 SolidBrush brush(TargetColors[m_StateMap.m_PlaneColors[i]]);
@@ -174,13 +178,17 @@ void CStateMapCtrl::DrawTargets()
                 graphics.RotateTransform(angle, MatrixOrderAppend);
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
+            else
+            {
+                Position end = m_StateMap.m_TargetPaths[i].back();
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+            }
             Image *targetImg = TargetTypeImages[m_StateMap.m_TargetTypes[i]];
             PointF pt(0.0, 0.0);
             graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
-            if (m_StateMap.m_TargetPaths[i].size() > 1)
-            {
-                graphics.ResetTransform();
-            }
+
+            graphics.ResetTransform();
+
             if (m_StateMap.m_ShowHeight)
             {
                 SolidBrush brush(TargetColors[m_StateMap.m_TargetColors[i]]);

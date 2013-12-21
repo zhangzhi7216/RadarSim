@@ -166,6 +166,7 @@ enum PacketType
 {
     PacketTypeImFusion = 0,
     PacketTypeFusionAddr,
+    PacketTypeImAttack,
     PacketTypeReset,
     PacketTypePlane,
     PacketTypeTarget,
@@ -173,6 +174,8 @@ enum PacketType
     PacketTypeEsm,
     PacketTypeInfrared,
     PacketTypeStateMap,
+    PacketTypeFusionAlgo,
+    PacketTypeNaviAlgo,
     PacketTypeGlobalData,
     PacketTypeTrueData,
     PacketTypeNoiseData,
@@ -188,6 +191,23 @@ enum NoiseType
     NoiseTypeLast,
 };
 extern CString NoiseTypeNames[NoiseTypeLast];
+
+enum FusionAlgoType
+{
+    FusionAlgoTypeLocal = 0,
+    FusionAlgoTypeVc,
+    FusionAlgoTypeMatlab,
+    FusionAlgoTypeLast,
+};
+
+enum FusionLocalAlgoType
+{
+    FusionLocalAlgoTypeTest1 = 0,
+    FusionLocalAlgoTypeTest2,
+    FusionLocalAlgoTypeLast,
+};
+
+extern CString __declspec(dllimport) AlgoConfigFileName;
 
 void __declspec(dllexport) GlobalInit();
 void __declspec(dllexport) GlobalShut();

@@ -7,6 +7,7 @@
 PlaneSocket::PlaneSocket(CDataCenterDlg *dlg)
 : m_Dlg(dlg)
 , m_IsFusion(false)
+, m_IsAttack(false)
 , m_FusionAddrSent(false)
 {
 }
@@ -86,6 +87,22 @@ void PlaneSocket::SendStateMap(StateMap &stateMap)
     ar.Flush();
 }
 
+void PlaneSocket::SendFusionAlgo(FusionAlgo *algo)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeFusionAlgo << *algo;
+    ar.Flush();
+}
+
+void PlaneSocket::SendNaviAlgo(NaviAlgo *algo)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeNaviAlgo << *algo;
+    ar.Flush();
+}
+
 void PlaneSocket::SendGlobalData(GlobalDataPacket &packet)
 {
     CSocketFile file(this);
@@ -100,6 +117,16 @@ void PlaneSocket::SendTrueData(TrueDataPacket &packet)
     CArchive ar(&file, CArchive::store);
     ar << PacketTypeTrueData << packet;
     ar.Flush();
+}
+
+bool PlaneSocket::IsFusion()
+{
+    return m_IsFusion;
+}
+
+bool PlaneSocket::IsAttack()
+{
+    return m_IsAttack;
 }
 
 void PlaneSocket::OnReceive(int nErrorCode)
@@ -119,6 +146,11 @@ void PlaneSocket::OnReceive(int nErrorCode)
             ar >> port;
             m_IsFusion = true;
             m_Dlg->SetFusionAddr(addr, port);
+        }
+        break;
+    case PacketTypeImAttack:
+        {
+            m_IsAttack = true;
         }
         break;
     case PacketTypeFusionData:

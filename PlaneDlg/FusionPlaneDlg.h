@@ -8,6 +8,8 @@
 #include <afxmt.h>
 #include <map>
 
+#include "FusionAlgo.h"
+
 using namespace std;
 
 // CFusionPlaneDlg ¶Ô»°¿ò
@@ -32,6 +34,7 @@ protected:
     virtual void AddPlaneSocket();
     virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void SetFusionAlgo(FusionAlgo *algo);
     virtual void DoFusion();
     map<int, SocketPacketPair> m_NoiseDatas;
     virtual void ResetSockets();
@@ -39,4 +42,6 @@ protected:
     FusionSocket *m_FusionSocket;
     vector<PlaneSocket *> m_PlaneSockets;
     CCriticalSection m_Lock;
+
+    FusionAlgo *m_FusionAlgo;
 };

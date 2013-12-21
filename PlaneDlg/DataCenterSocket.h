@@ -16,6 +16,7 @@ public:
 
     void SendFusionAddr(int port);
     void SendFusionData(FusionDataPacket &packet);
+    void SendAttack();
 
 public:
     CPlaneDlg *m_Dlg;

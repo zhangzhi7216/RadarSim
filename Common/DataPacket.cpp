@@ -94,14 +94,14 @@ CArchive & operator >> (CArchive &ar, ControlDataPacket &packet)
 
 CArchive & operator << (CArchive &ar, GlobalDataPacket &packet)
 {
-    ar << packet.m_Times << packet.m_Interval << packet.m_NoiseType << packet.m_WildValue << packet.m_Delay << packet.m_StartTime << packet.m_EndTime;
+    ar << packet.m_Rounds << packet.m_Interval << packet.m_NoiseType << packet.m_WildValue << packet.m_Delay << packet.m_StartTime << packet.m_EndTime;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, GlobalDataPacket &packet)
 {
     int noiseType = 0;
-    ar >> packet.m_Times >> packet.m_Interval >> noiseType >> packet.m_WildValue >> packet.m_Delay >> packet.m_StartTime >> packet.m_EndTime;
+    ar >> packet.m_Rounds >> packet.m_Interval >> noiseType >> packet.m_WildValue >> packet.m_Delay >> packet.m_StartTime >> packet.m_EndTime;
     packet.m_NoiseType = (NoiseType)noiseType;
     return ar;
 }

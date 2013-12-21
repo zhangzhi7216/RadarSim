@@ -2,10 +2,10 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Plane"
-	ProjectGUID="{C493B15D-78E4-4F6F-87EA-BC4E1E76E289}"
-	RootNamespace="Plane"
-	Keyword="MFCProj"
+	Name="FusionVcAlgoTest1"
+	ProjectGUID="{AC024050-D088-4B6E-88D9-1C1247D19124}"
+	RootNamespace="FusionVcAlgoTest1"
+	Keyword="MFCDLLProj"
 	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
@@ -20,7 +20,7 @@
 			Name="Debug|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			UseOfMFC="2"
 			CharacterSet="1"
 			>
@@ -40,13 +40,12 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../Plane;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
+				AdditionalIncludeDirectories="../Common;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -70,6 +69,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				ModuleDefinitionFile=".\FusionVcAlgoTest1.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -100,7 +100,7 @@
 			Name="Release|Win32"
 			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			UseOfMFC="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -121,15 +121,13 @@
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="false"
-				ValidateParameters="true"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../Plane;"
-				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
-				MinimalRebuild="false"
+				AdditionalIncludeDirectories="../Common;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
@@ -152,6 +150,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
+				ModuleDefinitionFile=".\FusionVcAlgoTest1.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -190,23 +189,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\PlaneDlg\DataCenterSocket.cpp"
+				RelativePath=".\FusionVcAlgoTest1.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\FusionSocket.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Plane.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneSocket.cpp"
+				RelativePath=".\FusionVcAlgoTest1.def"
 				>
 			</File>
 			<File
@@ -236,27 +223,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\PlaneDlg\DataCenterSocket.h"
+				RelativePath=".\FusionVcAlgoTest1.h"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\FusionSocket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Plane.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneDlg.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\PlaneSocket.h"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\Resource.h"
+				RelativePath=".\Resource.h"
 				>
 			</File>
 			<File
@@ -274,15 +245,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath="..\PlaneDlg\res\PlaneDlg.ico"
+				RelativePath=".\FusionVcAlgoTest1.rc"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\PlaneDlg.rc"
-				>
-			</File>
-			<File
-				RelativePath="..\PlaneDlg\res\PlaneDlg.rc2"
+				RelativePath=".\res\FusionVcAlgoTest1.rc2"
 				>
 			</File>
 		</Filter>
@@ -292,9 +259,5 @@
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="\Users\zanmato\Documents\GitHub\RadarSim\PlaneDlg\PlaneDlg.rc"
-		/>
 	</Globals>
 </VisualStudioProject>
