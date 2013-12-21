@@ -25,7 +25,8 @@ CAttackPlaneDlg::CAttackPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     m_DlgType = DlgTypeAttackPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-    m_MatlabDlg = new CMatlabDlg(TEXT("matlab_dialog.dll"), TEXT("matlab_dialog"));
+    m_MatlabDlg = new CMatlabDlg;
+    m_ShowDataListDlg = true;
 }
 
 CAttackPlaneDlg::~CAttackPlaneDlg()

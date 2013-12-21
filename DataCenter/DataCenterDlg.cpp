@@ -39,6 +39,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_FusionConnected(false)
     , m_ConnectedPlanes(0)
     , m_ShowStateMapDlg(true)
+    , m_ShowMatlabDlg(true)
     , m_StateMapDlg(TEXT("Ì¬ÊÆ"), m_StateMap, this)
     , m_CurrentFrame(0)
     , m_CurrentRound(0)
@@ -268,6 +269,7 @@ void CDataCenterDlg::ResetCtrls()
 
     m_StateMap.Reset();
     m_StateMapDlg.Reset();
+    m_MatlabDlg.Reset();
 }
 
 void CDataCenterDlg::OnBnClickedOk()
@@ -390,11 +392,11 @@ void CDataCenterDlg::StartSim()
         {
             // m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[0]);
         }
-        m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
             m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
         }
+        m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
     }
 
     ResetCtrls();
@@ -407,12 +409,20 @@ void CDataCenterDlg::StartSim()
     {
         m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_PlaneClients[i].m_Radar, &m_PlaneClients[i].m_Esm, &m_PlaneClients[i].m_Infrared);
         m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
+        m_MatlabDlg.AddPlane(m_PlaneClients[i].m_Plane);
     }
 
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         m_StateMap.AddTarget(m_TargetClients[i].m_Target);
         m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
+        m_MatlabDlg.AddTarget(m_TargetClients[i].m_Target);
+    }
+
+    m_MatlabDlg.SetSize((m_GlobalData.m_EndTime - m_GlobalData.m_StartTime + 1) / m_GlobalData.m_Interval);
+    if (m_ShowMatlabDlg)
+    {
+        m_MatlabDlg.Show();
     }
 
     m_StateMapDlg.m_Ctrl.DrawBackground();
@@ -480,10 +490,12 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
             m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+            m_MatlabDlg.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
         }
         for (int i = 0; i < TARGET_COUNT; ++i)
         {
             m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
+            m_MatlabDlg.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
         }
 
         m_StateMapDlg.m_Ctrl.DrawTargets();

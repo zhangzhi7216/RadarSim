@@ -49,6 +49,9 @@ protected:
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
 
+    bool m_ShowMatlabDlg;
+    CMatlabDlg m_MatlabDlg;
+
     DataCenterSocket *m_DataCenterSocket;
     bool m_FusionConnected;
     CString m_FusionAddr;

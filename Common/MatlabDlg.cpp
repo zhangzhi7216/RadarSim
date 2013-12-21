@@ -3,10 +3,8 @@
 
 using namespace MatlabHelper;
 
-CMatlabDlg::CMatlabDlg(LPCWSTR dllFileName, LPCWSTR funcName)
-: m_DllFileName(dllFileName)
-, m_FuncName(funcName)
-, m_PlaneInput(NULL)
+CMatlabDlg::CMatlabDlg()
+: m_PlaneInput(NULL)
 , m_TargetInput(NULL)
 , m_Size(50)
 , m_Thread(NULL)
@@ -16,7 +14,7 @@ CMatlabDlg::CMatlabDlg(LPCWSTR dllFileName, LPCWSTR funcName)
 
 CMatlabDlg::~CMatlabDlg(void)
 {
-    Hide();
+    Stop();
 }
 
 void CMatlabDlg::Show()
@@ -26,11 +24,21 @@ void CMatlabDlg::Show()
 
 void CMatlabDlg::Hide()
 {
+    Stop();
+}
+
+void CMatlabDlg::Stop()
+{
+    m_ThreadLock.Lock();
     if (m_Thread)
     {
-        TerminateThread(m_Thread, 0);
+        if (!TerminateThread(m_Thread, 0))
+        {
+            AfxMessageBox(TEXT("Close thread WTF!"));
+        }
         m_Thread = 0;
     }
+    m_ThreadLock.Unlock();
 
     if (m_PlaneInput)
     {
@@ -43,16 +51,21 @@ void CMatlabDlg::Hide()
         m_TargetInput = NULL;
     }
 
+    /*
     if (m_Engine)
     {
-        engClose(m_Engine);
+        if (engClose(m_Engine))
+        {
+            AfxMessageBox(TEXT("Close engine WTF!"));
+        }
         m_Engine = 0;
     }
+    */
 }
 
 void CMatlabDlg::Reset()
 {
-    Hide();
+    Stop();
 
     m_PlanePaths.clear();
     m_TargetPaths.clear();
@@ -99,14 +112,19 @@ void CMatlabDlg::Run()
 DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
 {
     CMatlabDlg *dlg = (CMatlabDlg *)lparam;
+    dlg->m_ThreadLock.Lock();
     if (!(dlg->m_Engine = engOpen(NULL)))
     {
         AfxMessageBox(TEXT("´ò¿ªMatlabÒýÇæ´íÎó"));
     }
     else
     {
-        engSetVisible(dlg->m_Engine, false);
+        if (engSetVisible(dlg->m_Engine, false))
+        {
+            AfxMessageBox(TEXT("Hide engine WTF!"));
+        }
     }
+    dlg->m_ThreadLock.Unlock();
     int result = 0;
     wchar_t buf[MAX_PATH];
     GetCurrentDirectory(MAX_PATH, buf);
@@ -114,13 +132,29 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     string curPath(wsCurPath.begin(), wsCurPath.end());
     string cmd = "cd " + curPath + "\\bin";
     result = engEvalString(dlg->m_Engine, cmd.c_str());
+    if (result)
+    {
+        AfxMessageBox(TEXT("Cd engine WTF!"));
+    }
     while (true)
     {
         result = engPutVariable(dlg->m_Engine, "plane_positions", dlg->m_PlaneInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 1 engine WTF!"));
+        }
         result = engPutVariable(dlg->m_Engine, "target_positions", dlg->m_TargetInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 2 engine WTF!"));
+        }
 
         string cmd = "matlab_dialog(plane_positions, target_positions)";
         result = engEvalString(dlg->m_Engine, cmd.c_str());
+        if (result)
+        {
+            AfxMessageBox(TEXT("Call func engine WTF!"));
+        }
         if (result)
         {
             break;
@@ -128,15 +162,21 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         Sleep(1);
     }
 
-    engClose(dlg->m_Engine);
+    /*
+    if (engClose(dlg->m_Engine))
+    {
+        AfxMessageBox(TEXT("Close engine engine WTF!"));
+    }
     dlg->m_Engine = 0;
+    */
+    dlg->m_Lock.Lock();
     dlg->m_Thread = 0;
+    dlg->m_Lock.Unlock();
     return result;
 }
 
 void CMatlabDlg::AddPlane(Plane &plane)
 {
-    Hide();
     m_PlanePaths.push_back(Path());
 }
 
@@ -160,7 +200,6 @@ void CMatlabDlg::AddPlaneData(int plane, Position pos)
 
 void CMatlabDlg::AddTarget(Target &target)
 {
-    Hide();
     m_TargetPaths.push_back(Path());
 }
 
@@ -184,6 +223,5 @@ void CMatlabDlg::AddTargetData(int target, Position pos)
 
 void CMatlabDlg::SetSize(int size)
 {
-    Hide();
     m_Size = size;
 }

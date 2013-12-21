@@ -125,13 +125,17 @@ BOOL CPlaneDlg::OnInitDialog()
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
 
-    if (m_MatlabDlg)
-    {
-    }
     CDataListDlg::CreateDlg(m_DataListDlg);
     if (m_ShowDataListDlg)
     {
-        m_DataListDlg.ShowWindow(SW_SHOW);
+        if (m_MatlabDlg)
+        {
+            m_MatlabDlg->Show();
+        }
+        else
+        {
+            m_DataListDlg.ShowWindow(SW_SHOW);
+        }
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1082,6 +1086,10 @@ void CPlaneDlg::SetGlobalData(GlobalDataPacket &packet)
     if (m_MatlabDlg)
     {
         m_MatlabDlg->SetSize((m_GlobalData.m_EndTime - m_GlobalData.m_StartTime + 1) / m_GlobalData.m_Interval);
+        if (m_ShowDataListDlg)
+        {
+            m_MatlabDlg->Show();
+        }
     }
 }
 
