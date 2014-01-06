@@ -114,6 +114,7 @@ BOOL CDataCenterDlg::OnInitDialog()
     }
     m_FusionAlgoSel.SetCurSel(0);
 
+    // FIXME
     if (0 && m_NaviAlgos.size() == 0)
     {
         AfxMessageBox(TEXT("未能读取任何导航算法."));
