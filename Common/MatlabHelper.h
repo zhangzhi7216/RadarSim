@@ -21,6 +21,8 @@ typedef mxArray Array;
 
 namespace MatlabHelper
 {
+    typedef bool (*RealFunc)(int, Array *[], int, Array *[]);
+
     typedef bool (*InitializeFunc)(void);
     /** @brief 实际在DLL中的算法初始化函数名前缀. */
     extern LPCSTR InitializeFuncPrefix;

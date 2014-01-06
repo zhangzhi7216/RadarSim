@@ -23,7 +23,7 @@ public:
         return true;
     }
 
-    bool Run(const TI &input, TO &output)
+    virtual bool Run(const TI &input, TO &output)
     {
         if (!m_Func)
         {

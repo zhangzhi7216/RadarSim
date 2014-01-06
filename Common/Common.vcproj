@@ -235,6 +235,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\FusionMatlabAlgo.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FusionVcAlgo.cpp"
 				>
 			</File>
@@ -354,6 +358,10 @@
 			</File>
 			<File
 				RelativePath=".\FusionLocalAlgo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FusionMatlabAlgo.h"
 				>
 			</File>
 			<File

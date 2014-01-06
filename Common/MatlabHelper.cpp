@@ -244,8 +244,7 @@ bool RealRunFunc(HINSTANCE algorithmDllHandle, const string &fullFuncName, vecto
     UINT32 outputCount = outputList.size();
     UINT32 inputCount = inputList.size();
 
-    typedef bool (*Func)(int, Array *[], int, Array *[]);
-    Func func = (Func)GetProcAddress(
+    RealFunc func = (RealFunc)GetProcAddress(
         algorithmDllHandle,
         fullFuncName.c_str());
     if (!func)

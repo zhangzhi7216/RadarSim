@@ -18,6 +18,7 @@
 
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
+#include "FusionMatlabAlgo.h"
 
 using namespace std;
 
@@ -634,8 +635,8 @@ void CDataCenterDlg::ReadConfigFile()
                 {
                     wstring name, dllFileName, funcName;
                     ist >> name >> dllFileName >> funcName;
-                    FusionAlgo *algo;// = new FusionLocalAlgo(name.c_str(), (FusionLocalAlgoType)localType);
-                    // m_FusionAlgos.push_back(algo);
+                    FusionAlgo *algo = new FusionMatlabAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
+                    m_FusionAlgos.push_back(algo);
                 }
                 break;
             default:

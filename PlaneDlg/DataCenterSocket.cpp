@@ -4,6 +4,7 @@
 #include "PlaneDlg.h"
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
+#include "FusionMatlabAlgo.h"
 
 DataCenterSocket::DataCenterSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
@@ -106,7 +107,7 @@ void DataCenterSocket::OnReceive(int nErrorCode)
                 break;
             case FusionAlgoTypeMatlab:
                 {
-                    FusionAlgo *algo;// = new FusionLocalAlgo(name.c_str(), (FusionLocalAlgoType)localType);
+                    FusionAlgo *algo = new FusionMatlabAlgo;
                     ar >> *algo;
                     m_Dlg->SetFusionAlgo(algo);
                 }
