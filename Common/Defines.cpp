@@ -74,6 +74,13 @@ CString NoiseTypeNames[] =
     TEXT("³ËÐÔÔëÉù"),
 };
 
+CString SensorIdNames[] =
+{
+    TEXT("À×´ï"),
+    TEXT("ESM"),
+    TEXT("ºìÍâ"),
+};
+
 CArchive & operator << (CArchive &ar, Position &pos)
 {
     ar << pos.X << pos.Y << pos.Z;

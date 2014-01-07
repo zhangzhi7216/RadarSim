@@ -68,6 +68,7 @@ public:
     CCriticalSection m_Lock;
     afx_msg void OnBnClickedOk();
 
+    Sensor m_Sensors[SensorIdLast];
     PlaneClient m_PlaneClients[PLANE_COUNT];
     vector<TargetClient> m_TargetClients;
 
@@ -100,4 +101,30 @@ public:
     CComboBox m_NaviAlgoSel;
     afx_msg void OnBnClickedStateMapDlgButton();
     afx_msg void OnBnClickedMatlabDlgButton();
+    CComboBox m_SensorIdSel;
+    afx_msg void OnCbnSelchangeDcSensorId();
+    BOOL m_SensorEnable;
+    int m_SensorMaxDis;
+    int m_SensorMaxTheta;
+    int m_SensorMaxPhi;
+    int m_SensorDisVar;
+    int m_SensorThetaVar;
+    int m_SensorPhiVar;
+    int m_SensorProDet;
+    afx_msg void OnBnClickedDcSensorEnable();
+    afx_msg void OnEnChangeDcGlobalRounds();
+    afx_msg void OnEnChangeDcGlobalCycle();
+    afx_msg void OnEnChangeDcGlobalStartTime();
+    afx_msg void OnEnChangeDcGlobalEndTime();
+    afx_msg void OnBnClickedGlobalWildValue();
+    afx_msg void OnBnClickedGlobalDelay();
+    afx_msg void OnEnChangeDcStateMapMaxX();
+    afx_msg void OnEnChangeDcStateMapMaxY();
+    afx_msg void OnEnChangeDcSensorMaxDis();
+    afx_msg void OnEnChangeDcSensorMaxTheta();
+    afx_msg void OnEnChangeDcSensorMaxPhi();
+    afx_msg void OnEnChangeDcSensorDisVar();
+    afx_msg void OnEnChangeDcSensorThetaVar();
+    afx_msg void OnEnChangeDcSensorPhiVar();
+    afx_msg void OnEnChangeDcSensorProDet();
 };

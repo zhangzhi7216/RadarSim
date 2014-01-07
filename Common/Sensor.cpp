@@ -5,6 +5,26 @@ using namespace Utility;
 
 CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
 
+Sensor::Sensor()
+: m_Type(SensorTypeSource)
+, m_Enable(TRUE)
+, m_MaxDis(300)
+, m_MaxTheta(120)
+, m_MaxPhi(90)
+, m_DisVar(0)
+, m_ThetaVar(0)
+, m_PhiVar(0)
+, m_ProDet(100)
+, m_ShowScanline(TRUE)
+, m_ShowTrack(TRUE)
+, m_ShowThetaRange(TRUE)
+, m_ThetaRangeColor(Color::Green)
+, m_ShowHeight(TRUE)
+, m_GlobalData(GlobalDataPacket())
+, m_Plane(Plane())
+{
+}
+
 Sensor::Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData)
 : m_Type(type)
 , m_Enable(TRUE)

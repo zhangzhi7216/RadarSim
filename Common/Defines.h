@@ -192,6 +192,15 @@ enum NoiseType
 };
 extern CString __declspec(dllimport) NoiseTypeNames[NoiseTypeLast];
 
+enum SensorId
+{
+    SensorIdRadar = 0,
+    SensorIdEsm,
+    SensorIdInfrared,
+    SensorIdLast,
+};
+extern CString __declspec(dllimport) SensorIdNames[SensorIdLast];
+
 enum FusionAlgoType
 {
     FusionAlgoTypeLocal = 0,

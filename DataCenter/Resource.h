@@ -9,6 +9,8 @@
 #define IDC_MATLAB_DLG_BUTTON           1001
 #define IDC_MATLAB_DLG_STATE_MAP        1002
 #define IDC_STATE_MAP_DLG_BUTTON        1002
+#define IDC_GLOBAL_WILD_VALUE           1003
+#define IDC_GLOBAL_DELAY                1004
 #define IDC_DC_SENSOR_ENABLE            4004
 #define IDC_DC_SENSOR_PARAM_GRP         4005
 #define IDC_DC_PLANE_PARAM_GRP          4006
@@ -123,7 +125,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1002
+#define _APS_NEXT_CONTROL_VALUE         1004
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

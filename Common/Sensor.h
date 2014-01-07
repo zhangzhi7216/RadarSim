@@ -16,6 +16,7 @@ public:
     static CString SensorTypeNames[SensorTypeLast];
 
     Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData);
+    Sensor();
     virtual ~Sensor(void);
 
     SensorType m_Type;

@@ -161,8 +161,8 @@ struct __declspec(dllexport) GlobalDataPacket
     int m_Rounds;
     int m_Interval;
     NoiseType m_NoiseType;
-    bool m_WildValue;
-    bool m_Delay;
+    BOOL m_WildValue;
+    BOOL m_Delay;
     int m_StartTime;
     int m_EndTime;
     GlobalDataPacket()

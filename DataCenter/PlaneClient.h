@@ -13,8 +13,8 @@ public:
     virtual ~PlaneClient(void);
 
     Plane m_Plane;
-    Sensor m_Radar, m_Esm, m_Infrared;
-    StateMap m_StateMap;
+    // Sensor m_Radar, m_Esm, m_Infrared;
+    // StateMap m_StateMap;
 
     PlaneSocket *m_PlaneSocket;
     vector<TrueDataFrame> m_PlaneTrueDatas;

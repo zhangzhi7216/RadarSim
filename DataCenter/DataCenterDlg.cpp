@@ -44,9 +44,35 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_CurrentFrame(0)
     , m_CurrentRound(0)
+    , m_SensorEnable(FALSE)
+    , m_SensorMaxDis(0)
+    , m_SensorMaxTheta(0)
+    , m_SensorMaxPhi(0)
+    , m_SensorDisVar(0)
+    , m_SensorThetaVar(0)
+    , m_SensorPhiVar(0)
+    , m_SensorProDet(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
+
+    m_Sensors[SensorIdRadar].m_Type = Sensor::SensorTypeSource;
+    m_Sensors[SensorIdRadar].m_MaxDis = 350;
+    m_Sensors[SensorIdRadar].m_MaxTheta = 120;
+
+    m_Sensors[SensorIdEsm].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdEsm].m_MaxDis = 300;
+    m_Sensors[SensorIdEsm].m_MaxTheta = 90;
+    m_Sensors[SensorIdEsm].m_ThetaRangeColor = Color::Red;
+    m_Sensors[SensorIdEsm].m_ShowHeight = FALSE;
+
+    m_Sensors[SensorIdInfrared].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdInfrared].m_MaxDis = 250;
+    m_Sensors[SensorIdInfrared].m_MaxTheta = 60;
+    m_Sensors[SensorIdInfrared].m_ShowScanline = FALSE;
+    m_Sensors[SensorIdInfrared].m_ShowThetaRange = FALSE;
+    m_Sensors[SensorIdInfrared].m_ThetaRangeColor = Color::Yellow;
+    m_Sensors[SensorIdInfrared].m_ShowHeight = FALSE;
 }
 
 CDataCenterDlg::~CDataCenterDlg()
@@ -74,6 +100,17 @@ void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_DC_STATE_MAP_MAX_Y, m_StateMap.m_MaxY);
     DDX_Control(pDX, IDC_DC_GLOBAL_FUSION_ALGO, m_FusionAlgoSel);
     DDX_Control(pDX, IDC_DC_GLOBAL_NAVI_ALGO, m_NaviAlgoSel);
+    DDX_Check(pDX, IDC_GLOBAL_WILD_VALUE, m_GlobalData.m_WildValue);
+    DDX_Check(pDX, IDC_GLOBAL_DELAY, m_GlobalData.m_Delay);
+    DDX_Control(pDX, IDC_DC_SENSOR_ID, m_SensorIdSel);
+    DDX_Check(pDX, IDC_DC_SENSOR_ENABLE, m_SensorEnable);
+    DDX_Text(pDX, IDC_DC_SENSOR_MAX_DIS, m_SensorMaxDis);
+    DDX_Text(pDX, IDC_DC_SENSOR_MAX_THETA, m_SensorMaxTheta);
+    DDX_Text(pDX, IDC_DC_SENSOR_MAX_PHI, m_SensorMaxPhi);
+    DDX_Text(pDX, IDC_DC_SENSOR_DIS_VAR, m_SensorDisVar);
+    DDX_Text(pDX, IDC_DC_SENSOR_THETA_VAR, m_SensorThetaVar);
+    DDX_Text(pDX, IDC_DC_SENSOR_PHI_VAR, m_SensorPhiVar);
+    DDX_Text(pDX, IDC_DC_SENSOR_PRO_DET, m_SensorProDet);
 }
 
 BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
@@ -87,6 +124,23 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_CBN_SELCHANGE(IDC_DC_STATE_MAP_BKG, &CDataCenterDlg::OnCbnSelchangeDcStateMapBkg)
     ON_BN_CLICKED(IDC_STATE_MAP_DLG_BUTTON, &CDataCenterDlg::OnBnClickedStateMapDlgButton)
     ON_BN_CLICKED(IDC_MATLAB_DLG_BUTTON, &CDataCenterDlg::OnBnClickedMatlabDlgButton)
+    ON_CBN_SELCHANGE(IDC_DC_SENSOR_ID, &CDataCenterDlg::OnCbnSelchangeDcSensorId)
+    ON_BN_CLICKED(IDC_DC_SENSOR_ENABLE, &CDataCenterDlg::OnBnClickedDcSensorEnable)
+    ON_EN_CHANGE(IDC_DC_GLOBAL_ROUNDS, &CDataCenterDlg::OnEnChangeDcGlobalRounds)
+    ON_EN_CHANGE(IDC_DC_GLOBAL_CYCLE, &CDataCenterDlg::OnEnChangeDcGlobalCycle)
+    ON_EN_CHANGE(IDC_DC_GLOBAL_START_TIME, &CDataCenterDlg::OnEnChangeDcGlobalStartTime)
+    ON_EN_CHANGE(IDC_DC_GLOBAL_END_TIME, &CDataCenterDlg::OnEnChangeDcGlobalEndTime)
+    ON_BN_CLICKED(IDC_GLOBAL_WILD_VALUE, &CDataCenterDlg::OnBnClickedGlobalWildValue)
+    ON_BN_CLICKED(IDC_GLOBAL_DELAY, &CDataCenterDlg::OnBnClickedGlobalDelay)
+    ON_EN_CHANGE(IDC_DC_STATE_MAP_MAX_X, &CDataCenterDlg::OnEnChangeDcStateMapMaxX)
+    ON_EN_CHANGE(IDC_DC_STATE_MAP_MAX_Y, &CDataCenterDlg::OnEnChangeDcStateMapMaxY)
+    ON_EN_CHANGE(IDC_DC_SENSOR_MAX_DIS, &CDataCenterDlg::OnEnChangeDcSensorMaxDis)
+    ON_EN_CHANGE(IDC_DC_SENSOR_MAX_THETA, &CDataCenterDlg::OnEnChangeDcSensorMaxTheta)
+    ON_EN_CHANGE(IDC_DC_SENSOR_MAX_PHI, &CDataCenterDlg::OnEnChangeDcSensorMaxPhi)
+    ON_EN_CHANGE(IDC_DC_SENSOR_DIS_VAR, &CDataCenterDlg::OnEnChangeDcSensorDisVar)
+    ON_EN_CHANGE(IDC_DC_SENSOR_THETA_VAR, &CDataCenterDlg::OnEnChangeDcSensorThetaVar)
+    ON_EN_CHANGE(IDC_DC_SENSOR_PHI_VAR, &CDataCenterDlg::OnEnChangeDcSensorPhiVar)
+    ON_EN_CHANGE(IDC_DC_SENSOR_PRO_DET, &CDataCenterDlg::OnEnChangeDcSensorProDet)
 END_MESSAGE_MAP()
 
 
@@ -100,6 +154,13 @@ BOOL CDataCenterDlg::OnInitDialog()
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
+
+    for (int i = SensorIdRadar; i < SensorIdLast; ++i)
+    {
+        m_SensorIdSel.InsertString(i, SensorIdNames[i]);
+    }
+    m_SensorIdSel.SetCurSel(0);
+    OnCbnSelchangeDcSensorId();
 
     ReadConfigFile();
 
@@ -332,21 +393,6 @@ void CDataCenterDlg::GeneratePlaneClients()
         m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, 0, rand() % 3);
         m_PlaneClients[i].m_Plane.m_Acc = Position(rand() % 1, rand() % 1, rand() % 1);
         m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
-        m_PlaneClients[i].m_Radar.m_MaxDis = 300 + i * 10;
-        m_PlaneClients[i].m_Radar.m_MaxTheta = 120 + i * 10;
-        m_PlaneClients[i].m_Esm.m_MaxDis = 250 + i * 10;
-        m_PlaneClients[i].m_Esm.m_MaxTheta = 90 + i * 10;
-        m_PlaneClients[i].m_Esm.m_ThetaRangeColor = Color::Red;
-        m_PlaneClients[i].m_Esm.m_ShowHeight = FALSE;
-        m_PlaneClients[i].m_Infrared.m_MaxDis = 350 + i * 10;
-        m_PlaneClients[i].m_Infrared.m_MaxTheta = 60 + i * 10;
-        m_PlaneClients[i].m_Infrared.m_ShowScanline = FALSE;
-        m_PlaneClients[i].m_Infrared.m_ShowThetaRange = FALSE;
-        m_PlaneClients[i].m_Infrared.m_ThetaRangeColor = Color::Yellow;
-        m_PlaneClients[i].m_Infrared.m_ShowHeight = FALSE;
-        m_PlaneClients[i].m_StateMap.m_Background = StateMapBackground3;
-        m_PlaneClients[i].m_StateMap.m_MaxX = 1200;
-        m_PlaneClients[i].m_StateMap.m_MaxY = 800;
     }
 }
 
@@ -421,10 +467,10 @@ void CDataCenterDlg::StartSim()
     {
         m_PlaneClients[i].m_PlaneSocket->SendReset();
         m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
-        m_PlaneClients[i].m_PlaneSocket->SendRadar(m_PlaneClients[i].m_Radar);
-        m_PlaneClients[i].m_PlaneSocket->SendEsm(m_PlaneClients[i].m_Esm);
-        m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_PlaneClients[i].m_Infrared);
-        m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_PlaneClients[i].m_StateMap);
+        m_PlaneClients[i].m_PlaneSocket->SendRadar(m_Sensors[SensorIdRadar]);
+        m_PlaneClients[i].m_PlaneSocket->SendEsm(m_Sensors[SensorIdEsm]);
+        m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_Sensors[SensorIdInfrared]);
+        m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_StateMap);
         if (m_PlaneClients[i].m_PlaneSocket->IsFusion())
         {
             int index = m_FusionAlgoSel.GetCurSel();
@@ -462,7 +508,7 @@ void CDataCenterDlg::StartSim()
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_PlaneClients[i].m_Radar, &m_PlaneClients[i].m_Esm, &m_PlaneClients[i].m_Infrared);
+        m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_Sensors[SensorIdRadar], &m_Sensors[SensorIdEsm], &m_Sensors[SensorIdInfrared]);
         m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
         m_MatlabDlg.AddPlane(m_PlaneClients[i].m_Plane);
     }
@@ -523,7 +569,7 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
 
     if (nIDEvent == WM_TIME_FRAME)
     {
-        if (m_CurrentFrame > m_GlobalData.m_EndTime)
+        if (m_CurrentFrame >= m_GlobalData.m_EndTime)
         {
             FinishSim();
             return;
@@ -705,5 +751,251 @@ void CDataCenterDlg::OnBnClickedMatlabDlgButton()
     {
         m_MatlabDlg.Show();
         m_ShowMatlabDlg = true;
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcSensorId()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        m_SensorEnable = sensor.m_Enable;
+        m_SensorMaxDis = sensor.m_MaxDis;
+        m_SensorMaxTheta = sensor.m_MaxTheta;
+        m_SensorMaxPhi = sensor.m_MaxPhi;
+        m_SensorDisVar = sensor.m_DisVar;
+        m_SensorThetaVar = sensor.m_ThetaVar;
+        m_SensorPhiVar = sensor.m_PhiVar;
+        m_SensorProDet = sensor.m_ProDet;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnBnClickedDcSensorEnable()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    m_SensorEnable = !m_SensorEnable;
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_Enable = m_SensorEnable;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcGlobalRounds()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_GlobalData.m_Rounds = GetDlgItemInt(IDC_DC_GLOBAL_ROUNDS);
+}
+
+void CDataCenterDlg::OnEnChangeDcGlobalCycle()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_GlobalData.m_Interval = GetDlgItemInt(IDC_DC_GLOBAL_CYCLE);
+}
+
+void CDataCenterDlg::OnEnChangeDcGlobalStartTime()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_GlobalData.m_StartTime = GetDlgItemInt(IDC_DC_GLOBAL_START_TIME);
+}
+
+void CDataCenterDlg::OnEnChangeDcGlobalEndTime()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_GlobalData.m_EndTime = GetDlgItemInt(IDC_DC_GLOBAL_END_TIME);
+}
+
+void CDataCenterDlg::OnBnClickedGlobalWildValue()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    m_GlobalData.m_WildValue = !m_GlobalData.m_WildValue;
+}
+
+void CDataCenterDlg::OnBnClickedGlobalDelay()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    m_GlobalData.m_Delay = !m_GlobalData.m_Delay;
+}
+
+void CDataCenterDlg::OnEnChangeDcStateMapMaxX()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_StateMap.m_MaxX = GetDlgItemInt(IDC_DC_STATE_MAP_MAX_X);
+}
+
+void CDataCenterDlg::OnEnChangeDcStateMapMaxY()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_StateMap.m_MaxY = GetDlgItemInt(IDC_DC_STATE_MAP_MAX_Y);
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorMaxDis()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorMaxDis = GetDlgItemInt(IDC_DC_SENSOR_MAX_DIS);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_MaxDis = m_SensorMaxDis;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorMaxTheta()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorMaxTheta = GetDlgItemInt(IDC_DC_SENSOR_MAX_THETA);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_MaxTheta = m_SensorMaxTheta;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorMaxPhi()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorMaxPhi = GetDlgItemInt(IDC_DC_SENSOR_MAX_PHI);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_MaxPhi = m_SensorMaxPhi;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorDisVar()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorDisVar = GetDlgItemInt(IDC_DC_SENSOR_DIS_VAR);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_DisVar = m_SensorDisVar;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorThetaVar()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorThetaVar = GetDlgItemInt(IDC_DC_SENSOR_THETA_VAR);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_ThetaVar = m_SensorThetaVar;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorPhiVar()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorPhiVar = GetDlgItemInt(IDC_DC_SENSOR_PHI_VAR);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_PhiVar = m_SensorPhiVar;
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcSensorProDet()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    m_SensorProDet = GetDlgItemInt(IDC_DC_SENSOR_PRO_DET);
+    int index = m_SensorIdSel.GetCurSel();
+    int count = m_SensorIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        SensorId sensorId = (SensorId)index;
+        Sensor &sensor = m_Sensors[sensorId];
+        sensor.m_ProDet = m_SensorProDet;
     }
 }
