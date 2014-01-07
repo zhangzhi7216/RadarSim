@@ -141,6 +141,10 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_EN_CHANGE(IDC_DC_SENSOR_THETA_VAR, &CDataCenterDlg::OnEnChangeDcSensorThetaVar)
     ON_EN_CHANGE(IDC_DC_SENSOR_PHI_VAR, &CDataCenterDlg::OnEnChangeDcSensorPhiVar)
     ON_EN_CHANGE(IDC_DC_SENSOR_PRO_DET, &CDataCenterDlg::OnEnChangeDcSensorProDet)
+    ON_BN_CLICKED(IDC_DC_EVAL, &CDataCenterDlg::OnBnClickedDcEval)
+    ON_BN_CLICKED(IDC_DC_TARGET_ADD, &CDataCenterDlg::OnBnClickedDcTargetAdd)
+    ON_BN_CLICKED(IDC_CONFIG_LOAD, &CDataCenterDlg::OnBnClickedConfigLoad)
+    ON_BN_CLICKED(IDC_CONFIG_SAVE, &CDataCenterDlg::OnBnClickedConfigSave)
 END_MESSAGE_MAP()
 
 
@@ -998,4 +1002,24 @@ void CDataCenterDlg::OnEnChangeDcSensorProDet()
         Sensor &sensor = m_Sensors[sensorId];
         sensor.m_ProDet = m_SensorProDet;
     }
+}
+
+void CDataCenterDlg::OnBnClickedDcEval()
+{
+    // TODO: 在此添加控件通知处理程序代码
+}
+
+void CDataCenterDlg::OnBnClickedDcTargetAdd()
+{
+    // TODO: 在此添加控件通知处理程序代码
+}
+
+void CDataCenterDlg::OnBnClickedConfigLoad()
+{
+    // TODO: 在此添加控件通知处理程序代码
+}
+
+void CDataCenterDlg::OnBnClickedConfigSave()
+{
+    // TODO: 在此添加控件通知处理程序代码
 }

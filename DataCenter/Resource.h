@@ -11,6 +11,12 @@
 #define IDC_STATE_MAP_DLG_BUTTON        1002
 #define IDC_GLOBAL_WILD_VALUE           1003
 #define IDC_GLOBAL_DELAY                1004
+#define IDC_SUB_PANEL_GRP               1005
+#define IDC_DC_EVAL                     1006
+#define IDC_CONFIG_GRP                  1008
+#define IDC_STATE_MAP_DLG_BUTTON2       1009
+#define IDC_CONFIG_LOAD                 1009
+#define IDC_CONFIG_SAVE                 1010
 #define IDC_DC_SENSOR_ENABLE            4004
 #define IDC_DC_SENSOR_PARAM_GRP         4005
 #define IDC_DC_PLANE_PARAM_GRP          4006
@@ -125,7 +131,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1004
+#define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

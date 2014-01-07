@@ -127,4 +127,8 @@ public:
     afx_msg void OnEnChangeDcSensorThetaVar();
     afx_msg void OnEnChangeDcSensorPhiVar();
     afx_msg void OnEnChangeDcSensorProDet();
+    afx_msg void OnBnClickedDcEval();
+    afx_msg void OnBnClickedDcTargetAdd();
+    afx_msg void OnBnClickedConfigLoad();
+    afx_msg void OnBnClickedConfigSave();
 };
