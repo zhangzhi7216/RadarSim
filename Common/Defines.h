@@ -97,9 +97,9 @@ typedef struct __declspec(dllexport) Point3D
     double Z;
 } Position, Velocity, Acceleration;
 
-__declspec(dllexport) CArchive & operator << (CArchive &ar, Position &pos);
+__declspec(dllimport) CArchive & operator << (CArchive &ar, Position &pos);
 
-__declspec(dllexport) CArchive & operator >> (CArchive &ar, Position &pos);
+__declspec(dllimport) CArchive & operator >> (CArchive &ar, Position &pos);
 
 typedef vector<Position> Path;
 
@@ -115,8 +115,8 @@ enum TargetColor
     TargetColorLast,
 };
 
-extern Color TargetColors[TargetColorLast];
-extern CString TargetColorNames[TargetColorLast];
+extern Color __declspec(dllimport) TargetColors[TargetColorLast];
+extern CString __declspec(dllimport) TargetColorNames[TargetColorLast];
 
 enum StateMapBackground
 {
@@ -128,7 +128,7 @@ enum StateMapBackground
     StateMapBackgroundLast,
 };
 
-extern Image *StateMapBackgrounds[StateMapBackgroundLast];
+extern Image __declspec(dllimport) *StateMapBackgrounds[StateMapBackgroundLast];
 extern CString __declspec(dllimport) StateMapBackgroundNames[StateMapBackgroundLast];
 
 enum TargetType
@@ -144,8 +144,8 @@ enum TargetType
     TargetTypeLast,
 };
 
-extern Image *TargetTypeImages[TargetTypeLast];
-extern CString TargetTypeNames[TargetTypeLast];
+extern Image __declspec(dllimport) *TargetTypeImages[TargetTypeLast];
+extern CString __declspec(dllimport) TargetTypeNames[TargetTypeLast];
 
 enum TargetMoveType
 {
@@ -155,7 +155,7 @@ enum TargetMoveType
     TargetMoveTypeLast,
 };
 
-extern CString TargetMoveTypeNames[TargetMoveTypeLast];
+extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 
 #define PLANE_COUNT 3
 #define TARGET_COUNT 3
@@ -218,5 +218,5 @@ enum FusionLocalAlgoType
 
 extern CString __declspec(dllimport) ConfigFileName;
 
-void __declspec(dllexport) GlobalInit();
-void __declspec(dllexport) GlobalShut();
+void __declspec(dllimport) GlobalInit();
+void __declspec(dllimport) GlobalShut();

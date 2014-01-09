@@ -3,7 +3,7 @@
 #include "Defines.h"
 #include <mclmcrrt.h>
 
-Color TargetColors[] =
+Color __declspec(dllexport) TargetColors[] =
 {
     Color::Red,
     Color::Orange,
@@ -14,7 +14,7 @@ Color TargetColors[] =
     Color::Purple,
 };
 
-CString TargetColorNames[] =
+CString __declspec(dllexport) TargetColorNames[] =
 {
     TEXT("红色"),
     TEXT("橙色"),
@@ -25,9 +25,9 @@ CString TargetColorNames[] =
     TEXT("紫色"),
 };
 
-Image *StateMapBackgrounds[];
+Image __declspec(dllexport) *StateMapBackgrounds[];
 
-CString StateMapBackgroundNames[] = 
+CString __declspec(dllexport) StateMapBackgroundNames[] = 
 {
     TEXT("地图0"),
     TEXT("地图1"),
@@ -36,7 +36,7 @@ CString StateMapBackgroundNames[] =
     TEXT("地图4"),
 };
 
-Image *TargetTypeImages[] =
+Image __declspec(dllexport) *TargetTypeImages[] =
 {
     Image::FromFile(TEXT("Heli.ico")),
     Image::FromFile(TEXT("Fighter.ico")),
@@ -48,7 +48,7 @@ Image *TargetTypeImages[] =
     Image::FromFile(TEXT("Missile.ico")),
 };
 
-CString TargetTypeNames[] =
+CString __declspec(dllexport) TargetTypeNames[] =
 {
     TEXT("直升机"),
     TEXT("歼敌机"),
@@ -60,44 +60,44 @@ CString TargetTypeNames[] =
     TEXT("导弹"),
 };
 
-CString TargetMoveTypeNames[] =
+CString __declspec(dllexport) TargetMoveTypeNames[] =
 {
     TEXT("匀速直线运动"),
     TEXT("匀加速直线运动"),
     TEXT("匀速圆周运动"),
 };
 
-CString NoiseTypeNames[] =
+CString __declspec(dllexport) NoiseTypeNames[] =
 {
     TEXT("白噪声"),
     TEXT("色噪声"),
     TEXT("乘性噪声"),
 };
 
-CString SensorIdNames[] =
+CString __declspec(dllexport) SensorIdNames[] =
 {
     TEXT("雷达"),
     TEXT("ESM"),
     TEXT("红外"),
 };
 
-CArchive & operator << (CArchive &ar, Position &pos)
+__declspec(dllexport) CArchive & operator << (CArchive &ar, Position &pos)
 {
     ar << pos.X << pos.Y << pos.Z;
 
     return ar;
 }
 
-CArchive & operator >> (CArchive &ar, Position &pos)
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, Position &pos)
 {
     ar >> pos.X >> pos.Y >> pos.Z;
 
     return ar;
 }
 
-CString ConfigFileName(TEXT("config.ini"));
+CString __declspec(dllexport) ConfigFileName(TEXT("config.ini"));
 
-void GlobalInit()
+void __declspec(dllexport) GlobalInit()
 {
     srand((unsigned int)time(NULL));
 
@@ -123,7 +123,7 @@ void GlobalInit()
     mclInitializeApplication(NULL, 0);
 }
 
-void GlobalShut()
+void __declspec(dllexport) GlobalShut()
 {
     for (int i = StateMapBackground0; i < StateMapBackgroundLast; ++i)
     {

@@ -52,6 +52,19 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_SensorThetaVar(0)
     , m_SensorPhiVar(0)
     , m_SensorProDet(0)
+    , m_ExtDataEnable(FALSE)
+    , m_PlaneId(0)
+    , m_PlanePosX(0)
+    , m_PlanePosY(0)
+    , m_PlanePosZ(0)
+    , m_PlaneVelX(0)
+    , m_PlaneVelY(0)
+    , m_PlaneVelZ(0)
+    , m_PlaneAccX(0)
+    , m_PlaneAccY(0)
+    , m_PlaneAccZ(0)
+    , m_PlanePal(0)
+    , m_PlaneRadius(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
@@ -111,6 +124,24 @@ void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_DC_SENSOR_THETA_VAR, m_SensorThetaVar);
     DDX_Text(pDX, IDC_DC_SENSOR_PHI_VAR, m_SensorPhiVar);
     DDX_Text(pDX, IDC_DC_SENSOR_PRO_DET, m_SensorProDet);
+    DDX_Check(pDX, IDC_DC_EXT_DATA_ENABLE, m_ExtDataEnable);
+    DDX_Control(pDX, IDC_EXT_DATA_LOAD_BUTTON, m_ExtDataLoadButton);
+    DDX_Control(pDX, IDC_DC_PLANE_ID, m_PlaneIdSel);
+    DDX_Text(pDX, IDC_DC_PLANE_ID_SET, m_PlaneId);
+    DDX_Control(pDX, IDC_DC_PLANE_COLOR, m_PlaneColor);
+    DDX_Control(pDX, IDC_DC_PLANE_TYPE, m_PlaneType);
+    DDX_Control(pDX, IDC_DC_PLANE_MOTION, m_PlaneMotion);
+    DDX_Text(pDX, IDC_DC_PLANE_POS_X, m_PlanePosX);
+    DDX_Text(pDX, IDC_DC_PLANE_POS_Y, m_PlanePosY);
+    DDX_Text(pDX, IDC_DC_PLANE_POS_Z, m_PlanePosZ);
+    DDX_Text(pDX, IDC_DC_PLANE_VEL_X, m_PlaneVelX);
+    DDX_Text(pDX, IDC_DC_PLANE_VEL_Y, m_PlaneVelY);
+    DDX_Text(pDX, IDC_DC_PLANE_VEL_Z, m_PlaneVelZ);
+    DDX_Text(pDX, IDC_DC_PLANE_ACC_X, m_PlaneAccX);
+    DDX_Text(pDX, IDC_DC_PLANE_ACC_Y, m_PlaneAccY);
+    DDX_Text(pDX, IDC_DC_PLANE_ACC_Z, m_PlaneAccZ);
+    DDX_Text(pDX, IDC_DC_PLANE_PAL, m_PlanePal);
+    DDX_Text(pDX, IDC_DC_PLANE_RADIUS, m_PlaneRadius);
 }
 
 BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
@@ -141,10 +172,27 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_EN_CHANGE(IDC_DC_SENSOR_THETA_VAR, &CDataCenterDlg::OnEnChangeDcSensorThetaVar)
     ON_EN_CHANGE(IDC_DC_SENSOR_PHI_VAR, &CDataCenterDlg::OnEnChangeDcSensorPhiVar)
     ON_EN_CHANGE(IDC_DC_SENSOR_PRO_DET, &CDataCenterDlg::OnEnChangeDcSensorProDet)
-    ON_BN_CLICKED(IDC_DC_EVAL, &CDataCenterDlg::OnBnClickedDcEval)
-    ON_BN_CLICKED(IDC_DC_TARGET_ADD, &CDataCenterDlg::OnBnClickedDcTargetAdd)
     ON_BN_CLICKED(IDC_CONFIG_LOAD, &CDataCenterDlg::OnBnClickedConfigLoad)
     ON_BN_CLICKED(IDC_CONFIG_SAVE, &CDataCenterDlg::OnBnClickedConfigSave)
+    ON_BN_CLICKED(IDC_DC_EVAL_ADD, &CDataCenterDlg::OnBnClickedDcEvalAdd)
+    ON_BN_CLICKED(IDC_DC_TARGET_ADD, &CDataCenterDlg::OnBnClickedDcTargetAdd)
+    ON_BN_CLICKED(IDC_DC_EXT_DATA_ENABLE, &CDataCenterDlg::OnBnClickedDcExtDataEnable)
+    ON_BN_CLICKED(IDC_EXT_DATA_LOAD_BUTTON, &CDataCenterDlg::OnBnClickedExtDataLoadButton)
+    ON_CBN_SELCHANGE(IDC_DC_PLANE_ID, &CDataCenterDlg::OnCbnSelchangeDcPlaneId)
+    ON_CBN_SELCHANGE(IDC_DC_PLANE_MOTION, &CDataCenterDlg::OnCbnSelchangeDcPlaneMotion)
+    ON_CBN_SELCHANGE(IDC_DC_PLANE_COLOR, &CDataCenterDlg::OnCbnSelchangeDcPlaneColor)
+    ON_CBN_SELCHANGE(IDC_DC_PLANE_TYPE, &CDataCenterDlg::OnCbnSelchangeDcPlaneType)
+    ON_EN_CHANGE(IDC_DC_PLANE_POS_X, &CDataCenterDlg::OnEnChangeDcPlanePosX)
+    ON_EN_CHANGE(IDC_DC_PLANE_POS_Y, &CDataCenterDlg::OnEnChangeDcPlanePosY)
+    ON_EN_CHANGE(IDC_DC_PLANE_POS_Z, &CDataCenterDlg::OnEnChangeDcPlanePosZ)
+    ON_EN_CHANGE(IDC_DC_PLANE_VEL_X, &CDataCenterDlg::OnEnChangeDcPlaneVelX)
+    ON_EN_CHANGE(IDC_DC_PLANE_VEL_Y, &CDataCenterDlg::OnEnChangeDcPlaneVelY)
+    ON_EN_CHANGE(IDC_DC_PLANE_VEL_Z, &CDataCenterDlg::OnEnChangeDcPlaneVelZ)
+    ON_EN_CHANGE(IDC_DC_PLANE_ACC_X, &CDataCenterDlg::OnEnChangeDcPlaneAccX)
+    ON_EN_CHANGE(IDC_DC_PLANE_ACC_Y, &CDataCenterDlg::OnEnChangeDcPlaneAccY)
+    ON_EN_CHANGE(IDC_DC_PLANE_ACC_Z, &CDataCenterDlg::OnEnChangeDcPlaneAccZ)
+    ON_EN_CHANGE(IDC_DC_PLANE_PAL, &CDataCenterDlg::OnEnChangeDcPlanePal)
+    ON_EN_CHANGE(IDC_DC_PLANE_RADIUS, &CDataCenterDlg::OnEnChangeDcPlaneRadius)
 END_MESSAGE_MAP()
 
 
@@ -158,6 +206,29 @@ BOOL CDataCenterDlg::OnInitDialog()
 	//  执行此操作
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
+
+    for (int i = 0; i < TargetTypeLast; ++i)
+    {
+        m_PlaneType.InsertString(i, TargetTypeNames[i]);
+    }
+    for (int i = 0; i < TargetColorLast; ++i)
+    {
+        m_PlaneColor.InsertString(i, TargetColorNames[i]);
+    }
+    for (int i = 0; i < TargetMoveTypeLast; ++i)
+    {
+        m_PlaneMotion.InsertString(i, TargetMoveTypeNames[i]);
+    }
+
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
+        CString s;
+        s.AppendFormat(TEXT("我机%d"), i);
+        m_PlaneIdSel.InsertString(i, s);
+    }
+    m_PlaneIdSel.SetCurSel(0);
+    OnCbnSelchangeDcPlaneId();
 
     for (int i = SensorIdRadar; i < SensorIdLast; ++i)
     {
@@ -281,7 +352,16 @@ void CDataCenterDlg::OnSubDlgClose(void *subDlg)
     */
     if (subDlg == (void *)&m_StateMapDlg)
     {
-        OnLButtonDblClk(0, 0);
+        if (m_ShowStateMapDlg)
+        {
+            m_StateMapDlg.ShowWindow(SW_HIDE);
+            m_ShowStateMapDlg = false;
+        }
+        else
+        {
+            m_StateMapDlg.ShowWindow(SW_SHOW);
+            m_ShowStateMapDlg = true;
+        }
     }
 }
 
@@ -377,6 +457,22 @@ void CDataCenterDlg::ResetCtrls()
     m_MatlabDlg.Reset();
 }
 
+void CDataCenterDlg::ResetPlanes()
+{
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        m_PlaneClients[i].m_Plane.Reset();
+    }
+}
+
+void CDataCenterDlg::ResetTargets()
+{
+    for (int i = 0; i < m_TargetClients.size(); ++i)
+    {
+        m_TargetClients[i].m_Target.Reset();
+    }
+}
+
 void CDataCenterDlg::OnBnClickedOk()
 {
     // TODO: Add your control notification handler code here
@@ -463,10 +559,14 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
 void CDataCenterDlg::StartSim()
 {
+    ResetCtrls();
+    ResetPlanes();
+    ResetTargets();
+
     m_CurrentFrame = m_GlobalData.m_StartTime;
 
-    GeneratePlaneClients();
-    GenerateTargetClients();
+    // GeneratePlaneClients();
+    // GenerateTargetClients();
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         m_PlaneClients[i].m_PlaneSocket->SendReset();
@@ -507,8 +607,6 @@ void CDataCenterDlg::StartSim()
         }
         m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
     }
-
-    ResetCtrls();
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
@@ -611,6 +709,7 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
     }
 }
 
+/*
 void CDataCenterDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
@@ -627,6 +726,7 @@ void CDataCenterDlg::OnMButtonDblClk(UINT nFlags, CPoint point)
 
     CCommonDlg::OnMButtonDblClk(nFlags, point);
 }
+*/
 
 void CDataCenterDlg::ReadConfigFile()
 {
@@ -1004,16 +1104,6 @@ void CDataCenterDlg::OnEnChangeDcSensorProDet()
     }
 }
 
-void CDataCenterDlg::OnBnClickedDcEval()
-{
-    // TODO: 在此添加控件通知处理程序代码
-}
-
-void CDataCenterDlg::OnBnClickedDcTargetAdd()
-{
-    // TODO: 在此添加控件通知处理程序代码
-}
-
 void CDataCenterDlg::OnBnClickedConfigLoad()
 {
     // TODO: 在此添加控件通知处理程序代码
@@ -1022,4 +1112,475 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
 void CDataCenterDlg::OnBnClickedConfigSave()
 {
     // TODO: 在此添加控件通知处理程序代码
+}
+
+void CDataCenterDlg::OnBnClickedDcEvalAdd()
+{
+    // TODO: 在此添加控件通知处理程序代码
+}
+
+void CDataCenterDlg::OnBnClickedDcTargetAdd()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    TargetClient client;
+    int count = m_PlaneIdSel.GetCount();
+    client.m_Target.m_Color = (TargetColor)(count % TargetColorLast);
+    m_TargetClients.push_back(client);
+
+    CString s;
+    s.AppendFormat(TEXT("敌机%d"), client.m_Target.m_Id);
+    m_PlaneIdSel.InsertString(count, s);
+
+    m_PlaneIdSel.SetCurSel(count);
+    OnCbnSelchangeDcPlaneId();
+}
+
+void CDataCenterDlg::OnBnClickedDcExtDataEnable()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    m_ExtDataEnable = !m_ExtDataEnable;
+    if (m_ExtDataEnable)
+    {
+        m_ExtDataLoadButton.EnableWindow();
+    }
+    else
+    {
+        m_ExtDataLoadButton.EnableWindow(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnBnClickedExtDataLoadButton()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    CFileDialog dlg(TRUE, NULL, NULL, OFN_NOCHANGEDIR | OFN_FILEMUSTEXIST, TEXT("Data Files (*.dat)|*.dat|All Files (*.*)|*.*||"));
+    INT_PTR ret = dlg.DoModal();
+    if (IDOK == ret)
+    {
+        CString filePath = dlg.GetPathName();
+    }
+    else
+    {
+        return;
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcPlaneId()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+        m_PlaneId = target.m_Id;
+        m_PlaneMotion.SetCurSel(target.m_MoveType);
+        m_PlaneType.SetCurSel(target.m_Type);
+        m_PlaneColor.SetCurSel(target.m_Color);
+        m_PlanePosX = target.m_InitPosition.X;
+        m_PlanePosY = target.m_InitPosition.Y;
+        m_PlanePosZ = target.m_InitPosition.Z;
+        m_PlaneVelX = target.m_InitVel.X;
+        m_PlaneVelY = target.m_InitVel.Y;
+        m_PlaneVelZ = target.m_InitVel.Z;
+        m_PlaneAccX = target.m_InitAcc.X;
+        m_PlaneAccY = target.m_InitAcc.Y;
+        m_PlaneAccZ = target.m_InitAcc.Z;
+        m_PlanePal = target.m_Pal;
+        m_PlaneRadius = target.m_Radius;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcPlaneMotion()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        target.m_MoveType = (TargetMoveType)m_PlaneMotion.GetCurSel();
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcPlaneColor()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        target.m_Color = (TargetColor)m_PlaneColor.GetCurSel();
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcPlaneType()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        target.m_Type = (TargetType)m_PlaneType.GetCurSel();
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlanePosX()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlanePosX = GetDlgItemInt(IDC_DC_PLANE_POS_X);
+        target.m_InitPosition.X = m_PlanePosX;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlanePosY()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlanePosY = GetDlgItemInt(IDC_DC_PLANE_POS_Y);
+        target.m_InitPosition.Y = m_PlanePosY;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlanePosZ()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlanePosZ = GetDlgItemInt(IDC_DC_PLANE_POS_Z);
+        target.m_InitPosition.Z = m_PlanePosZ;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneVelX()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneVelX = GetDlgItemInt(IDC_DC_PLANE_VEL_X);
+        target.m_InitVel.X = m_PlaneVelX;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneVelY()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneVelY = GetDlgItemInt(IDC_DC_PLANE_VEL_Y);
+        target.m_InitVel.Y = m_PlaneVelY;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneVelZ()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneVelZ = GetDlgItemInt(IDC_DC_PLANE_VEL_Z);
+        target.m_InitVel.Z = m_PlaneVelZ;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneAccX()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneAccX = GetDlgItemInt(IDC_DC_PLANE_ACC_X);
+        target.m_InitAcc.X = m_PlaneAccX;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneAccY()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneAccY = GetDlgItemInt(IDC_DC_PLANE_ACC_Y);
+        target.m_InitAcc.Y = m_PlaneAccY;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneAccZ()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneAccZ = GetDlgItemInt(IDC_DC_PLANE_ACC_Z);
+        target.m_InitAcc.Z = m_PlaneAccZ;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlanePal()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlanePal = GetDlgItemInt(IDC_DC_PLANE_PAL);
+        target.m_Pal = m_PlanePal;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcPlaneRadius()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_PlaneIdSel.GetCurSel();
+    int count = m_PlaneIdSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        Target *p = NULL;
+        if (index < PLANE_COUNT)
+        {
+            p = &m_PlaneClients[index].m_Plane;
+        }
+        else
+        {
+            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+        }
+        Target &target = *p;
+
+        m_PlaneRadius = GetDlgItemInt(IDC_DC_PLANE_RADIUS);
+        target.m_Radius = m_PlaneRadius;
+        UpdateData(FALSE);
+    }
 }
