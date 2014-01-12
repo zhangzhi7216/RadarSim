@@ -13,6 +13,22 @@ CArchive & operator >> (CArchive &ar, TrueDataFrame &frame)
     return ar;
 }
 
+wofstream & operator << (wofstream &os, TrueDataFrame &frame)
+{
+    os << frame.m_Time << TEXT(" ") << frame.m_Id << TEXT(" ");
+    os << frame.m_Pos << TEXT(" ");
+    os << frame.m_Vel << TEXT(" ");
+    os << frame.m_Acc;
+    return os;
+}
+
+wifstream & operator >> (wifstream &is, TrueDataFrame &frame)
+{
+    is >> frame.m_Time >> frame.m_Id;
+    is >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc;
+    return is;
+}
+
 CArchive & operator << (CArchive &ar, NoiseDataFrame &frame)
 {
     ar << frame.m_Time << frame.m_Id << frame.m_Dis << frame.m_Theta << frame.m_Phi

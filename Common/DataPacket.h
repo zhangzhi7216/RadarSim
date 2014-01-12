@@ -1,5 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
 struct __declspec(dllexport) TrueDataFrame
 {
     int m_Time;
@@ -39,6 +44,9 @@ struct __declspec(dllexport) TrueDataFrame
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, TrueDataFrame &frame);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, TrueDataFrame &frame);
+
+__declspec(dllexport) wofstream & operator << (wofstream &os, TrueDataFrame &frame);
+__declspec(dllexport) wifstream & operator >> (wifstream &is, TrueDataFrame &frame);
 
 struct __declspec(dllexport) NoiseDataFrame
 {

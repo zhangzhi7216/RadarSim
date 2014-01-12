@@ -81,18 +81,32 @@ CString __declspec(dllexport) SensorIdNames[] =
     TEXT("∫ÏÕ‚"),
 };
 
-__declspec(dllexport) CArchive & operator << (CArchive &ar, Position &pos)
+CArchive & operator << (CArchive &ar, Position &pos)
 {
     ar << pos.X << pos.Y << pos.Z;
 
     return ar;
 }
 
-__declspec(dllexport) CArchive & operator >> (CArchive &ar, Position &pos)
+CArchive & operator >> (CArchive &ar, Position &pos)
 {
     ar >> pos.X >> pos.Y >> pos.Z;
 
     return ar;
+}
+
+wofstream & operator << (wofstream &os, Position &pos)
+{
+    os << pos.X << TEXT(" ") << pos.Y << TEXT(" ") << pos.Z;
+
+    return os;
+}
+
+wifstream & operator >> (wifstream &is, Position &pos)
+{
+    is >> pos.X >> pos.Y >> pos.Z;
+
+    return is;
 }
 
 CString __declspec(dllexport) ConfigFileName(TEXT("config.ini"));

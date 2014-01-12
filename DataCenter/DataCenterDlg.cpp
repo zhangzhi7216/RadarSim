@@ -65,6 +65,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_PlaneAccZ(0)
     , m_PlanePal(0)
     , m_PlaneRadius(0)
+    , m_ExtDataPath(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
@@ -142,6 +143,7 @@ void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_DC_PLANE_ACC_Z, m_PlaneAccZ);
     DDX_Text(pDX, IDC_DC_PLANE_PAL, m_PlanePal);
     DDX_Text(pDX, IDC_DC_PLANE_RADIUS, m_PlaneRadius);
+    DDX_Text(pDX, IDC_EXT_DATA_PATH, m_ExtDataPath);
 }
 
 BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
@@ -193,6 +195,7 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_EN_CHANGE(IDC_DC_PLANE_ACC_Z, &CDataCenterDlg::OnEnChangeDcPlaneAccZ)
     ON_EN_CHANGE(IDC_DC_PLANE_PAL, &CDataCenterDlg::OnEnChangeDcPlanePal)
     ON_EN_CHANGE(IDC_DC_PLANE_RADIUS, &CDataCenterDlg::OnEnChangeDcPlaneRadius)
+    ON_EN_CHANGE(IDC_EXT_DATA_PATH, &CDataCenterDlg::OnEnChangeExtDataPath)
 END_MESSAGE_MAP()
 
 
@@ -521,29 +524,71 @@ void CDataCenterDlg::GenerateTrueData()
     {
         m_TargetClients[i].m_TargetTrueDatas.clear();
     }
-    for (int i = m_GlobalData.m_StartTime; i < m_GlobalData.m_EndTime + 1; i += m_GlobalData.m_Interval)
+    if (m_ExtDataEnable)
     {
-        for (int j = 0; j < PLANE_COUNT; ++j)
+        wifstream ifs(m_ExtDataPath);
+        if (!ifs)
         {
-            m_PlaneClients[j].m_Plane.Move(m_GlobalData.m_Interval);
-            // m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
-            // m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(3, 3, 3);
-            TrueDataFrame frame;
-            frame.m_Time = i;
-            frame.m_Id = m_PlaneClients[j].m_Plane.m_Id;
-            frame.m_Pos = m_PlaneClients[j].m_Plane.m_Position;
-            m_PlaneClients[j].m_PlaneTrueDatas.push_back(frame);
+            CString msg;
+            msg.AppendFormat(TEXT("打开外部文件%s失败"), m_ExtDataPath);
+            AfxMessageBox(msg);
         }
-        for (int j = 0; j < m_TargetClients.size(); ++j)
+        ifs >> m_GlobalData.m_Interval >> m_GlobalData.m_StartTime >> m_GlobalData.m_EndTime;
+        UpdateData(FALSE);
+
+        for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            m_TargetClients[j].m_Target.Move(m_GlobalData.m_Interval);
-            // m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(3, 0, 0);
-            TrueDataFrame frame;
-            frame.m_Time = i;
-            frame.m_Id = m_TargetClients[j].m_Target.m_Id;
-            frame.m_Pos = m_TargetClients[j].m_Target.m_Position;
-            m_TargetClients[j].m_TargetTrueDatas.push_back(frame);
+            int size = 0;
+            ifs >> size;
+            for (int j = 0; j < size; ++j)
+            {
+                TrueDataFrame frame;
+                ifs >> frame;
+                m_PlaneClients[i].m_PlaneTrueDatas.push_back(frame);
+            }
         }
+        for (int i = 0; i < m_TargetClients.size(); ++i)
+        {
+            int size = 0;
+            ifs >> size;
+            for (int j = 0; j < size; ++j)
+            {
+                TrueDataFrame frame;
+                ifs >> frame;
+                m_TargetClients[i].m_TargetTrueDatas.push_back(frame);
+            }
+        }
+
+        ifs.close();
+    }
+    else
+    {
+        for (int i = m_GlobalData.m_StartTime; i < m_GlobalData.m_EndTime + 1; i += m_GlobalData.m_Interval)
+        {
+            for (int j = 0; j < PLANE_COUNT; ++j)
+            {
+                m_PlaneClients[j].m_Plane.Move(m_GlobalData.m_Interval);
+                // m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
+                // m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(3, 3, 3);
+                TrueDataFrame frame;
+                frame.m_Time = i;
+                frame.m_Id = m_PlaneClients[j].m_Plane.m_Id;
+                frame.m_Pos = m_PlaneClients[j].m_Plane.m_Position;
+                m_PlaneClients[j].m_PlaneTrueDatas.push_back(frame);
+            }
+            for (int j = 0; j < m_TargetClients.size(); ++j)
+            {
+                m_TargetClients[j].m_Target.Move(m_GlobalData.m_Interval);
+                // m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(3, 0, 0);
+                TrueDataFrame frame;
+                frame.m_Time = i;
+                frame.m_Id = m_TargetClients[j].m_Target.m_Id;
+                frame.m_Pos = m_TargetClients[j].m_Target.m_Position;
+                m_TargetClients[j].m_TargetTrueDatas.push_back(frame);
+            }
+        }
+        // Dump dat files at last.
+        DumpTrueData(TEXT("dump_true_data.dat"));
     }
 }
 
@@ -654,12 +699,12 @@ void CDataCenterDlg::FinishSim()
     m_CurrentRound++;
     if (m_CurrentRound >= m_GlobalData.m_Rounds)
     {
+        GetDlgItem(IDOK)->EnableWindow(TRUE);
     }
     else
     {
         StartSim();
     }
-    // Save dat files at last.
 }
 
 void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
@@ -1107,11 +1152,102 @@ void CDataCenterDlg::OnEnChangeDcSensorProDet()
 void CDataCenterDlg::OnBnClickedConfigLoad()
 {
     // TODO: 在此添加控件通知处理程序代码
+    CFileDialog dlg(TRUE, NULL, NULL, OFN_NOCHANGEDIR | OFN_FILEMUSTEXIST, TEXT("Data Files (*.cfg)|*.cfg|All Files (*.*)|*.*||"));
+    INT_PTR ret = dlg.DoModal();
+    if (IDOK == ret)
+    {
+        // Cleanup.
+        for (int i = 0; i < m_TargetClients.size(); ++i)
+        {
+            int count = m_PlaneIdSel.GetCount();
+            m_PlaneIdSel.DeleteString(count - 1);
+        }
+        m_TargetClients.clear();
+
+        CString filePath = dlg.GetPathName();
+        CFile file(filePath, CFile::modeRead);
+        CArchive ar(&file, CArchive::load);
+        // ar >> PLANE_COUNT;
+        for (int i = 0; i < PLANE_COUNT; ++i)
+        {
+            ar >> m_PlaneClients[i].m_Plane;
+        }
+        int targetSize = 0;
+        ar >> targetSize;
+        for (int i = 0; i < targetSize; ++i)
+        {
+            int count = m_PlaneIdSel.GetCount();
+            TargetClient client;
+            ar >> client.m_Target;
+            m_TargetClients.push_back(client);
+
+            CString s;
+            s.AppendFormat(TEXT("敌机%d"), client.m_Target.m_Id);
+            m_PlaneIdSel.InsertString(count, s);
+        }
+        ar >> TargetClient::s_TargetCount;
+        for (int i = SensorIdRadar; i < SensorIdLast; ++i)
+        {
+            ar >> m_Sensors[i];
+        }
+        ar >> m_StateMap;
+        ar >> m_GlobalData;
+        int index = 0;
+        ar >> index;
+        m_FusionAlgoSel.SetCurSel(index);
+        ar >> index;
+        m_NaviAlgoSel.SetCurSel(index);
+
+        // FIXME: 评估
+        ar.Close();
+        file.Close();
+
+        OnCbnSelchangeDcPlaneId();
+        OnCbnSelchangeDcSensorId();
+        m_StateMapBkg.SetCurSel(m_StateMap.m_Background);
+        m_NoiseType.SetCurSel(m_GlobalData.m_NoiseType);
+
+        UpdateData(FALSE);
+    }
 }
 
 void CDataCenterDlg::OnBnClickedConfigSave()
 {
     // TODO: 在此添加控件通知处理程序代码
+    CFileDialog dlg(FALSE, NULL, NULL, OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT, TEXT("Data Files (*.cfg)|*.cfg|All Files (*.*)|*.*||"));
+    INT_PTR ret = dlg.DoModal();
+    if (IDOK == ret)
+    {
+        CString filePath = dlg.GetPathName();
+        CFile file(filePath, CFile::modeWrite | CFile::modeCreate);
+        CArchive ar(&file, CArchive::store);
+        // ar << PLANE_COUNT;
+        for (int i = 0; i < PLANE_COUNT; ++i)
+        {
+            ar << m_PlaneClients[i].m_Plane;
+        }
+        ar << m_TargetClients.size();
+        for (int i = 0; i < m_TargetClients.size(); ++i)
+        {
+            ar << m_TargetClients[i].m_Target;
+        }
+        ar << TargetClient::s_TargetCount;
+        // ar << SensorIdLast;
+        for (int i = SensorIdRadar; i < SensorIdLast; ++i)
+        {
+            ar << m_Sensors[i];
+        }
+        ar << m_StateMap;
+        ar << m_GlobalData;
+        int index = m_FusionAlgoSel.GetCurSel();
+        ar << index;
+        index = m_NaviAlgoSel.GetCurSel();
+        ar << index;
+
+        // FIXME: 评估
+        ar.Close();
+        file.Close();
+    }
 }
 
 void CDataCenterDlg::OnBnClickedDcEvalAdd()
@@ -1142,10 +1278,12 @@ void CDataCenterDlg::OnBnClickedDcExtDataEnable()
     if (m_ExtDataEnable)
     {
         m_ExtDataLoadButton.EnableWindow();
+        GetDlgItem(IDC_EXT_DATA_PATH)->EnableWindow();
     }
     else
     {
         m_ExtDataLoadButton.EnableWindow(FALSE);
+        GetDlgItem(IDC_EXT_DATA_PATH)->EnableWindow(FALSE);
     }
 }
 
@@ -1156,7 +1294,8 @@ void CDataCenterDlg::OnBnClickedExtDataLoadButton()
     INT_PTR ret = dlg.DoModal();
     if (IDOK == ret)
     {
-        CString filePath = dlg.GetPathName();
+        m_ExtDataPath = dlg.GetPathName();
+        UpdateData(FALSE);
     }
     else
     {
@@ -1583,4 +1722,55 @@ void CDataCenterDlg::OnEnChangeDcPlaneRadius()
         target.m_Radius = m_PlaneRadius;
         UpdateData(FALSE);
     }
+}
+
+void CDataCenterDlg::OnEnChangeExtDataPath()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    UpdateData(TRUE);
+}
+
+void CDataCenterDlg::DumpTrueData(LPCWSTR path)
+{
+    wofstream ofs(path);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开外部文件%s失败"), m_ExtDataPath);
+        AfxMessageBox(msg);
+    }
+    ofs << m_GlobalData.m_Interval << endl;
+    ofs << m_GlobalData.m_StartTime << endl;
+    ofs << m_GlobalData.m_EndTime << endl;
+    ofs << endl;
+
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        ofs << m_PlaneClients[i].m_PlaneTrueDatas.size() << endl;
+        ofs << endl;
+        for (int j = 0; j < m_PlaneClients[i].m_PlaneTrueDatas.size(); ++j)
+        {
+            ofs << m_PlaneClients[i].m_PlaneTrueDatas[j] << endl;
+        }
+        ofs << endl;
+    }
+    ofs << endl;
+    for (int i = 0; i < m_TargetClients.size(); ++i)
+    {
+        ofs << m_TargetClients[i].m_TargetTrueDatas.size() << endl;
+        ofs << endl;
+        for (int j = 0; j < m_TargetClients[i].m_TargetTrueDatas.size(); ++j)
+        {
+            ofs << m_TargetClients[i].m_TargetTrueDatas[j] << endl;
+        }
+        ofs << endl;
+    }
+    ofs << endl;
+
+    ofs.close();
 }

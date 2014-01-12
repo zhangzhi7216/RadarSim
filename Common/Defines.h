@@ -2,6 +2,10 @@
 #include <afxwin.h>
 
 #include <vector>
+
+#include <fstream>
+#include <iostream>
+
 using namespace std;
 
 #include <GdiPlus.h>
@@ -97,9 +101,11 @@ typedef struct __declspec(dllexport) Point3D
     double Z;
 } Position, Velocity, Acceleration;
 
-__declspec(dllimport) CArchive & operator << (CArchive &ar, Position &pos);
+__declspec(dllexport) CArchive & operator << (CArchive &ar, Position &pos);
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, Position &pos);
 
-__declspec(dllimport) CArchive & operator >> (CArchive &ar, Position &pos);
+__declspec(dllexport) wofstream & operator << (wofstream &os, Position &pos);
+__declspec(dllexport) wifstream & operator >> (wifstream &is, Position &pos);
 
 typedef vector<Position> Path;
 

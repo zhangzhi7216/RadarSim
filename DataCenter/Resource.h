@@ -14,12 +14,12 @@
 #define IDC_SUB_PANEL_GRP               1005
 #define IDC_DC_EVAL                     1006
 #define IDC_DC_EVAL_ADD                 1006
-#define IDC_EXT_DATA_LOAD               1007
 #define IDC_EXT_DATA_LOAD_BUTTON        1007
 #define IDC_CONFIG_GRP                  1008
 #define IDC_CONFIG_LOAD                 1009
 #define IDC_CONFIG_SAVE                 1010
-#define IDC_EXT_DATA_FILE               1011
+#define IDC_EDIT1                       1013
+#define IDC_EXT_DATA_PATH               1013
 #define IDC_DC_SENSOR_ENABLE            4004
 #define IDC_DC_SENSOR_PARAM_GRP         4005
 #define IDC_DC_PLANE_PARAM_GRP          4006
@@ -157,7 +157,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

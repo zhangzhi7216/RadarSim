@@ -168,4 +168,8 @@ public:
     afx_msg void OnEnChangeDcPlaneAccZ();
     afx_msg void OnEnChangeDcPlanePal();
     afx_msg void OnEnChangeDcPlaneRadius();
+    CString m_ExtDataPath;
+    afx_msg void OnEnChangeExtDataPath();
+
+    void DumpTrueData(LPCWSTR path);
 };
