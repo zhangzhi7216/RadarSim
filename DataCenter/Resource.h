@@ -18,7 +18,6 @@
 #define IDC_CONFIG_GRP                  1008
 #define IDC_CONFIG_LOAD                 1009
 #define IDC_CONFIG_SAVE                 1010
-#define IDC_EDIT1                       1013
 #define IDC_EXT_DATA_PATH               1013
 #define IDC_DC_SENSOR_ENABLE            4004
 #define IDC_DC_SENSOR_PARAM_GRP         4005
@@ -107,7 +106,10 @@
 #define IDC_DC_TARGET_VEL_Y             4069
 #define IDC_DC_EVAL_FILTER              4069
 #define IDC_DC_TARGET_VEL_Z_STATIC      4070
+#define IDC_DC_EVAL_FUNC_STATIC         4070
 #define IDC_DC_TARGET_VEL_Z             4071
+#define IDC_DC_EVAL_DLL2                4071
+#define IDC_DC_EVAL_FUNC                4071
 #define IDC_DC_TARGET_ACC_X_STATIC      4072
 #define IDC_DC_TARGET_ACC_X             4073
 #define IDC_DC_TARGET_ACC_Y_STATIC      4074

@@ -18,6 +18,8 @@
 #include "CommonDlg.h"
 #include "afxwin.h"
 
+#include "EvalItem.h"
+
 class DataCenterSocket;
 class PlaneSocket;
 
@@ -172,4 +174,30 @@ public:
     afx_msg void OnEnChangeExtDataPath();
 
     void DumpTrueData(LPCWSTR path);
+    CString m_OutputPlaneTrue;
+    CString m_OutputTargetTrue;
+    CString m_OutputTargetNoise;
+    CString m_OutputFusion;
+    CString m_OutputFilter;
+    CComboBox m_EvalSel;
+    CString m_EvalName;
+    CString m_EvalDll;
+    afx_msg void OnEnChangeDcEvalPlaneTrue();
+    afx_msg void OnEnChangeDcEvalTargetTrue();
+    afx_msg void OnEnChangeDcTargetNoise();
+    afx_msg void OnEnChangeDcEvalFusion();
+    afx_msg void OnEnChangeDcEvalFilter();
+
+    void OutputPlaneTrueData();
+    void OutputTargetTrueData();
+    void OutputTargetNoiseData();
+    void OutputFusionData();
+    void OutputFilterData();
+    CString m_EvalFunc;
+    afx_msg void OnEnChangeDcEvalFunc();
+    afx_msg void OnEnChangeDcEvalDll();
+    afx_msg void OnEnChangeDcEvalName();
+    afx_msg void OnCbnSelchangeDcEvalId();
+
+    vector<EvalItem> m_EvalItems;
 };

@@ -66,6 +66,14 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_PlanePal(0)
     , m_PlaneRadius(0)
     , m_ExtDataPath(_T(""))
+    , m_OutputPlaneTrue(_T("PlaneTrue.dat"))
+    , m_OutputTargetTrue(_T("TargetTrue.dat"))
+    , m_OutputTargetNoise(_T("TargetNoise.dat"))
+    , m_OutputFusion(_T("Fusion.dat"))
+    , m_OutputFilter(_T("Filter.dat"))
+    , m_EvalName(_T(""))
+    , m_EvalDll(_T(""))
+    , m_EvalFunc(_T(""))
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
@@ -144,6 +152,15 @@ void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_DC_PLANE_PAL, m_PlanePal);
     DDX_Text(pDX, IDC_DC_PLANE_RADIUS, m_PlaneRadius);
     DDX_Text(pDX, IDC_EXT_DATA_PATH, m_ExtDataPath);
+    DDX_Text(pDX, IDC_DC_EVAL_PLANE_TRUE, m_OutputPlaneTrue);
+    DDX_Text(pDX, IDC_DC_EVAL_TARGET_TRUE, m_OutputTargetTrue);
+    DDX_Text(pDX, IDC_DC_TARGET_NOISE, m_OutputTargetNoise);
+    DDX_Text(pDX, IDC_DC_EVAL_FUSION, m_OutputFusion);
+    DDX_Text(pDX, IDC_DC_EVAL_FILTER, m_OutputFilter);
+    DDX_Control(pDX, IDC_DC_EVAL_ID, m_EvalSel);
+    DDX_Text(pDX, IDC_DC_EVAL_NAME, m_EvalName);
+    DDX_Text(pDX, IDC_DC_EVAL_DLL, m_EvalDll);
+    DDX_Text(pDX, IDC_DC_EVAL_FUNC, m_EvalFunc);
 }
 
 BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
@@ -196,6 +213,15 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_EN_CHANGE(IDC_DC_PLANE_PAL, &CDataCenterDlg::OnEnChangeDcPlanePal)
     ON_EN_CHANGE(IDC_DC_PLANE_RADIUS, &CDataCenterDlg::OnEnChangeDcPlaneRadius)
     ON_EN_CHANGE(IDC_EXT_DATA_PATH, &CDataCenterDlg::OnEnChangeExtDataPath)
+    ON_EN_CHANGE(IDC_DC_EVAL_PLANE_TRUE, &CDataCenterDlg::OnEnChangeDcEvalPlaneTrue)
+    ON_EN_CHANGE(IDC_DC_EVAL_TARGET_TRUE, &CDataCenterDlg::OnEnChangeDcEvalTargetTrue)
+    ON_EN_CHANGE(IDC_DC_TARGET_NOISE, &CDataCenterDlg::OnEnChangeDcTargetNoise)
+    ON_EN_CHANGE(IDC_DC_EVAL_FUSION, &CDataCenterDlg::OnEnChangeDcEvalFusion)
+    ON_EN_CHANGE(IDC_DC_EVAL_FILTER, &CDataCenterDlg::OnEnChangeDcEvalFilter)
+    ON_EN_CHANGE(IDC_DC_EVAL_FUNC, &CDataCenterDlg::OnEnChangeDcEvalFunc)
+    ON_EN_CHANGE(IDC_DC_EVAL_DLL, &CDataCenterDlg::OnEnChangeDcEvalDll)
+    ON_EN_CHANGE(IDC_DC_EVAL_NAME, &CDataCenterDlg::OnEnChangeDcEvalName)
+    ON_CBN_SELCHANGE(IDC_DC_EVAL_ID, &CDataCenterDlg::OnCbnSelchangeDcEvalId)
 END_MESSAGE_MAP()
 
 
@@ -302,6 +328,7 @@ BOOL CDataCenterDlg::OnInitDialog()
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
+    m_StateMapDlg.SetWindowTextW(TEXT("数据控制中心态势"));
 
     ResetCtrls();
     ResetSockets();
@@ -604,6 +631,12 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
 void CDataCenterDlg::StartSim()
 {
+    if (m_TargetClients.size() == 0)
+    {
+        AfxMessageBox(TEXT("需要添加至少一架敌机"));
+        return;
+    }
+
     ResetCtrls();
     ResetPlanes();
     ResetTargets();
@@ -697,8 +730,24 @@ void CDataCenterDlg::ResumeSim()
 void CDataCenterDlg::FinishSim()
 {
     m_CurrentRound++;
+
+    // Output datas.
+    OutputPlaneTrueData();
+    OutputTargetTrueData();
+    OutputTargetNoiseData();
+    OutputFusionData();
+    OutputFilterData();
+
     if (m_CurrentRound >= m_GlobalData.m_Rounds)
     {
+        for (int i = 0; i < m_EvalItems.size(); ++i)
+        {
+            m_EvalItems[i].Run(wstring(m_OutputPlaneTrue),
+                wstring(m_OutputTargetTrue),
+                wstring(m_OutputTargetNoise),
+                wstring(m_OutputFusion),
+                wstring(m_OutputFilter));
+        }
         GetDlgItem(IDOK)->EnableWindow(TRUE);
     }
     else
@@ -1198,7 +1247,18 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
         ar >> index;
         m_NaviAlgoSel.SetCurSel(index);
 
-        // FIXME: 评估
+#if 1
+        int evalItemSize = 0;
+        ar >> evalItemSize;
+        for (int i = 0; i < evalItemSize; ++i)
+        {
+            EvalItem eval;
+            ar >> eval;
+            m_EvalItems.push_back(eval);
+            m_EvalSel.InsertString(i, eval.m_Name);
+        }
+#endif
+
         ar.Close();
         file.Close();
 
@@ -1244,7 +1304,12 @@ void CDataCenterDlg::OnBnClickedConfigSave()
         index = m_NaviAlgoSel.GetCurSel();
         ar << index;
 
-        // FIXME: 评估
+        ar << m_EvalItems.size();
+        for (int i = 0; i < m_EvalItems.size(); ++i)
+        {
+            ar << m_EvalItems[i];
+        }
+
         ar.Close();
         file.Close();
     }
@@ -1253,6 +1318,14 @@ void CDataCenterDlg::OnBnClickedConfigSave()
 void CDataCenterDlg::OnBnClickedDcEvalAdd()
 {
     // TODO: 在此添加控件通知处理程序代码
+    EvalItem eval;
+    m_EvalItems.push_back(eval);
+
+    int count = m_EvalSel.GetCount();
+    m_EvalSel.InsertString(count, eval.m_Name);
+
+    m_EvalSel.SetCurSel(count);
+    OnCbnSelchangeDcEvalId();
 }
 
 void CDataCenterDlg::OnBnClickedDcTargetAdd()
@@ -1773,4 +1846,279 @@ void CDataCenterDlg::DumpTrueData(LPCWSTR path)
     ofs << endl;
 
     ofs.close();
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalPlaneTrue()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    UpdateData(TRUE);
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalTargetTrue()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    UpdateData(TRUE);
+}
+
+void CDataCenterDlg::OnEnChangeDcTargetNoise()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    UpdateData(TRUE);
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalFusion()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    UpdateData(TRUE);
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalFilter()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    UpdateData(TRUE);
+}
+
+void CDataCenterDlg::OutputPlaneTrueData()
+{
+    wofstream ofs(m_OutputPlaneTrue);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开我机真值输出文件%s失败"), m_OutputPlaneTrue);
+        AfxMessageBox(msg);
+    }
+
+    ofs << PLANE_COUNT << endl;
+    ofs << endl;
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        vector<TrueDataFrame> &trueDatas = m_PlaneClients[i].m_PlaneTrueDatas;
+        ofs << trueDatas.size() << endl;
+        ofs << endl;
+        for (int j = 0; j < trueDatas.size(); ++j)
+        {
+            ofs << trueDatas[j] << endl;
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+}
+
+void CDataCenterDlg::OutputTargetTrueData()
+{
+    wofstream ofs(m_OutputTargetTrue);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开目标真值输出文件%s失败"), m_OutputTargetTrue);
+        AfxMessageBox(msg);
+    }
+
+    ofs << m_TargetClients.size() << endl;
+    ofs << endl;
+    for (int i = 0; i < m_TargetClients.size(); ++i)
+    {
+        vector<TrueDataFrame> &trueDatas = m_TargetClients[i].m_TargetTrueDatas;
+        ofs << trueDatas.size() << endl;
+        ofs << endl;
+        for (int j = 0; j < trueDatas.size(); ++j)
+        {
+            ofs << trueDatas[j] << endl;
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+}
+
+void CDataCenterDlg::OutputTargetNoiseData()
+{
+    wofstream ofs(m_OutputTargetNoise);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开目标测量值输出文件%s失败"), m_OutputTargetNoise);
+        AfxMessageBox(msg);
+    }
+
+    ofs << PLANE_COUNT << endl;
+    ofs << endl;
+    for (int iPlane = 0; iPlane < PLANE_COUNT - 1 /*排除攻击机*/; ++iPlane)
+    {
+        ofs << m_TargetClients.size() << endl;
+        ofs << endl;
+        for (int iTarget = 0; iTarget < m_TargetClients.size(); ++iTarget)
+        {
+            ofs << m_FusionDatas.size() << endl;
+            ofs << endl;
+            for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
+            {
+                NoiseDataFrame &frame = m_FusionDatas[iData].m_NoiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
+                ofs << frame << endl;
+            }
+            ofs << endl;
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+}
+
+void CDataCenterDlg::OutputFusionData()
+{
+    wofstream ofs(m_OutputFusion);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开融合输出文件%s失败"), m_OutputFusion);
+        AfxMessageBox(msg);
+    }
+
+    ofs << m_TargetClients.size() << endl;
+    ofs << endl;
+    for (int iTarget = 0; iTarget < m_TargetClients.size(); ++iTarget)
+    {
+        ofs << m_FusionDatas.size() << endl;
+        ofs << endl;
+        for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
+        {
+            NoiseDataFrame &frame = m_FusionDatas[iData].m_FusionDatas[iTarget];
+            ofs << frame << endl;
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+}
+
+void CDataCenterDlg::OutputFilterData()
+{
+    wofstream ofs(m_OutputFilter);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开滤波输出文件%s失败"), m_OutputFilter);
+        AfxMessageBox(msg);
+    }
+
+    ofs << m_TargetClients.size() << endl;
+    ofs << endl;
+    for (int iTarget = 0; iTarget < m_TargetClients.size(); ++iTarget)
+    {
+        ofs << m_FusionDatas.size() << endl;
+        ofs << endl;
+        for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
+        {
+            NoiseDataFrame &frame = m_FusionDatas[iData].m_FilterDatas[iTarget];
+            ofs << frame << endl;
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalFunc()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_EvalSel.GetCurSel();
+    int count = m_EvalSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        EvalItem &eval = m_EvalItems[index];
+
+        GetDlgItem(IDC_DC_EVAL_FUNC)->GetWindowText(m_EvalFunc);
+        eval.m_Func = m_EvalFunc;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalDll()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_EvalSel.GetCurSel();
+    int count = m_EvalSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        EvalItem &eval = m_EvalItems[index];
+
+        GetDlgItem(IDC_DC_EVAL_DLL)->GetWindowText(m_EvalDll);
+        eval.m_Dll = m_EvalDll;
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnEnChangeDcEvalName()
+{
+    // TODO:  如果该控件是 RICHEDIT 控件，它将不
+    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
+    // 函数并调用 CRichEditCtrl().SetEventMask()，
+    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+    // TODO:  在此添加控件通知处理程序代码
+    int index = m_EvalSel.GetCurSel();
+    int count = m_EvalSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        EvalItem &eval = m_EvalItems[index];
+
+        GetDlgItem(IDC_DC_EVAL_NAME)->GetWindowText(m_EvalName);
+        eval.m_Name = m_EvalName;
+        m_EvalSel.DeleteString(index);
+        m_EvalSel.InsertString(index, m_EvalName);
+        m_EvalSel.SetCurSel(index);
+        UpdateData(FALSE);
+    }
+}
+
+void CDataCenterDlg::OnCbnSelchangeDcEvalId()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_EvalSel.GetCurSel();
+    int count = m_EvalSel.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        EvalItem &eval = m_EvalItems[index];
+
+        m_EvalName = eval.m_Name;
+        m_EvalDll = eval.m_Dll;
+        m_EvalFunc = eval.m_Func;
+        UpdateData(FALSE);
+    }
 }

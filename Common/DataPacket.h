@@ -98,6 +98,9 @@ struct __declspec(dllexport) NoiseDataFrame
 __declspec(dllexport) CArchive & operator << (CArchive &ar, NoiseDataFrame &frame);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, NoiseDataFrame &frame);
 
+__declspec(dllexport) wofstream & operator << (wofstream &os, NoiseDataFrame &frame);
+__declspec(dllexport) wifstream & operator >> (wifstream &is, NoiseDataFrame &frame);
+
 struct __declspec(dllexport) ControlDataFrame
 {
     int m_Time;
@@ -120,6 +123,30 @@ __declspec(dllexport) CArchive & operator << (CArchive &ar, vector<T> &v)
 }
 template <class T>
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, vector<T> &v)
+{
+    int n = 0;
+    ar >> n;
+    for (int i = 0; i < n; ++i)
+    {
+        T t;
+        ar >> t;
+        v.push_back(t);
+    }
+    return ar;
+}
+
+template <class T>
+__declspec(dllexport) wofstream & operator << (wofstream &ar, vector<T> &v)
+{
+    ar << v.size() << endl;
+    for (int i = 0; i < v.size(); ++i)
+    {
+        ar << v[i] << TEXT(" ");
+    }
+    return ar;
+}
+template <class T>
+__declspec(dllexport) wifstream & operator >> (wifstream &ar, vector<T> &v)
 {
     int n = 0;
     ar >> n;

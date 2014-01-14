@@ -227,6 +227,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\EvalItem.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\FusionAlgo.cpp"
 				>
 			</File>
@@ -350,6 +354,10 @@
 			</File>
 			<File
 				RelativePath=".\EsmDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EvalItem.h"
 				>
 			</File>
 			<File
