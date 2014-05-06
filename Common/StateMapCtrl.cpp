@@ -90,6 +90,10 @@ void CStateMapCtrl::DrawTargets()
                 Position end = m_StateMap.m_PlanePaths[i].back();
                 Position start = m_StateMap.m_PlanePaths[i][m_StateMap.m_PlanePaths[i].size() - 2];
                 double angle = -Theta(end - start);
+                if (end.X < start.X)
+                {
+                    angle += 180;
+                }
                 graphics.RotateTransform(angle, MatrixOrderAppend);
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
@@ -175,6 +179,10 @@ void CStateMapCtrl::DrawTargets()
                 Position end = m_StateMap.m_TargetPaths[i].back();
                 Position start = m_StateMap.m_TargetPaths[i][m_StateMap.m_TargetPaths[i].size() - 2];
                 double angle = -Theta(end - start);
+                if (end.X < start.X)
+                {
+                    angle += 180;
+                }
                 graphics.RotateTransform(angle, MatrixOrderAppend);
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
