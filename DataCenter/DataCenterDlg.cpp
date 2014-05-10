@@ -19,6 +19,7 @@
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
 #include "FusionMatlabAlgo.h"
+#include "OneTimeMatlabDlg.h"
 
 using namespace std;
 
@@ -748,6 +749,8 @@ void CDataCenterDlg::FinishSim()
                 wstring(m_OutputFusion),
                 wstring(m_OutputFilter));
         }
+        COneTimeMatlabDlg dlg;
+        dlg.Run();
         GetDlgItem(IDOK)->EnableWindow(TRUE);
     }
     else

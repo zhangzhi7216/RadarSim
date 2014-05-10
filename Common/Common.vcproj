@@ -267,6 +267,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\OneTimeMatlabDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\Sensor.cpp"
 				>
 			</File>
@@ -398,6 +402,10 @@
 			</File>
 			<File
 				RelativePath=".\NaviAlgo.h"
+				>
+			</File>
+			<File
+				RelativePath=".\OneTimeMatlabDlg.h"
 				>
 			</File>
 			<File
