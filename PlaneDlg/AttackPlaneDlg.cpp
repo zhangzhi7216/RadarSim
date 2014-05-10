@@ -25,7 +25,7 @@ CAttackPlaneDlg::CAttackPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     m_DlgType = DlgTypeAttackPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-    m_MatlabDlg = new CMatlabDlg;
+    m_MatlabDlg = new CMatlabDlg("attack_matlab_dialog", "attack_plane_true", "attack_target_true", "attack_target_fusion", "attack_target_filter");
     m_ShowDataListDlg = true;
 }
 

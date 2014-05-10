@@ -627,6 +627,13 @@ void CDataCenterDlg::GenerateGlobalData()
 void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
     m_FusionDatas.push_back(packet);
+    for (int i = 0; i < TARGET_COUNT; ++i)
+    {
+        NoiseDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
+        m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
+        NoiseDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
+        m_MatlabDlg.AddTargetFilterData(i, filterFrame);
+    }
     ResumeSim();
 }
 
@@ -790,12 +797,12 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
             m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
-            m_MatlabDlg.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+            m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
         }
         for (int i = 0; i < TARGET_COUNT; ++i)
         {
             m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
-            m_MatlabDlg.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
+            m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
         }
 
         m_StateMapDlg.m_Ctrl.DrawTargets();

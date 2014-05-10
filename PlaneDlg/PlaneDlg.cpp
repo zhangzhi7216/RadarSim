@@ -464,7 +464,7 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 
     if (m_MatlabDlg)
     {
-        m_MatlabDlg->AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
+        m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
     m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
 
@@ -478,7 +478,7 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
         if (m_MatlabDlg)
         {
-            m_MatlabDlg->AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
+            m_MatlabDlg->AddTargetTrueData(i, packet.m_TargetTrueDatas[i].m_Pos);
         }
         m_StateMap.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
     }
