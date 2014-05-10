@@ -546,7 +546,10 @@ void CPlaneDlg::AddNoiseData(SocketPacketPair spp)
 
 void CPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
-    // FIXME: do what?
+}
+
+void CPlaneDlg::AddControlDataAck()
+{
 }
 
 void CPlaneDlg::ResetCtrls()

@@ -63,6 +63,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_4C933224E8674D4098FB2B261B5CC163"
+        "OwnerKey" = "8:_5FB57DD572204CE99792DD2E5C489AFA"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_54AC580CF4754D1EAFC6F6F1C61599E6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -81,8 +87,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5FB57DD572204CE99792DD2E5C489AFA"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_6E16BD9D7CD54CA0A74750DB1CD6C613"
         "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6E16BD9D7CD54CA0A74750DB1CD6C613"
+        "OwnerKey" = "8:_5FB57DD572204CE99792DD2E5C489AFA"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -101,6 +119,12 @@
         {
         "MsmKey" = "8:_92CC5E8A3821E460073079CC2C8AF523"
         "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_937B29A9020144CEA3072C7E8F8C4C72"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -164,6 +188,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -598,7 +635,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:AttackPlaneSetup"
         "ProductCode" = "8:{7FC69AE8-6A66-4E78-B991-8A8359EA3000}"
-        "PackageCode" = "8:{51C109A9-1E83-497B-90F4-CD0E807E80CF}"
+        "PackageCode" = "8:{F158DB57-2B48-4689-8FA3-167AA0835A55}"
         "UpgradeCode" = "8:{C1C471CF-C2EF-4FC3-9587-D60235AEB0EB}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -1200,6 +1237,62 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_5FB57DD572204CE99792DD2E5C489AFA"
+            {
+            "SourcePath" = "8:..\\Debug\\NaviVcAlgoTest1.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F5BB0F427EBC4420BE32EBAE33334AB4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{5AC98BD0-E2C4-4721-93F6-556A88B1DA6C}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_937B29A9020144CEA3072C7E8F8C4C72"
+            {
+            "SourcePath" = "8:..\\Debug\\NaviVcAlgoTest2.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_F5BB0F427EBC4420BE32EBAE33334AB4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{2260609B-39B3-405B-B628-E2DAE3D60359}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_FB2DB499701A451D880F79BC2B53AE71"
             {
             "SourcePath" = "8:..\\Debug\\AttackPlane.exe"

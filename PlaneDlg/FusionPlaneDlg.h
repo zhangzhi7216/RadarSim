@@ -38,10 +38,13 @@ protected:
     virtual void DoFusion();
     map<int, SocketPacketPair> m_NoiseDatas;
     virtual void ResetSockets();
+    virtual void AddControlDataAck();
 
     FusionSocket *m_FusionSocket;
     vector<PlaneSocket *> m_PlaneSockets;
     CCriticalSection m_Lock;
 
     FusionAlgo *m_FusionAlgo;
+
+    FusionOutput m_FusionOutput;
 };

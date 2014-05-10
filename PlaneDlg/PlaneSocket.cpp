@@ -28,6 +28,18 @@ void PlaneSocket::OnReceive(int nErrorCode)
             m_Dlg->AddNoiseData(make_pair(this, packet));
         }
         break;
+    case PacketTypeControlData:
+        {
+            ControlDataPacket packet;
+            ar >> packet;
+            m_Dlg->AddControlData(packet);
+        }
+        break;
+    case PacketTypeControlDataAck:
+        {
+            m_Dlg->AddControlDataAck();
+        }
+        break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;

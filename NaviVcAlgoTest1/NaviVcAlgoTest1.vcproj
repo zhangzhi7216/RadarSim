@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="Common"
-	ProjectGUID="{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}"
-	RootNamespace="Common"
+	Name="NaviVcAlgoTest1"
+	ProjectGUID="{5AC98BD0-E2C4-4721-93F6-556A88B1DA6C}"
+	RootNamespace="NaviVcAlgoTest1"
 	Keyword="MFCDLLProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -44,7 +44,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="../Common;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;_USRDLL"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -68,9 +68,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="gdiplus.lib mclmcrrt.lib libmx.lib libmat.lib libeng.lib"
 				LinkIncremental="2"
-				ModuleDefinitionFile=".\Common.def"
+				ModuleDefinitionFile=".\NaviVcAlgoTest1.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -127,7 +126,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories=""
+				AdditionalIncludeDirectories="../Common;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG;_USRDLL"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -150,9 +149,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="gdiplus.lib mclmcrrt.lib libmx.lib libmat.lib libeng.lib"
 				LinkIncremental="1"
-				ModuleDefinitionFile=".\Common.def"
+				ModuleDefinitionFile=".\NaviVcAlgoTest1.def"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -191,119 +189,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Common.cpp"
+				RelativePath=".\NaviVcAlgoTest1.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Common.def"
-				>
-			</File>
-			<File
-				RelativePath=".\CommonDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DataList.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DataListCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DataListDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\DataPacket.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Defines.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EsmDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\EvalItem.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionLocalAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionMatlabAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionVcAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MatlabDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\MatlabHelper.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviLocalAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviMatlabAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviVcAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\OneTimeMatlabDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Sensor.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorDlg.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\StateMap.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\StateMapCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\StateMapDlg.cpp"
+				RelativePath=".\NaviVcAlgoTest1.def"
 				>
 			</File>
 			<File
@@ -326,14 +216,6 @@
 					/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath=".\Target.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Utility.cpp"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="Í·ÎÄ¼þ"
@@ -341,95 +223,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\Common.h"
-				>
-			</File>
-			<File
-				RelativePath=".\CommonDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DataList.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DataListCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DataListDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\DataPacket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Defines.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EsmDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EvalItem.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionLocalAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionMatlabAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\FusionVcAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\GeneralAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MatlabDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\MatlabHelper.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviLocalAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviMatlabAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviVcAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\OneTimeMatlabDlg.h"
+				RelativePath=".\NaviVcAlgoTest1.h"
 				>
 			</File>
 			<File
@@ -437,43 +231,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Sensor.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\SensorDlg.h"
-				>
-			</File>
-			<File
-				RelativePath=".\StateMap.h"
-				>
-			</File>
-			<File
-				RelativePath=".\StateMapCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\StateMapDlg.h"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Target.h"
-				>
-			</File>
-			<File
 				RelativePath=".\targetver.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Utility.h"
 				>
 			</File>
 		</Filter>
@@ -483,15 +245,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\res\Common.ico"
+				RelativePath=".\NaviVcAlgoTest1.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\Common.rc"
-				>
-			</File>
-			<File
-				RelativePath=".\res\Common.rc2"
+				RelativePath=".\res\NaviVcAlgoTest1.rc2"
 				>
 			</File>
 		</Filter>
@@ -501,9 +259,5 @@
 		</File>
 	</Files>
 	<Globals>
-		<Global
-			Name="RESOURCE_FILE"
-			Value="Common.rc"
-		/>
 	</Globals>
 </VisualStudioProject>

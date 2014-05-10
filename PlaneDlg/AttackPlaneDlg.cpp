@@ -21,6 +21,7 @@
 CAttackPlaneDlg::CAttackPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(title, pParent)
     , m_NaviAlgo(NULL)
+    , m_HasNaviOutput(false)
 {
     m_DlgType = DlgTypeAttackPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -94,6 +95,12 @@ HCURSOR CAttackPlaneDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CAttackPlaneDlg::ResetCtrls()
+{
+    CPlaneDlg::ResetCtrls();
+    m_HasNaviOutput = false;
+}
+
 void CAttackPlaneDlg::ConnectDataCenter()
 {
     CPlaneDlg::ConnectDataCenter();
@@ -118,4 +125,41 @@ void CAttackPlaneDlg::SetNaviAlgo(NaviAlgo *algo)
         msg.AppendFormat(TEXT("导航算法%s初始化失败."), m_NaviAlgo->m_Name);
     }
     GetDlgItem(IDC_NAVI_ALGO)->SetWindowText(m_NaviAlgo->m_Name);
+}
+
+void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
+{
+    if (m_HasNaviOutput)
+    {
+        packet.m_PlaneTrueData.m_Pos = m_NaviOutput.m_Position;
+        m_HasNaviOutput = false;
+    }
+    CPlaneDlg::AddTrueData(packet);
+}
+
+void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
+{
+    DoNavi(packet);
+    m_HasNaviOutput = true;
+
+    m_FusionSocket->SendControlDataAck();
+}
+
+void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
+{
+    NaviInput input;
+    input.m_FusionDatas = packet.m_FusionData.m_FusionDatas;
+    input.m_FilterDatas = packet.m_FusionData.m_FilterDatas;
+    input.m_ControlData = packet.m_ControlData;
+    input.m_Position = m_Plane.m_Position;
+    if (!m_NaviAlgo)
+    {
+        AfxMessageBox(TEXT("尚未指定导航算法."));
+        return;
+    }
+    if (!m_NaviAlgo->Run(input, m_NaviOutput))
+    {
+        AfxMessageBox(TEXT("导航算法运行错误."));
+        return;
+    }
 }

@@ -186,6 +186,7 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, FusionDataPacket &pa
 
 struct __declspec(dllexport) ControlDataPacket
 {
+    FusionDataPacket m_FusionData;
     ControlDataFrame m_ControlData;
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataPacket &packet);

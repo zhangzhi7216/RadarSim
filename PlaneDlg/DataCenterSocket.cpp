@@ -5,6 +5,9 @@
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
 #include "FusionMatlabAlgo.h"
+#include "NaviLocalAlgo.h"
+#include "NaviVcAlgo.h"
+#include "NaviMatlabAlgo.h"
 
 DataCenterSocket::DataCenterSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
@@ -122,9 +125,37 @@ void DataCenterSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeNaviAlgo:
         {
-            StateMap stateMap;
-            ar >> stateMap;
-            m_Dlg->SetStateMap(stateMap);
+            int type;
+            ar >> type;
+            switch (type)
+            {
+            case NaviAlgoTypeLocal:
+                {
+                    NaviAlgo *algo = new NaviLocalAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetNaviAlgo(algo);
+                }
+                break;
+            case NaviAlgoTypeVc:
+                {
+                    NaviAlgo *algo = new NaviVcAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetNaviAlgo(algo);
+                }
+                break;
+            case NaviAlgoTypeMatlab:
+                {
+                    NaviAlgo *algo = new NaviMatlabAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetNaviAlgo(algo);
+                }
+                break;
+            default:
+                CString msg;
+                msg.AppendFormat(TEXT("未知导航算法类型%d."), type);
+                AfxMessageBox(msg);
+                break;
+            }
         }
         break;
     case PacketTypeGlobalData:

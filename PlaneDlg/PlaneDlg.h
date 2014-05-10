@@ -152,6 +152,7 @@ public:
     virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
     virtual void AddControlData(ControlDataPacket &packet);
+    virtual void AddControlDataAck();
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

@@ -21,26 +21,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_0C54795A09464C5F83B16AA687E99C11"
-        "OwnerKey" = "8:_0F666D228DC24E2CA1704757CD87A4E6"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0F666D228DC24E2CA1704757CD87A4E6"
-        "OwnerKey" = "8:_1562F636F6104FD09C2CC83177C6E885"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0F666D228DC24E2CA1704757CD87A4E6"
-        "OwnerKey" = "8:_8F981E899C954D69B6848543A3D92B85"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_0F666D228DC24E2CA1704757CD87A4E6"
-        "OwnerKey" = "8:_48069AA17BCE4FCA86864232EB7AB1BD"
+        "MsmKey" = "8:_07B4565DD7C8493B96B6C2078CBC701B"
+        "OwnerKey" = "8:_D8123C30E3F54C5D8D63032EABD1730B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -87,20 +69,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_48069AA17BCE4FCA86864232EB7AB1BD"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5C4913AD13064C13958BEAC26BE0B79A"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_632F0E37CE584C9AA37CE24C75B66914"
-        "OwnerKey" = "8:_FD167B0A153748C689D165752398C250"
+        "MsmKey" = "8:_5D0363D504D24463AAF93B3AA8EEB442"
+        "OwnerKey" = "8:_9564A870A5E541FF8FE49BEA1D2823BB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -141,6 +117,24 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_9564A870A5E541FF8FE49BEA1D2823BB"
+        "OwnerKey" = "8:_1562F636F6104FD09C2CC83177C6E885"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9564A870A5E541FF8FE49BEA1D2823BB"
+        "OwnerKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9564A870A5E541FF8FE49BEA1D2823BB"
+        "OwnerKey" = "8:_8F981E899C954D69B6848543A3D92B85"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B2AB10C4CEA245309B48BFA33391504D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -165,20 +159,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD167B0A153748C689D165752398C250"
+        "MsmKey" = "8:_D8123C30E3F54C5D8D63032EABD1730B"
         "OwnerKey" = "8:_1562F636F6104FD09C2CC83177C6E885"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD167B0A153748C689D165752398C250"
+        "MsmKey" = "8:_D8123C30E3F54C5D8D63032EABD1730B"
+        "OwnerKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D8123C30E3F54C5D8D63032EABD1730B"
         "OwnerKey" = "8:_8F981E899C954D69B6848543A3D92B85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_FD167B0A153748C689D165752398C250"
-        "OwnerKey" = "8:_48069AA17BCE4FCA86864232EB7AB1BD"
+        "MsmKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -199,6 +199,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -215,6 +223,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -1176,7 +1192,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_0C54795A09464C5F83B16AA687E99C11"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_07B4565DD7C8493B96B6C2078CBC701B"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1190,21 +1206,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_0F666D228DC24E2CA1704757CD87A4E6"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugMFC_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_632F0E37CE584C9AA37CE24C75B66914"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_5D0363D504D24463AAF93B3AA8EEB442"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1218,11 +1220,25 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_FD167B0A153748C689D165752398C250"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_9564A870A5E541FF8FE49BEA1D2823BB"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_D8123C30E3F54C5D8D63032EABD1730B"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugMFC_x86.msm"
                 "Properties"
                 {
                 }
@@ -1263,34 +1279,6 @@
                 {
                 }
             }
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_48069AA17BCE4FCA86864232EB7AB1BD"
-            {
-            "SourcePath" = "8:..\\Debug\\FusionVcAlgoTest1.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{AC024050-D088-4B6E-88D9-1C1247D19124}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_8F981E899C954D69B6848543A3D92B85"
             {
             "SourcePath" = "8:..\\Debug\\FusionVcAlgoTest2.dll"
@@ -1314,6 +1302,34 @@
             "OutputConfiguration" = "8:"
             "OutputGroupCanonicalName" = "8:Built"
             "OutputProjectGuid" = "8:{7C85FD41-C2F0-4A4C-97F5-C15977ECDFA0}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_E506ABC6CE4F4B3597E78D02727FE839"
+            {
+            "SourcePath" = "8:..\\Debug\\FusionVcAlgoTest1.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{AC024050-D088-4B6E-88D9-1C1247D19124}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {

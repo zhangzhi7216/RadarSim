@@ -19,6 +19,11 @@
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
 #include "FusionMatlabAlgo.h"
+
+#include "NaviLocalAlgo.h"
+#include "NaviVcAlgo.h"
+#include "NaviMatlabAlgo.h"
+
 #include "OneTimeMatlabDlg.h"
 
 using namespace std;
@@ -280,8 +285,7 @@ BOOL CDataCenterDlg::OnInitDialog()
     }
     m_FusionAlgoSel.SetCurSel(0);
 
-    // FIXME
-    if (0 && m_NaviAlgos.size() == 0)
+    if (m_NaviAlgos.size() == 0)
     {
         AfxMessageBox(TEXT("未能读取任何导航算法."));
         exit(-1);
@@ -685,7 +689,7 @@ void CDataCenterDlg::StartSim()
             {
                 index = 0;
             }
-            // m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[index]);
+            m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[index]);
         }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
@@ -903,6 +907,42 @@ void CDataCenterDlg::ReadConfigFile()
         }
         else if (key == TEXT("NAVI_ALGO"))
         {
+            int type;
+            ist >> type;
+            switch (type)
+            {
+            case NaviAlgoTypeLocal:
+                {
+                    wstring name;
+                    int localType;
+                    ist >> name;
+                    ist >> localType;
+                    NaviAlgo *algo = new NaviLocalAlgo(name.c_str(), (NaviLocalAlgoType)localType);
+                    m_NaviAlgos.push_back(algo);
+                }
+                break;
+            case NaviAlgoTypeVc:
+                {
+                    wstring name, dllFileName, funcName;
+                    ist >> name >> dllFileName >> funcName;
+                    NaviAlgo *algo = new NaviVcAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
+                    m_NaviAlgos.push_back(algo);
+                }
+                break;
+            case NaviAlgoTypeMatlab:
+                {
+                    wstring name, dllFileName, funcName;
+                    ist >> name >> dllFileName >> funcName;
+                    NaviAlgo *algo = new NaviMatlabAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
+                    m_NaviAlgos.push_back(algo);
+                }
+                break;
+            default:
+                CString msg;
+                msg.AppendFormat(TEXT("未知导航算法类型%d."), type);
+                AfxMessageBox(msg);
+                break;
+            }
         }
     }
 

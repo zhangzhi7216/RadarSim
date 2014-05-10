@@ -34,6 +34,11 @@ void FusionSocket::OnReceive(int nErrorCode)
             m_Dlg->AddControlData(packet);
         }
         break;
+    case PacketTypeControlDataAck:
+        {
+            m_Dlg->AddControlDataAck();
+        }
+        break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;
@@ -57,5 +62,13 @@ void FusionSocket::SendNoiseData(NoiseDataPacket &packet)
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
     ar << PacketTypeNoiseData << packet;
+    ar.Flush();
+}
+
+void FusionSocket::SendControlDataAck()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeControlDataAck;
     ar.Flush();
 }

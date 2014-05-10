@@ -16,6 +16,7 @@ public:
     void OnClose(int nErrorCode);
 
     void SendNoiseData(NoiseDataPacket &packet);
+    void SendControlDataAck();
 
 public:
     CPlaneDlg *m_Dlg;

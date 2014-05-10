@@ -114,13 +114,13 @@ CArchive & operator >> (CArchive &ar, FusionDataPacket &packet)
 
 CArchive & operator << (CArchive &ar, ControlDataPacket &packet)
 {
-    ar << packet.m_ControlData;
+    ar << packet.m_FusionData << packet.m_ControlData;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, ControlDataPacket &packet)
 {
-    ar >> packet.m_ControlData;
+    ar >> packet.m_FusionData >> packet.m_ControlData;
     return ar;
 }
 

@@ -73,6 +73,7 @@ bool FusionLocalAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutpu
     for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
     {
         ControlDataPacket packet;
+        packet.m_FusionData = output.m_FusionData;
         packet.m_ControlData.m_Time = noiseDatas[iPlane].m_PlaneTrueData.m_Time;
         packet.m_ControlData.m_Id = noiseDatas[iPlane].m_PlaneTrueData.m_Id;
         output.m_ControlDatas.push_back(packet);
@@ -107,6 +108,7 @@ bool FusionLocalAlgoTest2(const vector<NoiseDataPacket> &noiseDatas, FusionOutpu
     for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
     {
         ControlDataPacket packet;
+        packet.m_FusionData = output.m_FusionData;
         packet.m_ControlData.m_Time = noiseDatas[iPlane].m_PlaneTrueData.m_Time;
         packet.m_ControlData.m_Id = noiseDatas[iPlane].m_PlaneTrueData.m_Id;
         output.m_ControlDatas.push_back(packet);

@@ -170,25 +170,33 @@ void CFusionPlaneDlg::DoFusion()
     {
         input.push_back(it->second.second);
     }
-    FusionOutput output;
-    if (!m_FusionAlgo->Run(input, output))
+    if (!m_FusionAlgo->Run(input, m_FusionOutput))
     {
         AfxMessageBox(TEXT("融合算法运行错误."));
         return;
     }
 
+    /*
     int i = 0;
-    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end() && i < output.m_ControlDatas.size(); ++it, ++i)
+    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end() && i < m_FusionOutput.m_ControlDatas.size(); ++it, ++i)
     {
         if (it->second.first)
         {
-            it->second.first->SendControlData(output.m_ControlDatas[i]);
+            it->second.first->SendControlData(m_FusionOutput.m_ControlDatas[i]);
         }
+    }
+    */
+    for (int i = 0; i < m_PlaneSockets.size(); ++i)
+    {
+        m_PlaneSockets[i]->SendControlData(m_FusionOutput.m_ControlDatas[i]);
     }
 
     m_NoiseDatas.clear();
+}
 
-    m_DataCenterSocket->SendFusionData(output.m_FusionData);
+void CFusionPlaneDlg::AddControlDataAck()
+{
+    m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionData);
 }
 
 void CFusionPlaneDlg::ResetSockets()
