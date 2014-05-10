@@ -45,14 +45,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_40D5FE36AB224507B38895B6D781AFB5"
+        "OwnerKey" = "8:_6E16BD9D7CD54CA0A74750DB1CD6C613"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4657F8DA75C043DFAF8D650F79BC6C1D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4E8D153075A847C18027E7F8A3180466"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_4C933224E8674D4098FB2B261B5CC163"
+        "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -69,20 +75,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5A36C653D5684811A344A2221FEF1EEE"
-        "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_5C594CA8F74E452DAB0C034550595395"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6F365CC9FDB94116931128907B1E1387"
-        "OwnerKey" = "8:_AD8F1715A9954DB9A6CE94C82917F3FB"
+        "MsmKey" = "8:_6E16BD9D7CD54CA0A74750DB1CD6C613"
+        "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_7A4F6970050643349A1858E1B0DED819"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -94,12 +100,6 @@
         "Entry"
         {
         "MsmKey" = "8:_92CC5E8A3821E460073079CC2C8AF523"
-        "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_AD8F1715A9954DB9A6CE94C82917F3FB"
         "OwnerKey" = "8:_FB2DB499701A451D880F79BC2B53AE71"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -129,8 +129,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EEBCD3557EC849599183EB707CA0BCCA"
-        "OwnerKey" = "8:_5A36C653D5684811A344A2221FEF1EEE"
+        "MsmKey" = "8:_D431BBA594974577A17B77E7CDFA431B"
+        "OwnerKey" = "8:_4C933224E8674D4098FB2B261B5CC163"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -157,6 +157,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -173,6 +181,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -314,26 +330,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_4E8D153075A847C18027E7F8A3180466"
-            {
-            "SourcePath" = "8:..\\AttackPlane\\bin\\matlab_dialog.m"
-            "TargetName" = "8:matlab_dialog.m"
-            "Tag" = "8:"
-            "Folder" = "8:_3BD7ABB9D85846B199FC6083B950069C"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_54AC580CF4754D1EAFC6F6F1C61599E6"
             {
             "SourcePath" = "8:..\\AttackPlane\\Tank.ico"
@@ -380,6 +376,26 @@
             "TargetName" = "8:Fighter.ico"
             "Tag" = "8:"
             "Folder" = "8:_F5BB0F427EBC4420BE32EBAE33334AB4"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7A4F6970050643349A1858E1B0DED819"
+            {
+            "SourcePath" = "8:..\\Matlab\\dialog\\attack_matlab_dialog.m"
+            "TargetName" = "8:attack_matlab_dialog.m"
+            "Tag" = "8:"
+            "Folder" = "8:_3BD7ABB9D85846B199FC6083B950069C"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -1125,11 +1141,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_5A36C653D5684811A344A2221FEF1EEE"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_40D5FE36AB224507B38895B6D781AFB5"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
+            "SourcePath" = "8:microsoft_vc90_debugcrt_x86.msm"
                 "Properties"
                 {
                 }
@@ -1139,21 +1155,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_6F365CC9FDB94116931128907B1E1387"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_debugmfc_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_AD8F1715A9954DB9A6CE94C82917F3FB"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4C933224E8674D4098FB2B261B5CC163"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1167,11 +1169,25 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_EEBCD3557EC849599183EB707CA0BCCA"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_6E16BD9D7CD54CA0A74750DB1CD6C613"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_debugcrt_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_D431BBA594974577A17B77E7CDFA431B"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:microsoft_vc90_debugmfc_x86.msm"
                 "Properties"
                 {
                 }
