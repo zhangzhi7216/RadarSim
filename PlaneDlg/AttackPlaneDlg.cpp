@@ -131,7 +131,7 @@ void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
     if (m_HasNaviOutput)
     {
-        packet.m_PlaneTrueData.m_Pos = m_NaviOutput.m_Position;
+        packet.m_PlaneTrueData = m_NaviOutput.m_TrueData;
         m_HasNaviOutput = false;
     }
     CPlaneDlg::AddTrueData(packet);
@@ -151,7 +151,7 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     input.m_FusionDatas = packet.m_FusionData.m_FusionDatas;
     input.m_FilterDatas = packet.m_FusionData.m_FilterDatas;
     input.m_ControlData = packet.m_ControlData;
-    input.m_Position = m_Plane.m_Position;
+    input.m_Plane = m_Plane;
     if (!m_NaviAlgo)
     {
         AfxMessageBox(TEXT("尚未指定导航算法."));

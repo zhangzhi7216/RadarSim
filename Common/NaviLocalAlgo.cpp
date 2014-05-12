@@ -48,12 +48,12 @@ void NaviLocalAlgo::Input(CArchive &ar)
 
 bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 {
-    output.m_Position = Position(10000, 40000, 0);
+    output.m_TrueData.m_Pos = Position(10000, 40000, 0);
     return true;
 }
 
 bool NaviLocalAlgoTest2(const NaviInput &input, NaviOutput &output)
 {
-    output.m_Position = Position(40000, 10000, 0);
+    output.m_TrueData.m_Pos = Position(40000, 10000, 0);
     return true;
 }

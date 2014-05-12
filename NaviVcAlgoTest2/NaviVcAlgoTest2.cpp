@@ -65,6 +65,6 @@ BOOL CNaviVcAlgoTest2App::InitInstance()
 
 extern "C" __declspec(dllexport) bool NaviVcAlgoTest2(const NaviInput &input, NaviOutput &output)
 {
-    output.m_Position = Position(30000, 20000, 0);
+    output.m_TrueData.m_Pos = Position(30000, 20000, 0);
     return true;
 }

@@ -40,8 +40,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FusionVcAlgoTest1", "FusionVcAlgoTest1\FusionVcAlgoTest1.vcproj", "{AC024050-D088-4B6E-88D9-1C1247D19124}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NaviVcAlgoTest1", "NaviVcAlgoTest1\NaviVcAlgoTest1.vcproj", "{5AC98BD0-E2C4-4721-93F6-556A88B1DA6C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NaviVcAlgoTest2", "NaviVcAlgoTest2\NaviVcAlgoTest2.vcproj", "{2260609B-39B3-405B-B628-E2DAE3D60359}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
