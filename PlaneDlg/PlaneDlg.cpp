@@ -143,6 +143,12 @@ BOOL CPlaneDlg::OnInitDialog()
     }
 
     CStateMapDlg::CreateDlg(m_StateMapDlg);
+
+    ResetCtrls();
+    ResetSockets();
+
+    ConnectDataCenter();
+
     if (m_ShowStateMapDlg)
     {
         m_StateMapDlg.ShowWindow(SW_SHOW);
@@ -150,11 +156,6 @@ BOOL CPlaneDlg::OnInitDialog()
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
-
-    ResetCtrls();
-    ResetSockets();
-
-    ConnectDataCenter();
 
 #if 0
     // 初始化我机和目标

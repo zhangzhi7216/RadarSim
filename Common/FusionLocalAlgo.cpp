@@ -1,6 +1,7 @@
 #include "StdAfx.h"
 #include "FusionLocalAlgo.h"
 #include <assert.h>
+#include <math.h>
 
 FusionLocalAlgo::FusionLocalAlgo()
 : m_Type(FusionLocalAlgoTypeTest1)
@@ -53,14 +54,25 @@ bool FusionLocalAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutpu
     for (int iTarget = 0; iTarget < nTargets; ++iTarget)
     {
         NoiseDataFrame frame;
+        TrueDataFrame decomposition;
+        int PlaneCount = 0;
         assert(noiseDatas.front().m_TargetNoiseDatas.size() > iTarget);
         frame.m_Time = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Time;
         frame.m_Id = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Id;
         for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
         {
-            frame += noiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
+            if(noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis != 0)
+            {
+                decomposition.m_Pos.X = noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis * cos( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi * 0.017453292) * cos( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Theta * 0.017453292) + noiseDatas[iPlane].m_PlaneTrueData.m_Pos.X;
+                decomposition.m_Pos.Y = noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis * cos( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi * 0.017453292) * sin( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Theta * 0.017453292) + noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Y;
+                decomposition.m_Pos.Z = noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis * sin( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi * 0.017453292) + noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Z;
+                frame.m_Dis = sqrt(pow(decomposition.m_Pos.X,2)+pow(decomposition.m_Pos.Y,2)+pow(decomposition.m_Pos.Z,2));
+                frame.m_Phi = atan(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Z / sqrt(pow(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.X,2)+pow(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Y,2))) + noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
+                frame.m_Theta = atan(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.X / noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Y) + noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
+                PlaneCount++;
+            }
         }
-        frame /= nPlanes;
+        if(PlaneCount != 0)frame /= PlaneCount;
         output.m_FusionData.m_FusionDatas.push_back(frame);
         frame = noiseDatas.front().m_TargetNoiseDatas[iTarget];
         output.m_FusionData.m_FilterDatas.push_back(frame);

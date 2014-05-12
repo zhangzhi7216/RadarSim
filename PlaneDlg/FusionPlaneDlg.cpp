@@ -170,6 +170,7 @@ void CFusionPlaneDlg::DoFusion()
     {
         input.push_back(it->second.second);
     }
+    m_FusionOutput = FusionOutput();
     if (!m_FusionAlgo->Run(input, m_FusionOutput))
     {
         AfxMessageBox(TEXT("融合算法运行错误."));
