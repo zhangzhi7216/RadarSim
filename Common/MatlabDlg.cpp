@@ -160,6 +160,8 @@ void CMatlabDlg::Run()
     m_Lock.Unlock();
 }
 
+static char s_Msg[256];
+
 DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
 {
     CMatlabDlg *dlg = (CMatlabDlg *)lparam;
@@ -174,6 +176,10 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         {
             AfxMessageBox(TEXT("Hide engine WTF!"));
         }
+        else
+        {
+            engOutputBuffer(dlg->m_Engine, s_Msg, 256);
+        }
     }
     dlg->m_ThreadLock.Unlock();
     int result = 0;
@@ -181,7 +187,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     GetCurrentDirectory(MAX_PATH, buf);
     wstring wsCurPath(buf);
     string curPath(wsCurPath.begin(), wsCurPath.end());
-    string cmd = "cd " + curPath + "\\bin";
+    string cmd = "cd \'" + curPath + "\\bin\'";
     result = engEvalString(dlg->m_Engine, cmd.c_str());
     if (result)
     {
@@ -239,6 +245,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     }
     dlg->m_Engine = 0;
     */
+
     dlg->m_Lock.Lock();
     dlg->m_Thread = 0;
     dlg->m_Lock.Unlock();
