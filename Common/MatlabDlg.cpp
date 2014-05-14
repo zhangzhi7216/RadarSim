@@ -71,17 +71,6 @@ void CMatlabDlg::Stop()
         DestroyArray(m_TargetFilterInput);
         m_TargetFilterInput = NULL;
     }
-
-    /*
-    if (m_Engine)
-    {
-        if (engClose(m_Engine))
-        {
-            AfxMessageBox(TEXT("Close engine WTF!"));
-        }
-        m_Engine = 0;
-    }
-    */
 }
 
 void CMatlabDlg::Reset()
@@ -97,10 +86,10 @@ void CMatlabDlg::Reset()
 void CMatlabDlg::Run()
 {
     m_Lock.Lock();
-    m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * 3, (const unsigned char *)NULL, 0, 0);
-    m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * 3, (const unsigned char *)NULL, 0, 0);
-    m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * 6, (const unsigned char *)NULL, 0, 0);
-    m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * 6, (const unsigned char *)NULL, 0, 0);
+    m_PlaneTrueInput = CreateDoubleArray(max(m_PlaneTrueDatas.size(), 1), m_Size * 3, (const unsigned char *)NULL, 0, 0);
+    m_TargetTrueInput = CreateDoubleArray(max(m_TargetTrueDatas.size(), 1), m_Size * 3, (const unsigned char *)NULL, 0, 0);
+    m_TargetFusionInput = CreateDoubleArray(max(m_TargetFusionDatas.size(), 1), m_Size * 6, (const unsigned char *)NULL, 0, 0);
+    m_TargetFilterInput = CreateDoubleArray(max(m_TargetFilterDatas.size(), 1), m_Size * 6, (const unsigned char *)NULL, 0, 0);
 
     double *data = mxGetPr(m_PlaneTrueInput);
     for (int plane = 0; plane < m_PlaneTrueDatas.size(); ++plane)
@@ -187,6 +176,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     GetCurrentDirectory(MAX_PATH, buf);
     wstring wsCurPath(buf);
     string curPath(wsCurPath.begin(), wsCurPath.end());
+
     string cmd = "cd \'" + curPath + "\\bin\'";
     result = engEvalString(dlg->m_Engine, cmd.c_str());
     if (result)
@@ -195,6 +185,14 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     }
     while (true)
     {
+        /*
+        cmd += "clear";
+        result = engEvalString(dlg->m_Engine, cmd.c_str());
+        if (result)
+        {
+            AfxMessageBox(TEXT("Call clear engine WTF!"));
+        }
+        */
         result = engPutVariable(dlg->m_Engine, dlg->m_PlaneTrue, dlg->m_PlaneTrueInput);
         if (result)
         {
@@ -216,7 +214,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
             AfxMessageBox(TEXT("Put var 4 engine WTF!"));
         }
 
-        string cmd = dlg->m_FileName;
+        cmd = dlg->m_FileName;
         cmd += "(";
         cmd += dlg->m_PlaneTrue;
         cmd += ", ";
@@ -235,16 +233,15 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         {
             break;
         }
+
         Sleep(1);
     }
 
-    /*
     if (engClose(dlg->m_Engine))
     {
         AfxMessageBox(TEXT("Close engine engine WTF!"));
     }
     dlg->m_Engine = 0;
-    */
 
     dlg->m_Lock.Lock();
     dlg->m_Thread = 0;
