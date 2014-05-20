@@ -606,6 +606,8 @@ void CDataCenterDlg::GenerateTrueData()
                 frame.m_Time = i;
                 frame.m_Id = m_PlaneClients[j].m_Plane.m_Id;
                 frame.m_Pos = m_PlaneClients[j].m_Plane.m_Position;
+                frame.m_Vel = m_PlaneClients[j].m_Plane.m_Vel;
+                frame.m_Acc = m_PlaneClients[j].m_Plane.m_Acc;
                 m_PlaneClients[j].m_PlaneTrueDatas.push_back(frame);
             }
             for (int j = 0; j < m_TargetClients.size(); ++j)
@@ -616,6 +618,8 @@ void CDataCenterDlg::GenerateTrueData()
                 frame.m_Time = i;
                 frame.m_Id = m_TargetClients[j].m_Target.m_Id;
                 frame.m_Pos = m_TargetClients[j].m_Target.m_Position;
+                frame.m_Vel = m_TargetClients[j].m_Target.m_Vel;
+                frame.m_Acc = m_TargetClients[j].m_Target.m_Acc;
                 m_TargetClients[j].m_TargetTrueDatas.push_back(frame);
             }
         }
