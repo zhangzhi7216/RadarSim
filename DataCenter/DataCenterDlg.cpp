@@ -756,14 +756,12 @@ void CDataCenterDlg::FinishSim()
 
     if (m_CurrentRound >= m_GlobalData.m_Rounds)
     {
-        // Evaluating is time consuming so keep a local flag incase m_ShowMatlabDlg is modified.
-        bool showMatlabDlg = m_ShowMatlabDlg;
-        if (showMatlabDlg)
+        if (m_ShowMatlabDlg)
         {
             m_MatlabDlg.Stop();
+            m_ShowMatlabDlg = false;
         }
 
-        /*
         for (int i = 0; i < m_EvalItems.size(); ++i)
         {
             m_EvalItems[i].Run(wstring(m_OutputPlaneTrue),
@@ -773,13 +771,8 @@ void CDataCenterDlg::FinishSim()
                 wstring(m_OutputFilter));
         }
         COneTimeMatlabDlg dlg;
-        // dlg.Run();
-        */
+        dlg.Run();
 
-        if (showMatlabDlg)
-        {
-            m_MatlabDlg.Run();
-        }
         GetDlgItem(IDOK)->EnableWindow(TRUE);
     }
     else
