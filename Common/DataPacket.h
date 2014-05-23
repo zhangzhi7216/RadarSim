@@ -177,8 +177,8 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, NoiseDataPacket &pac
 
 struct __declspec(dllexport) FusionDataPacket
 {
-    vector<NoiseDataFrame> m_FusionDatas;
-    vector<NoiseDataFrame> m_FilterDatas;
+    vector<TrueDataFrame> m_FusionDatas;
+    vector<TrueDataFrame> m_FilterDatas;
     vector<NoiseDataPacket> m_NoiseDatas;
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, FusionDataPacket &packet);

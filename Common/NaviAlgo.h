@@ -5,8 +5,8 @@
 
 struct __declspec(dllexport) NaviInput
 {
-    vector<NoiseDataFrame> m_FusionDatas;
-    vector<NoiseDataFrame> m_FilterDatas;
+    vector<TrueDataFrame> m_FusionDatas;
+    vector<TrueDataFrame> m_FilterDatas;
     ControlDataFrame m_ControlData;
     Plane m_Plane;
 };

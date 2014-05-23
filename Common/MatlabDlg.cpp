@@ -116,12 +116,12 @@ void CMatlabDlg::Run()
     {
         for (int pos = 0; pos < m_TargetFusionDatas[target].size(); ++pos)
         {
-            data[(pos * 6 + 0) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Dis;
-            data[(pos * 6 + 1) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Theta;
-            data[(pos * 6 + 2) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Phi;
-            data[(pos * 6 + 3) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_DisVar;
-            data[(pos * 6 + 4) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_ThetaVar;
-            data[(pos * 6 + 5) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_PhiVar;
+            data[(pos * 6 + 0) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.X;
+            data[(pos * 6 + 1) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.Y;
+            data[(pos * 6 + 2) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.Z;
+            data[(pos * 6 + 3) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.X;
+            data[(pos * 6 + 4) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.Y;
+            data[(pos * 6 + 5) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.Z;
         }
     }
     data = mxGetPr(m_TargetFilterInput);
@@ -129,12 +129,12 @@ void CMatlabDlg::Run()
     {
         for (int pos = 0; pos < m_TargetFilterDatas[target].size(); ++pos)
         {
-            data[(pos * 6 + 0) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Dis;
-            data[(pos * 6 + 1) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Theta;
-            data[(pos * 6 + 2) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Phi;
-            data[(pos * 6 + 3) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_DisVar;
-            data[(pos * 6 + 4) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_ThetaVar;
-            data[(pos * 6 + 5) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_PhiVar;
+            data[(pos * 6 + 0) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.X;
+            data[(pos * 6 + 1) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.Y;
+            data[(pos * 6 + 2) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.Z;
+            data[(pos * 6 + 3) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.X;
+            data[(pos * 6 + 4) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.Y;
+            data[(pos * 6 + 5) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.Z;
         }
     }
 
@@ -257,8 +257,8 @@ void CMatlabDlg::AddPlane(Plane &plane)
 void CMatlabDlg::AddTarget(Target &target)
 {
     m_TargetTrueDatas.push_back(Path());
-    m_TargetFusionDatas.push_back(vector<NoiseDataFrame>());
-    m_TargetFilterDatas.push_back(vector<NoiseDataFrame>());
+    m_TargetFusionDatas.push_back(vector<TrueDataFrame>());
+    m_TargetFilterDatas.push_back(vector<TrueDataFrame>());
 }
 
 void CMatlabDlg::SetSize(int size)
@@ -302,7 +302,7 @@ void CMatlabDlg::AddTargetTrueData(int target, Position pos)
     m_Lock.Unlock();
 }
 
-void CMatlabDlg::AddTargetFusionData(int target, const NoiseDataFrame &frame)
+void CMatlabDlg::AddTargetFusionData(int target, const TrueDataFrame &frame)
 {
     m_Lock.Lock();
     if (m_TargetFusionDatas[target].size() >= m_Size)
@@ -312,18 +312,18 @@ void CMatlabDlg::AddTargetFusionData(int target, const NoiseDataFrame &frame)
     if (m_TargetFusionInput)
     {
         double *data = mxGetPr(m_TargetFusionInput);
-        data[(m_TargetFusionDatas[target].size() * 6 + 0) * m_TargetFusionDatas.size() + target] = frame.m_Dis;
-        data[(m_TargetFusionDatas[target].size() * 6 + 1) * m_TargetFusionDatas.size() + target] = frame.m_Theta;
-        data[(m_TargetFusionDatas[target].size() * 6 + 2) * m_TargetFusionDatas.size() + target] = frame.m_Phi;
-        data[(m_TargetFusionDatas[target].size() * 6 + 3) * m_TargetFusionDatas.size() + target] = frame.m_DisVar;
-        data[(m_TargetFusionDatas[target].size() * 6 + 4) * m_TargetFusionDatas.size() + target] = frame.m_ThetaVar;
-        data[(m_TargetFusionDatas[target].size() * 6 + 5) * m_TargetFusionDatas.size() + target] = frame.m_PhiVar;
+        data[(m_TargetFusionDatas[target].size() * 6 + 0) * m_TargetFusionDatas.size() + target] = frame.m_Pos.X;
+        data[(m_TargetFusionDatas[target].size() * 6 + 1) * m_TargetFusionDatas.size() + target] = frame.m_Pos.Y;
+        data[(m_TargetFusionDatas[target].size() * 6 + 2) * m_TargetFusionDatas.size() + target] = frame.m_Pos.Z;
+        data[(m_TargetFusionDatas[target].size() * 6 + 3) * m_TargetFusionDatas.size() + target] = frame.m_Vel.X;
+        data[(m_TargetFusionDatas[target].size() * 6 + 4) * m_TargetFusionDatas.size() + target] = frame.m_Vel.Y;
+        data[(m_TargetFusionDatas[target].size() * 6 + 5) * m_TargetFusionDatas.size() + target] = frame.m_Vel.Z;
     }
     m_TargetFusionDatas[target].push_back(frame);
     m_Lock.Unlock();
 }
 
-void CMatlabDlg::AddTargetFilterData(int target, const NoiseDataFrame &frame)
+void CMatlabDlg::AddTargetFilterData(int target, const TrueDataFrame &frame)
 {
     m_Lock.Lock();
     if (m_TargetFilterDatas[target].size() >= m_Size)
@@ -333,12 +333,12 @@ void CMatlabDlg::AddTargetFilterData(int target, const NoiseDataFrame &frame)
     if (m_TargetFilterInput)
     {
         double *data = mxGetPr(m_TargetFilterInput);
-        data[(m_TargetFilterDatas[target].size() * 6 + 0) * m_TargetFilterDatas.size() + target] = frame.m_Dis;
-        data[(m_TargetFilterDatas[target].size() * 6 + 1) * m_TargetFilterDatas.size() + target] = frame.m_Theta;
-        data[(m_TargetFilterDatas[target].size() * 6 + 2) * m_TargetFilterDatas.size() + target] = frame.m_Phi;
-        data[(m_TargetFilterDatas[target].size() * 6 + 3) * m_TargetFilterDatas.size() + target] = frame.m_DisVar;
-        data[(m_TargetFilterDatas[target].size() * 6 + 4) * m_TargetFilterDatas.size() + target] = frame.m_ThetaVar;
-        data[(m_TargetFilterDatas[target].size() * 6 + 5) * m_TargetFilterDatas.size() + target] = frame.m_PhiVar;
+        data[(m_TargetFilterDatas[target].size() * 6 + 0) * m_TargetFilterDatas.size() + target] = frame.m_Pos.X;
+        data[(m_TargetFilterDatas[target].size() * 6 + 1) * m_TargetFilterDatas.size() + target] = frame.m_Pos.Y;
+        data[(m_TargetFilterDatas[target].size() * 6 + 2) * m_TargetFilterDatas.size() + target] = frame.m_Pos.Z;
+        data[(m_TargetFilterDatas[target].size() * 6 + 3) * m_TargetFilterDatas.size() + target] = frame.m_Vel.X;
+        data[(m_TargetFilterDatas[target].size() * 6 + 4) * m_TargetFilterDatas.size() + target] = frame.m_Vel.Y;
+        data[(m_TargetFilterDatas[target].size() * 6 + 5) * m_TargetFilterDatas.size() + target] = frame.m_Vel.Z;
     }
     m_TargetFilterDatas[target].push_back(frame);
     m_Lock.Unlock();

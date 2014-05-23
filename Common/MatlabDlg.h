@@ -45,14 +45,14 @@ public:
     void AddPlaneTrueData(int plane, Position pos);
     void AddTargetTrueData(int target, Position pos);
 
-    void AddTargetFusionData(int target, const NoiseDataFrame &frame);
-    void AddTargetFilterData(int target, const NoiseDataFrame &frame);
+    void AddTargetFusionData(int target, const TrueDataFrame &frame);
+    void AddTargetFilterData(int target, const TrueDataFrame &frame);
 
     vector<Path> m_PlaneTrueDatas;
     vector<Path> m_TargetTrueDatas;
 
-    vector<vector<NoiseDataFrame>> m_TargetFusionDatas;
-    vector<vector<NoiseDataFrame>> m_TargetFilterDatas;
+    vector<vector<TrueDataFrame>> m_TargetFusionDatas;
+    vector<vector<TrueDataFrame>> m_TargetFilterDatas;
 
     Array *m_PlaneTrueInput;
     Array *m_TargetTrueInput;

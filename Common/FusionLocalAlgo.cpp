@@ -73,9 +73,9 @@ bool FusionLocalAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutpu
             }
         }
         if(PlaneCount != 0)frame /= PlaneCount;
-        output.m_FusionData.m_FusionDatas.push_back(frame);
+        output.m_FusionData.m_FusionDatas.push_back(decomposition);
         frame = noiseDatas.front().m_TargetNoiseDatas[iTarget];
-        output.m_FusionData.m_FilterDatas.push_back(frame);
+        output.m_FusionData.m_FilterDatas.push_back(decomposition);
     }
     for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
     {
@@ -99,17 +99,17 @@ bool FusionLocalAlgoTest2(const vector<NoiseDataPacket> &noiseDatas, FusionOutpu
     int nPlanes = noiseDatas.size();
     for (int iTarget = 0; iTarget < nTargets; ++iTarget)
     {
-        NoiseDataFrame frame;
+        TrueDataFrame frame;
         assert(noiseDatas.front().m_TargetNoiseDatas.size() > iTarget);
         frame.m_Time = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Time;
         frame.m_Id = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Id;
         for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
         {
-            frame += noiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
+            // frame += noiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
         }
-        frame /= nPlanes;
+        // frame /= nPlanes;
         output.m_FusionData.m_FusionDatas.push_back(frame);
-        frame = noiseDatas.back().m_TargetNoiseDatas[iTarget];
+        // frame = noiseDatas.back().m_TargetNoiseDatas[iTarget];
         output.m_FusionData.m_FilterDatas.push_back(frame);
     }
     for (int iPlane = 0; iPlane < nPlanes; ++iPlane)

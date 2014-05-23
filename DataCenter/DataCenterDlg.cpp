@@ -637,9 +637,9 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     m_FusionDatas.push_back(packet);
     for (int i = 0; i < TARGET_COUNT; ++i)
     {
-        NoiseDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
+        TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
         m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
-        NoiseDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
+        TrueDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
         m_MatlabDlg.AddTargetFilterData(i, filterFrame);
     }
     ResumeSim();
@@ -2069,7 +2069,7 @@ void CDataCenterDlg::OutputFusionData()
         ofs << endl;
         for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
         {
-            NoiseDataFrame &frame = m_FusionDatas[iData].m_FusionDatas[iTarget];
+            TrueDataFrame &frame = m_FusionDatas[iData].m_FusionDatas[iTarget];
             ofs << frame << endl;
         }
         ofs << endl;
@@ -2096,7 +2096,7 @@ void CDataCenterDlg::OutputFilterData()
         ofs << endl;
         for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
         {
-            NoiseDataFrame &frame = m_FusionDatas[iData].m_FilterDatas[iTarget];
+            TrueDataFrame &frame = m_FusionDatas[iData].m_FilterDatas[iTarget];
             ofs << frame << endl;
         }
         ofs << endl;

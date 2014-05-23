@@ -152,16 +152,17 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
         int m = mxGetM(fusionDatas), n = mxGetN(fusionDatas);
         for (int iTarget = 0; iTarget < m; ++iTarget)
         {
-            NoiseDataFrame noiseData;
-            noiseData.m_Time = p[iTarget + 0 * m];
-            noiseData.m_Id = p[iTarget + 1 * m];
-            noiseData.m_Dis = p[iTarget + 2 * m];
-            noiseData.m_DisVar = p[iTarget + 3 * m];
-            noiseData.m_Theta = p[iTarget + 4 * m];
-            noiseData.m_ThetaVar = p[iTarget + 5 * m];
-            noiseData.m_Phi = p[iTarget + 6 * m];
-            noiseData.m_PhiVar = p[iTarget + 7 * m];
-            output.m_FusionData.m_FusionDatas.push_back(noiseData);
+            TrueDataFrame fusionData;
+            fusionData.m_Time = p[iTarget + 0 * m];
+            fusionData.m_Id = p[iTarget + 1 * m];
+            fusionData.m_Pos.X = p[iTarget + 2 * m];
+            fusionData.m_Pos.Y = p[iTarget + 3 * m];
+            fusionData.m_Pos.Z = p[iTarget + 4 * m];
+            fusionData.m_Vel.X = p[iTarget + 5 * m];
+            fusionData.m_Vel.Y = p[iTarget + 6 * m];
+            fusionData.m_Vel.Z = p[iTarget + 7 * m];
+            // FIXME: No Acc yet.
+            output.m_FusionData.m_FusionDatas.push_back(fusionData);
         }
 
         p = mxGetPr(filterDatas);
@@ -169,16 +170,16 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
         n = mxGetN(filterDatas);
         for (int iTarget = 0; iTarget < m; ++iTarget)
         {
-            NoiseDataFrame noiseData;
-            noiseData.m_Time = p[iTarget + 0 * m];
-            noiseData.m_Id = p[iTarget + 1 * m];
-            noiseData.m_Dis = p[iTarget + 2 * m];
-            noiseData.m_DisVar = p[iTarget + 3 * m];
-            noiseData.m_Theta = p[iTarget + 4 * m];
-            noiseData.m_ThetaVar = p[iTarget + 5 * m];
-            noiseData.m_Phi = p[iTarget + 6 * m];
-            noiseData.m_PhiVar = p[iTarget + 7 * m];
-            output.m_FusionData.m_FilterDatas.push_back(noiseData);
+            TrueDataFrame fusionData;
+            fusionData.m_Time = p[iTarget + 0 * m];
+            fusionData.m_Id = p[iTarget + 1 * m];
+            fusionData.m_Pos.X = p[iTarget + 2 * m];
+            fusionData.m_Pos.Y = p[iTarget + 3 * m];
+            fusionData.m_Pos.Z = p[iTarget + 4 * m];
+            fusionData.m_Vel.X = p[iTarget + 5 * m];
+            fusionData.m_Vel.Y = p[iTarget + 6 * m];
+            fusionData.m_Vel.Z = p[iTarget + 7 * m];
+            output.m_FusionData.m_FilterDatas.push_back(fusionData);
         }
 
         for (int iPlane = 0; iPlane < input.size(); ++iPlane)
