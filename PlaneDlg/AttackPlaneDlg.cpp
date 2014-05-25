@@ -151,6 +151,7 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     input.m_FusionDatas = packet.m_FusionData.m_FusionDatas;
     input.m_FilterDatas = packet.m_FusionData.m_FilterDatas;
     input.m_ControlData = packet.m_ControlData;
+    input.m_GlobalData = m_GlobalData;
     input.m_Plane = m_Plane;
     if (!m_NaviAlgo)
     {

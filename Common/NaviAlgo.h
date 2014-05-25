@@ -8,6 +8,7 @@ struct __declspec(dllexport) NaviInput
     vector<TrueDataFrame> m_FusionDatas;
     vector<TrueDataFrame> m_FilterDatas;
     ControlDataFrame m_ControlData;
+    GlobalDataPacket m_GlobalData;
     Plane m_Plane;
 };
 
