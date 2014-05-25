@@ -28,6 +28,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AttackPlane", "AttackPlane\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FusionVcAlgoTest2", "FusionVcAlgoTest2\FusionVcAlgoTest2.vcproj", "{7C85FD41-C2F0-4A4C-97F5-C15977ECDFA0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FusionPlaneSetup", "FusionPlaneSetup\FusionPlaneSetup.vdproj", "{185897D5-68DB-46A8-A675-62BE1A28EEFD}"
 EndProject
@@ -38,6 +41,9 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlaneSetup", "PlaneSetup\PlaneSetup.vdproj", "{454ACB31-42E2-4268-B764-40E5D2F609D0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FusionVcAlgoTest1", "FusionVcAlgoTest1\FusionVcAlgoTest1.vcproj", "{AC024050-D088-4B6E-88D9-1C1247D19124}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NaviVcAlgoTest1", "NaviVcAlgoTest1\NaviVcAlgoTest1.vcproj", "{5AC98BD0-E2C4-4721-93F6-556A88B1DA6C}"
 	ProjectSection(ProjectDependencies) = postProject

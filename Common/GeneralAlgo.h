@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DataPacket.h"
+#include "Target.h"
 
 template <class TI, class TO>
 class GeneralAlgo

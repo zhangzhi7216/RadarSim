@@ -1,7 +1,6 @@
 #pragma once
 
 #include "NaviAlgo.h"
-
 #include "MatlabHelper.h"
 
 using namespace MatlabHelper;

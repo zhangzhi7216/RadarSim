@@ -164,7 +164,7 @@ enum TargetMoveType
 extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 
 #define PLANE_COUNT 3
-#define TARGET_COUNT 3
+#define TARGET_COUNT_MAX 5
 #define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086
 

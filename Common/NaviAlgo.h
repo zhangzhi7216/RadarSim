@@ -1,7 +1,6 @@
 #pragma once
 
 #include "GeneralAlgo.h"
-#include "Target.h"
 
 struct __declspec(dllexport) NaviInput
 {

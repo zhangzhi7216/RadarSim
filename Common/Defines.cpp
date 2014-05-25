@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "Defines.h"
+#include "DataPacket.h"
 #include <mclmcrrt.h>
 
 Color __declspec(dllexport) TargetColors[] =
@@ -134,11 +135,24 @@ void __declspec(dllexport) GlobalInit()
     TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.ico"));
     TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.ico"));
 
+    typedef GlobalVarFrame *GlobalVarFrameP;
+    g_GlobalVar = new GlobalVarFrameP[PLANE_COUNT];
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        g_GlobalVar[i] = new GlobalVarFrame[TARGET_COUNT_MAX];
+    }
+
     mclInitializeApplication(NULL, 0);
 }
 
 void __declspec(dllexport) GlobalShut()
 {
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        delete[] g_GlobalVar;
+    }
+    delete[] g_GlobalVar;
+
     for (int i = StateMapBackground0; i < StateMapBackgroundLast; ++i)
     {
         delete StateMapBackgrounds[i];

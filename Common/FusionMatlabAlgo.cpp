@@ -131,6 +131,8 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             }
         }
 
+        // FIXME: Pass in global var.
+
         vector<Array *> outputList(3);
         bool result = m_MatlabFunc(3, &outputList[0], input.size(), &inputList[0]);
         if (!result)
@@ -179,6 +181,7 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             fusionData.m_Vel.X = p[iTarget + 5 * m];
             fusionData.m_Vel.Y = p[iTarget + 6 * m];
             fusionData.m_Vel.Z = p[iTarget + 7 * m];
+            // FIXME: No Acc yet.
             output.m_FusionData.m_FilterDatas.push_back(fusionData);
         }
 
@@ -186,6 +189,8 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
         {
             output.m_FusionData.m_NoiseDatas.push_back(input[iPlane]);
         }
+
+        // FIXME: Pull out global var.
 
         p = mxGetPr(controlDatas);
         m = mxGetM(controlDatas);

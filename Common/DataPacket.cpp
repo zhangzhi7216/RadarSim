@@ -137,3 +137,5 @@ CArchive & operator >> (CArchive &ar, GlobalDataPacket &packet)
     packet.m_NoiseType = (NoiseType)noiseType;
     return ar;
 }
+
+__declspec(dllexport) GlobalVarFrame **g_GlobalVar;

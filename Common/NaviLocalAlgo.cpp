@@ -48,13 +48,26 @@ void NaviLocalAlgo::Input(CArchive &ar)
 
 bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 {
+    // How to get interval.
     int interval = input.m_GlobalData.m_Interval;
+
+    // How to use global var.
+    g_GlobalVar[0][0].m_G1 = 0;
+    g_GlobalVar[0][0].m_G2 = 0;
+
     output.m_TrueData.m_Pos = Position(10000, 40000, 0);
     return true;
 }
 
 bool NaviLocalAlgoTest2(const NaviInput &input, NaviOutput &output)
 {
+    // How to get interval.
+    int interval = input.m_GlobalData.m_Interval;
+
+    // How to use global var.
+    g_GlobalVar[0][0].m_G1 = 0;
+    g_GlobalVar[0][0].m_G2 = 0;
+
     output.m_TrueData.m_Pos = Position(40000, 10000, 0);
     return true;
 }

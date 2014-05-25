@@ -534,7 +534,7 @@ void CDataCenterDlg::GeneratePlaneClients()
 void CDataCenterDlg::GenerateTargetClients()
 {
     m_TargetClients.clear();
-    for (int i = 0; i < TARGET_COUNT; ++i)
+    for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         TargetClient client;
         client.m_Target.m_Type = (TargetType)((int)TargetTypeShipboard + rand() % ((int)TargetTypeMissile - (int)TargetTypeShipboard + 1));
@@ -635,7 +635,7 @@ void CDataCenterDlg::GenerateGlobalData()
 void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
     m_FusionDatas.push_back(packet);
-    for (int i = 0; i < TARGET_COUNT; ++i)
+    for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
         m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
@@ -814,7 +814,7 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
             m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
             m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
         }
-        for (int i = 0; i < TARGET_COUNT; ++i)
+        for (int i = 0; i < m_TargetClients.size(); ++i)
         {
             m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
             m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
