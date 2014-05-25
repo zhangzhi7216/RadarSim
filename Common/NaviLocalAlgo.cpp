@@ -48,6 +48,7 @@ void NaviLocalAlgo::Input(CArchive &ar)
 
 bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 {
+    int interval = input.m_GlobalData.m_Interval;
     output.m_TrueData.m_Pos = Position(10000, 40000, 0);
     return true;
 }
