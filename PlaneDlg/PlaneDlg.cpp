@@ -972,11 +972,7 @@ void CPlaneDlg::AddPlaneSocket()
 
 void CPlaneDlg::SetPlane(Plane &plane)
 {
-    m_Plane.m_Id = plane.m_Id;
-    m_Plane.m_Type = plane.m_Type;
-    m_Plane.m_Color = plane.m_Color;
-    m_Plane.m_Position = plane.m_Position;
-    m_Plane.m_HeadDir = plane.m_HeadDir;
+    m_Plane = plane;
 
     AddPlane(m_Plane, &m_Radar, &m_Esm, &m_Infrared);
 }
