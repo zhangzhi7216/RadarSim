@@ -139,6 +139,13 @@ void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
 
 void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
+    for (int i = 0; i < packet.m_FusionData.m_FusionDatas.size(); ++i)
+    {
+        TrueDataFrame &fusionFrame = packet.m_FusionData.m_FusionDatas[i];
+        m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
+        TrueDataFrame &filterFrame = packet.m_FusionData.m_FilterDatas[i];
+        m_MatlabDlg->AddTargetFilterData(i, filterFrame);
+    }
     DoNavi(packet);
     m_HasNaviOutput = true;
 
@@ -163,4 +170,5 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
         AfxMessageBox(TEXT("导航算法运行错误."));
         return;
     }
+    m_Plane = input.m_Plane;
 }
