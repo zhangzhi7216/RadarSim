@@ -170,5 +170,7 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
         AfxMessageBox(TEXT("导航算法运行错误."));
         return;
     }
-    m_Plane = input.m_Plane;
+    m_Plane.MoveTo(m_NaviOutput.m_TrueData.m_Pos);
+    m_Plane.m_Vel = m_NaviOutput.m_TrueData.m_Vel;
+    m_Plane.m_Acc = m_NaviOutput.m_TrueData.m_Acc;
 }
