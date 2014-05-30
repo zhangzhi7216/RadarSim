@@ -213,3 +213,9 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+DataCenter/Filter.dat
+DataCenter/Fusion.dat
+DataCenter/PlaneTrue.dat
+DataCenter/TargetNoise.dat
+DataCenter/dump_true_data.dat
