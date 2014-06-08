@@ -7,6 +7,8 @@
 #include "PlaneDlg.h"
 #include "IpDlg.h"
 
+#include <algorithm>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -517,6 +519,30 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 
 }
 
+bool NoiseDataFrameComp(const NoiseDataFrame &f1, const NoiseDataFrame f2)
+{
+    if (f1.m_Dis == 0 &&
+        f1.m_DisVar == 0 &&
+        f1.m_Theta == 0 &&
+        f1.m_ThetaVar == 0 &&
+        f1.m_Phi == 0 &&
+        f1.m_PhiVar == 0)
+    {
+        return false;
+    }
+    if (f2.m_Dis == 0 &&
+        f2.m_DisVar == 0 &&
+        f2.m_Theta == 0 &&
+        f2.m_ThetaVar == 0 &&
+        f2.m_Phi == 0 &&
+        f2.m_PhiVar == 0)
+    {
+        return true;
+    }
+
+    return f1.m_Dis < f2.m_Dis;
+}
+
 void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket)
 {
     noisePacket.m_PlaneTrueData = packet.m_PlaneTrueData;
@@ -524,8 +550,10 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
         NoiseDataFrame frame;
-        frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
-        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+        // Noise data doesn't know the target ID.
+        // Possibly the same for time.
+        // frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
+        // frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
         frame.m_Dis = m_Radar.m_TargetDistances[i].back();
         frame.m_DisVar = m_Radar.m_DisVar;
         frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
@@ -534,6 +562,8 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
         frame.m_PhiVar = m_Infrared.m_PhiVar;
         noisePacket.m_TargetNoiseDatas.push_back(frame);
     }
+
+    sort(noisePacket.m_TargetNoiseDatas.begin(), noisePacket.m_TargetNoiseDatas.end(), &NoiseDataFrameComp);
 }
 
 void CPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
