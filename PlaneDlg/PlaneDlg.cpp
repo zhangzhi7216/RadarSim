@@ -8,6 +8,8 @@
 #include "IpDlg.h"
 
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -953,7 +955,54 @@ void CPlaneDlg::OnSubDlgProDet(void *subDlg)
 
 void CPlaneDlg::ConnectDataCenter()
 {
-    CIpDlg dlg(DATA_CENTER_ADDR, DATA_CENTER_PORT);
+    wstring hostName = DATA_CENTER_ADDR;
+    int port = DATA_CENTER_PORT;
+
+
+    wifstream in(ConfigFileName);
+    in.imbue(locale("chs"));
+
+    wstring nextLine = TEXT("");
+
+    while(in || nextLine.length() > 0)
+    {
+        wstring line;
+        if(nextLine.length() > 0)
+        {
+            line = nextLine;  // we read ahead; use it now
+            nextLine = L"";
+        }
+        else
+        {
+            getline(in, line);
+        }
+
+        line = line.substr(0, line.find(TEXT("#")));
+
+        if (line.length() == 0)
+        {
+            continue;
+        }
+
+        wistringstream ist(line);
+        wstring key;
+        ist >> key;
+        if (key == TEXT("IP"))
+        {
+            wstring ip;
+            ist >> ip;
+            hostName = ip;
+        }
+        else if (key == TEXT("PORT"))
+        {
+            int configPort;
+            ist >> configPort;
+            port = configPort;
+        }
+    }
+
+    in.close();
+    CIpDlg dlg(hostName.c_str(), port);
     if (IDOK == dlg.DoModal())
     {
         if (!m_DataCenterSocket->Connect(dlg.m_HostName, dlg.m_Port))
