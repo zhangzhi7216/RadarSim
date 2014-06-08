@@ -1,4 +1,4 @@
-function [output] = matlab_dialog(plane_true, target_true, target_fusion, target_filter)
+function [output] = matlab_dialog(plane_true, target_true, target_fusion, target_filter, global_var)
 t_current = 0;
 PlaneCount = size(plane_true,1);
 TargetCount = size(target_fusion,1);

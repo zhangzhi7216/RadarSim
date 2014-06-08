@@ -7,16 +7,19 @@ CMatlabDlg::CMatlabDlg(const char *fileName,
         const char *planeTrue,
         const char *targetTrue,
         const char *targetFusion,
-        const char *targetFilter)
+        const char *targetFilter,
+        const char *globalVar)
 : m_FileName(fileName)
 , m_PlaneTrue(planeTrue)
 , m_TargetTrue(targetTrue)
 , m_TargetFusion(targetFusion)
 , m_TargetFilter(targetFilter)
+, m_GlobalVar(globalVar)
 , m_PlaneTrueInput(NULL)
 , m_TargetTrueInput(NULL)
 , m_TargetFusionInput(NULL)
 , m_TargetFilterInput(NULL)
+, m_GlobalVarInput(NULL)
 , m_Size(50)
 , m_Thread(NULL)
 , m_Engine(NULL)
@@ -71,6 +74,11 @@ void CMatlabDlg::Stop()
         DestroyArray(m_TargetFilterInput);
         m_TargetFilterInput = NULL;
     }
+    if (m_GlobalVarInput)
+    {
+        DestroyArray(m_GlobalVarInput);
+        m_GlobalVarInput = NULL;
+    }
 }
 
 void CMatlabDlg::Reset()
@@ -86,19 +94,20 @@ void CMatlabDlg::Reset()
 void CMatlabDlg::Run()
 {
     m_Lock.Lock();
-    m_PlaneTrueInput = CreateDoubleArray(max(m_PlaneTrueDatas.size(), 1), m_Size * 3, (const unsigned char *)NULL, 0, 0);
-    m_TargetTrueInput = CreateDoubleArray(max(m_TargetTrueDatas.size(), 1), m_Size * 3, (const unsigned char *)NULL, 0, 0);
-    m_TargetFusionInput = CreateDoubleArray(max(m_TargetFusionDatas.size(), 1), m_Size * 6, (const unsigned char *)NULL, 0, 0);
-    m_TargetFilterInput = CreateDoubleArray(max(m_TargetFilterDatas.size(), 1), m_Size * 6, (const unsigned char *)NULL, 0, 0);
+    m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    m_GlobalVarInput = CreateDoubleArray(PLANE_COUNT, TARGET_COUNT_MAX * MATLAB_GLOBAL_VAR_SIZE, (const unsigned char *)NULL, 0, 0);
 
     double *data = mxGetPr(m_PlaneTrueInput);
     for (int plane = 0; plane < m_PlaneTrueDatas.size(); ++plane)
     {
         for (int pos = 0; pos < m_PlaneTrueDatas[plane].size(); ++pos)
         {
-            data[(pos * 3 + 0) * m_PlaneTrueDatas.size() + plane] = m_PlaneTrueDatas[plane][pos].X;
-            data[(pos * 3 + 1) * m_PlaneTrueDatas.size() + plane] = m_PlaneTrueDatas[plane][pos].Y;
-            data[(pos * 3 + 2) * m_PlaneTrueDatas.size() + plane] = m_PlaneTrueDatas[plane][pos].Z;
+            data[(pos * MATLAB_DRAW_TRUE_DATA_SIZE + 0) * m_PlaneTrueDatas.size() + plane] = m_PlaneTrueDatas[plane][pos].X;
+            data[(pos * MATLAB_DRAW_TRUE_DATA_SIZE + 1) * m_PlaneTrueDatas.size() + plane] = m_PlaneTrueDatas[plane][pos].Y;
+            data[(pos * MATLAB_DRAW_TRUE_DATA_SIZE + 2) * m_PlaneTrueDatas.size() + plane] = m_PlaneTrueDatas[plane][pos].Z;
         }
     }
     data = mxGetPr(m_TargetTrueInput);
@@ -106,9 +115,9 @@ void CMatlabDlg::Run()
     {
         for (int pos = 0; pos < m_TargetTrueDatas[target].size(); ++pos)
         {
-            data[(pos * 3 + 0) * m_TargetTrueDatas.size() + target] = m_TargetTrueDatas[target][pos].X;
-            data[(pos * 3 + 1) * m_TargetTrueDatas.size() + target] = m_TargetTrueDatas[target][pos].Y;
-            data[(pos * 3 + 2) * m_TargetTrueDatas.size() + target] = m_TargetTrueDatas[target][pos].Z;
+            data[(pos * MATLAB_DRAW_TRUE_DATA_SIZE + 0) * m_TargetTrueDatas.size() + target] = m_TargetTrueDatas[target][pos].X;
+            data[(pos * MATLAB_DRAW_TRUE_DATA_SIZE + 1) * m_TargetTrueDatas.size() + target] = m_TargetTrueDatas[target][pos].Y;
+            data[(pos * MATLAB_DRAW_TRUE_DATA_SIZE + 2) * m_TargetTrueDatas.size() + target] = m_TargetTrueDatas[target][pos].Z;
         }
     }
     data = mxGetPr(m_TargetFusionInput);
@@ -116,12 +125,15 @@ void CMatlabDlg::Run()
     {
         for (int pos = 0; pos < m_TargetFusionDatas[target].size(); ++pos)
         {
-            data[(pos * 6 + 0) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.X;
-            data[(pos * 6 + 1) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.Y;
-            data[(pos * 6 + 2) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.Z;
-            data[(pos * 6 + 3) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.X;
-            data[(pos * 6 + 4) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.Y;
-            data[(pos * 6 + 5) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.Z;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 0) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.X;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 1) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.Y;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 2) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Pos.Z;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 3) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.X;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 4) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.Y;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 5) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Vel.Z;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 6) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Acc.X;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 7) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Acc.Y;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 8) * m_TargetFusionDatas.size() + target] = m_TargetFusionDatas[target][pos].m_Acc.Z;
         }
     }
     data = mxGetPr(m_TargetFilterInput);
@@ -129,17 +141,36 @@ void CMatlabDlg::Run()
     {
         for (int pos = 0; pos < m_TargetFilterDatas[target].size(); ++pos)
         {
-            data[(pos * 6 + 0) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.X;
-            data[(pos * 6 + 1) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.Y;
-            data[(pos * 6 + 2) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.Z;
-            data[(pos * 6 + 3) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.X;
-            data[(pos * 6 + 4) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.Y;
-            data[(pos * 6 + 5) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.Z;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 0) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.X;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 1) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.Y;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 2) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Pos.Z;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 3) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.X;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 4) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.Y;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 5) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Vel.Z;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 6) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Acc.X;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 7) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Acc.Y;
+            data[(pos * MATLAB_DRAW_FUSION_DATA_SIZE + 8) * m_TargetFilterDatas.size() + target] = m_TargetFilterDatas[target][pos].m_Acc.Z;
+        }
+    }
+    data = mxGetPr(m_GlobalVarInput);
+    for (int plane = 0; plane < PLANE_COUNT; ++plane)
+    {
+        for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+        {
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G1;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G2;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G3;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G4;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G5;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G6;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G7;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G8;
+            data[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G9;
         }
     }
 
     m_Thread = CreateThread(NULL,
-        NULL,
+        10 * 1024 * 1024,
         MatlabRun,
         (LPVOID)this,
         CREATE_SUSPENDED,
@@ -154,6 +185,7 @@ static char s_Msg[256];
 DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
 {
     CMatlabDlg *dlg = (CMatlabDlg *)lparam;
+
     dlg->m_ThreadLock.Lock();
     if (!(dlg->m_Engine = engOpen(NULL)))
     {
@@ -193,6 +225,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
             AfxMessageBox(TEXT("Call clear engine WTF!"));
         }
         */
+        dlg->m_Lock.Lock();
         result = engPutVariable(dlg->m_Engine, dlg->m_PlaneTrue, dlg->m_PlaneTrueInput);
         if (result)
         {
@@ -213,6 +246,11 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         {
             AfxMessageBox(TEXT("Put var 4 engine WTF!"));
         }
+        result = engPutVariable(dlg->m_Engine, dlg->m_GlobalVar, dlg->m_GlobalVarInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 5 engine WTF!"));
+        }
 
         cmd = dlg->m_FileName;
         cmd += "(";
@@ -223,6 +261,8 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         cmd += dlg->m_TargetFusion;
         cmd += ", ";
         cmd += dlg->m_TargetFilter;
+        cmd += ", ";
+        cmd += dlg->m_GlobalVar;
         cmd += ")";
         result = engEvalString(dlg->m_Engine, cmd.c_str());
         if (result)
@@ -233,6 +273,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         {
             break;
         }
+        dlg->m_Lock.Unlock();
 
         Sleep(1);
     }
@@ -276,9 +317,9 @@ void CMatlabDlg::AddPlaneTrueData(int plane, Position pos)
     if (m_PlaneTrueInput)
     {
         double *data = mxGetPr(m_PlaneTrueInput);
-        data[(m_PlaneTrueDatas[plane].size() * 3 + 0) * m_PlaneTrueDatas.size() + plane] = pos.X;
-        data[(m_PlaneTrueDatas[plane].size() * 3 + 1) * m_PlaneTrueDatas.size() + plane] = pos.Y;
-        data[(m_PlaneTrueDatas[plane].size() * 3 + 2) * m_PlaneTrueDatas.size() + plane] = pos.Z;
+        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 0) * m_PlaneTrueDatas.size() + plane] = pos.X;
+        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 1) * m_PlaneTrueDatas.size() + plane] = pos.Y;
+        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 2) * m_PlaneTrueDatas.size() + plane] = pos.Z;
     }
     m_PlaneTrueDatas[plane].push_back(pos);
     m_Lock.Unlock();
@@ -294,9 +335,9 @@ void CMatlabDlg::AddTargetTrueData(int target, Position pos)
     if (m_TargetTrueInput)
     {
         double *data = mxGetPr(m_TargetTrueInput);
-        data[(m_TargetTrueDatas[target].size() * 3 + 0) * m_TargetTrueDatas.size() + target] = pos.X;
-        data[(m_TargetTrueDatas[target].size() * 3 + 1) * m_TargetTrueDatas.size() + target] = pos.Y;
-        data[(m_TargetTrueDatas[target].size() * 3 + 2) * m_TargetTrueDatas.size() + target] = pos.Z;
+        data[(m_TargetTrueDatas[target].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 0) * m_TargetTrueDatas.size() + target] = pos.X;
+        data[(m_TargetTrueDatas[target].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 1) * m_TargetTrueDatas.size() + target] = pos.Y;
+        data[(m_TargetTrueDatas[target].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 2) * m_TargetTrueDatas.size() + target] = pos.Z;
     }
     m_TargetTrueDatas[target].push_back(pos);
     m_Lock.Unlock();
@@ -312,12 +353,15 @@ void CMatlabDlg::AddTargetFusionData(int target, const TrueDataFrame &frame)
     if (m_TargetFusionInput)
     {
         double *data = mxGetPr(m_TargetFusionInput);
-        data[(m_TargetFusionDatas[target].size() * 6 + 0) * m_TargetFusionDatas.size() + target] = frame.m_Pos.X;
-        data[(m_TargetFusionDatas[target].size() * 6 + 1) * m_TargetFusionDatas.size() + target] = frame.m_Pos.Y;
-        data[(m_TargetFusionDatas[target].size() * 6 + 2) * m_TargetFusionDatas.size() + target] = frame.m_Pos.Z;
-        data[(m_TargetFusionDatas[target].size() * 6 + 3) * m_TargetFusionDatas.size() + target] = frame.m_Vel.X;
-        data[(m_TargetFusionDatas[target].size() * 6 + 4) * m_TargetFusionDatas.size() + target] = frame.m_Vel.Y;
-        data[(m_TargetFusionDatas[target].size() * 6 + 5) * m_TargetFusionDatas.size() + target] = frame.m_Vel.Z;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 0) * m_TargetFusionDatas.size() + target] = frame.m_Pos.X;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 1) * m_TargetFusionDatas.size() + target] = frame.m_Pos.Y;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 2) * m_TargetFusionDatas.size() + target] = frame.m_Pos.Z;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 3) * m_TargetFusionDatas.size() + target] = frame.m_Vel.X;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 4) * m_TargetFusionDatas.size() + target] = frame.m_Vel.Y;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 5) * m_TargetFusionDatas.size() + target] = frame.m_Vel.Z;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 6) * m_TargetFusionDatas.size() + target] = frame.m_Acc.X;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 7) * m_TargetFusionDatas.size() + target] = frame.m_Acc.Y;
+        data[(m_TargetFusionDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 8) * m_TargetFusionDatas.size() + target] = frame.m_Acc.Z;
     }
     m_TargetFusionDatas[target].push_back(frame);
     m_Lock.Unlock();
@@ -333,13 +377,41 @@ void CMatlabDlg::AddTargetFilterData(int target, const TrueDataFrame &frame)
     if (m_TargetFilterInput)
     {
         double *data = mxGetPr(m_TargetFilterInput);
-        data[(m_TargetFilterDatas[target].size() * 6 + 0) * m_TargetFilterDatas.size() + target] = frame.m_Pos.X;
-        data[(m_TargetFilterDatas[target].size() * 6 + 1) * m_TargetFilterDatas.size() + target] = frame.m_Pos.Y;
-        data[(m_TargetFilterDatas[target].size() * 6 + 2) * m_TargetFilterDatas.size() + target] = frame.m_Pos.Z;
-        data[(m_TargetFilterDatas[target].size() * 6 + 3) * m_TargetFilterDatas.size() + target] = frame.m_Vel.X;
-        data[(m_TargetFilterDatas[target].size() * 6 + 4) * m_TargetFilterDatas.size() + target] = frame.m_Vel.Y;
-        data[(m_TargetFilterDatas[target].size() * 6 + 5) * m_TargetFilterDatas.size() + target] = frame.m_Vel.Z;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 0) * m_TargetFilterDatas.size() + target] = frame.m_Pos.X;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 1) * m_TargetFilterDatas.size() + target] = frame.m_Pos.Y;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 2) * m_TargetFilterDatas.size() + target] = frame.m_Pos.Z;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 3) * m_TargetFilterDatas.size() + target] = frame.m_Vel.X;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 4) * m_TargetFilterDatas.size() + target] = frame.m_Vel.Y;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 5) * m_TargetFilterDatas.size() + target] = frame.m_Vel.Z;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 6) * m_TargetFilterDatas.size() + target] = frame.m_Acc.X;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 7) * m_TargetFilterDatas.size() + target] = frame.m_Acc.Y;
+        data[(m_TargetFilterDatas[target].size() * MATLAB_DRAW_FUSION_DATA_SIZE + 8) * m_TargetFilterDatas.size() + target] = frame.m_Acc.Z;
     }
     m_TargetFilterDatas[target].push_back(frame);
+    m_Lock.Unlock();
+}
+
+void CMatlabDlg::UpdateGlobalVar()
+{
+    m_Lock.Lock();
+    if (m_TargetFilterInput)
+    {
+        double *data = mxGetPr(m_GlobalVarInput);
+        for (int plane = 0; plane < PLANE_COUNT; ++plane)
+        {
+            for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+            {
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G1;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G2;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G3;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G4;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G5;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G6;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G7;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G8;
+                data[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G9;
+            }
+        }
+    }
     m_Lock.Unlock();
 }

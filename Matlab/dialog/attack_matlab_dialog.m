@@ -1,4 +1,4 @@
-function [output] = attack_matlab_dialog(attack_plane_true, attack_target_true, attack_target_fusion, attack_target_filter)
+function [output] = attack_matlab_dialog(attack_plane_true, attack_target_true, attack_target_fusion, attack_target_filter, global_var)
 t_current = 0;
 TargetChoice = 1;
 RelativeDistanceMin = 1000;

@@ -13,7 +13,8 @@ public:
         const char *planeTrue = "plane_true",
         const char *targetTrue = "target_true",
         const char *targetFusion = "target_fusion",
-        const char *targetFilter = "target_filter");
+        const char *targetFilter = "target_filter",
+        const char *globalVar = "global_var");
     virtual ~CMatlabDlg(void);
 
     const char *m_FileName;
@@ -21,6 +22,7 @@ public:
     const char *m_TargetTrue;
     const char *m_TargetFusion;
     const char *m_TargetFilter;
+    const char *m_GlobalVar;
 
     void Show();
     void Hide();
@@ -48,6 +50,8 @@ public:
     void AddTargetFusionData(int target, const TrueDataFrame &frame);
     void AddTargetFilterData(int target, const TrueDataFrame &frame);
 
+    void UpdateGlobalVar();
+
     vector<Path> m_PlaneTrueDatas;
     vector<Path> m_TargetTrueDatas;
 
@@ -58,5 +62,6 @@ public:
     Array *m_TargetTrueInput;
     Array *m_TargetFusionInput;
     Array *m_TargetFilterInput;
+    Array *m_GlobalVarInput;
 };
 

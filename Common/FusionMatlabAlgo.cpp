@@ -94,10 +94,12 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
     else
     {
         vector<Array *> inputList;
-        Array *planeTrueDatas = CreateDoubleArray(input.size(), 20, (const unsigned char *)NULL, 0, 0);
+        Array *planeTrueDatas = CreateDoubleArray(input.size(), MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(planeTrueDatas);
-        Array *targetNoiseDatas = CreateDoubleArray(input.size() * input[0].m_TargetNoiseDatas.size(), 20, (const unsigned char *)NULL, 0, 0);
+        Array *targetNoiseDatas = CreateDoubleArray(input.size() * input[0].m_TargetNoiseDatas.size(), MATLAB_FUSION_NOISE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(targetNoiseDatas);
+        Array *globalVar = CreateDoubleArray(PLANE_COUNT, TARGET_COUNT_MAX * MATLAB_GLOBAL_VAR_SIZE, (const unsigned char *)NULL, 0, 0);
+        inputList.push_back(globalVar);
 
         double *p = mxGetPr(planeTrueDatas);
         for (int iPlane = 0; iPlane < input.size(); ++iPlane)
@@ -131,7 +133,22 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             }
         }
 
-        // FIXME: Pass in global var.
+        p = mxGetPr(globalVar);
+        for (int plane = 0; plane < PLANE_COUNT; ++plane)
+        {
+            for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+            {
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G1;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G2;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G3;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G4;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G5;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G6;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G7;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G8;
+                p[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G9;
+            }
+        }
 
         vector<Array *> outputList(3);
         bool result = m_MatlabFunc(3, &outputList[0], input.size(), &inputList[0]);
@@ -149,6 +166,7 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
         Array *fusionDatas = outputList[0];
         Array *filterDatas = outputList[1];
         Array *controlDatas = outputList[2];
+        Array *outputGlobalVar = outputList[3];
 
         p = mxGetPr(fusionDatas);
         int m = mxGetM(fusionDatas), n = mxGetN(fusionDatas);
@@ -163,7 +181,9 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             fusionData.m_Vel.X = p[iTarget + 5 * m];
             fusionData.m_Vel.Y = p[iTarget + 6 * m];
             fusionData.m_Vel.Z = p[iTarget + 7 * m];
-            // FIXME: No Acc yet.
+            fusionData.m_Acc.X = p[iTarget + 8 * m];
+            fusionData.m_Acc.Y = p[iTarget + 9 * m];
+            fusionData.m_Acc.Z = p[iTarget + 10 * m];
             output.m_FusionData.m_FusionDatas.push_back(fusionData);
         }
 
@@ -172,25 +192,25 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
         n = mxGetN(filterDatas);
         for (int iTarget = 0; iTarget < m; ++iTarget)
         {
-            TrueDataFrame fusionData;
-            fusionData.m_Time = p[iTarget + 0 * m];
-            fusionData.m_Id = p[iTarget + 1 * m];
-            fusionData.m_Pos.X = p[iTarget + 2 * m];
-            fusionData.m_Pos.Y = p[iTarget + 3 * m];
-            fusionData.m_Pos.Z = p[iTarget + 4 * m];
-            fusionData.m_Vel.X = p[iTarget + 5 * m];
-            fusionData.m_Vel.Y = p[iTarget + 6 * m];
-            fusionData.m_Vel.Z = p[iTarget + 7 * m];
-            // FIXME: No Acc yet.
-            output.m_FusionData.m_FilterDatas.push_back(fusionData);
+            TrueDataFrame filterData;
+            filterData.m_Time = p[iTarget + 0 * m];
+            filterData.m_Id = p[iTarget + 1 * m];
+            filterData.m_Pos.X = p[iTarget + 2 * m];
+            filterData.m_Pos.Y = p[iTarget + 3 * m];
+            filterData.m_Pos.Z = p[iTarget + 4 * m];
+            filterData.m_Vel.X = p[iTarget + 5 * m];
+            filterData.m_Vel.Y = p[iTarget + 6 * m];
+            filterData.m_Vel.Z = p[iTarget + 7 * m];
+            filterData.m_Acc.X = p[iTarget + 8 * m];
+            filterData.m_Acc.Y = p[iTarget + 9 * m];
+            filterData.m_Acc.Z = p[iTarget + 10 * m];
+            output.m_FusionData.m_FilterDatas.push_back(filterData);
         }
 
         for (int iPlane = 0; iPlane < input.size(); ++iPlane)
         {
             output.m_FusionData.m_NoiseDatas.push_back(input[iPlane]);
         }
-
-        // FIXME: Pull out global var.
 
         p = mxGetPr(controlDatas);
         m = mxGetM(controlDatas);
@@ -203,11 +223,33 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             output.m_ControlDatas.push_back(packet);
         }
 
+        p = mxGetPr(outputGlobalVar);
+        m = mxGetM(outputGlobalVar);
+        n = mxGetN(outputGlobalVar);
+        for (int plane = 0; plane < m; ++plane)
+        {
+            for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+            {
+                g_GlobalVar[plane][target].m_G1 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G2 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G3 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G4 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G5 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G6 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G7 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G8 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane];
+                g_GlobalVar[plane][target].m_G9 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane];
+            }
+        }
+
         DestroyArray(planeTrueDatas);
         DestroyArray(targetNoiseDatas);
+        DestroyArray(globalVar);
+
         DestroyArray(fusionDatas);
         DestroyArray(filterDatas);
         DestroyArray(controlDatas);
+        DestroyArray(outputGlobalVar);
 
         return true;
     }
