@@ -225,7 +225,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
             AfxMessageBox(TEXT("Call clear engine WTF!"));
         }
         */
-        dlg->m_Lock.Lock();
+        dlg->m_ThreadLock.Lock();
         result = engPutVariable(dlg->m_Engine, dlg->m_PlaneTrue, dlg->m_PlaneTrueInput);
         if (result)
         {
@@ -265,6 +265,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         cmd += dlg->m_GlobalVar;
         cmd += ")";
         result = engEvalString(dlg->m_Engine, cmd.c_str());
+        dlg->m_ThreadLock.Unlock();
         if (result)
         {
             AfxMessageBox(TEXT("Call func engine WTF!"));
@@ -273,16 +274,17 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         {
             break;
         }
-        dlg->m_Lock.Unlock();
 
         Sleep(1);
     }
 
+    /*
     if (engClose(dlg->m_Engine))
     {
         AfxMessageBox(TEXT("Close engine engine WTF!"));
     }
     dlg->m_Engine = 0;
+    */
 
     dlg->m_Lock.Lock();
     dlg->m_Thread = 0;
@@ -309,11 +311,11 @@ void CMatlabDlg::SetSize(int size)
 
 void CMatlabDlg::AddPlaneTrueData(int plane, Position pos)
 {
-    m_Lock.Lock();
     if (m_PlaneTrueDatas[plane].size() >= m_Size)
     {
         return;
     }
+    m_Lock.Lock();
     if (m_PlaneTrueInput)
     {
         double *data = mxGetPr(m_PlaneTrueInput);
@@ -327,11 +329,11 @@ void CMatlabDlg::AddPlaneTrueData(int plane, Position pos)
 
 void CMatlabDlg::AddTargetTrueData(int target, Position pos)
 {
-    m_Lock.Lock();
     if (m_TargetTrueDatas[target].size() >= m_Size)
     {
         return;
     }
+    m_Lock.Lock();
     if (m_TargetTrueInput)
     {
         double *data = mxGetPr(m_TargetTrueInput);
@@ -345,11 +347,11 @@ void CMatlabDlg::AddTargetTrueData(int target, Position pos)
 
 void CMatlabDlg::AddTargetFusionData(int target, const TrueDataFrame &frame)
 {
-    m_Lock.Lock();
     if (m_TargetFusionDatas[target].size() >= m_Size)
     {
         return;
     }
+    m_Lock.Lock();
     if (m_TargetFusionInput)
     {
         double *data = mxGetPr(m_TargetFusionInput);
@@ -369,11 +371,11 @@ void CMatlabDlg::AddTargetFusionData(int target, const TrueDataFrame &frame)
 
 void CMatlabDlg::AddTargetFilterData(int target, const TrueDataFrame &frame)
 {
-    m_Lock.Lock();
     if (m_TargetFilterDatas[target].size() >= m_Size)
     {
         return;
     }
+    m_Lock.Lock();
     if (m_TargetFilterInput)
     {
         double *data = mxGetPr(m_TargetFilterInput);
@@ -394,7 +396,7 @@ void CMatlabDlg::AddTargetFilterData(int target, const TrueDataFrame &frame)
 void CMatlabDlg::UpdateGlobalVar()
 {
     m_Lock.Lock();
-    if (m_TargetFilterInput)
+    if (m_GlobalVarInput)
     {
         double *data = mxGetPr(m_GlobalVarInput);
         for (int plane = 0; plane < PLANE_COUNT; ++plane)

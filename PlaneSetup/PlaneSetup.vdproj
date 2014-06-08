@@ -164,6 +164,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -587,10 +600,10 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PlaneSetup"
         "ProductCode" = "8:{6C9980DE-D97E-4D5E-993C-46F740F44FA1}"
-        "PackageCode" = "8:{9CB851CB-D34D-46BE-9190-D81E42FE8F00}"
+        "PackageCode" = "8:{A949DA8D-2E25-40A0-8A48-D9EF4FA43003}"
         "UpgradeCode" = "8:{929B6E58-C034-4C9F-9BCB-ECDEAEC28494}"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
         "ProductVersion" = "8:1.0.0"

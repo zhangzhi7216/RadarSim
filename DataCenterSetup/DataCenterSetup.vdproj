@@ -57,20 +57,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_5C87B568BEC44813A07AEE1B624D0DA6"
-        "OwnerKey" = "8:_1D02567D939241DCBC9F6E38767D539F"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_60AEFB60FB5C40C2A9CA59E58C2AC3A1"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_636BEDD73B38450BAFDB15DA63BFFF47"
-        "OwnerKey" = "8:_F48910A976D84EA7A4E2C7230F789EF5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -111,14 +99,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B1DCAB56A922450D81713148AF5D794E"
-        "OwnerKey" = "8:_5C87B568BEC44813A07AEE1B624D0DA6"
+        "MsmKey" = "8:_B421AFEAB6174566B4899940E9DE1CEF"
+        "OwnerKey" = "8:_1D02567D939241DCBC9F6E38767D539F"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_B9FC2A85B1464C6DAD1150D6AA5F7808"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C077E911F0E94B24AE51C2768602558E"
+        "OwnerKey" = "8:_B421AFEAB6174566B4899940E9DE1CEF"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_CD3236638EEF4856A8277C4F79F02FD8"
+        "OwnerKey" = "8:_F6956E4AB136450296FCAE6A822C6DE2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -141,7 +141,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F48910A976D84EA7A4E2C7230F789EF5"
+        "MsmKey" = "8:_F6956E4AB136450296FCAE6A822C6DE2"
         "OwnerKey" = "8:_1D02567D939241DCBC9F6E38767D539F"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -675,14 +675,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DataCenterSetup"
-        "ProductCode" = "8:{2EBAF2D5-54AA-4BC9-8AEC-AE4E24827957}"
-        "PackageCode" = "8:{1CF8947B-AD29-42C9-B879-DE07651806CD}"
+        "ProductCode" = "8:{84AB12EB-C68B-448D-BAEE-95ABFB231BEF}"
+        "PackageCode" = "8:{362F2A9A-5F50-4212-A2D4-F9A2F675801C}"
         "UpgradeCode" = "8:{0DB89229-4A7B-4FCA-B0EA-F6C355A9F333}"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:SJU"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -1219,11 +1219,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_5C87B568BEC44813A07AEE1B624D0DA6"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_B421AFEAB6174566B4899940E9DE1CEF"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugMFC_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
                 "Properties"
                 {
                 }
@@ -1233,7 +1233,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_636BEDD73B38450BAFDB15DA63BFFF47"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_C077E911F0E94B24AE51C2768602558E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1247,7 +1247,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_B1DCAB56A922450D81713148AF5D794E"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_CD3236638EEF4856A8277C4F79F02FD8"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1261,11 +1261,11 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F48910A976D84EA7A4E2C7230F789EF5"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_F6956E4AB136450296FCAE6A822C6DE2"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugMFC_x86.msm"
                 "Properties"
                 {
                 }

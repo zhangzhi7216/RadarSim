@@ -54,13 +54,16 @@ void COneTimeMatlabDlg::Run()
     {
         AfxMessageBox(TEXT("Call func engine WTF!"));
     }
+    /*
     cmd = "clear";
     result = engEvalString(m_Engine, cmd.c_str());
     if (result)
     {
         AfxMessageBox(TEXT("Call func engine WTF!"));
     }
+    */
 
+    /*
     if (m_Engine)
     {
         if (engClose(m_Engine))
@@ -69,4 +72,5 @@ void COneTimeMatlabDlg::Run()
         }
         m_Engine = 0;
     }
+    */
 }
