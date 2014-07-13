@@ -37,6 +37,12 @@ void CDataListCtrl::AddTargetData()
     for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
     {
         int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;
+        if (!m_DataList.m_Esm.IsShowTargetData(i, j) &&
+            !m_DataList.m_Infrared.IsShowTargetData(i, j) &&
+            !m_DataList.m_Infrared.IsShowTargetData(i, j))
+        {
+            continue;
+        }
         int row = InsertItem(0, TEXT(""));
         SetItemData(row, TargetColors[m_DataList.m_TargetColors[i]].ToCOLORREF());
         CString str;
