@@ -126,45 +126,88 @@ void CStateMapDlg::Resize()
 
     int left = rect.left + PAD, width = 2 * (80 + PAD), top = rect.top + PAD, height = rect.bottom - rect.top - PAD * 2;
     int left2 = left + width + PAD, width2 = rect.right - PAD - left2, top2 = top, height2 = height;
+    if (IsZoomed())
+    {
+        width = 0;
+        left2 = left;
+        width2 = rect.right - PAD - left2;
+        GetDlgItem(IDC_STATEMAP_PARAM_GRP)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_SHOW_TRACK)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_BACKGROUND)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_SHOW_THETA_RANGE)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_PLANE_ID)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_PLANE_TYPE_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_PLANE_TYPE)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_PLANE_COLOR_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_PLANE_COLOR)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_TARGET_ID_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_TARGET_ID)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_TARGET_TYPE_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_TARGET_TYPE)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->ShowWindow(SW_HIDE);
+    }
+    else
+    {
+        GetDlgItem(IDC_STATEMAP_PARAM_GRP)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_SHOW_TRACK)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_BACKGROUND)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_SHOW_THETA_RANGE)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_PLANE_ID)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_PLANE_TYPE_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_PLANE_TYPE)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_PLANE_COLOR_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_PLANE_COLOR)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_TARGET_ID_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_TARGET_ID)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_TARGET_TYPE_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_TARGET_TYPE)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->ShowWindow(SW_SHOW);
 
-    GetDlgItem(IDC_STATEMAP_PARAM_GRP)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_PARAM_GRP)->MoveWindow(left, top, width, height);
 
-    left = left + PAD;
-    width = 80;
-    top = top + PAD * 2;
-    height = 20;
-    GetDlgItem(IDC_STATEMAP_SHOW_TRACK)->MoveWindow(left, top, width, height);
+        left = left + PAD;
+        width = 80;
+        top = top + PAD * 2;
+        height = 20;
+        GetDlgItem(IDC_STATEMAP_SHOW_TRACK)->MoveWindow(left, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_SHOW_THETA_RANGE)->MoveWindow(left, top, width * 2, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_SHOW_THETA_RANGE)->MoveWindow(left, top, width * 2, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_BACKGROUND)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_BACKGROUND)->MoveWindow(left + width, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_PLANE_ID)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_PLANE_ID)->MoveWindow(left + width, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_PLANE_TYPE_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_PLANE_TYPE)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_PLANE_TYPE_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_PLANE_TYPE)->MoveWindow(left + width, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_PLANE_COLOR_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_PLANE_COLOR)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_PLANE_COLOR_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_PLANE_COLOR)->MoveWindow(left + width, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_TARGET_ID_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_TARGET_ID)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_TARGET_ID_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_TARGET_ID)->MoveWindow(left + width, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_TARGET_TYPE_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_TARGET_TYPE)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_TARGET_TYPE_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_TARGET_TYPE)->MoveWindow(left + width, top, width, height);
 
-    top = top + height + PAD;
-    GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->MoveWindow(left + width, top, width, height);
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->MoveWindow(left + width, top, width, height);
+    }
 
     GetDlgItem(IDC_STATEMAP_GRP)->MoveWindow(left2, top2, width2, height2);
     GetDlgItem(IDC_STATEMAP)->MoveWindow(left2 + PAD, top2 + PAD * 2, width2 - PAD * 2, height2 - PAD * 3);
