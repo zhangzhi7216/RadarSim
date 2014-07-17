@@ -44,6 +44,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_StateMapDlg(TEXT("Ì¬ÊÆ"), m_StateMap, this)
     , m_DataCenterSocket(0)
     , m_FusionSocket(0)
+    , m_AddMissile(false)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
@@ -691,6 +692,21 @@ void CPlaneDlg::AddTarget(Target &target)
     {
         m_MatlabDlg->AddTarget(target);
     }
+
+    if (m_AddMissile)
+    {
+        AddMissile(target.m_Id + 100);
+    }
+}
+
+void CPlaneDlg::AddMissile(int id)
+{
+    Missile miss;
+    miss.m_Id = id;
+    miss.m_Color = TargetColorRed;
+    m_Missiles.push_back(miss);
+    m_StateMap.AddMissile(m_Missiles.back());
+    m_StateMapDlg.AddMissile(m_Missiles.back());
 }
 
 void CPlaneDlg::OnSubDlgClose(void *subDlg)

@@ -26,6 +26,7 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     m_DlgType = DlgTypeFusionPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_FusionSocket = new FusionSocket(this);
+    m_AddMissile = true;
 }
 
 BEGIN_MESSAGE_MAP(CFusionPlaneDlg, CPlaneDlg)

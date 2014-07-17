@@ -73,6 +73,8 @@ public:
     GlobalDataPacket m_GlobalData;
     Plane m_Plane;
     vector<Target> m_Targets;
+    vector<Missile> m_Missiles;
+    bool m_AddMissile;
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 
     bool m_ShowRadarDlg;
@@ -109,7 +111,8 @@ public:
     void ResetSensors();
     void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
     void AddOtherPlane(Plane &plane);
-    virtual void AddTarget(Target &target);
+    void AddTarget(Target &target);
+    void AddMissile(int id);
 
     virtual void OnSubDlgClose(void *subDlg);
 
