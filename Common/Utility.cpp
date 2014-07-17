@@ -38,6 +38,15 @@ namespace Utility
         return Phi(rel);
     }
 
+    Position Rel(double dis, double theta, double phi)
+    {
+        double z = sin(phi / 57.2957795785523) * dis;
+        double ydx = tan(theta / 57.2957795785523);
+        double x = sqrt((pow(dis, 2) - pow(z, 2)) / (1 + pow(ydx, 2)));
+        double y = x * ydx;
+        return Position(x, y, z);
+    }
+
     double WhiteNoise(double value, double var)
     {
         return value + (double)rand() / (double)RAND_MAX * var;

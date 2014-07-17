@@ -7,6 +7,7 @@
 #include "PlaneDlg.h"
 #include "IpDlg.h"
 
+#include "Utility.h"
 #include <algorithm>
 #include <fstream>
 #include <sstream>
@@ -481,12 +482,29 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         m_Radar.AddTargetData(i, rel);
         m_Esm.AddTargetData(i, rel);
         m_Infrared.AddTargetData(i, rel);
+
         m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
+
         if (m_MatlabDlg)
         {
             m_MatlabDlg->AddTargetTrueData(i, packet.m_TargetTrueDatas[i].m_Pos);
         }
-        m_StateMap.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Pos);
+
+        NoiseDataFrame frame;
+        frame.m_Time = packet.m_PlaneTrueData.m_Time;
+        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+        frame.m_Dis = m_Radar.m_TargetDistances[i].back();
+        frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
+        frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
+        if (!(frame.m_Dis == 0 && frame.m_Theta == 0 && frame.m_Phi == 0))
+        {
+            Position noiseAbsPos = packet.m_PlaneTrueData.m_Pos + Utility::Rel(frame.m_Dis, frame.m_Theta, frame.m_Phi);
+            m_StateMap.AddTargetData(i, noiseAbsPos);
+        }
+        else
+        {
+            m_StateMap.AddTargetData(i, Position(0, 0, 0));
+        }
     }
 
     m_RadarCtrl.DrawTargets();

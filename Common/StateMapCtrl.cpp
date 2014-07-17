@@ -165,6 +165,15 @@ void CStateMapCtrl::DrawTargets()
             Pen pen(TargetColors[m_StateMap.m_TargetColors[i]], TARGET_TRACK_WIDTH);
             for (int j = 1; j < m_StateMap.m_TargetPaths[i].size(); ++j)
             {
+                if (m_StateMap.m_TargetPaths[i][j - 1].X == 0 &&
+                    m_StateMap.m_TargetPaths[i][j - 1].Y == 0 &&
+                    m_StateMap.m_TargetPaths[i][j - 1].Z == 0 &&
+                    m_StateMap.m_TargetPaths[i][j].X == 0 &&
+                    m_StateMap.m_TargetPaths[i][j].Y == 0 &&
+                    m_StateMap.m_TargetPaths[i][j].Z == 0)
+                {
+                    continue;
+                }
                 PointF pt0(m_StateMap.m_TargetPaths[i][j - 1].X / m_StateMap.m_MaxX * (double)width,
                     (double)height - m_StateMap.m_TargetPaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
                 PointF pt1(m_StateMap.m_TargetPaths[i][j].X / m_StateMap.m_MaxX * (double)width,
@@ -172,7 +181,10 @@ void CStateMapCtrl::DrawTargets()
                 graphics.DrawLine(&pen, pt0, pt1);
             }
         }
-        if (m_StateMap.m_TargetPaths[i].size() > 0)
+        if (m_StateMap.m_TargetPaths[i].size() > 0 &&
+            !(m_StateMap.m_TargetPaths[i].back().X == 0 &&
+              m_StateMap.m_TargetPaths[i].back().Y == 0 &&
+              m_StateMap.m_TargetPaths[i].back().Z == 0))
         {
             if (m_StateMap.m_TargetPaths[i].size() > 1)
             {
