@@ -18,6 +18,7 @@ class CFusionPlaneDlg : public CPlaneDlg
 // 构造
 public:
 	CFusionPlaneDlg(LPCWSTR title, CWnd* pParent = NULL);	// 标准构造函数
+    ~CFusionPlaneDlg();
 
 // 实现
 protected:

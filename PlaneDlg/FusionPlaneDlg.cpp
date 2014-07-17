@@ -27,6 +27,15 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_FusionSocket = new FusionSocket(this);
     m_AddMissile = true;
+
+    m_MatlabDlg = new CMatlabDlg("attack_matlab_dialog", "attack_plane_true", "attack_target_true", "attack_target_fusion", "attack_target_filter", "attack_global_var");
+    // m_ShowDataListDlg = true;
+}
+
+CFusionPlaneDlg::~CFusionPlaneDlg()
+{
+    delete m_MatlabDlg;
+    m_MatlabDlg = NULL;
 }
 
 BEGIN_MESSAGE_MAP(CFusionPlaneDlg, CPlaneDlg)
