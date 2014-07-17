@@ -40,6 +40,7 @@ public:
     void Reset();
     void AddPlane(Plane &plane);
     void AddTarget(Target &target);
+    void AddMissile(Missile &miss);
     CComboBox m_Background;
     CComboBox m_PlaneType;
     CComboBox m_PlaneColor;

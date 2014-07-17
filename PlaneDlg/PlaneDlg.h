@@ -109,7 +109,7 @@ public:
     void ResetSensors();
     void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
     void AddOtherPlane(Plane &plane);
-    void AddTarget(Target &target);
+    virtual void AddTarget(Target &target);
 
     virtual void OnSubDlgClose(void *subDlg);
 

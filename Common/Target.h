@@ -35,6 +35,7 @@ public:
 };
 
 typedef Target Plane;
+typedef Target Missile;
 
 __declspec(dllexport) CArchive & operator << (CArchive &ar, Target &target);
 

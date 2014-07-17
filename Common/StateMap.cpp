@@ -26,6 +26,8 @@ void StateMap::Reset()
     m_TargetTypes.clear();
     m_TargetColors.clear();
     m_TargetPaths.clear();
+    m_MissileColors.clear();
+    m_MissilePaths.clear();
 
     m_Radars.clear();
     m_Esms.clear();
@@ -58,6 +60,17 @@ void StateMap::AddTarget(Target &target)
 void StateMap::AddTargetData(int target, Position pos)
 {
     m_TargetPaths[target].push_back(pos);
+}
+
+void StateMap::AddMissile(Missile &miss)
+{
+    m_MissileColors.push_back(miss.m_Color);
+    m_MissilePaths.push_back(Path());
+}
+
+void StateMap::AddMissileData(int miss, Position pos)
+{
+    m_MissilePaths[miss].push_back(pos);
 }
 
 CArchive & operator << (CArchive &ar, StateMap &stateMap)

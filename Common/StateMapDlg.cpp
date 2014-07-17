@@ -255,6 +255,13 @@ void CStateMapDlg::AddTarget(Target &target)
     m_TargetId.InsertString(m_TargetId.GetCount(), str);
 }
 
+void CStateMapDlg::AddMissile(Missile &miss)
+{
+    CString str;
+    str.AppendFormat(TEXT("%d"), miss.m_Id);
+    m_TargetId.InsertString(m_TargetId.GetCount(), str);
+}
+
 void CStateMapDlg::OnBnClickedStatemapShowTrack()
 {
     // TODO: 在此添加控件通知处理程序代码

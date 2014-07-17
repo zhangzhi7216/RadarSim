@@ -41,4 +41,9 @@ protected:
     virtual void AddTrueData(TrueDataPacket &packet);
     virtual void AddControlData(ControlDataPacket &packet);
 
+    virtual void AddTarget(Target &target);
+    virtual void AddMissile(int id);
+
+private:
+    vector<Missile> m_Missiles;
 };

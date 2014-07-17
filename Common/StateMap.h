@@ -29,11 +29,16 @@ public:
     vector<TargetColor> m_TargetColors;
     vector<Path> m_TargetPaths;
 
+    vector<TargetColor> m_MissileColors;
+    vector<Path> m_MissilePaths;
+
     void Reset();
     void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
     void AddPlaneData(int plane, Position pos);
     void AddTarget(Target &target);
     void AddTargetData(int target, Position pos);
+    void AddMissile(Missile &miss);
+    void AddMissileData(int miss, Position pos);
 };
 
 __declspec(dllexport) CArchive & operator << (CArchive &ar, StateMap &stateMap);

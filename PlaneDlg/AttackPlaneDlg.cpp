@@ -175,3 +175,19 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     m_Plane.m_Vel = m_NaviOutput.m_TrueData.m_Vel;
     m_Plane.m_Acc = m_NaviOutput.m_TrueData.m_Acc;
 }
+
+void CAttackPlaneDlg::AddTarget(Target &target)
+{
+    CPlaneDlg::AddTarget(target);
+    AddMissile(target.m_Id + 100);
+}
+
+void CAttackPlaneDlg::AddMissile(int id)
+{
+    Missile miss;
+    miss.m_Id = id;
+    miss.m_Color = TargetColorRed;
+    m_Missiles.push_back(miss);
+    m_StateMap.AddMissile(m_Missiles.back());
+    m_StateMapDlg.AddMissile(m_Missiles.back());
+}
