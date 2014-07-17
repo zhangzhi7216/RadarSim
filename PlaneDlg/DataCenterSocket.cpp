@@ -47,6 +47,13 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             m_Dlg->SetPlane(plane);
         }
         break;
+    case PacketTypeOtherPlane:
+        {
+            Plane plane;
+            ar >> plane;
+            m_Dlg->AddOtherPlane(plane);
+        }
+        break;
     case PacketTypeTarget:
         {
             Target target;

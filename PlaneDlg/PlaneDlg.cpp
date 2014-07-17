@@ -656,6 +656,16 @@ void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infra
     m_StateMapDlg.AddPlane(plane);
 }
 
+void CPlaneDlg::AddOtherPlane(Plane &plane)
+{
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->AddPlane(plane);
+    }
+    m_StateMap.AddPlane(plane, &m_Radar, &m_Esm, &m_Infrared);
+    m_StateMapDlg.AddPlane(plane);
+}
+
 void CPlaneDlg::AddTarget(Target &target)
 {
     m_Targets.push_back(target);
@@ -958,7 +968,13 @@ void CPlaneDlg::ConnectDataCenter()
     wstring hostName = DATA_CENTER_ADDR;
     int port = DATA_CENTER_PORT;
 
-
+#ifdef _DEV
+    if (!m_DataCenterSocket->Connect(hostName.c_str(), port))
+    {
+        AfxMessageBox(TEXT("连接到数据中心失败."));
+        exit(-1);
+    }
+#else
     wifstream in(ConfigFileName);
     in.imbue(locale("chs"));
 
@@ -1015,6 +1031,7 @@ void CPlaneDlg::ConnectDataCenter()
     {
         exit(-1);
     }
+#endif
     m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
     // AfxMessageBox(TEXT("连接到数据中心"));
 }

@@ -696,6 +696,16 @@ void CDataCenterDlg::StartSim()
             }
             m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[index]);
         }
+        if (m_PlaneClients[i].m_PlaneSocket->IsFusion() || m_PlaneClients[i].m_PlaneSocket->IsAttack())
+        {
+            for (int j = 0; j < PLANE_COUNT; ++j)
+            {
+                if (i != j)
+                {
+                    m_PlaneClients[i].m_PlaneSocket->SendOtherPlane(m_PlaneClients[j].m_Plane);
+                }
+            }
+        }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
             m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);

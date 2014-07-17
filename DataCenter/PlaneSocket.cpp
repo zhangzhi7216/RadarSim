@@ -47,6 +47,14 @@ void PlaneSocket::SendPlane(Plane &plane)
     ar.Flush();
 }
 
+void PlaneSocket::SendOtherPlane(Plane &plane)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeOtherPlane << plane;
+    ar.Flush();
+}
+
 void PlaneSocket::SendTarget(Target &target)
 {
     CSocketFile file(this);

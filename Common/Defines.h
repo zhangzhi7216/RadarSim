@@ -163,7 +163,12 @@ enum TargetMoveType
 
 extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 
+#ifdef _DEV
+#define PLANE_COUNT 3
+#else
 #define PLANE_COUNT 4
+#endif
+
 #define TARGET_COUNT_MAX 5
 
 #define MATLAB_DRAW_TRUE_DATA_SIZE 3
@@ -184,6 +189,7 @@ enum PacketType
     PacketTypeImAttack,
     PacketTypeReset,
     PacketTypePlane,
+    PacketTypeOtherPlane,
     PacketTypeTarget,
     PacketTypeRadar,
     PacketTypeEsm,
