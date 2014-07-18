@@ -165,12 +165,12 @@ void CStateMapCtrl::DrawTargets()
             Pen pen(TargetColors[m_StateMap.m_TargetColors[i]], TARGET_TRACK_WIDTH);
             for (int j = 1; j < m_StateMap.m_TargetPaths[i].size(); ++j)
             {
-                if (m_StateMap.m_TargetPaths[i][j - 1].X == 0 &&
+                if ((m_StateMap.m_TargetPaths[i][j - 1].X == 0 &&
                     m_StateMap.m_TargetPaths[i][j - 1].Y == 0 &&
-                    m_StateMap.m_TargetPaths[i][j - 1].Z == 0 &&
-                    m_StateMap.m_TargetPaths[i][j].X == 0 &&
+                    m_StateMap.m_TargetPaths[i][j - 1].Z == 0) ||
+                    (m_StateMap.m_TargetPaths[i][j].X == 0 &&
                     m_StateMap.m_TargetPaths[i][j].Y == 0 &&
-                    m_StateMap.m_TargetPaths[i][j].Z == 0)
+                    m_StateMap.m_TargetPaths[i][j].Z == 0))
                 {
                     continue;
                 }
