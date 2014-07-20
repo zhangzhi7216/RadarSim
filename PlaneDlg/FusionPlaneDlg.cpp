@@ -186,7 +186,11 @@ void CFusionPlaneDlg::DoFusion()
         AfxMessageBox(TEXT("融合算法运行错误."));
         return;
     }
-
+    // Set Plane true data.
+    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+    {
+        m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(it->second.second.m_PlaneTrueData);
+    }
     /*
     int i = 0;
     for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end() && i < m_FusionOutput.m_ControlDatas.size(); ++it, ++i)

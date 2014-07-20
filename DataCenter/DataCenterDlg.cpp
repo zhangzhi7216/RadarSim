@@ -635,14 +635,32 @@ void CDataCenterDlg::GenerateGlobalData()
 void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
     m_FusionDatas.push_back(packet);
+
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
+        m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas.back().m_Pos);
         TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
         m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
         TrueDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
         m_MatlabDlg.AddTargetFilterData(i, filterFrame);
         m_MatlabDlg.UpdateGlobalVar();
+
+        m_StateMap.AddTargetData(i, fusionFrame.m_Pos);
     }
+
+    // Adjust the plane true data.
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        TrueDataFrame &frame = packet.m_PlaneTrueDatas[i];
+        m_PlaneClients[i].m_PlaneTrueDatas.back() = frame;
+        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas.back().m_Pos);
+        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas.back().m_Pos);
+    }
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+
     ResumeSim();
 }
 
@@ -819,21 +837,6 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
             }
             m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
         }
-
-        for (int i = 0; i < PLANE_COUNT; ++i)
-        {
-            m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
-            m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
-        }
-        for (int i = 0; i < m_TargetClients.size(); ++i)
-        {
-            m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
-            m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
-        }
-
-        m_StateMapDlg.m_Ctrl.DrawTargets();
-        m_StateMapDlg.m_Ctrl.BlendAll();
-        m_StateMapDlg.m_Ctrl.Invalidate();
 
         m_CurrentFrame += m_GlobalData.m_Interval;
     }

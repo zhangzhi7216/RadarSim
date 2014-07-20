@@ -180,6 +180,7 @@ struct __declspec(dllexport) FusionDataPacket
     vector<TrueDataFrame> m_FusionDatas;
     vector<TrueDataFrame> m_FilterDatas;
     vector<NoiseDataPacket> m_NoiseDatas;
+    vector<TrueDataFrame> m_PlaneTrueDatas;
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, FusionDataPacket &packet);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, FusionDataPacket &packet);

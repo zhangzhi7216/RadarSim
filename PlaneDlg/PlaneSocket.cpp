@@ -37,7 +37,9 @@ void PlaneSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeControlDataAck:
         {
-            m_Dlg->AddControlDataAck();
+            TrueDataFrame frame;
+            ar >> frame;
+            m_Dlg->AddControlDataAck(frame);
         }
         break;
     default:

@@ -102,13 +102,13 @@ CArchive & operator >> (CArchive &ar, NoiseDataPacket &packet)
 
 CArchive & operator << (CArchive &ar, FusionDataPacket &packet)
 {
-    ar << packet.m_FusionDatas << packet.m_FilterDatas << packet.m_NoiseDatas;
+    ar << packet.m_FusionDatas << packet.m_FilterDatas << packet.m_NoiseDatas << packet.m_PlaneTrueDatas;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, FusionDataPacket &packet)
 {
-    ar >> packet.m_FusionDatas >> packet.m_FilterDatas >> packet.m_NoiseDatas;
+    ar >> packet.m_FusionDatas >> packet.m_FilterDatas >> packet.m_NoiseDatas >> packet.m_PlaneTrueDatas;
     return ar;
 }
 

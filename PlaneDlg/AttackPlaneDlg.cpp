@@ -151,7 +151,13 @@ void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
     DoNavi(packet);
     m_HasNaviOutput = true;
 
-    m_FusionSocket->SendControlDataAck();
+    TrueDataFrame frame;
+    frame.m_Time = packet.m_FusionData.m_FusionDatas[0].m_Time;
+    frame.m_Id = m_Plane.m_Id;
+    frame.m_Pos = m_Plane.m_Position;
+    frame.m_Vel = m_Plane.m_Vel;
+    frame.m_Acc = m_Plane.m_Acc;
+    m_FusionSocket->SendControlDataAck(frame);
 }
 
 void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)

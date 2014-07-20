@@ -16,7 +16,7 @@ public:
     void OnClose(int nErrorCode);
 
     void SendNoiseData(NoiseDataPacket &packet);
-    void SendControlDataAck();
+    void SendControlDataAck(TrueDataFrame &frame);
 
 public:
     CPlaneDlg *m_Dlg;

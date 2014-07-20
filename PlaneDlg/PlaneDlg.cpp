@@ -600,7 +600,7 @@ void CPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
 }
 
-void CPlaneDlg::AddControlDataAck()
+void CPlaneDlg::AddControlDataAck(TrueDataFrame &frame)
 {
 }
 

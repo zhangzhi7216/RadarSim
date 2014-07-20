@@ -36,7 +36,9 @@ void FusionSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeControlDataAck:
         {
-            m_Dlg->AddControlDataAck();
+            TrueDataFrame frame;
+            ar >> frame;
+            m_Dlg->AddControlDataAck(frame);
         }
         break;
     default:
@@ -65,10 +67,10 @@ void FusionSocket::SendNoiseData(NoiseDataPacket &packet)
     ar.Flush();
 }
 
-void FusionSocket::SendControlDataAck()
+void FusionSocket::SendControlDataAck(TrueDataFrame &frame)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeControlDataAck;
+    ar << PacketTypeControlDataAck << frame;
     ar.Flush();
 }
