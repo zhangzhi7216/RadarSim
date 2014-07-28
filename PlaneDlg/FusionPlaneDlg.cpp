@@ -209,8 +209,10 @@ void CFusionPlaneDlg::DoFusion()
     m_NoiseDatas.clear();
 }
 
-void CFusionPlaneDlg::AddControlDataAck()
+void CFusionPlaneDlg::AddControlDataAck(ControlDataAckPacket &packet)
 {
+    m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(packet.m_PlaneTrueData);
+    m_FusionOutput.m_FusionData.m_MissileTrueDatas = packet.m_MissileTrueDatas;
     m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionData);
 }
 

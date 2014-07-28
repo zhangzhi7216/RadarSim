@@ -572,9 +572,11 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
     {
         NoiseDataFrame frame;
         // Noise data doesn't know the target ID.
+#ifndef _DEV
         // Possibly the same for time.
-        // frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
-        // frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+        frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
+        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+#endif
         frame.m_Dis = m_Radar.m_TargetDistances[i].back();
         frame.m_DisVar = m_Radar.m_DisVar;
         frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
@@ -584,7 +586,9 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
         noisePacket.m_TargetNoiseDatas.push_back(frame);
     }
 
+#ifndef _DEV
     sort(noisePacket.m_TargetNoiseDatas.begin(), noisePacket.m_TargetNoiseDatas.end(), &NoiseDataFrameComp);
+#endif
 }
 
 void CPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
@@ -600,7 +604,7 @@ void CPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
 }
 
-void CPlaneDlg::AddControlDataAck(TrueDataFrame &frame)
+void CPlaneDlg::AddControlDataAck(ControlDataAckPacket &packet)
 {
 }
 
@@ -721,6 +725,7 @@ void CPlaneDlg::AddMissile(int id)
 {
     Missile miss;
     miss.m_Id = id;
+    miss.m_Type = TargetTypeMissile;
     miss.m_Color = TargetColorRed;
     m_Missiles.push_back(miss);
     m_StateMap.AddMissile(m_Missiles.back());

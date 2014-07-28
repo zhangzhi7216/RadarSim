@@ -9,11 +9,13 @@ struct __declspec(dllexport) NaviInput
     ControlDataFrame m_ControlData;
     GlobalDataPacket m_GlobalData;
     Plane m_Plane;
+    vector<Missile> m_Missiles;
 };
 
 struct __declspec(dllexport) NaviOutput
 {
     TrueDataFrame m_TrueData;
+    vector<Missile> m_Missiles;
 };
 
 class __declspec(dllexport) NaviAlgo : public GeneralAlgo<NaviInput, NaviOutput>

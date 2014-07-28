@@ -146,6 +146,25 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
         }
     }
 
+    output.m_TrueData.m_Pos.X += 200;
+    output.m_TrueData.m_Pos.Y += 200;
+    output.m_TrueData.m_Pos.Z += 200;
+
+    for (int i = 0; i < input.m_Missiles.size(); ++i)
+    {
+        Missile miss = input.m_Missiles[i];
+        miss.m_Position.X += 200 + i * 20;
+        miss.m_Position.Y += 200 + i * 20;
+        miss.m_Position.Z += 200 + i * 20;
+        miss.m_Vel.X += 200 + i * 20;
+        miss.m_Vel.Y += 200 + i * 20;
+        miss.m_Vel.Z += 200 + i * 20;
+        miss.m_Acc.X += 200 + i * 20;
+        miss.m_Acc.Y += 200 + i * 20;
+        miss.m_Acc.Z += 200 + i * 20;
+        output.m_Missiles.push_back(miss);
+    }
+
     return true;
 }
 

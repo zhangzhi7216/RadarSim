@@ -102,13 +102,13 @@ CArchive & operator >> (CArchive &ar, NoiseDataPacket &packet)
 
 CArchive & operator << (CArchive &ar, FusionDataPacket &packet)
 {
-    ar << packet.m_FusionDatas << packet.m_FilterDatas << packet.m_NoiseDatas << packet.m_PlaneTrueDatas;
+    ar << packet.m_FusionDatas << packet.m_FilterDatas << packet.m_NoiseDatas << packet.m_PlaneTrueDatas << packet.m_MissileTrueDatas;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, FusionDataPacket &packet)
 {
-    ar >> packet.m_FusionDatas >> packet.m_FilterDatas >> packet.m_NoiseDatas >> packet.m_PlaneTrueDatas;
+    ar >> packet.m_FusionDatas >> packet.m_FilterDatas >> packet.m_NoiseDatas >> packet.m_PlaneTrueDatas >> packet.m_MissileTrueDatas;
     return ar;
 }
 
@@ -121,6 +121,18 @@ CArchive & operator << (CArchive &ar, ControlDataPacket &packet)
 CArchive & operator >> (CArchive &ar, ControlDataPacket &packet)
 {
     ar >> packet.m_FusionData >> packet.m_ControlData;
+    return ar;
+}
+
+CArchive & operator << (CArchive &ar, ControlDataAckPacket &packet)
+{
+    ar << packet.m_PlaneTrueData << packet.m_MissileTrueDatas;
+    return ar;
+}
+
+CArchive & operator >> (CArchive &ar, ControlDataAckPacket &packet)
+{
+    ar >> packet.m_PlaneTrueData >> packet.m_MissileTrueDatas;
     return ar;
 }
 

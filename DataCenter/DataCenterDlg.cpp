@@ -506,6 +506,10 @@ void CDataCenterDlg::ResetTargets()
     {
         m_TargetClients[i].m_Target.Reset();
     }
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        m_Missiles[i].Reset();
+    }
 }
 
 void CDataCenterDlg::OnBnClickedOk()
@@ -599,7 +603,10 @@ void CDataCenterDlg::GenerateTrueData()
         {
             for (int j = 0; j < PLANE_COUNT; ++j)
             {
-                m_PlaneClients[j].m_Plane.Move(m_GlobalData.m_Interval);
+                if (i != m_GlobalData.m_StartTime)
+                {
+                    m_PlaneClients[j].m_Plane.Move(m_GlobalData.m_Interval);
+                }
                 // m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
                 // m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(3, 3, 3);
                 TrueDataFrame frame;
@@ -612,7 +619,10 @@ void CDataCenterDlg::GenerateTrueData()
             }
             for (int j = 0; j < m_TargetClients.size(); ++j)
             {
-                m_TargetClients[j].m_Target.Move(m_GlobalData.m_Interval);
+                if (i != m_GlobalData.m_StartTime)
+                {
+                    m_TargetClients[j].m_Target.Move(m_GlobalData.m_Interval);
+                }
                 // m_TargetClients[j].m_Target.m_Position = m_TargetClients[j].m_Target.m_Position + Position(3, 0, 0);
                 TrueDataFrame frame;
                 frame.m_Time = i;
@@ -648,13 +658,22 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_StateMap.AddTargetData(i, fusionFrame.m_Pos);
     }
 
+    int index = m_CurrentFrame / m_GlobalData.m_Interval;
+
     // Adjust the plane true data.
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         TrueDataFrame &frame = packet.m_PlaneTrueDatas[i];
-        m_PlaneClients[i].m_PlaneTrueDatas.back() = frame;
-        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas.back().m_Pos);
-        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas.back().m_Pos);
+        m_PlaneClients[i].m_PlaneTrueDatas[index] = frame;
+        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+    }
+
+    // Adjust the missile true data.
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        TrueDataFrame &frame = packet.m_MissileTrueDatas[i];
+        m_StateMap.AddMissileData(i, frame.m_Pos);
     }
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
@@ -676,7 +695,7 @@ void CDataCenterDlg::StartSim()
     ResetPlanes();
     ResetTargets();
 
-    m_CurrentFrame = m_GlobalData.m_StartTime;
+    // m_CurrentFrame = m_GlobalData.m_StartTime;
 
     // GeneratePlaneClients();
     // GenerateTargetClients();
@@ -745,6 +764,12 @@ void CDataCenterDlg::StartSim()
         m_MatlabDlg.AddTarget(m_TargetClients[i].m_Target);
     }
 
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        m_StateMap.AddMissile(m_Missiles[i]);
+        m_StateMapDlg.AddMissile(m_Missiles[i]);
+    }
+
     m_MatlabDlg.SetSize((m_GlobalData.m_EndTime - m_GlobalData.m_StartTime + 1) / m_GlobalData.m_Interval);
     if (m_ShowMatlabDlg)
     {
@@ -758,7 +783,8 @@ void CDataCenterDlg::StartSim()
 
     m_FusionDatas.clear();
     GenerateTrueData();
-    m_CurrentFrame = 0;
+    // m_CurrentFrame = 0;
+    m_CurrentFrame = m_GlobalData.m_StartTime;
     SetTimer(WM_TIME_FRAME, 800, NULL);
 }
 
@@ -769,6 +795,7 @@ void CDataCenterDlg::PauseSim()
 
 void CDataCenterDlg::ResumeSim()
 {
+    m_CurrentFrame += m_GlobalData.m_Interval;
     SetTimer(WM_TIME_FRAME, 800, NULL);
 }
 
@@ -837,8 +864,6 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
             }
             m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
         }
-
-        m_CurrentFrame += m_GlobalData.m_Interval;
     }
 }
 
@@ -1310,6 +1335,28 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
             m_PlaneIdSel.InsertString(count, s);
         }
         ar >> TargetClient::s_TargetCount;
+#if 1
+        int missileSize = 0;
+        ar >> missileSize;
+        for (int i = 0; i < missileSize; ++i)
+        {
+            Missile miss;
+            ar >> miss;
+            miss.m_Type = TargetTypeMissile;
+            miss.m_Color = TargetColorRed;
+            m_Missiles.push_back(miss);
+        }
+#else
+        int missileSize = 0;
+        ar >> missileSize;
+        for (int i = 0; i < targetSize; ++i)
+        {
+            Missile miss;
+            miss.m_Id = m_TargetClients[i].m_Target.m_Id + 100;
+            miss.m_Color = TargetColorRed;
+            m_Missiles.push_back(miss);
+        }
+#endif
         for (int i = SensorIdRadar; i < SensorIdLast; ++i)
         {
             ar >> m_Sensors[i];
@@ -1367,6 +1414,11 @@ void CDataCenterDlg::OnBnClickedConfigSave()
             ar << m_TargetClients[i].m_Target;
         }
         ar << TargetClient::s_TargetCount;
+        ar << m_Missiles.size();
+        for (int i = 0; i < m_Missiles.size(); ++i)
+        {
+            ar << m_Missiles[i];
+        }
         // ar << SensorIdLast;
         for (int i = SensorIdRadar; i < SensorIdLast; ++i)
         {
@@ -1417,6 +1469,12 @@ void CDataCenterDlg::OnBnClickedDcTargetAdd()
 
     m_PlaneIdSel.SetCurSel(count);
     OnCbnSelchangeDcPlaneId();
+    
+    Missile miss;
+    miss.m_Id = client.m_Target.m_Id + 100;
+    miss.m_Type = TargetTypeMissile;
+    miss.m_Color = TargetColorRed;
+    m_Missiles.push_back(miss);
 }
 
 void CDataCenterDlg::OnBnClickedDcExtDataEnable()

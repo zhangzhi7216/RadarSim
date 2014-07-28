@@ -181,6 +181,7 @@ struct __declspec(dllexport) FusionDataPacket
     vector<TrueDataFrame> m_FilterDatas;
     vector<NoiseDataPacket> m_NoiseDatas;
     vector<TrueDataFrame> m_PlaneTrueDatas;
+    vector<TrueDataFrame> m_MissileTrueDatas;
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, FusionDataPacket &packet);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, FusionDataPacket &packet);
@@ -192,6 +193,14 @@ struct __declspec(dllexport) ControlDataPacket
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataPacket &packet);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataPacket &packet);
+
+struct __declspec(dllexport) ControlDataAckPacket
+{
+    TrueDataFrame m_PlaneTrueData;
+    vector<TrueDataFrame> m_MissileTrueDatas;
+};
+__declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataAckPacket &packet);
+__declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataAckPacket &packet);
 
 struct __declspec(dllexport) GlobalDataPacket
 {

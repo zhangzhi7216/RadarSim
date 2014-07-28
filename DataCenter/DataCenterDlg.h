@@ -75,6 +75,7 @@ public:
     Sensor m_Sensors[SensorIdLast];
     PlaneClient m_PlaneClients[PLANE_COUNT];
     vector<TargetClient> m_TargetClients;
+    vector<Missile> m_Missiles;
 
     void GeneratePlaneClients();
     void GenerateTargetClients();

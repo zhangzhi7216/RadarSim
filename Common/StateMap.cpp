@@ -26,6 +26,7 @@ void StateMap::Reset()
     m_TargetTypes.clear();
     m_TargetColors.clear();
     m_TargetPaths.clear();
+    m_MissileTypes.clear();
     m_MissileColors.clear();
     m_MissilePaths.clear();
 
@@ -64,6 +65,7 @@ void StateMap::AddTargetData(int target, Position pos)
 
 void StateMap::AddMissile(Missile &miss)
 {
+    m_MissileTypes.push_back(miss.m_Type);
     m_MissileColors.push_back(miss.m_Color);
     m_MissilePaths.push_back(Path());
 }

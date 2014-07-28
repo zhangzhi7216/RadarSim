@@ -157,7 +157,6 @@ void CStateMapCtrl::DrawTargets()
         }
     }
 
-
     for (int i = 0; i < m_StateMap.m_TargetTypes.size(); ++i)
     {
         if (m_StateMap.m_ShowTrack)
@@ -217,6 +216,70 @@ void CStateMapCtrl::DrawTargets()
                 Font font(TEXT("Calibri"), 9);
                 PointF pt(m_StateMap.m_TargetPaths[i].back().X / m_StateMap.m_MaxX * (double)width,
                     (double)height - m_StateMap.m_TargetPaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
+                graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - targetImg->GetHeight()), &brush);
+            }
+        }
+    }
+
+    for (int i = 0; i < m_StateMap.m_MissilePaths.size(); ++i)
+    {
+        if (m_StateMap.m_ShowTrack)
+        {
+            Pen pen(TargetColors[m_StateMap.m_MissileColors[i]], TARGET_TRACK_WIDTH);
+            for (int j = 1; j < m_StateMap.m_MissilePaths[i].size(); ++j)
+            {
+                if ((m_StateMap.m_MissilePaths[i][j - 1].X == 0 &&
+                    m_StateMap.m_MissilePaths[i][j - 1].Y == 0 &&
+                    m_StateMap.m_MissilePaths[i][j - 1].Z == 0) ||
+                    (m_StateMap.m_MissilePaths[i][j].X == 0 &&
+                    m_StateMap.m_MissilePaths[i][j].Y == 0 &&
+                    m_StateMap.m_MissilePaths[i][j].Z == 0))
+                {
+                    continue;
+                }
+                PointF pt0(m_StateMap.m_MissilePaths[i][j - 1].X / m_StateMap.m_MaxX * (double)width,
+                    (double)height - m_StateMap.m_MissilePaths[i][j - 1].Y / m_StateMap.m_MaxY * (double)height);
+                PointF pt1(m_StateMap.m_MissilePaths[i][j].X / m_StateMap.m_MaxX * (double)width,
+                    (double)height - m_StateMap.m_MissilePaths[i][j].Y / m_StateMap.m_MaxY * (double)height);
+                graphics.DrawLine(&pen, pt0, pt1);
+            }
+        }
+        if (m_StateMap.m_MissilePaths[i].size() > 0 &&
+            !(m_StateMap.m_MissilePaths[i].back().X == 0 &&
+              m_StateMap.m_MissilePaths[i].back().Y == 0 &&
+              m_StateMap.m_MissilePaths[i].back().Z == 0))
+        {
+            if (m_StateMap.m_MissilePaths[i].size() > 1)
+            {
+                Position end = m_StateMap.m_MissilePaths[i].back();
+                Position start = m_StateMap.m_MissilePaths[i][m_StateMap.m_MissilePaths[i].size() - 2];
+                double angle = -Theta(end - start);
+                if (end.X < start.X)
+                {
+                    angle += 180;
+                }
+                graphics.RotateTransform(angle, MatrixOrderAppend);
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+            }
+            else
+            {
+                Position end = m_StateMap.m_MissilePaths[i].back();
+                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+            }
+            Image *targetImg = TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+            PointF pt(0.0, 0.0);
+            graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+
+            graphics.ResetTransform();
+
+            if (m_StateMap.m_ShowHeight)
+            {
+                SolidBrush brush(TargetColors[m_StateMap.m_MissileColors[i]]);
+                CString str;
+                str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_MissilePaths[i].back().Z);
+                Font font(TEXT("Calibri"), 9);
+                PointF pt(m_StateMap.m_MissilePaths[i].back().X / m_StateMap.m_MaxX * (double)width,
+                    (double)height - m_StateMap.m_MissilePaths[i].back().Y / m_StateMap.m_MaxY * (double)height);
                 graphics.DrawString(str, str.GetLength(), &font, PointF(pt.X, pt.Y - targetImg->GetHeight()), &brush);
             }
         }

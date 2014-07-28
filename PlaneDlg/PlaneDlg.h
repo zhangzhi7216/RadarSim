@@ -107,7 +107,7 @@ public:
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
 
-    void ResetCtrls();
+    virtual void ResetCtrls();
     void ResetSensors();
     void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
     void AddOtherPlane(Plane &plane);
@@ -156,7 +156,7 @@ public:
     virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
     virtual void AddControlData(ControlDataPacket &packet);
-    virtual void AddControlDataAck(TrueDataFrame &frame);
+    virtual void AddControlDataAck(ControlDataAckPacket &packet);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

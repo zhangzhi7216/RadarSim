@@ -41,6 +41,9 @@ void CStateMapDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_STATEMAP_TARGET_ID, m_TargetId);
     DDX_Control(pDX, IDC_STATEMAP_TARGET_TYPE, m_TargetType);
     DDX_Control(pDX, IDC_STATEMAP_TARGET_COLOR, m_TargetColor);
+    DDX_Control(pDX, IDC_STATEMAP_MISS_ID, m_MissileId);
+    DDX_Control(pDX, IDC_STATEMAP_MISS_TYPE, m_MissileType);
+    DDX_Control(pDX, IDC_STATEMAP_MISS_COLOR, m_MissileColor);
     DDX_Control(pDX, IDC_STATEMAP_PLANE_ID, m_PlaneId);
 }
 BEGIN_MESSAGE_MAP(CStateMapDlg, CDialog)
@@ -54,6 +57,9 @@ BEGIN_MESSAGE_MAP(CStateMapDlg, CDialog)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_ID, &CStateMapDlg::OnCbnSelchangeStatemapTargetId)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_TYPE, &CStateMapDlg::OnCbnSelchangeStatemapTargetType)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_COLOR, &CStateMapDlg::OnCbnSelchangeStatemapTargetColor)
+    ON_CBN_SELCHANGE(IDC_STATEMAP_MISS_ID, &CStateMapDlg::OnCbnSelchangeStatemapMissileId)
+    ON_CBN_SELCHANGE(IDC_STATEMAP_MISS_TYPE, &CStateMapDlg::OnCbnSelchangeStatemapMissileType)
+    ON_CBN_SELCHANGE(IDC_STATEMAP_MISS_COLOR, &CStateMapDlg::OnCbnSelchangeStatemapMissileColor)
     ON_CBN_SELCHANGE(IDC_STATEMAP_PLANE_ID, &CStateMapDlg::OnCbnSelchangeStatemapPlaneId)
 END_MESSAGE_MAP()
 
@@ -97,6 +103,15 @@ BOOL CStateMapDlg::OnInitDialog()
     for (int i = 0; i < TargetColorLast; ++i)
     {
         m_TargetColor.InsertString(i, TargetColorNames[i]);
+    }
+    // m_MissileColor.SetCurSel(m_StateMap.m_PlaneColor);
+    for (int i = 0; i < TargetTypeLast; ++i)
+    {
+        m_MissileType.InsertString(i, TargetTypeNames[i]);
+    }
+    for (int i = 0; i < TargetColorLast; ++i)
+    {
+        m_MissileColor.InsertString(i, TargetColorNames[i]);
     }
 
     Resize();
@@ -148,6 +163,12 @@ void CStateMapDlg::Resize()
         GetDlgItem(IDC_STATEMAP_TARGET_TYPE)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_MISS_ID_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_MISS_ID)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_MISS_TYPE_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_MISS_TYPE)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_MISS_COLOR_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_MISS_COLOR)->ShowWindow(SW_HIDE);
     }
     else
     {
@@ -168,6 +189,12 @@ void CStateMapDlg::Resize()
         GetDlgItem(IDC_STATEMAP_TARGET_TYPE)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_MISS_ID_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_MISS_ID)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_MISS_TYPE_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_MISS_TYPE)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_MISS_COLOR_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_MISS_COLOR)->ShowWindow(SW_SHOW);
 
         GetDlgItem(IDC_STATEMAP_PARAM_GRP)->MoveWindow(left, top, width, height);
 
@@ -207,6 +234,18 @@ void CStateMapDlg::Resize()
         top = top + height + PAD;
         GetDlgItem(IDC_STATEMAP_TARGET_COLOR_STATIC)->MoveWindow(left, top, width, height);
         GetDlgItem(IDC_STATEMAP_TARGET_COLOR)->MoveWindow(left + width, top, width, height);
+
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_MISS_ID_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_MISS_ID)->MoveWindow(left + width, top, width, height);
+
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_MISS_TYPE_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_MISS_TYPE)->MoveWindow(left + width, top, width, height);
+
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_MISS_COLOR_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_MISS_COLOR)->MoveWindow(left + width, top, width, height);
     }
 
     GetDlgItem(IDC_STATEMAP_GRP)->MoveWindow(left2, top2, width2, height2);
@@ -238,6 +277,10 @@ void CStateMapDlg::Reset()
     m_TargetType.SetCurSel(CB_ERR);
     m_TargetColor.SetCurSel(CB_ERR);
 
+    m_MissileId.ResetContent();
+    m_MissileType.SetCurSel(CB_ERR);
+    m_MissileColor.SetCurSel(CB_ERR);
+
     UpdateData(FALSE);
 }
 
@@ -259,7 +302,7 @@ void CStateMapDlg::AddMissile(Missile &miss)
 {
     CString str;
     str.AppendFormat(TEXT("%d"), miss.m_Id);
-    m_TargetId.InsertString(m_TargetId.GetCount(), str);
+    m_MissileId.InsertString(m_MissileId.GetCount(), str);
 }
 
 void CStateMapDlg::OnBnClickedStatemapShowTrack()
@@ -368,6 +411,46 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetColor()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_TargetColors[index] = (TargetColor)m_TargetColor.GetCurSel();
+        m_Ctrl.DrawTargets();
+        m_Ctrl.BlendAll();
+        m_Ctrl.Invalidate();
+    }
+}
+
+void CStateMapDlg::OnCbnSelchangeStatemapMissileId()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_MissileId.GetCurSel();
+    int count = m_MissileId.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_MissileType.SetCurSel(m_StateMap.m_MissileTypes[index]);
+        m_MissileColor.SetCurSel(m_StateMap.m_MissileColors[index]);
+    }
+}
+
+void CStateMapDlg::OnCbnSelchangeStatemapMissileType()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_MissileId.GetCurSel();
+    int count = m_MissileId.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_StateMap.m_MissileTypes[index] = (TargetType)m_MissileType.GetCurSel();
+        m_Ctrl.DrawTargets();
+        m_Ctrl.BlendAll();
+        m_Ctrl.Invalidate();
+    }
+}
+
+void CStateMapDlg::OnCbnSelchangeStatemapMissileColor()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_MissileId.GetCurSel();
+    int count = m_MissileId.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_StateMap.m_MissileColors[index] = (TargetColor)m_MissileColor.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();

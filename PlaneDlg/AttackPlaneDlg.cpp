@@ -100,6 +100,8 @@ void CAttackPlaneDlg::ResetCtrls()
 {
     CPlaneDlg::ResetCtrls();
     m_HasNaviOutput = false;
+    m_NaviOutput = NaviOutput();
+    m_Missiles.clear();
 }
 
 void CAttackPlaneDlg::ConnectDataCenter()
@@ -133,6 +135,10 @@ void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
     if (m_HasNaviOutput)
     {
         packet.m_PlaneTrueData = m_NaviOutput.m_TrueData;
+        for (int i = 0; i < m_Missiles.size(); ++i)
+        {
+            m_StateMap.AddMissileData(i, m_Missiles[i].m_Position);
+        }
         m_HasNaviOutput = false;
     }
     CPlaneDlg::AddTrueData(packet);
@@ -143,21 +149,32 @@ void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
     for (int i = 0; i < packet.m_FusionData.m_FusionDatas.size(); ++i)
     {
         TrueDataFrame &fusionFrame = packet.m_FusionData.m_FusionDatas[i];
-        m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
+        // m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
         TrueDataFrame &filterFrame = packet.m_FusionData.m_FilterDatas[i];
-        m_MatlabDlg->AddTargetFilterData(i, filterFrame);
-        m_MatlabDlg->UpdateGlobalVar();
+        // m_MatlabDlg->AddTargetFilterData(i, filterFrame);
+        // m_MatlabDlg->UpdateGlobalVar();
     }
     DoNavi(packet);
     m_HasNaviOutput = true;
 
-    TrueDataFrame frame;
-    frame.m_Time = packet.m_FusionData.m_FusionDatas[0].m_Time;
-    frame.m_Id = m_Plane.m_Id;
-    frame.m_Pos = m_Plane.m_Position;
-    frame.m_Vel = m_Plane.m_Vel;
-    frame.m_Acc = m_Plane.m_Acc;
-    m_FusionSocket->SendControlDataAck(frame);
+    ControlDataAckPacket accPacket;
+    accPacket.m_PlaneTrueData.m_Time = packet.m_FusionData.m_FusionDatas[0].m_Time;
+    accPacket.m_PlaneTrueData.m_Id = m_Plane.m_Id;
+    accPacket.m_PlaneTrueData.m_Pos = m_Plane.m_Position;
+    accPacket.m_PlaneTrueData.m_Vel = m_Plane.m_Vel;
+    accPacket.m_PlaneTrueData.m_Acc = m_Plane.m_Acc;
+
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        TrueDataFrame frame;
+        frame.m_Time = packet.m_FusionData.m_FusionDatas[0].m_Time;
+        frame.m_Id = m_Missiles[i].m_Id;
+        frame.m_Pos = m_Missiles[i].m_Position;
+        frame.m_Vel = m_Missiles[i].m_Vel;
+        frame.m_Acc = m_Missiles[i].m_Acc;
+        accPacket.m_MissileTrueDatas.push_back(frame);
+    }
+    m_FusionSocket->SendControlDataAck(accPacket);
 }
 
 void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
@@ -168,6 +185,8 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     input.m_ControlData = packet.m_ControlData;
     input.m_GlobalData = m_GlobalData;
     input.m_Plane = m_Plane;
+    input.m_Missiles = m_Missiles;
+    m_NaviOutput = NaviOutput();
     if (!m_NaviAlgo)
     {
         AfxMessageBox(TEXT("尚未指定导航算法."));
@@ -181,4 +200,11 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     m_Plane.MoveTo(m_NaviOutput.m_TrueData.m_Pos);
     m_Plane.m_Vel = m_NaviOutput.m_TrueData.m_Vel;
     m_Plane.m_Acc = m_NaviOutput.m_TrueData.m_Acc;
+
+    for (int i = 0; i < m_NaviOutput.m_Missiles.size(); ++i)
+    {
+        m_Missiles[i].MoveTo(m_NaviOutput.m_Missiles[i].m_Position);
+        m_Missiles[i].m_Vel = m_NaviOutput.m_Missiles[i].m_Vel;
+        m_Missiles[i].m_Acc = m_NaviOutput.m_Missiles[i].m_Acc;
+    }
 }

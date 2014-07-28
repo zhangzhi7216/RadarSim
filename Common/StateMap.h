@@ -29,6 +29,7 @@ public:
     vector<TargetColor> m_TargetColors;
     vector<Path> m_TargetPaths;
 
+    vector<TargetType> m_MissileTypes;
     vector<TargetColor> m_MissileColors;
     vector<Path> m_MissilePaths;
 
