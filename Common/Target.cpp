@@ -12,6 +12,7 @@ Target::Target()
 , m_HeadDir(1, 1, 1)
 , m_Pal(1)
 , m_Radius(100)
+, m_State(TargetStateAlive)
 {
 }
 
@@ -54,6 +55,8 @@ void Target::Reset()
     m_Acc = m_InitAcc;
 
     m_Center = m_InitPosition;
+
+    m_State = TargetStateAlive;
 }
 
 CArchive & operator << (CArchive &ar, Target &target)
@@ -61,7 +64,8 @@ CArchive & operator << (CArchive &ar, Target &target)
     int type = (int)target.m_Type;
     int moveType = (int)target.m_MoveType;
     int color = (int)target.m_Color;
-    ar << target.m_Id << type << moveType << color
+    int state = (int)target.m_State;
+    ar << target.m_Id << type << moveType << color << state
         << target.m_InitPosition << target.m_InitVel << target.m_InitAcc
         << target.m_Position << target.m_Vel << target.m_Acc
         << target.m_Center << target.m_Pal << target.m_Radius
@@ -72,8 +76,8 @@ CArchive & operator << (CArchive &ar, Target &target)
 
 CArchive & operator >> (CArchive &ar, Target &target)
 {
-    int type, moveType, color;
-    ar >> target.m_Id >> type >> moveType >> color
+    int type, moveType, color, state;
+    ar >> target.m_Id >> type >> moveType >> color >> state
         >> target.m_InitPosition >> target.m_InitVel >> target.m_InitAcc
         >> target.m_Position >> target.m_Vel >> target.m_Acc
         >> target.m_Center >> target.m_Pal >> target.m_Radius
@@ -81,6 +85,7 @@ CArchive & operator >> (CArchive &ar, Target &target)
     target.m_Type = (TargetType)type;
     target.m_MoveType = (TargetMoveType)moveType;
     target.m_Color = (TargetColor)color;
+    target.m_State = (TargetState)state;
 
     return ar;
 }

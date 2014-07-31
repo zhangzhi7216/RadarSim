@@ -28,6 +28,8 @@ public:
 
     TargetColor m_Color;
 
+    TargetState m_State;
+
     void Move(double t);
     void MoveTo(const Position &pos);
 

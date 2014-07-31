@@ -150,6 +150,14 @@ enum TargetType
     TargetTypeLast,
 };
 
+enum TargetState
+{
+    TargetStateAlive = 0,
+    TargetStateExploding,
+    TargetStateDestroyed,
+    TargetStateLast,
+};
+
 extern Image __declspec(dllimport) *TargetTypeImages[TargetTypeLast];
 extern CString __declspec(dllimport) TargetTypeNames[TargetTypeLast];
 
