@@ -6,6 +6,8 @@
 #include "AttackPlane.h"
 #include "AttackPlaneDlg.h"
 
+#include "Utility.h"
+
 #include <assert.h>
 
 #ifdef _DEBUG
@@ -134,10 +136,11 @@ void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
     if (m_HasNaviOutput)
     {
+        Utility::CheckMissileHit(this->m_Missiles, packet.m_TargetTrueDatas);
         packet.m_PlaneTrueData = m_NaviOutput.m_TrueData;
         for (int i = 0; i < m_Missiles.size(); ++i)
         {
-            m_StateMap.AddMissileData(i, m_Missiles[i].m_Position);
+            m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
         }
         m_HasNaviOutput = false;
     }
@@ -163,6 +166,7 @@ void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
     accPacket.m_PlaneTrueData.m_Pos = m_Plane.m_Position;
     accPacket.m_PlaneTrueData.m_Vel = m_Plane.m_Vel;
     accPacket.m_PlaneTrueData.m_Acc = m_Plane.m_Acc;
+    accPacket.m_PlaneTrueData.m_State = m_Plane.m_State;
 
     for (int i = 0; i < m_Missiles.size(); ++i)
     {
@@ -172,6 +176,8 @@ void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
         frame.m_Pos = m_Missiles[i].m_Position;
         frame.m_Vel = m_Missiles[i].m_Vel;
         frame.m_Acc = m_Missiles[i].m_Acc;
+        // 不记录导弹状态，交由DataCenter自己根据与目标的相对位置来判断
+        // frame.m_State = m_Missiles[i].m_State;
         accPacket.m_MissileTrueDatas.push_back(frame);
     }
     m_FusionSocket->SendControlDataAck(accPacket);

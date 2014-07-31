@@ -20,6 +20,8 @@ using namespace Gdiplus;
 
 #define LIST_ITEM_WIDTH 90
 
+#define MISSILE_HIT_THRESHOLD 50
+
 typedef struct __declspec(dllexport) Point3D
 {
     Point3D()
@@ -207,6 +209,7 @@ enum PacketType
     PacketTypeNaviAlgo,
     PacketTypeGlobalData,
     PacketTypeTrueData,
+    PacketTypeOtherTrueData,
     PacketTypeNoiseData,
     PacketTypeFusionData,
     PacketTypeControlData,

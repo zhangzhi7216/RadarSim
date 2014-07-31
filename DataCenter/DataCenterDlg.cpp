@@ -26,6 +26,8 @@
 
 #include "OneTimeMatlabDlg.h"
 
+#include "Utility.h"
+
 using namespace std;
 
 #ifdef _DEBUG
@@ -646,6 +648,23 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
     m_FusionDatas.push_back(packet);
 
+    // Adjust the missile true data.
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        TrueDataFrame &frame = packet.m_MissileTrueDatas[i];
+        m_Missiles[i].m_Position = frame.m_Pos;
+        m_Missiles[i].m_Vel = frame.m_Vel;
+        m_Missiles[i].m_Acc = frame.m_Acc;
+        // 同样不接收导弹状态，等下根据与目标的相对位置来自己判断
+        // m_Missiles[i].m_State = frame.m_State;
+    }
+    vector<Target *> targets;
+    for (int i = 0; i < m_TargetClients.size(); ++i)
+    {
+        targets.push_back(&m_TargetClients[i].m_Target);
+    }
+    Utility::CheckMissileHit(m_Missiles, targets);
+
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas.back().m_Pos);
@@ -655,7 +674,12 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_MatlabDlg.AddTargetFilterData(i, filterFrame);
         m_MatlabDlg.UpdateGlobalVar();
 
-        m_StateMap.AddTargetData(i, fusionFrame.m_Pos);
+        m_StateMap.AddTargetData(i, fusionFrame.m_Pos, m_TargetClients[i].m_Target.m_State);
+    }
+
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
     }
 
     int index = m_CurrentFrame / m_GlobalData.m_Interval;
@@ -665,16 +689,10 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     {
         TrueDataFrame &frame = packet.m_PlaneTrueDatas[i];
         m_PlaneClients[i].m_PlaneTrueDatas[index] = frame;
-        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos, (TargetState)(m_PlaneClients[i].m_PlaneTrueDatas[index].m_State));
         m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
     }
 
-    // Adjust the missile true data.
-    for (int i = 0; i < m_Missiles.size(); ++i)
-    {
-        TrueDataFrame &frame = packet.m_MissileTrueDatas[i];
-        m_StateMap.AddMissileData(i, frame.m_Pos);
-    }
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
@@ -863,6 +881,17 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
                 packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[index]);
             }
             m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
+
+            if (m_PlaneClients[i].m_PlaneSocket->IsFusion() || m_PlaneClients[i].m_PlaneSocket->IsAttack())
+            {
+                for (int j = 0; j < PLANE_COUNT; ++j)
+                {
+                    if (i != j)
+                    {
+                        m_PlaneClients[i].m_PlaneSocket->SendOtherTrueData(j < i ? j : j - 1, m_PlaneClients[j].m_PlaneTrueDatas[index]);
+                    }
+                }
+            }
         }
     }
 }

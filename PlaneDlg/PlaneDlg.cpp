@@ -423,9 +423,9 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         m_Radar.AddTargetData(1, rel1);
         m_Esm.AddTargetData(1, rel1);
         m_Infrared.AddTargetData(1, rel1);
-        m_StateMap.AddPlaneData(0, m_Plane.m_Position);
-        m_StateMap.AddTargetData(0, m_Targets[0].m_Position);
-        m_StateMap.AddTargetData(1, m_Targets[1].m_Position);
+        m_StateMap.AddPlaneData(0, m_Plane.m_Position, m_Plane.m_State);
+        m_StateMap.AddTargetData(0, m_Targets[0].m_Position, m_Targets[0].m_State);
+        m_StateMap.AddTargetData(1, m_Targets[1].m_Position, m_Targets[1].m_State);
 
         m_RadarCtrl.DrawTargets();
         m_RadarCtrl.BlendAll();
@@ -473,10 +473,14 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     {
         m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
-    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
 
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
+        if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
+        {
+            continue;
+        }
         Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
 
         m_Radar.AddTargetData(i, rel);
@@ -499,11 +503,11 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         if (!(frame.m_Dis == 0 && frame.m_Theta == 0 && frame.m_Phi == 0))
         {
             Position noiseAbsPos = packet.m_PlaneTrueData.m_Pos + Utility::Rel(frame.m_Dis, frame.m_Theta, frame.m_Phi);
-            m_StateMap.AddTargetData(i, noiseAbsPos);
+            m_StateMap.AddTargetData(i, noiseAbsPos, TargetStateAlive);
         }
         else
         {
-            m_StateMap.AddTargetData(i, Position(0, 0, 0));
+            m_StateMap.AddTargetData(i, Position(0, 0, 0), TargetStateDestroyed);
         }
     }
 
@@ -537,7 +541,15 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
+}
 
+void CPlaneDlg::AddOtherTrueData(int i, TrueDataFrame &frame)
+{
+    m_StateMap.AddPlaneData(i + 1, frame.m_Pos, (TargetState)frame.m_State);
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
 }
 
 bool NoiseDataFrameComp(const NoiseDataFrame &f1, const NoiseDataFrame f2)
@@ -571,18 +583,21 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
         NoiseDataFrame frame;
-        // Noise data doesn't know the target ID.
+        if (packet.m_TargetTrueDatas[i].m_State == TargetStateAlive)
+        {
+            // Noise data doesn't know the target ID.
 #ifndef _DEV
-        // Possibly the same for time.
-        frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
-        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+            // Possibly the same for time.
+            frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
+            frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
 #endif
-        frame.m_Dis = m_Radar.m_TargetDistances[i].back();
-        frame.m_DisVar = m_Radar.m_DisVar;
-        frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
-        frame.m_ThetaVar = m_Infrared.m_ThetaVar;
-        frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
-        frame.m_PhiVar = m_Infrared.m_PhiVar;
+            frame.m_Dis = m_Radar.m_TargetDistances[i].back();
+            frame.m_DisVar = m_Radar.m_DisVar;
+            frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
+            frame.m_ThetaVar = m_Infrared.m_ThetaVar;
+            frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
+            frame.m_PhiVar = m_Infrared.m_PhiVar;
+        }
         noisePacket.m_TargetNoiseDatas.push_back(frame);
     }
 

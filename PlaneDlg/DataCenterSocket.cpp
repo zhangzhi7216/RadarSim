@@ -182,6 +182,14 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             m_Dlg->SendNoiseData(noisePacket);
         }
         break;
+    case PacketTypeOtherTrueData:
+        {
+            int i;
+            TrueDataFrame frame;
+            ar >> i >> frame;
+            m_Dlg->AddOtherTrueData(i, frame);
+        }
+        break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;

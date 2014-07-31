@@ -127,6 +127,14 @@ void PlaneSocket::SendTrueData(TrueDataPacket &packet)
     ar.Flush();
 }
 
+void PlaneSocket::SendOtherTrueData(int i, TrueDataFrame &frame)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeOtherTrueData << i << frame;
+    ar.Flush();
+}
+
 bool PlaneSocket::IsFusion()
 {
     return m_IsFusion;

@@ -151,6 +151,7 @@ public:
     virtual void SetNaviAlgo(NaviAlgo *algo);
     virtual void SetGlobalData(GlobalDataPacket &packet);
     virtual void AddTrueData(TrueDataPacket &packet);
+    virtual void AddOtherTrueData(int i, TrueDataFrame &frame);
     virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
     typedef pair<PlaneSocket *, NoiseDataPacket> SocketPacketPair;
     virtual void AddNoiseData(SocketPacketPair spp);

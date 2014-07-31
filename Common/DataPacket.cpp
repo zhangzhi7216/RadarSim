@@ -3,13 +3,13 @@
 
 CArchive & operator << (CArchive &ar, TrueDataFrame &frame)
 {
-    ar << frame.m_Time << frame.m_Id << frame.m_Pos << frame.m_Vel << frame.m_Acc;
+    ar << frame.m_Time << frame.m_Id << frame.m_Pos << frame.m_Vel << frame.m_Acc << frame.m_State;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, TrueDataFrame &frame)
 {
-    ar >> frame.m_Time >> frame.m_Id >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc;
+    ar >> frame.m_Time >> frame.m_Id >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc >> frame.m_State;
     return ar;
 }
 
@@ -18,14 +18,15 @@ wofstream & operator << (wofstream &os, TrueDataFrame &frame)
     os << frame.m_Time << TEXT(" ") << frame.m_Id << TEXT(" ");
     os << frame.m_Pos << TEXT(" ");
     os << frame.m_Vel << TEXT(" ");
-    os << frame.m_Acc;
+    os << frame.m_Acc << TEXT(" ");
+    os << frame.m_State << TEXT(" ");
     return os;
 }
 
 wifstream & operator >> (wifstream &is, TrueDataFrame &frame)
 {
     is >> frame.m_Time >> frame.m_Id;
-    is >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc;
+    is >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc >> frame.m_State;
     return is;
 }
 

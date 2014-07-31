@@ -61,4 +61,74 @@ namespace Utility
         // 在这里加乘性噪声.
         return value + (double)rand() / (double)RAND_MAX * var;
     }
+
+    void CheckMissileHit(vector<Missile> &missiles, vector<TrueDataFrame> &targetTrueDatas)
+    {
+        for (int i = 0; i < missiles.size(); ++i)
+        {
+            Missile &miss = missiles[i];
+            if (miss.m_State == TargetStateDestroyed)
+            {
+                continue;
+            }
+            if (miss.m_State == TargetStateExploding)
+            {
+                miss.m_State = TargetStateDestroyed;
+                continue;
+            }
+            for (int j = 0; j < targetTrueDatas.size(); ++j)
+            {
+                TrueDataFrame &frame = targetTrueDatas[j];
+                if (frame.m_State == TargetStateDestroyed)
+                {
+                    continue;
+                }
+                if (frame.m_State == TargetStateExploding)
+                {
+                    frame.m_State = TargetStateDestroyed;
+                    continue;
+                }
+                if (Utility::Distance(frame.m_Pos - miss.m_Position) <= MISSILE_HIT_THRESHOLD)
+                {
+                    miss.m_State = TargetStateExploding;
+                    frame.m_State = TargetStateExploding;
+                }
+            }
+        }
+    }
+
+    void CheckMissileHit(vector<Missile> &missiles, vector<Target *> &targetClients)
+    {
+        for (int i = 0; i < missiles.size(); ++i)
+        {
+            Missile &miss = missiles[i];
+            if (miss.m_State == TargetStateDestroyed)
+            {
+                continue;
+            }
+            if (miss.m_State == TargetStateExploding)
+            {
+                miss.m_State = TargetStateDestroyed;
+                continue;
+            }
+            for (int j = 0; j < targetClients.size(); ++j)
+            {
+                Target &tar = *targetClients[j];
+                if (tar.m_State == TargetStateDestroyed)
+                {
+                    continue;
+                }
+                if (tar.m_State == TargetStateExploding)
+                {
+                    tar.m_State = TargetStateDestroyed;
+                    continue;
+                }
+                if (Utility::Distance(tar.m_Position - miss.m_Position) <= MISSILE_HIT_THRESHOLD)
+                {
+                    miss.m_State = TargetStateExploding;
+                    tar.m_State = TargetStateExploding;
+                }
+            }
+        }
+    }
 };

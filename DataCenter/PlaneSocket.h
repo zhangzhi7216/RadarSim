@@ -33,6 +33,7 @@ public:
     void SendNaviAlgo(NaviAlgo *algo);
     void SendGlobalData(GlobalDataPacket &packet);
     void SendTrueData(TrueDataPacket &packet);
+    void SendOtherTrueData(int i, TrueDataFrame &frame);
     bool IsFusion();
     bool IsAttack();
 
