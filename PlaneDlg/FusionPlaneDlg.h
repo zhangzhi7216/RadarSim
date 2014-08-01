@@ -33,6 +33,7 @@ protected:
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void AddPlaneSocket();
+    virtual void AddTrueData(TrueDataPacket &packet);
     virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
     virtual void SetFusionAlgo(FusionAlgo *algo);
@@ -48,4 +49,6 @@ protected:
     FusionAlgo *m_FusionAlgo;
 
     FusionOutput m_FusionOutput;
+
+    vector<TargetState> m_TargetStates;
 };

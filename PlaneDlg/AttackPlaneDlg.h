@@ -36,8 +36,9 @@ protected:
     NaviAlgo *m_NaviAlgo;
     void DoNavi(const ControlDataPacket &packet);
     NaviOutput m_NaviOutput;
-    bool m_HasNaviOutput;
 
     virtual void AddTrueData(TrueDataPacket &packet);
     virtual void AddControlData(ControlDataPacket &packet);
+
+    vector<TargetState> m_TargetStates;
 };

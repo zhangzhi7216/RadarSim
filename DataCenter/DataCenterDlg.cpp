@@ -648,16 +648,17 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
     m_FusionDatas.push_back(packet);
 
-    // Adjust the missile true data.
-    for (int i = 0; i < m_Missiles.size(); ++i)
+    int index = m_CurrentFrame / m_GlobalData.m_Interval;
+
+    /////// 以下为本帧内容显示
+    // 显示本帧我机
+    for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        TrueDataFrame &frame = packet.m_MissileTrueDatas[i];
-        m_Missiles[i].m_Position = frame.m_Pos;
-        m_Missiles[i].m_Vel = frame.m_Vel;
-        m_Missiles[i].m_Acc = frame.m_Acc;
-        // 同样不接收导弹状态，等下根据与目标的相对位置来自己判断
-        // m_Missiles[i].m_State = frame.m_State;
+        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos, (TargetState)(m_PlaneClients[i].m_PlaneTrueDatas[index].m_State));
+        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
     }
+
+    // 检测本帧是否发生爆炸
     vector<Target *> targets;
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
@@ -665,6 +666,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     }
     Utility::CheckMissileHit(m_Missiles, targets);
 
+    // 显示本帧目标
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas.back().m_Pos);
@@ -677,26 +679,34 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_StateMap.AddTargetData(i, fusionFrame.m_Pos, m_TargetClients[i].m_Target.m_State);
     }
 
+    // 显示本帧导弹
     for (int i = 0; i < m_Missiles.size(); ++i)
     {
         m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
     }
 
-    int index = m_CurrentFrame / m_GlobalData.m_Interval;
-
-    // Adjust the plane true data.
-    for (int i = 0; i < PLANE_COUNT; ++i)
-    {
-        TrueDataFrame &frame = packet.m_PlaneTrueDatas[i];
-        m_PlaneClients[i].m_PlaneTrueDatas[index] = frame;
-        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos, (TargetState)(m_PlaneClients[i].m_PlaneTrueDatas[index].m_State));
-        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
-    }
-
-
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
+
+    /////// 以下为下一帧内容校正
+    // 校正攻击机位置
+    if (m_CurrentRound < m_GlobalData.m_Rounds)
+    {
+        TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
+        m_PlaneClients[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;
+    }
+
+    // 校正导弹位置
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        TrueDataFrame &frame = packet.m_MissileTrueDatas[i];
+        m_Missiles[i].m_Position = frame.m_Pos;
+        m_Missiles[i].m_Vel = frame.m_Vel;
+        m_Missiles[i].m_Acc = frame.m_Acc;
+        // 同样不接收导弹状态，等下根据与目标的相对位置来自己判断
+        // m_Missiles[i].m_State = frame.m_State;
+    }
 
     ResumeSim();
 }

@@ -138,12 +138,106 @@ void CFusionPlaneDlg::AddPlaneSocket()
     m_Lock.Unlock();
 }
 
+void CFusionPlaneDlg::AddTrueData(TrueDataPacket &packet)
+{
+    // CPlaneDlg::AddTrueData(packet);
+    m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
+
+    // 显示本帧前半部，即传感器部分
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
+    }
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
+
+    // 让融合机的传感器照常采样，仅仅用于显示
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
+    {
+        if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
+        {
+            continue;
+        }
+        Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
+
+        m_Radar.AddTargetData(i, rel);
+        m_Esm.AddTargetData(i, rel);
+        m_Infrared.AddTargetData(i, rel);
+
+        m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
+
+        if (m_MatlabDlg)
+        {
+            m_MatlabDlg->AddTargetTrueData(i, packet.m_TargetTrueDatas[i].m_Pos);
+        }
+    }
+
+    m_RadarCtrl.DrawTargets();
+    m_RadarCtrl.BlendAll();
+    m_RadarCtrl.Invalidate();
+
+    m_RadarDlg.m_Ctrl->DrawTargets();
+    m_RadarDlg.m_Ctrl->BlendAll();
+    m_RadarDlg.m_Ctrl->Invalidate();
+
+    m_EsmCtrl.DrawTargets();
+    m_EsmCtrl.BlendAll();
+    m_EsmCtrl.Invalidate();
+
+    m_EsmDlg.m_Ctrl->DrawTargets();
+    m_EsmDlg.m_Ctrl->BlendAll();
+    m_EsmDlg.m_Ctrl->Invalidate();
+
+    m_InfraredCtrl.DrawTargets();
+    m_InfraredCtrl.BlendAll();
+    m_InfraredCtrl.Invalidate();
+
+    m_InfraredDlg.m_Ctrl->DrawTargets();
+    m_InfraredDlg.m_Ctrl->BlendAll();
+    m_InfraredDlg.m_Ctrl->Invalidate();
+
+    m_DataListCtrl.AddTargetData();
+    m_DataListDlg.m_Ctrl->AddTargetData();
+
+    m_TargetStates.clear();
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
+    {
+        m_TargetStates.push_back((TargetState)packet.m_TargetTrueDatas[i].m_State);
+    }
+}
+
 void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
 {
     m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
     if (m_NoiseDatas.size() == m_PlaneSockets.size())
     {
         DoFusion();
+
+        for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
+        {
+            TrueDataFrame &fusionFrame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
+            m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
+            TrueDataFrame &filterFrame = m_FusionOutput.m_FusionData.m_FilterDatas[i];
+            m_MatlabDlg->AddTargetFilterData(i, filterFrame);
+            m_MatlabDlg->UpdateGlobalVar();
+        }
+
+        // 显示本帧后半部，即态势部分，目标和导弹
+        for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
+        {
+            TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
+            m_StateMap.AddTargetData(i, frame.m_Pos, m_TargetStates[i]);
+        }
+
+        m_StateMapDlg.m_Ctrl.DrawTargets();
+        m_StateMapDlg.m_Ctrl.BlendAll();
+        m_StateMapDlg.m_Ctrl.Invalidate();
+
+        for (int i = 0; i < m_PlaneSockets.size(); ++i)
+        {
+            m_PlaneSockets[i]->SendControlData(m_FusionOutput.m_ControlDatas[i]);
+        }
+
+        m_NoiseDatas.clear();
     }
 }
 
@@ -191,22 +285,19 @@ void CFusionPlaneDlg::DoFusion()
     {
         m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(it->second.second.m_PlaneTrueData);
     }
-    /*
-    int i = 0;
-    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end() && i < m_FusionOutput.m_ControlDatas.size(); ++it, ++i)
-    {
-        if (it->second.first)
-        {
-            it->second.first->SendControlData(m_FusionOutput.m_ControlDatas[i]);
-        }
-    }
-    */
-    for (int i = 0; i < m_PlaneSockets.size(); ++i)
-    {
-        m_PlaneSockets[i]->SendControlData(m_FusionOutput.m_ControlDatas[i]);
-    }
 
-    m_NoiseDatas.clear();
+#ifdef _DEV
+    for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
+    {
+        TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
+        TrueDataFrame &planeTrue = m_FusionOutput.m_FusionData.m_PlaneTrueDatas[i % m_FusionOutput.m_FusionData.m_PlaneTrueDatas.size()];
+        frame.m_Pos = planeTrue.m_Pos + Position(500, 500, 100);
+    }
+    for (int i = 0; i < m_FusionOutput.m_ControlDatas.size(); ++i)
+    {
+        m_FusionOutput.m_ControlDatas[i].m_FusionData = m_FusionOutput.m_FusionData;
+    }
+#endif
 }
 
 void CFusionPlaneDlg::AddControlDataAck(ControlDataAckPacket &packet)

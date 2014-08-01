@@ -23,7 +23,6 @@
 CAttackPlaneDlg::CAttackPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(title, pParent)
     , m_NaviAlgo(NULL)
-    , m_HasNaviOutput(false)
 {
     m_DlgType = DlgTypeAttackPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -101,7 +100,6 @@ HCURSOR CAttackPlaneDlg::OnQueryDragIcon()
 void CAttackPlaneDlg::ResetCtrls()
 {
     CPlaneDlg::ResetCtrls();
-    m_HasNaviOutput = false;
     m_NaviOutput = NaviOutput();
     m_Missiles.clear();
 }
@@ -134,31 +132,94 @@ void CAttackPlaneDlg::SetNaviAlgo(NaviAlgo *algo)
 
 void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
-    if (m_HasNaviOutput)
+    // CPlaneDlg::AddTrueData(packet);
+    m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
+
+    // 显示本帧前半部，即传感器部分
+    if (m_MatlabDlg)
     {
-        Utility::CheckMissileHit(this->m_Missiles, packet.m_TargetTrueDatas);
-        packet.m_PlaneTrueData = m_NaviOutput.m_TrueData;
-        for (int i = 0; i < m_Missiles.size(); ++i)
-        {
-            m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
-        }
-        m_HasNaviOutput = false;
+        m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
-    CPlaneDlg::AddTrueData(packet);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
+
+    // 让攻击机的传感器照常采样，仅仅用于显示
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
+    {
+        if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
+        {
+            continue;
+        }
+        Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
+
+        m_Radar.AddTargetData(i, rel);
+        m_Esm.AddTargetData(i, rel);
+        m_Infrared.AddTargetData(i, rel);
+
+        m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
+
+        if (m_MatlabDlg)
+        {
+            m_MatlabDlg->AddTargetTrueData(i, packet.m_TargetTrueDatas[i].m_Pos);
+        }
+    }
+
+    m_RadarCtrl.DrawTargets();
+    m_RadarCtrl.BlendAll();
+    m_RadarCtrl.Invalidate();
+
+    m_RadarDlg.m_Ctrl->DrawTargets();
+    m_RadarDlg.m_Ctrl->BlendAll();
+    m_RadarDlg.m_Ctrl->Invalidate();
+
+    m_EsmCtrl.DrawTargets();
+    m_EsmCtrl.BlendAll();
+    m_EsmCtrl.Invalidate();
+
+    m_EsmDlg.m_Ctrl->DrawTargets();
+    m_EsmDlg.m_Ctrl->BlendAll();
+    m_EsmDlg.m_Ctrl->Invalidate();
+
+    m_InfraredCtrl.DrawTargets();
+    m_InfraredCtrl.BlendAll();
+    m_InfraredCtrl.Invalidate();
+
+    m_InfraredDlg.m_Ctrl->DrawTargets();
+    m_InfraredDlg.m_Ctrl->BlendAll();
+    m_InfraredDlg.m_Ctrl->Invalidate();
+
+    m_DataListCtrl.AddTargetData();
+    m_DataListDlg.m_Ctrl->AddTargetData();
+
+    // 仅有此处可以看到目标真值，所以在这里判断爆炸
+    Utility::CheckMissileHit(m_Missiles, packet.m_TargetTrueDatas);
+    m_TargetStates.clear();
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
+    {
+        m_TargetStates.push_back((TargetState)packet.m_TargetTrueDatas[i].m_State);
+    }
 }
 
 void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
+    // 显示本帧后半部，即态势部分，目标和导弹
     for (int i = 0; i < packet.m_FusionData.m_FusionDatas.size(); ++i)
     {
-        TrueDataFrame &fusionFrame = packet.m_FusionData.m_FusionDatas[i];
-        // m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
-        TrueDataFrame &filterFrame = packet.m_FusionData.m_FilterDatas[i];
-        // m_MatlabDlg->AddTargetFilterData(i, filterFrame);
-        // m_MatlabDlg->UpdateGlobalVar();
+        TrueDataFrame &frame = packet.m_FusionData.m_FusionDatas[i];
+        m_StateMap.AddTargetData(i, frame.m_Pos, m_TargetStates[i]);
     }
+
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
+    }
+
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+
+    // 校正下帧，即完成导航控制攻击机和导弹的下一帧位置
+
     DoNavi(packet);
-    m_HasNaviOutput = true;
 
     ControlDataAckPacket accPacket;
     accPacket.m_PlaneTrueData.m_Time = packet.m_FusionData.m_FusionDatas[0].m_Time;
@@ -182,7 +243,7 @@ void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
     }
     m_FusionSocket->SendControlDataAck(accPacket);
 }
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
 {
     NaviInput input;
