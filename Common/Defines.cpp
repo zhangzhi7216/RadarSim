@@ -140,18 +140,18 @@ void __declspec(dllexport) GlobalInit()
     StateMapBackgrounds[StateMapBackground3] = Image::FromFile(TEXT("StateMapBackground3.bmp"));
     StateMapBackgrounds[StateMapBackground4] = Image::FromFile(TEXT("StateMapBackground4.bmp"));
 
-    TargetTypeImages[TargetTypeHeli] = Image::FromFile(TEXT("Heli.ico"));
-    TargetTypeImages[TargetTypeFighter] = Image::FromFile(TEXT("Fighter.ico"));
-    TargetTypeImages[TargetTypeAew] = Image::FromFile(TEXT("Aew.ico"));
-    TargetTypeImages[TargetTypeBomber] = Image::FromFile(TEXT("Bomber.ico"));
-    TargetTypeImages[TargetTypeShipboard] = Image::FromFile(TEXT("Shipboard.ico"));
-    TargetTypeImages[TargetTypeTank] = Image::FromFile(TEXT("Tank.ico"));
-    TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.ico"));
-    TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.ico"));
+    TargetTypeImages[TargetTypeHeli] = Image::FromFile(TEXT("Heli.png"));
+    TargetTypeImages[TargetTypeFighter] = Image::FromFile(TEXT("Fighter.png"));
+    TargetTypeImages[TargetTypeAew] = Image::FromFile(TEXT("Aew.png"));
+    TargetTypeImages[TargetTypeBomber] = Image::FromFile(TEXT("Bomber.png"));
+    TargetTypeImages[TargetTypeShipboard] = Image::FromFile(TEXT("Shipboard.png"));
+    TargetTypeImages[TargetTypeTank] = Image::FromFile(TEXT("Tank.png"));
+    TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.png"));
+    TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.png"));
 
-    ExplosionTypeImages[ExplosionType0] = Image::FromFile(TEXT("Explosion0.ico"));
-    ExplosionTypeImages[ExplosionType1] = Image::FromFile(TEXT("Explosion1.ico"));
-    ExplosionTypeImages[ExplosionType2] = Image::FromFile(TEXT("Explosion2.ico"));
+    ExplosionTypeImages[ExplosionType0] = Image::FromFile(TEXT("Explosion0.png"));
+    ExplosionTypeImages[ExplosionType1] = Image::FromFile(TEXT("Explosion1.png"));
+    ExplosionTypeImages[ExplosionType2] = Image::FromFile(TEXT("Explosion2.png"));
 
     typedef GlobalVarFrame *GlobalVarFrameP;
     g_GlobalVar = new GlobalVarFrameP[PLANE_COUNT];
