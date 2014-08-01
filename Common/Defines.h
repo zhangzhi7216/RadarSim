@@ -152,16 +152,19 @@ enum TargetType
     TargetTypeLast,
 };
 
-enum TargetState
-{
-    TargetStateAlive = 0,
-    TargetStateExploding,
-    TargetStateDestroyed,
-    TargetStateLast,
-};
-
 extern Image __declspec(dllimport) *TargetTypeImages[TargetTypeLast];
 extern CString __declspec(dllimport) TargetTypeNames[TargetTypeLast];
+
+enum ExplosionType
+{
+    ExplosionType0 = 0,
+    ExplosionType1,
+    ExplosionType2,
+    ExplosionTypeLast,
+};
+
+extern Image __declspec(dllimport) *ExplosionTypeImages[ExplosionTypeLast];
+extern CString __declspec(dllimport) ExplosionTypeNames[ExplosionTypeLast];
 
 enum TargetMoveType
 {
@@ -169,6 +172,14 @@ enum TargetMoveType
     TargetMoveTypeUniAcc,
     TargetMoveTypeUniCir,
     TargetMoveTypeLast,
+};
+
+enum TargetState
+{
+    TargetStateAlive = 0,
+    TargetStateExploding,
+    TargetStateDestroyed,
+    TargetStateLast,
 };
 
 extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];

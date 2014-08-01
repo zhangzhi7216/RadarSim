@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_02F8860BFFDE456995D2FF25C8979748"
+        "MsmKey" = "8:_02407C3D9AB346D1B2548CF570271734"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_13F17AF5B11A45008449B2DFA09623A9"
+        "MsmKey" = "8:_0C5C26348AD14DB4914A5D6B249543D2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -33,56 +33,8 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_18DF17A902EE4F09B455F91765C00FA0"
+        "MsmKey" = "8:_1AA553AA29BA4CCBB6988ECC87E90290"
         "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1AB3D3843DA14354B7587064859337FB"
-        "OwnerKey" = "8:_24372CB1E8E94B21A6F0D2F58333E627"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1BB9FB545B2347249AE4C222CD6B0077"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1D95A297A90048CEACE678B1FBE63415"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_1F0F3953804F411CA5F3B398AB6EBC14"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_23FB86EAD44A4AA29F4D40BC3CD14004"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_24372CB1E8E94B21A6F0D2F58333E627"
-        "OwnerKey" = "8:_1562F636F6104FD09C2CC83177C6E885"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_24372CB1E8E94B21A6F0D2F58333E627"
-        "OwnerKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_24372CB1E8E94B21A6F0D2F58333E627"
-        "OwnerKey" = "8:_8F981E899C954D69B6848543A3D92B85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -93,43 +45,49 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_4C8160695B994248B7D3EE71D3AF1187"
-        "OwnerKey" = "8:_6D338BB6DFA444F3A6A1F7AF74E9A8B7"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5C4913AD13064C13958BEAC26BE0B79A"
+        "MsmKey" = "8:_53D93C0B2E81403791FC84C7F21A85F9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D338BB6DFA444F3A6A1F7AF74E9A8B7"
+        "MsmKey" = "8:_55A5766F8348480D8CB5DFDCF5C4984F"
         "OwnerKey" = "8:_1562F636F6104FD09C2CC83177C6E885"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D338BB6DFA444F3A6A1F7AF74E9A8B7"
+        "MsmKey" = "8:_55A5766F8348480D8CB5DFDCF5C4984F"
         "OwnerKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6D338BB6DFA444F3A6A1F7AF74E9A8B7"
+        "MsmKey" = "8:_55A5766F8348480D8CB5DFDCF5C4984F"
         "OwnerKey" = "8:_8F981E899C954D69B6848543A3D92B85"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_717C4D513BCF4A60B6C26CD28F691F89"
+        "MsmKey" = "8:_63836280727D4943AF1B3520BFB981E9"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_750DCE9E47904E51B3D555AF46D36E53"
+        "MsmKey" = "8:_66EF4EA1B12C4AC9B8604685B952F055"
+        "OwnerKey" = "8:_55A5766F8348480D8CB5DFDCF5C4984F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6C0A5FF64A4B47BA98EC7B01443BF577"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_717C4D513BCF4A60B6C26CD28F691F89"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -147,19 +105,49 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7DD05A07FD6040649E42F59C0BD96C39"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_8396495D561C4F4CAECBC24C1B303AD3"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8F981E899C954D69B6848543A3D92B85"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9269CD9C2FDD46209C6AB16E46384DEC"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_95FFCE603EC74B9F9F5BA37DB1DC293B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_9EE98719E1594B3788C4370E7B864D06"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A9053C296020461B865BA5C452B90FD0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AA1231EAFFEF46B3A27437C9CFEEB559"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_ACFE72A393FE4457B9E14A91FB10F9E1"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AF4552F09D8C454990CE687BB335AB8C"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -189,13 +177,37 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_C4886ECC1CE94898BBDA8F13BF384F52"
+        "MsmKey" = "8:_CBE79F80FED2494781F434E5F9CE694D"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_D67AA854E4EA448E9CD46D28D00DB9DA"
+        "MsmKey" = "8:_D283AC33CF4444F89088688FE72CF50D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DD9C8E174FED447C85124F7264B55E6E"
+        "OwnerKey" = "8:_1562F636F6104FD09C2CC83177C6E885"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DD9C8E174FED447C85124F7264B55E6E"
+        "OwnerKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_DD9C8E174FED447C85124F7264B55E6E"
+        "OwnerKey" = "8:_8F981E899C954D69B6848543A3D92B85"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E2465D6550604B2BB8D5B5FFE122820E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -203,6 +215,12 @@
         {
         "MsmKey" = "8:_E506ABC6CE4F4B3597E78D02727FE839"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EF613174EA974CA4915AB3C1A8244C71"
+        "OwnerKey" = "8:_DD9C8E174FED447C85124F7264B55E6E"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -302,10 +320,10 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_02F8860BFFDE456995D2FF25C8979748"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_02407C3D9AB346D1B2548CF570271734"
             {
-            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground2.bmp"
-            "TargetName" = "8:StateMapBackground2.bmp"
+            "SourcePath" = "8:..\\FusionPlane\\Explosion0.png"
+            "TargetName" = "8:Explosion0.png"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -322,10 +340,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_13F17AF5B11A45008449B2DFA09623A9"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0C5C26348AD14DB4914A5D6B249543D2"
             {
-            "SourcePath" = "8:..\\FusionPlane\\Missile.ico"
-            "TargetName" = "8:Missile.ico"
+            "SourcePath" = "8:..\\FusionPlane\\Bomber.png"
+            "TargetName" = "8:Bomber.png"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -342,90 +360,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18DF17A902EE4F09B455F91765C00FA0"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1AA553AA29BA4CCBB6988ECC87E90290"
             {
-            "SourcePath" = "8:..\\FusionPlane\\Fighter.ico"
-            "TargetName" = "8:Fighter.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1BB9FB545B2347249AE4C222CD6B0077"
-            {
-            "SourcePath" = "8:..\\FusionPlane\\Bomber.ico"
-            "TargetName" = "8:Bomber.ico"
-            "Tag" = "8:"
-            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1D95A297A90048CEACE678B1FBE63415"
-            {
-            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground4.bmp"
-            "TargetName" = "8:StateMapBackground4.bmp"
-            "Tag" = "8:"
-            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1F0F3953804F411CA5F3B398AB6EBC14"
-            {
-            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground1.bmp"
-            "TargetName" = "8:StateMapBackground1.bmp"
-            "Tag" = "8:"
-            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_23FB86EAD44A4AA29F4D40BC3CD14004"
-            {
-            "SourcePath" = "8:..\\FusionPlane\\Aew.ico"
-            "TargetName" = "8:Aew.ico"
+            "SourcePath" = "8:..\\FusionPlane\\Tank.png"
+            "TargetName" = "8:Tank.png"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -462,10 +400,50 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5C4913AD13064C13958BEAC26BE0B79A"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_53D93C0B2E81403791FC84C7F21A85F9"
             {
-            "SourcePath" = "8:..\\FusionPlane\\Shipboard.ico"
-            "TargetName" = "8:Shipboard.ico"
+            "SourcePath" = "8:..\\FusionPlane\\Fighter.png"
+            "TargetName" = "8:Fighter.png"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_63836280727D4943AF1B3520BFB981E9"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\Panzer.png"
+            "TargetName" = "8:Panzer.png"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6C0A5FF64A4B47BA98EC7B01443BF577"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\Explosion2.png"
+            "TargetName" = "8:Explosion2.png"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -486,26 +464,6 @@
             {
             "SourcePath" = "8:..\\FusionPlane\\FusionMatlabAlgoTest2.dll"
             "TargetName" = "8:FusionMatlabAlgoTest2.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_750DCE9E47904E51B3D555AF46D36E53"
-            {
-            "SourcePath" = "8:..\\FusionPlane\\Heli.ico"
-            "TargetName" = "8:Heli.ico"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -562,10 +520,10 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_7DD05A07FD6040649E42F59C0BD96C39"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9269CD9C2FDD46209C6AB16E46384DEC"
             {
-            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground0.bmp"
-            "TargetName" = "8:StateMapBackground0.bmp"
+            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground4.bmp"
+            "TargetName" = "8:StateMapBackground4.bmp"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -582,10 +540,110 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8396495D561C4F4CAECBC24C1B303AD3"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_95FFCE603EC74B9F9F5BA37DB1DC293B"
             {
-            "SourcePath" = "8:..\\FusionPlane\\Panzer.ico"
-            "TargetName" = "8:Panzer.ico"
+            "SourcePath" = "8:..\\FusionPlane\\Heli.png"
+            "TargetName" = "8:Heli.png"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9EE98719E1594B3788C4370E7B864D06"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground3.bmp"
+            "TargetName" = "8:StateMapBackground3.bmp"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A9053C296020461B865BA5C452B90FD0"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\Missile.png"
+            "TargetName" = "8:Missile.png"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AA1231EAFFEF46B3A27437C9CFEEB559"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground2.bmp"
+            "TargetName" = "8:StateMapBackground2.bmp"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ACFE72A393FE4457B9E14A91FB10F9E1"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\Shipboard.png"
+            "TargetName" = "8:Shipboard.png"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AF4552F09D8C454990CE687BB335AB8C"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\Aew.png"
+            "TargetName" = "8:Aew.png"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -642,10 +700,10 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_C4886ECC1CE94898BBDA8F13BF384F52"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_CBE79F80FED2494781F434E5F9CE694D"
             {
-            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground3.bmp"
-            "TargetName" = "8:StateMapBackground3.bmp"
+            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground1.bmp"
+            "TargetName" = "8:StateMapBackground1.bmp"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -662,10 +720,30 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D67AA854E4EA448E9CD46D28D00DB9DA"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D283AC33CF4444F89088688FE72CF50D"
             {
-            "SourcePath" = "8:..\\FusionPlane\\Tank.ico"
-            "TargetName" = "8:Tank.ico"
+            "SourcePath" = "8:..\\FusionPlane\\Explosion1.png"
+            "TargetName" = "8:Explosion1.png"
+            "Tag" = "8:"
+            "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E2465D6550604B2BB8D5B5FFE122820E"
+            {
+            "SourcePath" = "8:..\\FusionPlane\\StateMapBackground0.bmp"
+            "TargetName" = "8:StateMapBackground0.bmp"
             "Tag" = "8:"
             "Folder" = "8:_79A0A3BCDD794F39A66E1151F98B4A9B"
             "Condition" = "8:"
@@ -1293,11 +1371,11 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_1AB3D3843DA14354B7587064859337FB"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_55A5766F8348480D8CB5DFDCF5C4984F"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:microsoft_vc90_debugmfc_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
                 "Properties"
                 {
                 }
@@ -1307,21 +1385,7 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_24372CB1E8E94B21A6F0D2F58333E627"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugMFC_x86.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_4C8160695B994248B7D3EE71D3AF1187"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_66EF4EA1B12C4AC9B8604685B952F055"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1335,11 +1399,25 @@
             "Feature" = "8:"
             "IsolateTo" = "8:"
             }
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_6D338BB6DFA444F3A6A1F7AF74E9A8B7"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_DD9C8E174FED447C85124F7264B55E6E"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugCRT_x86.msm"
+            "SourcePath" = "8:policy_9_0_Microsoft_VC90_DebugMFC_x86.msm"
+                "Properties"
+                {
+                }
+            "LanguageId" = "3:0"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_EF613174EA974CA4915AB3C1A8244C71"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:TRUE"
+            "SourcePath" = "8:microsoft_vc90_debugmfc_x86.msm"
                 "Properties"
                 {
                 }

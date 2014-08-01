@@ -39,14 +39,14 @@ CString __declspec(dllexport) StateMapBackgroundNames[] =
 
 Image __declspec(dllexport) *TargetTypeImages[] =
 {
-    Image::FromFile(TEXT("Heli.ico")),
-    Image::FromFile(TEXT("Fighter.ico")),
-    Image::FromFile(TEXT("Aew.ico")),
-    Image::FromFile(TEXT("Bomber.ico")),
-    Image::FromFile(TEXT("Shipboard.ico")),
-    Image::FromFile(TEXT("Tank.ico")),
-    Image::FromFile(TEXT("Panzer.ico")),
-    Image::FromFile(TEXT("Missile.ico")),
+    Image::FromFile(TEXT("Heli.png")),
+    Image::FromFile(TEXT("Fighter.png")),
+    Image::FromFile(TEXT("Aew.png")),
+    Image::FromFile(TEXT("Bomber.png")),
+    Image::FromFile(TEXT("Shipboard.png")),
+    Image::FromFile(TEXT("Tank.png")),
+    Image::FromFile(TEXT("Panzer.png")),
+    Image::FromFile(TEXT("Missile.png")),
 };
 
 CString __declspec(dllexport) TargetTypeNames[] =
@@ -59,6 +59,20 @@ CString __declspec(dllexport) TargetTypeNames[] =
     TEXT("Ì¹¿Ë"),
     TEXT("×°¼×³µ"),
     TEXT("µ¼µ¯"),
+};
+
+Image __declspec(dllexport) *ExplosionTypeImages[] =
+{
+    Image::FromFile(TEXT("Explosion0.png")),
+    Image::FromFile(TEXT("Explosion1.png")),
+    Image::FromFile(TEXT("Explosion2.png")),
+};
+
+CString __declspec(dllexport) ExplosionTypeNames[] =
+{
+    TEXT("±¬Õ¨0"),
+    TEXT("±¬Õ¨1"),
+    TEXT("±¬Õ¨2"),
 };
 
 CString __declspec(dllexport) TargetMoveTypeNames[] =
@@ -135,6 +149,10 @@ void __declspec(dllexport) GlobalInit()
     TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.ico"));
     TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.ico"));
 
+    ExplosionTypeImages[ExplosionType0] = Image::FromFile(TEXT("Explosion0.ico"));
+    ExplosionTypeImages[ExplosionType1] = Image::FromFile(TEXT("Explosion1.ico"));
+    ExplosionTypeImages[ExplosionType2] = Image::FromFile(TEXT("Explosion2.ico"));
+
     typedef GlobalVarFrame *GlobalVarFrameP;
     g_GlobalVar = new GlobalVarFrameP[PLANE_COUNT];
     for (int i = 0; i < PLANE_COUNT; ++i)
@@ -149,7 +167,7 @@ void __declspec(dllexport) GlobalShut()
 {
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        delete[] g_GlobalVar;
+        delete[] g_GlobalVar[i];
     }
     delete[] g_GlobalVar;
 
@@ -160,6 +178,10 @@ void __declspec(dllexport) GlobalShut()
     for (int i = TargetTypeHeli; i < TargetTypeLast; ++i)
     {
         delete TargetTypeImages[i];
+    }
+    for (int i = ExplosionType0; i < ExplosionTypeLast; ++i)
+    {
+        delete ExplosionTypeImages[i];
     }
     ULONG_PTR gdiplusToken = NULL; 
     GdiplusShutdown(gdiplusToken);
