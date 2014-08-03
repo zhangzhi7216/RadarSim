@@ -20,7 +20,11 @@ using namespace Gdiplus;
 
 #define LIST_ITEM_WIDTH 90
 
+#ifdef _DEV
+#define MISSILE_HIT_THRESHOLD 10000
+#else
 #define MISSILE_HIT_THRESHOLD 50
+#endif
 
 typedef struct __declspec(dllexport) Point3D
 {

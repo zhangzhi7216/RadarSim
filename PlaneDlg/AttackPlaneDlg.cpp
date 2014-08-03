@@ -270,8 +270,17 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
 
     for (int i = 0; i < m_NaviOutput.m_Missiles.size(); ++i)
     {
-        m_Missiles[i].MoveTo(m_NaviOutput.m_Missiles[i].m_Position);
-        m_Missiles[i].m_Vel = m_NaviOutput.m_Missiles[i].m_Vel;
-        m_Missiles[i].m_Acc = m_NaviOutput.m_Missiles[i].m_Acc;
+        if (m_NaviOutput.m_Missiles[i].m_State == TargetStateAlive)
+        {
+            m_Missiles[i].MoveTo(m_NaviOutput.m_Missiles[i].m_Position);
+            m_Missiles[i].m_Vel = m_NaviOutput.m_Missiles[i].m_Vel;
+            m_Missiles[i].m_Acc = m_NaviOutput.m_Missiles[i].m_Acc;
+        }
+        else if (m_NaviOutput.m_Missiles[i].m_State == TargetStateExploding)
+        {
+            m_Missiles[i].m_Position = Position(0, 0, 0);
+            m_Missiles[i].m_Vel = Point3D(0, 0, 0);
+            m_Missiles[i].m_Acc = Point3D(0, 0, 0);
+        }
     }
 }

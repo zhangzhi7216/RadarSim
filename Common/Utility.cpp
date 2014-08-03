@@ -66,67 +66,71 @@ namespace Utility
     {
         for (int i = 0; i < missiles.size(); ++i)
         {
-            Missile &miss = missiles[i];
-            if (miss.m_State == TargetStateDestroyed)
+            if (missiles[i].m_State == TargetStateExploding)
             {
-                continue;
+                missiles[i].m_State = TargetStateDestroyed;
             }
-            if (miss.m_State == TargetStateExploding)
+        }
+        for (int i = 0; i < targetTrueDatas.size(); ++i)
+        {
+            if (targetTrueDatas[i].m_State == TargetStateExploding)
             {
-                miss.m_State = TargetStateDestroyed;
+                targetTrueDatas[i].m_State = TargetStateDestroyed;
+            }
+        }
+
+        for (int i = 0; i < missiles.size(); ++i)
+        {
+            Missile &miss = missiles[i];
+            if (miss.m_State != TargetStateAlive)
+            {
                 continue;
             }
             for (int j = 0; j < targetTrueDatas.size(); ++j)
             {
                 TrueDataFrame &frame = targetTrueDatas[j];
-                if (frame.m_State == TargetStateDestroyed)
-                {
-                    continue;
-                }
-                if (frame.m_State == TargetStateExploding)
-                {
-                    frame.m_State = TargetStateDestroyed;
-                    continue;
-                }
-                if (Utility::Distance(frame.m_Pos - miss.m_Position) <= MISSILE_HIT_THRESHOLD)
+                if (frame.m_State == TargetStateAlive && Utility::Distance(frame.m_Pos - miss.m_Position) <= MISSILE_HIT_THRESHOLD)
                 {
                     miss.m_State = TargetStateExploding;
                     frame.m_State = TargetStateExploding;
+                    break;
                 }
             }
         }
     }
 
-    void CheckMissileHit(vector<Missile> &missiles, vector<Target *> &targetClients)
+    void CheckMissileHit(vector<Missile> &missiles, vector<TrueDataFrame *> &targetTrueDatas)
     {
         for (int i = 0; i < missiles.size(); ++i)
         {
+            if (missiles[i].m_State == TargetStateExploding)
+            {
+                missiles[i].m_State = TargetStateDestroyed;
+            }
+        }
+        for (int i = 0; i < targetTrueDatas.size(); ++i)
+        {
+            if (targetTrueDatas[i]->m_State == TargetStateExploding)
+            {
+                targetTrueDatas[i]->m_State = TargetStateDestroyed;
+            }
+        }
+
+        for (int i = 0; i < missiles.size(); ++i)
+        {
             Missile &miss = missiles[i];
-            if (miss.m_State == TargetStateDestroyed)
+            if (miss.m_State != TargetStateAlive)
             {
                 continue;
             }
-            if (miss.m_State == TargetStateExploding)
+            for (int j = 0; j < targetTrueDatas.size(); ++j)
             {
-                miss.m_State = TargetStateDestroyed;
-                continue;
-            }
-            for (int j = 0; j < targetClients.size(); ++j)
-            {
-                Target &tar = *targetClients[j];
-                if (tar.m_State == TargetStateDestroyed)
-                {
-                    continue;
-                }
-                if (tar.m_State == TargetStateExploding)
-                {
-                    tar.m_State = TargetStateDestroyed;
-                    continue;
-                }
-                if (Utility::Distance(tar.m_Position - miss.m_Position) <= MISSILE_HIT_THRESHOLD)
+                TrueDataFrame &frame = *targetTrueDatas[j];
+                if (frame.m_State == TargetStateAlive && Utility::Distance(frame.m_Pos - miss.m_Position) <= MISSILE_HIT_THRESHOLD)
                 {
                     miss.m_State = TargetStateExploding;
-                    tar.m_State = TargetStateExploding;
+                    frame.m_State = TargetStateExploding;
+                    break;
                 }
             }
         }

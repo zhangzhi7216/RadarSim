@@ -291,7 +291,7 @@ void CFusionPlaneDlg::DoFusion()
     {
         TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
         TrueDataFrame &planeTrue = m_FusionOutput.m_FusionData.m_PlaneTrueDatas[i % m_FusionOutput.m_FusionData.m_PlaneTrueDatas.size()];
-        frame.m_Pos = planeTrue.m_Pos + Position(500, 500, 100);
+        frame.m_Pos = planeTrue.m_Pos + Position(300 * (i % 3), 300 * ((i + 1) % 3), 0);
     }
     for (int i = 0; i < m_FusionOutput.m_ControlDatas.size(); ++i)
     {

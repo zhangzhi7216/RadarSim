@@ -17,5 +17,5 @@ namespace Utility
     __declspec(dllexport) double ColorNoise(double value, double var);
     __declspec(dllexport) double MultNoise(double value, double var);
     __declspec(dllexport) void CheckMissileHit(vector<Missile> &missiles, vector<TrueDataFrame> &targetTrueDatas);
-    __declspec(dllexport) void CheckMissileHit(vector<Missile> &missiles, vector<Target *> &targetClients);
+    __declspec(dllexport) void CheckMissileHit(vector<Missile> &missiles, vector<TrueDataFrame *> &targetTrueDatas);
 };

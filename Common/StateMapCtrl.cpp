@@ -202,9 +202,20 @@ void CStateMapCtrl::DrawTargets()
                 Position end = m_StateMap.m_TargetPaths[i].back();
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
-            Image *targetImg = TargetTypeImages[m_StateMap.m_TargetTypes[i]];
-            PointF pt(0.0, 0.0);
-            graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+            Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
+                ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
+#ifdef _DEV
+            if (m_StateMap.m_TargetStates[i] == TargetStateExploding)
+            {
+                Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
+                    ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
+            }
+#endif
+            if (m_StateMap.m_TargetStates[i] != TargetStateDestroyed)
+            {
+                PointF pt(0.0, 0.0);
+                graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+            }
 
             graphics.ResetTransform();
 
@@ -266,9 +277,20 @@ void CStateMapCtrl::DrawTargets()
                 Position end = m_StateMap.m_MissilePaths[i].back();
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
-            Image *targetImg = TargetTypeImages[m_StateMap.m_MissileTypes[i]];
-            PointF pt(0.0, 0.0);
-            graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+            Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
+                ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+#ifdef _DEV
+            if (m_StateMap.m_MissileStates[i] == TargetStateExploding)
+            {
+                Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
+                    ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+            }
+#endif
+            if (m_StateMap.m_MissileStates[i] != TargetStateDestroyed)
+            {
+                PointF pt(0.0, 0.0);
+                graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+            }
 
             graphics.ResetTransform();
 

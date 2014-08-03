@@ -659,24 +659,39 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     }
 
     // 检测本帧是否发生爆炸
-    vector<Target *> targets;
+    vector<TrueDataFrame *> targetTrueDatas;
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
-        targets.push_back(&m_TargetClients[i].m_Target);
+        targetTrueDatas.push_back(&m_TargetClients[i].m_TargetTrueDatas[index]);
     }
-    Utility::CheckMissileHit(m_Missiles, targets);
+    Utility::CheckMissileHit(m_Missiles, targetTrueDatas);
+    // 校正目标位置：如果已被击落则后面真值置0
+    for (int i = 0; i < m_TargetClients.size(); ++i)
+    {
+        if (m_TargetClients[i].m_TargetTrueDatas[index].m_State == TargetStateExploding)
+        {
+            vector<TrueDataFrame> &trueDatas = m_TargetClients[i].m_TargetTrueDatas;
+            for (int j = index + 1; j < trueDatas.size(); ++j)
+            {
+                trueDatas[j].m_Pos = Position(0, 0, 0);
+                trueDatas[j].m_Vel = Point3D(0, 0, 0);
+                trueDatas[j].m_Acc = Point3D(0, 0, 0);
+                trueDatas[j].m_State = TargetStateDestroyed;
+            }
+        }
+    }
 
     // 显示本帧目标
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
-        m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas.back().m_Pos);
+        m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
         TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
         m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
         TrueDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
         m_MatlabDlg.AddTargetFilterData(i, filterFrame);
         m_MatlabDlg.UpdateGlobalVar();
 
-        m_StateMap.AddTargetData(i, fusionFrame.m_Pos, m_TargetClients[i].m_Target.m_State);
+        m_StateMap.AddTargetData(i, fusionFrame.m_Pos, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
     }
 
     // 显示本帧导弹

@@ -13,7 +13,7 @@ struct __declspec(dllexport) TrueDataFrame
     Point3D m_Vel;
     Point3D m_Acc;
     int m_State;
-    TrueDataFrame() : m_Time(0), m_Id(0) {}
+    TrueDataFrame() : m_Time(0), m_Id(0), m_State(0) {}
     TrueDataFrame &operator += (const TrueDataFrame &frame)
     {
         m_Pos += frame.m_Pos;
