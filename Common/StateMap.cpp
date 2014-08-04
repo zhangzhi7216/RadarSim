@@ -66,8 +66,11 @@ void StateMap::AddTarget(Target &target)
 
 void StateMap::AddTargetData(int target, Position pos, TargetState state)
 {
-    m_TargetPaths[target].push_back(pos);
     m_TargetStates[target] = state;
+    if (state != TargetStateDestroyed)
+    {
+        m_TargetPaths[target].push_back(pos);
+    }
 }
 
 void StateMap::AddMissile(Missile &miss)
@@ -80,8 +83,11 @@ void StateMap::AddMissile(Missile &miss)
 
 void StateMap::AddMissileData(int miss, Position pos, TargetState state)
 {
-    m_MissilePaths[miss].push_back(pos);
     m_MissileStates[miss] = state;
+    if (state != TargetStateDestroyed)
+    {
+        m_MissilePaths[miss].push_back(pos);
+    }
 }
 
 CArchive & operator << (CArchive &ar, StateMap &stateMap)
