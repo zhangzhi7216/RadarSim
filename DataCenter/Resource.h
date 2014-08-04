@@ -108,7 +108,6 @@
 #define IDC_DC_TARGET_VEL_Z_STATIC      4070
 #define IDC_DC_EVAL_FUNC_STATIC         4070
 #define IDC_DC_TARGET_VEL_Z             4071
-#define IDC_DC_EVAL_DLL2                4071
 #define IDC_DC_EVAL_FUNC                4071
 #define IDC_DC_TARGET_ACC_X_STATIC      4072
 #define IDC_DC_TARGET_ACC_X             4073
@@ -148,10 +147,14 @@
 #define IDC_DC_STATE_MAP_BKG            4104
 #define IDC_DC_STATE_MAP_BKG_STATIC     4105
 #define IDC_DC_STATE_MAP_MAX_X_STATIC   4106
+#define IDC_DC_STATE_MAP_MAX_X_Y_STATIC 4106
 #define IDC_DC_SENSOR_PRO_DET2          4107
 #define IDC_DC_STATE_MAP_MAX_X          4107
 #define IDC_DC_STATE_MAP_MAX_Y_STATIC   4108
+#define IDC_DC_STATE_MAP_EXPLOSION_TYPE_STATIC 4108
 #define IDC_DC_STATE_MAP_MAX_Y          4109
+#define IDC_DC_STATE_MAP_BKG2           4110
+#define IDC_DC_STATE_MAP_EXPLOSION_TYPE 4110
 
 // Next default values for new objects
 // 

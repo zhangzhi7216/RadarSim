@@ -668,6 +668,7 @@ void CPlaneDlg::ResetSensors()
     m_Infrared.m_ShowHeight = FALSE;
 
     m_StateMap.m_Background = StateMapBackground0;
+    m_StateMap.m_ExplosionType = ExplosionType0;
 }
 
 void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
@@ -1223,6 +1224,10 @@ void CPlaneDlg::SetInfrared(Sensor &infrared)
 void CPlaneDlg::SetStateMap(StateMap &stateMap)
 {
     m_StateMap.m_Background = stateMap.m_Background;
+    m_StateMap.m_ExplosionType = stateMap.m_ExplosionType;
+    m_StateMapDlg.m_Background.SetCurSel(m_StateMap.m_Background);
+    m_StateMapDlg.m_ExplosionType.SetCurSel(m_StateMap.m_ExplosionType);
+
     m_StateMap.m_MaxX = stateMap.m_MaxX;
     m_StateMap.m_MaxY = stateMap.m_MaxY;
     m_StateMap.m_ShowHeight = stateMap.m_ShowHeight;

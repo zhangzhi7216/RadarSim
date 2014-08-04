@@ -36,6 +36,7 @@ void CStateMapDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Check(pDX, IDC_STATEMAP_SHOW_TRACK, m_StateMap.m_ShowTrack);
     DDX_Check(pDX, IDC_STATEMAP_SHOW_THETA_RANGE, m_StateMap.m_ShowThetaRange);
     DDX_Control(pDX, IDC_STATEMAP_BACKGROUND, m_Background);
+    DDX_Control(pDX, IDC_STATEMAP_EXPLOSION_TYPE, m_ExplosionType);
     DDX_Control(pDX, IDC_STATEMAP_PLANE_TYPE, m_PlaneType);
     DDX_Control(pDX, IDC_STATEMAP_PLANE_COLOR, m_PlaneColor);
     DDX_Control(pDX, IDC_STATEMAP_TARGET_ID, m_TargetId);
@@ -52,6 +53,7 @@ BEGIN_MESSAGE_MAP(CStateMapDlg, CDialog)
     ON_BN_CLICKED(IDC_STATEMAP_SHOW_TRACK, &CStateMapDlg::OnBnClickedStatemapShowTrack)
     ON_BN_CLICKED(IDC_STATEMAP_SHOW_THETA_RANGE, &CStateMapDlg::OnBnClickedStatemapShowThetaRange)
     ON_CBN_SELCHANGE(IDC_STATEMAP_BACKGROUND, &CStateMapDlg::OnCbnSelchangeStatemapBackground)
+    ON_CBN_SELCHANGE(IDC_STATEMAP_EXPLOSION_TYPE, &CStateMapDlg::OnCbnSelchangeStatemapExplosionType)
     ON_CBN_SELCHANGE(IDC_STATEMAP_PLANE_TYPE, &CStateMapDlg::OnCbnSelchangeStatemapPlaneType)
     ON_CBN_SELCHANGE(IDC_STATEMAP_PLANE_COLOR, &CStateMapDlg::OnCbnSelchangeStatemapPlaneColor)
     ON_CBN_SELCHANGE(IDC_STATEMAP_TARGET_ID, &CStateMapDlg::OnCbnSelchangeStatemapTargetId)
@@ -86,6 +88,11 @@ BOOL CStateMapDlg::OnInitDialog()
         m_Background.InsertString(i, StateMapBackgroundNames[i]);
     }
     m_Background.SetCurSel(m_StateMap.m_Background);
+    for (int i = 0; i < ExplosionTypeLast; ++i)
+    {
+        m_ExplosionType.InsertString(i, ExplosionTypeNames[i]);
+    }
+    m_ExplosionType.SetCurSel(m_StateMap.m_ExplosionType);
     for (int i = 0; i < TargetTypeLast; ++i)
     {
         m_PlaneType.InsertString(i, TargetTypeNames[i]);
@@ -150,6 +157,8 @@ void CStateMapDlg::Resize()
         GetDlgItem(IDC_STATEMAP_SHOW_TRACK)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_BACKGROUND)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_EXPLOSION_TYPE_STATIC)->ShowWindow(SW_HIDE);
+        GetDlgItem(IDC_STATEMAP_EXPLOSION_TYPE)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_SHOW_THETA_RANGE)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->ShowWindow(SW_HIDE);
         GetDlgItem(IDC_STATEMAP_PLANE_ID)->ShowWindow(SW_HIDE);
@@ -176,6 +185,8 @@ void CStateMapDlg::Resize()
         GetDlgItem(IDC_STATEMAP_SHOW_TRACK)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_BACKGROUND)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_EXPLOSION_TYPE_STATIC)->ShowWindow(SW_SHOW);
+        GetDlgItem(IDC_STATEMAP_EXPLOSION_TYPE)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_SHOW_THETA_RANGE)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->ShowWindow(SW_SHOW);
         GetDlgItem(IDC_STATEMAP_PLANE_ID)->ShowWindow(SW_SHOW);
@@ -210,6 +221,10 @@ void CStateMapDlg::Resize()
         top = top + height + PAD;
         GetDlgItem(IDC_STATEMAP_BACKGROUND_STATIC)->MoveWindow(left, top, width, height);
         GetDlgItem(IDC_STATEMAP_BACKGROUND)->MoveWindow(left + width, top, width, height);
+
+        top = top + height + PAD;
+        GetDlgItem(IDC_STATEMAP_EXPLOSION_TYPE_STATIC)->MoveWindow(left, top, width, height);
+        GetDlgItem(IDC_STATEMAP_EXPLOSION_TYPE)->MoveWindow(left + width, top, width, height);
 
         top = top + height + PAD;
         GetDlgItem(IDC_STATEMAP_PLANE_ID_STATIC)->MoveWindow(left, top, width, height);
@@ -268,6 +283,8 @@ void CStateMapDlg::Reset()
     m_Ctrl.Reset();
 
     m_Background.SetCurSel(m_StateMap.m_Background);
+
+    m_ExplosionType.SetCurSel(m_StateMap.m_ExplosionType);
     
     m_PlaneId.ResetContent();
     m_PlaneType.SetCurSel(CB_ERR);
@@ -332,6 +349,20 @@ void CStateMapDlg::OnCbnSelchangeStatemapBackground()
     {
         m_StateMap.m_Background = (StateMapBackground)index;
         m_Ctrl.DrawBackground();
+        m_Ctrl.BlendAll();
+        m_Ctrl.Invalidate();
+    }
+}
+
+void CStateMapDlg::OnCbnSelchangeStatemapExplosionType()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_ExplosionType.GetCurSel();
+    int count = m_ExplosionType.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_StateMap.m_ExplosionType = (ExplosionType)index;
+        m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
     }

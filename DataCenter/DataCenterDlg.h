@@ -102,6 +102,9 @@ public:
     afx_msg void OnCbnSelchangeDcGlobalNoise();
     CComboBox m_StateMapBkg;
     afx_msg void OnCbnSelchangeDcStateMapBkg();
+    CComboBox m_StateMapExplosionType;
+    afx_msg void OnCbnSelchangeDcStateMapExplosionType();
+
     CComboBox m_FusionAlgoSel;
     CComboBox m_NaviAlgoSel;
     afx_msg void OnBnClickedStateMapDlgButton();

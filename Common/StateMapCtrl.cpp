@@ -203,12 +203,12 @@ void CStateMapCtrl::DrawTargets()
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
             Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
-                ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
+                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
 #ifdef _DEV
             if (m_StateMap.m_TargetStates[i] == TargetStateExploding)
             {
                 Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
-                    ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
+                    ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
             }
 #endif
             if (m_StateMap.m_TargetStates[i] != TargetStateDestroyed)
@@ -278,12 +278,12 @@ void CStateMapCtrl::DrawTargets()
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
             Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
-                ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
 #ifdef _DEV
             if (m_StateMap.m_MissileStates[i] == TargetStateExploding)
             {
                 Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
-                    ExplosionTypeImages[0] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+                    ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
             }
 #endif
             if (m_StateMap.m_MissileStates[i] != TargetStateDestroyed)

@@ -17,6 +17,8 @@ public:
 
     StateMapBackground m_Background;
 
+    ExplosionType m_ExplosionType;
+
     vector<TargetType> m_PlaneTypes;
     vector<TargetColor> m_PlaneColors;
     vector<Path> m_PlanePaths;

@@ -8,6 +8,7 @@ StateMap::StateMap()
 , m_ShowThetaRange(TRUE)
 , m_ShowHeight(FALSE)
 , m_Background(StateMapBackground0)
+, m_ExplosionType(ExplosionType0)
 {
 }
 
@@ -93,16 +94,18 @@ void StateMap::AddMissileData(int miss, Position pos, TargetState state)
 CArchive & operator << (CArchive &ar, StateMap &stateMap)
 {
     int background = (int)stateMap.m_Background;
-    ar << background << stateMap.m_MaxX << stateMap.m_MaxY << stateMap.m_ShowHeight;
+    int explosion = (int)stateMap.m_ExplosionType;
+    ar << background << explosion << stateMap.m_MaxX << stateMap.m_MaxY << stateMap.m_ShowHeight;
 
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, StateMap &stateMap)
 {
-    int background;
-    ar >> background >> stateMap.m_MaxX >> stateMap.m_MaxY >> stateMap.m_ShowHeight;
+    int background, explosion;
+    ar >> background >> explosion >> stateMap.m_MaxX >> stateMap.m_MaxY >> stateMap.m_ShowHeight;
     stateMap.m_Background = (StateMapBackground)background;
+    stateMap.m_ExplosionType = (ExplosionType)explosion;
 
     return ar;
 }

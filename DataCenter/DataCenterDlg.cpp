@@ -169,6 +169,7 @@ void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_DC_EVAL_NAME, m_EvalName);
     DDX_Text(pDX, IDC_DC_EVAL_DLL, m_EvalDll);
     DDX_Text(pDX, IDC_DC_EVAL_FUNC, m_EvalFunc);
+    DDX_Control(pDX, IDC_DC_STATE_MAP_EXPLOSION_TYPE, m_StateMapExplosionType);
 }
 
 BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
@@ -180,6 +181,7 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_WM_MBUTTONDBLCLK()
     ON_CBN_SELCHANGE(IDC_DC_GLOBAL_NOISE, &CDataCenterDlg::OnCbnSelchangeDcGlobalNoise)
     ON_CBN_SELCHANGE(IDC_DC_STATE_MAP_BKG, &CDataCenterDlg::OnCbnSelchangeDcStateMapBkg)
+    ON_CBN_SELCHANGE(IDC_DC_STATE_MAP_EXPLOSION_TYPE, &CDataCenterDlg::OnCbnSelchangeDcStateMapExplosionType)
     ON_BN_CLICKED(IDC_STATE_MAP_DLG_BUTTON, &CDataCenterDlg::OnBnClickedStateMapDlgButton)
     ON_BN_CLICKED(IDC_MATLAB_DLG_BUTTON, &CDataCenterDlg::OnBnClickedMatlabDlgButton)
     ON_CBN_SELCHANGE(IDC_DC_SENSOR_ID, &CDataCenterDlg::OnCbnSelchangeDcSensorId)
@@ -303,6 +305,12 @@ BOOL CDataCenterDlg::OnInitDialog()
         m_StateMapBkg.InsertString(i, StateMapBackgroundNames[i]);
     }
     m_StateMapBkg.SetCurSel(m_StateMap.m_Background);
+
+    for (int i = 0; i < ExplosionTypeLast; ++i)
+    {
+        m_StateMapExplosionType.InsertString(i, ExplosionTypeNames[i]);
+    }
+    m_StateMapExplosionType.SetCurSel(m_StateMap.m_ExplosionType);
 
     for (int i = 0; i < NoiseTypeLast; ++i)
     {
@@ -1075,6 +1083,17 @@ void CDataCenterDlg::OnCbnSelchangeDcStateMapBkg()
     }
 }
 
+void CDataCenterDlg::OnCbnSelchangeDcStateMapExplosionType()
+{
+    // TODO: 在此添加控件通知处理程序代码
+    int index = m_StateMapExplosionType.GetCurSel();
+    int count = m_StateMapExplosionType.GetCount();
+    if ((index != CB_ERR) && (count >= 1))
+    {
+        m_StateMap.m_ExplosionType = (ExplosionType)index;
+    }
+}
+
 void CDataCenterDlg::OnBnClickedStateMapDlgButton()
 {
     // TODO: 在此添加控件通知处理程序代码
@@ -1441,6 +1460,7 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
         OnCbnSelchangeDcPlaneId();
         OnCbnSelchangeDcSensorId();
         m_StateMapBkg.SetCurSel(m_StateMap.m_Background);
+        m_StateMapExplosionType.SetCurSel(m_StateMap.m_ExplosionType);
         m_NoiseType.SetCurSel(m_GlobalData.m_NoiseType);
 
         UpdateData(FALSE);
