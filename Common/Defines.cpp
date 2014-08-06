@@ -158,6 +158,18 @@ void __declspec(dllexport) GlobalInit()
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         g_GlobalVar[i] = new GlobalVarFrame[TARGET_COUNT_MAX];
+        for (int j = 0; j < TARGET_COUNT_MAX; ++j)
+        {
+            g_GlobalVar[i][j].m_G1 = 0.0;
+            g_GlobalVar[i][j].m_G2 = 0.0;
+            g_GlobalVar[i][j].m_G3 = 0.0;
+            g_GlobalVar[i][j].m_G4 = 0.0;
+            g_GlobalVar[i][j].m_G5 = 0.0;
+            g_GlobalVar[i][j].m_G6 = 0.0;
+            g_GlobalVar[i][j].m_G7 = 0.0;
+            g_GlobalVar[i][j].m_G8 = 0.0;
+            g_GlobalVar[i][j].m_G9 = 0.0;
+        }
     }
 
     mclInitializeApplication(NULL, 0);
