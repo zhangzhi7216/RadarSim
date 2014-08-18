@@ -15,5 +15,5 @@ public:
     FusionLocalAlgoType m_Type;
 };
 
-bool FusionLocalAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutput &output);
-bool FusionLocalAlgoTest2(const vector<NoiseDataPacket> &noiseDatas, FusionOutput &output);
+bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output);
+bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output);

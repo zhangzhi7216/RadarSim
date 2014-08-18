@@ -82,7 +82,7 @@ void FusionMatlabAlgo::Input(CArchive &ar)
     FusionAlgo::Input(ar);
 }
 
-bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &output)
+bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
 {
     if (!m_MatlabFunc)
     {
@@ -93,43 +93,47 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
     }
     else
     {
+        int planeSize = input.m_NoiseDataPackets.size();
+        int targetSize = input.m_NoiseDataPackets[0].m_TargetNoiseDatas.size();
         vector<Array *> inputList;
-        Array *planeTrueDatas = CreateDoubleArray(input.size(), MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+        Array *planeTrueDatas = CreateDoubleArray(planeSize, MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(planeTrueDatas);
-        Array *targetNoiseDatas = CreateDoubleArray(input.size() * input[0].m_TargetNoiseDatas.size(), MATLAB_FUSION_NOISE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+        Array *targetNoiseDatas = CreateDoubleArray(planeSize * targetSize, MATLAB_FUSION_NOISE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(targetNoiseDatas);
         Array *globalVar = CreateDoubleArray(PLANE_COUNT, TARGET_COUNT_MAX * MATLAB_GLOBAL_VAR_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(globalVar);
+        Array *interval = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
+        inputList.push_back(interval);
 
         double *p = mxGetPr(planeTrueDatas);
-        for (int iPlane = 0; iPlane < input.size(); ++iPlane)
+        for (int iPlane = 0; iPlane < planeSize; ++iPlane)
         {
-            p[iPlane + 0 * input.size()] = input[iPlane].m_PlaneTrueData.m_Time;
-            p[iPlane + 1 * input.size()] = input[iPlane].m_PlaneTrueData.m_Id;
-            p[iPlane + 2 * input.size()] = input[iPlane].m_PlaneTrueData.m_Pos.X;
-            p[iPlane + 3 * input.size()] = input[iPlane].m_PlaneTrueData.m_Pos.Y;
-            p[iPlane + 4 * input.size()] = input[iPlane].m_PlaneTrueData.m_Pos.Z;
-            p[iPlane + 5 * input.size()] = input[iPlane].m_PlaneTrueData.m_Vel.X;
-            p[iPlane + 6 * input.size()] = input[iPlane].m_PlaneTrueData.m_Vel.Y;
-            p[iPlane + 7 * input.size()] = input[iPlane].m_PlaneTrueData.m_Vel.Z;
-            p[iPlane + 8 * input.size()] = input[iPlane].m_PlaneTrueData.m_Acc.X;
-            p[iPlane + 9 * input.size()] = input[iPlane].m_PlaneTrueData.m_Acc.Y;
-            p[iPlane + 10 * input.size()] = input[iPlane].m_PlaneTrueData.m_Acc.Z;
+            p[iPlane + 0 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Time;
+            p[iPlane + 1 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Id;
+            p[iPlane + 2 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Pos.X;
+            p[iPlane + 3 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Pos.Y;
+            p[iPlane + 4 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Pos.Z;
+            p[iPlane + 5 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Vel.X;
+            p[iPlane + 6 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Vel.Y;
+            p[iPlane + 7 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Vel.Z;
+            p[iPlane + 8 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Acc.X;
+            p[iPlane + 9 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Acc.Y;
+            p[iPlane + 10 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Acc.Z;
         }
 
         p = mxGetPr(targetNoiseDatas);
-        for (int iPlane = 0; iPlane < input.size(); ++iPlane)
+        for (int iPlane = 0; iPlane < planeSize; ++iPlane)
         {
-            for (int iTarget = 0; iTarget < input[iPlane].m_TargetNoiseDatas.size(); ++iTarget)
+            for (int iTarget = 0; iTarget < targetSize; ++iTarget)
             {
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 0 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_Time;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 1 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_Id;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 2 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_Dis;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 3 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_DisVar;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 4 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 5 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_ThetaVar;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 6 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
-                p[(iPlane * input[iPlane].m_TargetNoiseDatas.size() + iTarget) + 7 * (input.size() * input[iPlane].m_TargetNoiseDatas.size())] = input[iPlane].m_TargetNoiseDatas[iTarget].m_PhiVar;
+                p[(iPlane * targetSize + iTarget) + 0 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Time;
+                p[(iPlane * targetSize + iTarget) + 1 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Id;
+                p[(iPlane * targetSize + iTarget) + 2 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Dis;
+                p[(iPlane * targetSize + iTarget) + 3 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_DisVar;
+                p[(iPlane * targetSize + iTarget) + 4 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
+                p[(iPlane * targetSize + iTarget) + 5 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_ThetaVar;
+                p[(iPlane * targetSize + iTarget) + 6 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
+                p[(iPlane * targetSize + iTarget) + 7 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_PhiVar;
             }
         }
 
@@ -150,12 +154,17 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             }
         }
 
-        vector<Array *> outputList(3);
-        bool result = m_MatlabFunc(3, &outputList[0], input.size(), &inputList[0]);
+        p = mxGetPr(interval);
+        *p = input.m_Interval;
+
+        vector<Array *> outputList(4);
+        bool result = m_MatlabFunc(4, &outputList[0], inputList.size(), &inputList[0]);
         if (!result)
         {
             DestroyArray(planeTrueDatas);
             DestroyArray(targetNoiseDatas);
+            DestroyArray(globalVar);
+            DestroyArray(interval);
 
             CString msg;
             msg.AppendFormat(TEXT("À„∑®%sµ˜”√ ß∞‹."), m_Name);
@@ -207,9 +216,9 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
             output.m_FusionData.m_FilterDatas.push_back(filterData);
         }
 
-        for (int iPlane = 0; iPlane < input.size(); ++iPlane)
+        for (int iPlane = 0; iPlane < planeSize; ++iPlane)
         {
-            output.m_FusionData.m_NoiseDatas.push_back(input[iPlane]);
+            output.m_FusionData.m_NoiseDatas.push_back(input.m_NoiseDataPackets[iPlane]);
         }
 
         p = mxGetPr(controlDatas);
@@ -245,6 +254,7 @@ bool FusionMatlabAlgo::Run(const vector<NoiseDataPacket> &input, FusionOutput &o
         DestroyArray(planeTrueDatas);
         DestroyArray(targetNoiseDatas);
         DestroyArray(globalVar);
+        DestroyArray(interval);
 
         DestroyArray(fusionDatas);
         DestroyArray(filterDatas);

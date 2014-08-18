@@ -47,12 +47,14 @@ void FusionLocalAlgo::Input(CArchive &ar)
     FusionAlgo::Input(ar);
 }
 
-bool FusionLocalAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutput &output)
+bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output)
 {
     // This is how to use global var.
     //g_GlobalVar[0][0].m_G1 = 0;
     //g_GlobalVar[0][0].m_G2 = 0;
     //g_GlobalVar[0][0]
+    const vector<NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
+    int interval = input.m_Interval;
     int nTargets = noiseDatas.front().m_TargetNoiseDatas.size();
     int nPlanes = noiseDatas.size();
     for (int iTarget = 0; iTarget < nTargets; ++iTarget)
@@ -132,11 +134,13 @@ bool FusionLocalAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutpu
     return true;
 }
 
-bool FusionLocalAlgoTest2(const vector<NoiseDataPacket> &noiseDatas, FusionOutput &output)
+bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output)
 {
     // This is how to use global var.
     g_GlobalVar[0][0].m_G1 = 0;
     g_GlobalVar[0][0].m_G2 = 0;
+    const vector<NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
+    int interval = input.m_Interval;
 
     int nTargets = noiseDatas.front().m_TargetNoiseDatas.size();
     int nPlanes = noiseDatas.size();

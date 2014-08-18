@@ -14,7 +14,7 @@ public:
     ~FusionMatlabAlgo(void);
 
     bool Init();
-    bool Run(const vector<NoiseDataPacket> &input, FusionOutput &output);
+    bool Run(const FusionInput &input, FusionOutput &output);
 
     void Output(CArchive &ar);
     void Input(CArchive &ar);

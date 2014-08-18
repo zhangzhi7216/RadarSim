@@ -250,9 +250,22 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     input.m_FusionDatas = packet.m_FusionData.m_FusionDatas;
     input.m_FilterDatas = packet.m_FusionData.m_FilterDatas;
     input.m_ControlData = packet.m_ControlData;
-    input.m_GlobalData = m_GlobalData;
-    input.m_Plane = m_Plane;
-    input.m_Missiles = m_Missiles;
+    input.m_Interval = m_GlobalData.m_Interval;
+    input.m_PlaneTrueData.m_Time = packet.m_FusionData.m_PlaneTrueDatas[0].m_Time;
+    input.m_PlaneTrueData.m_Id = m_Plane.m_Id;
+    input.m_PlaneTrueData.m_Pos = m_Plane.m_Position;
+    input.m_PlaneTrueData.m_Vel = m_Plane.m_Vel;
+    input.m_PlaneTrueData.m_Acc = m_Plane.m_Acc;
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        TrueDataFrame missileTrueData;
+        missileTrueData.m_Time = packet.m_FusionData.m_PlaneTrueDatas[0].m_Time;
+        missileTrueData.m_Id = m_Missiles[i].m_Id;
+        missileTrueData.m_Pos = m_Missiles[i].m_Position;
+        missileTrueData.m_Vel = m_Missiles[i].m_Vel;
+        missileTrueData.m_Acc = m_Missiles[i].m_Acc;
+        input.m_MissileTrueDatas.push_back(missileTrueData);
+    }
     m_NaviOutput = NaviOutput();
     if (!m_NaviAlgo)
     {
@@ -264,19 +277,19 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
         AfxMessageBox(TEXT("导航算法运行错误."));
         return;
     }
-    m_Plane.MoveTo(m_NaviOutput.m_TrueData.m_Pos);
-    m_Plane.m_Vel = m_NaviOutput.m_TrueData.m_Vel;
-    m_Plane.m_Acc = m_NaviOutput.m_TrueData.m_Acc;
+    m_Plane.MoveTo(m_NaviOutput.m_PlaneTrueData.m_Pos);
+    m_Plane.m_Vel = m_NaviOutput.m_PlaneTrueData.m_Vel;
+    m_Plane.m_Acc = m_NaviOutput.m_PlaneTrueData.m_Acc;
 
-    for (int i = 0; i < m_NaviOutput.m_Missiles.size(); ++i)
+    for (int i = 0; i < m_NaviOutput.m_MissileTrueDatas.size(); ++i)
     {
-        if (m_NaviOutput.m_Missiles[i].m_State == TargetStateAlive)
+        if (m_NaviOutput.m_MissileTrueDatas[i].m_State == TargetStateAlive)
         {
-            m_Missiles[i].MoveTo(m_NaviOutput.m_Missiles[i].m_Position);
-            m_Missiles[i].m_Vel = m_NaviOutput.m_Missiles[i].m_Vel;
-            m_Missiles[i].m_Acc = m_NaviOutput.m_Missiles[i].m_Acc;
+            m_Missiles[i].MoveTo(m_NaviOutput.m_MissileTrueDatas[i].m_Pos);
+            m_Missiles[i].m_Vel = m_NaviOutput.m_MissileTrueDatas[i].m_Vel;
+            m_Missiles[i].m_Acc = m_NaviOutput.m_MissileTrueDatas[i].m_Acc;
         }
-        else if (m_NaviOutput.m_Missiles[i].m_State == TargetStateExploding)
+        else if (m_NaviOutput.m_MissileTrueDatas[i].m_State == TargetStateExploding)
         {
             m_Missiles[i].m_Position = Position(0, 0, 0);
             m_Missiles[i].m_Vel = Point3D(0, 0, 0);

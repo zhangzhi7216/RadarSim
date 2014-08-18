@@ -200,6 +200,7 @@ extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 #define MATLAB_DRAW_FUSION_DATA_SIZE 9
 
 #define MATLAB_FUSION_TRUE_DATA_SIZE 11
+#define MATLAB_CONTROL_DATA_SIZE 3
 #define MATLAB_FUSION_NOISE_DATA_SIZE 8
 
 #define MATLAB_GLOBAL_VAR_SIZE 9

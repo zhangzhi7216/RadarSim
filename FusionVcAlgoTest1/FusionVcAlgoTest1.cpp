@@ -66,11 +66,13 @@ BOOL CFusionVcAlgoTest1App::InitInstance()
 
 __declspec(dllimport) GlobalVarFrame **g_GlobalVar;
 
-extern "C" __declspec(dllexport) bool FusionVcAlgoTest1(const vector<NoiseDataPacket> &noiseDatas, FusionOutput &output)
+extern "C" __declspec(dllexport) bool FusionVcAlgoTest1(const FusionInput &input, FusionOutput &output)
 {
     // This is how to use global var.
     g_GlobalVar[0][0].m_G1 = 0;
     g_GlobalVar[0][0].m_G2 = 0;
+    const vector<NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
+    int interval = input.m_Interval;
 
     int nTargets = noiseDatas.front().m_TargetNoiseDatas.size();
     int nPlanes = noiseDatas.size();

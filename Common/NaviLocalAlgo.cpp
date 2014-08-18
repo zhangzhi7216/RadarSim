@@ -62,20 +62,20 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
     TargetCount = input.m_FusionDatas.size();
     if(input.m_FilterDatas[1].m_Vel.X==0&&input.m_FusionDatas[1].m_Vel.Y==0&&input.m_FusionDatas[1].m_Vel.Z==0)
     {
-        distancemin = sqrt(pow((input.m_FusionDatas[0].m_Pos.X - input.m_Plane.m_Position.X),2)+pow((input.m_FusionDatas[0].m_Pos.Y - input.m_Plane.m_Position.Y),2)+pow((input.m_FusionDatas[0].m_Pos.Z - input.m_Plane.m_Position.Z),2));
-        output.m_TrueData.m_Vel.X = input.m_Plane.m_Vel.X;
-        output.m_TrueData.m_Vel.Y = input.m_Plane.m_Vel.Y;
-        output.m_TrueData.m_Vel.Z = input.m_Plane.m_Vel.Z;
-        output.m_TrueData.m_Pos.X = input.m_Plane.m_Position.X;
-        output.m_TrueData.m_Pos.Y = input.m_Plane.m_Position.Y;
-        output.m_TrueData.m_Pos.Z = input.m_Plane.m_Position.Z;
-        output.m_TrueData.m_Acc.X = input.m_Plane.m_Acc.X;
-        output.m_TrueData.m_Acc.Y = input.m_Plane.m_Acc.Y;
-        output.m_TrueData.m_Acc.Z = input.m_Plane.m_Acc.Z;
-        g_GlobalVar[0][0].m_G8 = sqrt(pow(input.m_Plane.m_Vel.X,2)+pow(input.m_Plane.m_Vel.Y,2)+pow(input.m_Plane.m_Vel.Z,2));//全局变量G8存储初始状态速度大小
+        distancemin = sqrt(pow((input.m_FusionDatas[0].m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((input.m_FusionDatas[0].m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2)+pow((input.m_FusionDatas[0].m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
+       output.m_PlaneTrueData.m_Vel.X = input.m_PlaneTrueData.m_Vel.X;
+       output.m_PlaneTrueData.m_Vel.Y = input.m_PlaneTrueData.m_Vel.Y;
+       output.m_PlaneTrueData.m_Vel.Z = input.m_PlaneTrueData.m_Vel.Z;
+       output.m_PlaneTrueData.m_Pos.X = input.m_PlaneTrueData.m_Pos.X;
+       output.m_PlaneTrueData.m_Pos.Y = input.m_PlaneTrueData.m_Pos.Y;
+       output.m_PlaneTrueData.m_Pos.Z = input.m_PlaneTrueData.m_Pos.Z;
+       output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
+       output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
+       output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
+        g_GlobalVar[0][0].m_G8 = sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2));//全局变量G8存储初始状态速度大小
         for(unsigned int i=1;i<=TargetCount-1;i++)
         {
-            distance = sqrt(pow((input.m_FusionDatas[i].m_Pos.X - input.m_Plane.m_Position.X),2)+pow((input.m_FusionDatas[i].m_Pos.Y - input.m_Plane.m_Position.Y),2)+pow((input.m_FusionDatas[i].m_Pos.Z - input.m_Plane.m_Position.Z),2));
+            distance = sqrt(pow((input.m_FusionDatas[i].m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((input.m_FusionDatas[i].m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2)+pow((input.m_FusionDatas[i].m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
             if(distance <= distancemin)
             {
                 distancemin = distance;
@@ -87,7 +87,7 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
     }
     else
     {
-        relativedistance = sqrt(pow((input.m_Plane.m_Position.X-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X),2)+pow((input.m_Plane.m_Position.Y-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Y),2)+pow((input.m_Plane.m_Position.Z-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Z),2));
+        relativedistance = sqrt(pow((input.m_PlaneTrueData.m_Pos.X-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X),2)+pow((input.m_PlaneTrueData.m_Pos.Y-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Y),2)+pow((input.m_PlaneTrueData.m_Pos.Z-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Z),2));
         if(relativedistance>relativedistancemin)
         {
             decomposition.m_Pos.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X;
@@ -99,65 +99,65 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
             decomposition.m_Acc.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.X;
             decomposition.m_Acc.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.Y;
             decomposition.m_Acc.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.Z;
-            rphi = sqrt(pow((decomposition.m_Pos.Z - input.m_Plane.m_Position.Z),2));
-            rtheta = sqrt(pow((decomposition.m_Pos.X - input.m_Plane.m_Position.X),2)+pow((decomposition.m_Pos.Y - input.m_Plane.m_Position.Y),2));
-            qphi = atan((decomposition.m_Pos.Z-input.m_Plane.m_Position.Z)/sqrt(pow((decomposition.m_Pos.X-input.m_Plane.m_Position.X),2)+pow((decomposition.m_Pos.Y-input.m_Plane.m_Position.Y),2)));
-            qtheta = atan((decomposition.m_Pos.Y-input.m_Plane.m_Position.Y)/(decomposition.m_Pos.X-input.m_Plane.m_Position.X));
+            rphi = sqrt(pow((decomposition.m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
+            rtheta = sqrt(pow((decomposition.m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((decomposition.m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2));
+            qphi = atan((decomposition.m_Pos.Z-input.m_PlaneTrueData.m_Pos.Z)/sqrt(pow((decomposition.m_Pos.X-input.m_PlaneTrueData.m_Pos.X),2)+pow((decomposition.m_Pos.Y-input.m_PlaneTrueData.m_Pos.Y),2)));
+            qtheta = atan((decomposition.m_Pos.Y-input.m_PlaneTrueData.m_Pos.Y)/(decomposition.m_Pos.X-input.m_PlaneTrueData.m_Pos.X));
             sigmatphi = atan(decomposition.m_Vel.Z/sqrt(pow(decomposition.m_Vel.X,2)+pow(decomposition.m_Vel.Y,2)));
             sigmattheta = atan(decomposition.m_Vel.Y/decomposition.m_Vel.X);
-            sigmapphi = atan(input.m_Plane.m_Vel.Z/sqrt(pow(input.m_Plane.m_Vel.X,2)+pow(input.m_Plane.m_Vel.Y,2)));
-            sigmaptheta = atan(input.m_Plane.m_Vel.Y/input.m_Plane.m_Vel.X);
+            sigmapphi = atan(input.m_PlaneTrueData.m_Vel.Z/sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)));
+            sigmaptheta = atan(input.m_PlaneTrueData.m_Vel.Y/input.m_PlaneTrueData.m_Vel.X);
             yitatphi = qphi - sigmatphi;
             yitattheta = qtheta - sigmattheta;
             yitapphi = qphi - sigmapphi;
             yitaptheta = qtheta - sigmaptheta;
-            rphideri = abs(decomposition.m_Vel.Z)*cos(yitatphi)-abs(input.m_Plane.m_Vel.Z)*cos(yitapphi);
-            rthetaderi = sqrt(pow(decomposition.m_Vel.X,2)+pow(decomposition.m_Vel.Y,2))*cos(yitattheta)-sqrt(pow(input.m_Plane.m_Vel.X,2)+pow(input.m_Plane.m_Vel.Y,2))*cos(yitaptheta);
-            rphi += rphideri * input.m_GlobalData.m_Interval;
-            rtheta += rthetaderi * input.m_GlobalData.m_Interval;
-            //qphideri = (abs(input.m_Plane.m_Vel.Z)*sin(yitapphi)-abs(decomposition.m_Vel.Z)*sin(yitatphi))/rphi;
+            rphideri = abs(decomposition.m_Vel.Z)*cos(yitatphi)-abs(input.m_PlaneTrueData.m_Vel.Z)*cos(yitapphi);
+            rthetaderi = sqrt(pow(decomposition.m_Vel.X,2)+pow(decomposition.m_Vel.Y,2))*cos(yitattheta)-sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2))*cos(yitaptheta);
+            rphi += rphideri * input.m_Interval;
+            rtheta += rthetaderi * input.m_Interval;
+            //qphideri = (abs(input.m_PlaneTrueData.m_Vel.Z)*sin(yitapphi)-abs(decomposition.m_Vel.Z)*sin(yitatphi))/rphi;
             qphideri = 0;
-            qthetaderi = (sqrt(pow(input.m_Plane.m_Vel.X,2)+pow(input.m_Plane.m_Vel.Y,2))*sin(yitattheta)-sqrt(pow(decomposition.m_Vel.X,2)+pow(decomposition.m_Vel.Y,2))*sin(yitattheta))/rtheta;
+            qthetaderi = (sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2))*sin(yitattheta)-sqrt(pow(decomposition.m_Vel.X,2)+pow(decomposition.m_Vel.Y,2))*sin(yitattheta))/rtheta;
             sigmaphideri = Kphi*qphideri;
             sigmathetaderi = Ktheta*qthetaderi;
-            sigmapphi += sigmaphideri * input.m_GlobalData.m_Interval;
-            sigmaptheta += sigmathetaderi * input.m_GlobalData.m_Interval;
-            output.m_TrueData.m_Acc.X = input.m_Plane.m_Acc.X;
-            output.m_TrueData.m_Acc.Y = input.m_Plane.m_Acc.Y;
-            output.m_TrueData.m_Acc.Z = input.m_Plane.m_Acc.Z;
-            output.m_TrueData.m_Vel.X = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
-            output.m_TrueData.m_Vel.Y = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*sin(sigmaptheta);
-            output.m_TrueData.m_Vel.Z = g_GlobalVar[0][0].m_G8*sin(sigmapphi);
-            output.m_TrueData.m_Pos.X = input.m_Plane.m_Position.X+output.m_TrueData.m_Vel.X * input.m_GlobalData.m_Interval;
-            output.m_TrueData.m_Pos.Y = input.m_Plane.m_Position.Y+output.m_TrueData.m_Vel.Y * input.m_GlobalData.m_Interval;
-            output.m_TrueData.m_Pos.Z = input.m_Plane.m_Position.Z+output.m_TrueData.m_Vel.Z * input.m_GlobalData.m_Interval;    
+            sigmapphi += sigmaphideri * input.m_Interval;
+            sigmaptheta += sigmathetaderi * input.m_Interval;
+           output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
+           output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
+           output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
+           output.m_PlaneTrueData.m_Vel.X = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
+           output.m_PlaneTrueData.m_Vel.Y = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*sin(sigmaptheta);
+           output.m_PlaneTrueData.m_Vel.Z = g_GlobalVar[0][0].m_G8*sin(sigmapphi);
+           output.m_PlaneTrueData.m_Pos.X = input.m_PlaneTrueData.m_Pos.X+output.m_PlaneTrueData.m_Vel.X * input.m_Interval;
+           output.m_PlaneTrueData.m_Pos.Y = input.m_PlaneTrueData.m_Pos.Y+output.m_PlaneTrueData.m_Vel.Y * input.m_Interval;
+           output.m_PlaneTrueData.m_Pos.Z = input.m_PlaneTrueData.m_Pos.Z+output.m_PlaneTrueData.m_Vel.Z * input.m_Interval;    
         }
         else
         {
-            output.m_TrueData.m_Acc.X = input.m_Plane.m_Acc.X;
-            output.m_TrueData.m_Acc.Y = input.m_Plane.m_Acc.Y;
-            output.m_TrueData.m_Acc.Z = input.m_Plane.m_Acc.Z;
-            output.m_TrueData.m_Vel.X = input.m_Plane.m_Vel.X;
-            output.m_TrueData.m_Vel.Y = input.m_Plane.m_Vel.Y;
-            output.m_TrueData.m_Vel.Z = input.m_Plane.m_Vel.Z;
-            output.m_TrueData.m_Pos.X = input.m_Plane.m_Position.X;
-            output.m_TrueData.m_Pos.Y = input.m_Plane.m_Position.Y;
-            output.m_TrueData.m_Pos.Z = input.m_Plane.m_Position.Z;    
+           output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
+           output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
+           output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
+           output.m_PlaneTrueData.m_Vel.X = input.m_PlaneTrueData.m_Vel.X;
+           output.m_PlaneTrueData.m_Vel.Y = input.m_PlaneTrueData.m_Vel.Y;
+           output.m_PlaneTrueData.m_Vel.Z = input.m_PlaneTrueData.m_Vel.Z;
+           output.m_PlaneTrueData.m_Pos.X = input.m_PlaneTrueData.m_Pos.X;
+           output.m_PlaneTrueData.m_Pos.Y = input.m_PlaneTrueData.m_Pos.Y;
+           output.m_PlaneTrueData.m_Pos.Z = input.m_PlaneTrueData.m_Pos.Z;    
         }
     }
 
-    output.m_TrueData.m_Pos.X += 200;
-    output.m_TrueData.m_Pos.Y += 200;
-    output.m_TrueData.m_Pos.Z += 200;
+   output.m_PlaneTrueData.m_Pos.X += 200;
+   output.m_PlaneTrueData.m_Pos.Y += 200;
+   output.m_PlaneTrueData.m_Pos.Z += 200;
 
     static int frame = 0;
 
-    for (int i = 0; i < input.m_Missiles.size(); ++i)
+    for (int i = 0; i < input.m_MissileTrueDatas.size(); ++i)
     {
-        Missile miss = input.m_Missiles[i];
-        miss.m_Position.X += 2000 + i * 500;
-        miss.m_Position.Y += 2000 + i * 1000;
-        miss.m_Position.Z += 2000 + i * 2000;
+        TrueDataFrame miss = input.m_MissileTrueDatas[i];
+        miss.m_Pos.X += 2000 + i * 500;
+        miss.m_Pos.Y += 2000 + i * 1000;
+        miss.m_Pos.Z += 2000 + i * 2000;
         miss.m_Vel.X += 200 + i * 20;
         miss.m_Vel.Y += 200 + i * 20;
         miss.m_Vel.Z += 200 + i * 20;
@@ -166,9 +166,9 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
         miss.m_Acc.Z += 200 + i * 20;
         if (frame == 5)
         {
-            miss.m_Position = input.m_FusionDatas[i].m_Pos - Position(500, 500, 100);
+            miss.m_Pos = input.m_FusionDatas[i].m_Pos - Position(500, 500, 100);
         }
-        output.m_Missiles.push_back(miss);
+        output.m_MissileTrueDatas.push_back(miss);
     }
 
     if (frame == 5)
@@ -185,12 +185,12 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 bool NaviLocalAlgoTest2(const NaviInput &input, NaviOutput &output)
 {
     // How to get interval.
-    int interval = input.m_GlobalData.m_Interval;
+    int interval = input.m_Interval;
 
     // How to use global var.
     g_GlobalVar[0][0].m_G1 = 0;
     g_GlobalVar[0][0].m_G2 = 0;
 
-    output.m_TrueData.m_Pos = Position(40000, 10000, 0);
+   output.m_PlaneTrueData.m_Pos = Position(40000, 10000, 0);
     return true;
 }

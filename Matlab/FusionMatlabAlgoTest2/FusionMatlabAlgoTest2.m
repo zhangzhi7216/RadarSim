@@ -1,4 +1,5 @@
-function [ fusionDatas, filterDatas, controlDatas ] = FusionMatlabAlgoTest2( planeTrueDatas, targetNoiseDatas )
+function [ fusionDatas, filterDatas, controlDatas, globalVarsOutput ] = FusionMatlabAlgoTest2( planeTrueDatas, targetNoiseDatas, globalVars, interval )
+globalVarsOutput = globalVars;
 %msgbox(num2str(targetNoiseDatas(1:1, 2:2)));
 %msgbox(num2str(targetNoiseDatas(2:2, 2:2)));
 %msgbox(num2str(targetNoiseDatas(3:3, 2:2)));

@@ -91,6 +91,190 @@ bool NaviMatlabAlgo::Run(const NaviInput &input, NaviOutput &output)
         AfxMessageBox(msg);
         return false;
     }
-    // FIXME: To implement navi matlab algo.
+    vector<Array *> inputList;
+    Array *planeTrueData = CreateDoubleArray(1, MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(planeTrueData);
+    Array *missileTrueDatas = CreateDoubleArray(input.m_MissileTrueDatas.size(), MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(missileTrueDatas);
+    Array *fusionDatas = CreateDoubleArray(input.m_FusionDatas.size(), MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(fusionDatas);
+    Array *filterDatas = CreateDoubleArray(input.m_FilterDatas.size(), MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(filterDatas);
+    Array *controlData = CreateDoubleArray(1, MATLAB_CONTROL_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(controlData);
+    Array *globalVar = CreateDoubleArray(PLANE_COUNT, TARGET_COUNT_MAX * MATLAB_GLOBAL_VAR_SIZE, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(globalVar);
+    Array *interval = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(interval);
+
+    double *p = mxGetPr(planeTrueData);
+    p[0] = input.m_PlaneTrueData.m_Time;
+    p[1] = input.m_PlaneTrueData.m_Id;
+    p[2] = input.m_PlaneTrueData.m_Pos.X;
+    p[3] = input.m_PlaneTrueData.m_Pos.Y;
+    p[4] = input.m_PlaneTrueData.m_Pos.Z;
+    p[5] = input.m_PlaneTrueData.m_Vel.X;
+    p[6] = input.m_PlaneTrueData.m_Vel.Y;
+    p[7] = input.m_PlaneTrueData.m_Vel.Z;
+    p[8] = input.m_PlaneTrueData.m_Acc.X;
+    p[9] = input.m_PlaneTrueData.m_Acc.Y;
+    p[10] = input.m_PlaneTrueData.m_Acc.Z;
+
+    p = mxGetPr(missileTrueDatas);
+    for (int iMissile = 0; iMissile < input.m_MissileTrueDatas.size(); ++iMissile)
+    {
+        p[iMissile + 0 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Time;
+        p[iMissile + 1 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Id;
+        p[iMissile + 2 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Pos.X;
+        p[iMissile + 3 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Pos.Y;
+        p[iMissile + 4 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Pos.Z;
+        p[iMissile + 5 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Vel.X;
+        p[iMissile + 6 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Vel.Y;
+        p[iMissile + 7 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Vel.Z;
+        p[iMissile + 8 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Acc.X;
+        p[iMissile + 9 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Acc.Y;
+        p[iMissile + 10 * input.m_MissileTrueDatas.size()] = input.m_MissileTrueDatas[iMissile].m_Acc.Z;
+    }
+
+    p = mxGetPr(fusionDatas);
+    for (int iTarget = 0; iTarget < input.m_FusionDatas.size(); ++iTarget)
+    {
+        p[iTarget + 0 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Time;
+        p[iTarget + 1 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Id;
+        p[iTarget + 2 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Pos.X;
+        p[iTarget + 3 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Pos.Y;
+        p[iTarget + 4 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Pos.Z;
+        p[iTarget + 5 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Vel.X;
+        p[iTarget + 6 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Vel.Y;
+        p[iTarget + 7 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Vel.Z;
+        p[iTarget + 8 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Acc.X;
+        p[iTarget + 9 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Acc.Y;
+        p[iTarget + 10 * input.m_FusionDatas.size()] = input.m_FusionDatas[iTarget].m_Acc.Z;
+    }
+
+    p = mxGetPr(filterDatas);
+    for (int iTarget = 0; iTarget < input.m_FilterDatas.size(); ++iTarget)
+    {
+        p[iTarget + 0 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Time;
+        p[iTarget + 1 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Id;
+        p[iTarget + 2 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Pos.X;
+        p[iTarget + 3 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Pos.Y;
+        p[iTarget + 4 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Pos.Z;
+        p[iTarget + 5 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Vel.X;
+        p[iTarget + 6 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Vel.Y;
+        p[iTarget + 7 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Vel.Z;
+        p[iTarget + 8 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Acc.X;
+        p[iTarget + 9 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Acc.Y;
+        p[iTarget + 10 * input.m_FilterDatas.size()] = input.m_FilterDatas[iTarget].m_Acc.Z;
+    }
+
+    p = mxGetPr(controlData);
+    p[0] = input.m_ControlData.m_Time;
+    p[1] = input.m_ControlData.m_Id;
+    p[2] = input.m_ControlData.m_C1;
+
+    p = mxGetPr(globalVar);
+    for (int plane = 0; plane < PLANE_COUNT; ++plane)
+    {
+        for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+        {
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G1;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G2;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G3;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G4;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G5;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G6;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G7;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G8;
+            p[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G9;
+        }
+    }
+
+    p = mxGetPr(interval);
+    *p = input.m_Interval;
+
+    vector<Array *> outputList(3);
+    bool result = m_MatlabFunc(3, &outputList[0], inputList.size(), &inputList[0]);
+    if (!result)
+    {
+        DestroyArray(planeTrueData);
+        DestroyArray(missileTrueDatas);
+        DestroyArray(fusionDatas);
+        DestroyArray(filterDatas);
+        DestroyArray(controlData);
+        DestroyArray(globalVar);
+        DestroyArray(interval);
+
+        CString msg;
+        msg.AppendFormat(TEXT("À„∑®%sµ˜”√ ß∞‹."), m_Name);
+
+        return false;
+    }
+
+    Array *planeTrueDataOutput = outputList[0];
+    Array *missileTrueDatasOutput = outputList[1];
+    Array *globalVarsOutput = outputList[2];
+
+    p = mxGetPr(planeTrueDataOutput);
+   output.m_PlaneTrueData.m_Time = p[0];
+   output.m_PlaneTrueData.m_Id = p[1];
+   output.m_PlaneTrueData.m_Pos.X = p[2];
+   output.m_PlaneTrueData.m_Pos.Y = p[3];
+   output.m_PlaneTrueData.m_Pos.Z = p[4];
+   output.m_PlaneTrueData.m_Vel.X = p[5];
+   output.m_PlaneTrueData.m_Vel.Y = p[6];
+   output.m_PlaneTrueData.m_Vel.Z = p[7];
+   output.m_PlaneTrueData.m_Acc.X = p[8];
+   output.m_PlaneTrueData.m_Acc.Y = p[9];
+   output.m_PlaneTrueData.m_Acc.Z = p[10];
+
+    int m = mxGetM(missileTrueDatasOutput), n = mxGetN(missileTrueDatasOutput);
+    for (int iMissile = 0; iMissile < m; ++iMissile)
+    {
+        TrueDataFrame missileTrueData;
+        missileTrueData.m_Time = p[iMissile + 0 * m];
+        missileTrueData.m_Id = p[iMissile + 1 * m];
+        missileTrueData.m_Pos.X = p[iMissile + 2 * m];
+        missileTrueData.m_Pos.Y = p[iMissile + 3 * m];
+        missileTrueData.m_Pos.Z = p[iMissile + 4 * m];
+        missileTrueData.m_Vel.X = p[iMissile + 5 * m];
+        missileTrueData.m_Vel.Y = p[iMissile + 6 * m];
+        missileTrueData.m_Vel.Z = p[iMissile + 7 * m];
+        missileTrueData.m_Acc.X = p[iMissile + 8 * m];
+        missileTrueData.m_Acc.Y = p[iMissile + 9 * m];
+        missileTrueData.m_Acc.Z = p[iMissile + 10 * m];
+        output.m_MissileTrueDatas.push_back(missileTrueData);
+    }
+
+    p = mxGetPr(globalVarsOutput);
+    m = mxGetM(globalVarsOutput);
+    n = mxGetN(globalVarsOutput);
+    for (int plane = 0; plane < m; ++plane)
+    {
+        for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+        {
+            g_GlobalVar[plane][target].m_G1 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G2 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G3 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G4 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G5 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G6 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G7 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G8 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane];
+            g_GlobalVar[plane][target].m_G9 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane];
+        }
+    }
+
+    DestroyArray(planeTrueData);
+    DestroyArray(missileTrueDatas);
+    DestroyArray(fusionDatas);
+    DestroyArray(filterDatas);
+    DestroyArray(controlData);
+    DestroyArray(globalVar);
+    DestroyArray(interval);
+
+    DestroyArray(planeTrueDataOutput);
+    DestroyArray(missileTrueDatasOutput);
+    DestroyArray(globalVarsOutput);
     return true;
 }

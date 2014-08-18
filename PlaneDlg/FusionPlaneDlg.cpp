@@ -269,11 +269,12 @@ void CFusionPlaneDlg::DoFusion()
         AfxMessageBox(TEXT("尚未指定融合算法."));
         return;
     }
-    vector<NoiseDataPacket> input;
+    FusionInput input;
     for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
     {
-        input.push_back(it->second.second);
+        input.m_NoiseDataPackets.push_back(it->second.second);
     }
+    input.m_Interval = m_GlobalData.m_Interval;
     m_FusionOutput = FusionOutput();
     if (!m_FusionAlgo->Run(input, m_FusionOutput))
     {
