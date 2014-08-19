@@ -585,12 +585,8 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
         NoiseDataFrame frame;
         if (packet.m_TargetTrueDatas[i].m_State == TargetStateAlive)
         {
-            // Noise data doesn't know the target ID.
-#ifndef _DEV
-            // Possibly the same for time.
             frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
             frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
-#endif
             frame.m_Dis = m_Radar.m_TargetDistances[i].back();
             frame.m_DisVar = m_Radar.m_DisVar;
             frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
