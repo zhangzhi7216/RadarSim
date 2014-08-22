@@ -227,7 +227,7 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, GlobalDataPacket &pa
 
 struct __declspec(dllexport) GlobalVarFrame
 {
-    double m_G1, m_G2, m_G3, m_G4, m_G5, m_G6, m_G7, m_G8, m_G9;
+    double m_G[GLOBAL_VAR_FRAME_SIZE];
 };
 
-extern __declspec(dllexport) GlobalVarFrame **g_GlobalVar;
+extern __declspec(dllexport) GlobalVarFrame *g_GlobalVar;

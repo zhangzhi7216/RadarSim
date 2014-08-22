@@ -100,7 +100,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         inputList.push_back(planeTrueDatas);
         Array *targetNoiseDatas = CreateDoubleArray(planeSize * targetSize, MATLAB_FUSION_NOISE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(targetNoiseDatas);
-        Array *globalVar = CreateDoubleArray(PLANE_COUNT, TARGET_COUNT_MAX * MATLAB_GLOBAL_VAR_SIZE, (const unsigned char *)NULL, 0, 0);
+        Array *globalVar = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(globalVar);
         Array *interval = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
         inputList.push_back(interval);
@@ -138,19 +138,11 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         }
 
         p = mxGetPr(globalVar);
-        for (int plane = 0; plane < PLANE_COUNT; ++plane)
+        for (int i = 0; i < PLANE_COUNT + TARGET_COUNT_MAX; ++i)
         {
-            for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+            for (int j = 0; j < GLOBAL_VAR_FRAME_SIZE; ++j)
             {
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G1;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G2;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G3;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G4;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G5;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G6;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G7;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G8;
-                p[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane] = g_GlobalVar[plane][target].m_G9;
+                p[j * (PLANE_COUNT + TARGET_COUNT_MAX) + i] = g_GlobalVar[i].m_G[j];
             }
         }
 
@@ -235,19 +227,11 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         p = mxGetPr(outputGlobalVar);
         m = mxGetM(outputGlobalVar);
         n = mxGetN(outputGlobalVar);
-        for (int plane = 0; plane < m; ++plane)
+        for (int i = 0; i < m; ++i)
         {
-            for (int target = 0; target < TARGET_COUNT_MAX; ++target)
+            for (int j = 0; j < n; ++j)
             {
-                g_GlobalVar[plane][target].m_G1 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 0) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G2 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 1) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G3 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 2) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G4 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 3) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G5 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 4) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G6 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 5) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G7 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 6) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G8 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 7) * PLANE_COUNT + plane];
-                g_GlobalVar[plane][target].m_G9 = p[(target * MATLAB_GLOBAL_VAR_SIZE + 8) * PLANE_COUNT + plane];
+                g_GlobalVar[i].m_G[j] = p[j * m + i];
             }
         }
 

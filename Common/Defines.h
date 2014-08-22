@@ -203,7 +203,7 @@ extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 #define MATLAB_CONTROL_DATA_SIZE 3
 #define MATLAB_FUSION_NOISE_DATA_SIZE 8
 
-#define MATLAB_GLOBAL_VAR_SIZE 9
+#define GLOBAL_VAR_FRAME_SIZE 25
 
 #define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086

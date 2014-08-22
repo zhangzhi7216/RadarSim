@@ -83,10 +83,10 @@ bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output)
                     addition.m_Pos.X += decomposition.m_Pos.X;
                     addition.m_Pos.Y += decomposition.m_Pos.Y;
                     addition.m_Pos.Z += decomposition.m_Pos.Z;
-                    g_GlobalVar[iTarget][iPlane].m_G1 = decomposition.m_Pos.X;//G1保存X坐标
-                    g_GlobalVar[iTarget][iPlane].m_G2 = decomposition.m_Pos.Y;//G2保存Y坐标
-                    g_GlobalVar[iTarget][iPlane].m_G3 = decomposition.m_Pos.Z;//G3保存Z坐标
-                    g_GlobalVar[iTarget][iPlane].m_G4 = decomposition.m_Time;//G4保存时间
+                    // g_GlobalVar[iTarget][iPlane].m_G1 = decomposition.m_Pos.X;//G1保存X坐标
+                    // g_GlobalVar[iTarget][iPlane].m_G2 = decomposition.m_Pos.Y;//G2保存Y坐标
+                    // g_GlobalVar[iTarget][iPlane].m_G3 = decomposition.m_Pos.Z;//G3保存Z坐标
+                    // g_GlobalVar[iTarget][iPlane].m_G4 = decomposition.m_Time;//G4保存时间
                     PlaneCount++;
                 }
                 else
@@ -94,19 +94,19 @@ bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output)
                     decomposition.m_Pos.X = noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis * cos( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi * 0.017453292) * cos( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Theta * 0.017453292 + atan(noiseDatas[iPlane].m_PlaneTrueData.m_Vel.Y/noiseDatas[iPlane].m_PlaneTrueData.m_Vel.X)) + noiseDatas[iPlane].m_PlaneTrueData.m_Pos.X;
                     decomposition.m_Pos.Y = noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis * cos( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi * 0.017453292) * sin( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Theta * 0.017453292 + atan(noiseDatas[iPlane].m_PlaneTrueData.m_Vel.Y/noiseDatas[iPlane].m_PlaneTrueData.m_Vel.X)) + noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Y;
                     decomposition.m_Pos.Z = noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Dis * sin( noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi * 0.017453292) + noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Z;
-                    decomposition.m_Vel.X = (decomposition.m_Pos.X - g_GlobalVar[iTarget][iPlane].m_G1)/(addition.m_Time-g_GlobalVar[iTarget][iPlane].m_G4);
-                    decomposition.m_Vel.Y = (decomposition.m_Pos.Y - g_GlobalVar[iTarget][iPlane].m_G2)/(addition.m_Time-g_GlobalVar[iTarget][iPlane].m_G4);
-                    decomposition.m_Vel.Z = (decomposition.m_Pos.Z - g_GlobalVar[iTarget][iPlane].m_G3)/(addition.m_Time-g_GlobalVar[iTarget][iPlane].m_G4);
+                    // decomposition.m_Vel.X = (decomposition.m_Pos.X - g_GlobalVar[iTarget][iPlane].m_G1)/(addition.m_Time-g_GlobalVar[iTarget][iPlane].m_G4);
+                    // decomposition.m_Vel.Y = (decomposition.m_Pos.Y - g_GlobalVar[iTarget][iPlane].m_G2)/(addition.m_Time-g_GlobalVar[iTarget][iPlane].m_G4);
+                    // decomposition.m_Vel.Z = (decomposition.m_Pos.Z - g_GlobalVar[iTarget][iPlane].m_G3)/(addition.m_Time-g_GlobalVar[iTarget][iPlane].m_G4);
                     addition.m_Pos.X += decomposition.m_Pos.X;
                     addition.m_Pos.Y += decomposition.m_Pos.Y;
                     addition.m_Pos.Z += decomposition.m_Pos.Z;
                     addition.m_Vel.X += decomposition.m_Vel.X;
                     addition.m_Vel.Y += decomposition.m_Vel.Y;
                     addition.m_Vel.Z += decomposition.m_Vel.Z;
-                    g_GlobalVar[iTarget][iPlane].m_G1 = decomposition.m_Pos.X;//G1保存X坐标
-                    g_GlobalVar[iTarget][iPlane].m_G2 = decomposition.m_Pos.Y;//G2保存Y坐标
-                    g_GlobalVar[iTarget][iPlane].m_G3 = decomposition.m_Pos.Z;//G3保存Z坐标
-                    g_GlobalVar[iTarget][iPlane].m_G4 = addition.m_Time;//G4保存时间      
+                    // g_GlobalVar[iTarget][iPlane].m_G1 = decomposition.m_Pos.X;//G1保存X坐标
+                    // g_GlobalVar[iTarget][iPlane].m_G2 = decomposition.m_Pos.Y;//G2保存Y坐标
+                    // g_GlobalVar[iTarget][iPlane].m_G3 = decomposition.m_Pos.Z;//G3保存Z坐标
+                    // g_GlobalVar[iTarget][iPlane].m_G4 = addition.m_Time;//G4保存时间      
                     //frame.m_Dis = sqrt(pow(decomposition.m_Pos.X,2)+pow(decomposition.m_Pos.Y,2)+pow(decomposition.m_Pos.Z,2));
                     //frame.m_Phi = atan(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Z / sqrt(pow(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.X,2)+pow(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Y,2))) + noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
                     //frame.m_Theta = atan(noiseDatas[iPlane].m_PlaneTrueData.m_Pos.X / noiseDatas[iPlane].m_PlaneTrueData.m_Pos.Y) + noiseDatas[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
@@ -137,8 +137,8 @@ bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output)
 bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output)
 {
     // This is how to use global var.
-    g_GlobalVar[0][0].m_G1 = 0;
-    g_GlobalVar[0][0].m_G2 = 0;
+    g_GlobalVar[0].m_G[0] = 0;
+    g_GlobalVar[0].m_G[1] = 0;
     const vector<NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
     int interval = input.m_Interval;
 

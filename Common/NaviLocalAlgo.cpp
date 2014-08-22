@@ -72,7 +72,7 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
        output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
        output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
        output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
-        g_GlobalVar[0][0].m_G8 = sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2));//全局变量G8存储初始状态速度大小
+       // g_GlobalVar[0][0].m_G8 = sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2));//全局变量G8存储初始状态速度大小
         for(unsigned int i=1;i<=TargetCount-1;i++)
         {
             distance = sqrt(pow((input.m_FusionDatas[i].m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((input.m_FusionDatas[i].m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2)+pow((input.m_FusionDatas[i].m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
@@ -80,25 +80,25 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
             {
                 distancemin = distance;
                 TargetChoice = i;
-                g_GlobalVar[0][0].m_G9 = TargetChoice;//通过第一个时间点确定攻击的敌机，之后可以直接选择敌机进行攻击。
+                // g_GlobalVar[0][0].m_G9 = TargetChoice;//通过第一个时间点确定攻击的敌机，之后可以直接选择敌机进行攻击。
             }
         }
 
     }
     else
     {
-        relativedistance = sqrt(pow((input.m_PlaneTrueData.m_Pos.X-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X),2)+pow((input.m_PlaneTrueData.m_Pos.Y-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Y),2)+pow((input.m_PlaneTrueData.m_Pos.Z-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Z),2));
+        // relativedistance = sqrt(pow((input.m_PlaneTrueData.m_Pos.X-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X),2)+pow((input.m_PlaneTrueData.m_Pos.Y-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Y),2)+pow((input.m_PlaneTrueData.m_Pos.Z-input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Z),2));
         if(relativedistance>relativedistancemin)
         {
-            decomposition.m_Pos.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X;
-            decomposition.m_Pos.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Y;
-            decomposition.m_Pos.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Z;
-            decomposition.m_Vel.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Vel.X;
-            decomposition.m_Vel.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Vel.Y;
-            decomposition.m_Vel.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Vel.Z;
-            decomposition.m_Acc.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.X;
-            decomposition.m_Acc.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.Y;
-            decomposition.m_Acc.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.Z;
+            // decomposition.m_Pos.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.X;
+            // decomposition.m_Pos.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Y;
+            // decomposition.m_Pos.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Pos.Z;
+            // decomposition.m_Vel.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Vel.X;
+            // decomposition.m_Vel.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Vel.Y;
+            // decomposition.m_Vel.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Vel.Z;
+            // decomposition.m_Acc.X = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.X;
+            // decomposition.m_Acc.Y = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.Y;
+            // decomposition.m_Acc.Z = input.m_FusionDatas[g_GlobalVar[0][0].m_G9].m_Acc.Z;
             rphi = sqrt(pow((decomposition.m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
             rtheta = sqrt(pow((decomposition.m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((decomposition.m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2));
             qphi = atan((decomposition.m_Pos.Z-input.m_PlaneTrueData.m_Pos.Z)/sqrt(pow((decomposition.m_Pos.X-input.m_PlaneTrueData.m_Pos.X),2)+pow((decomposition.m_Pos.Y-input.m_PlaneTrueData.m_Pos.Y),2)));
@@ -125,9 +125,9 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
            output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
            output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
            output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
-           output.m_PlaneTrueData.m_Vel.X = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
-           output.m_PlaneTrueData.m_Vel.Y = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*sin(sigmaptheta);
-           output.m_PlaneTrueData.m_Vel.Z = g_GlobalVar[0][0].m_G8*sin(sigmapphi);
+           // output.m_PlaneTrueData.m_Vel.X = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
+           // output.m_PlaneTrueData.m_Vel.Y = g_GlobalVar[0][0].m_G8*cos(sigmapphi)*sin(sigmaptheta);
+           // output.m_PlaneTrueData.m_Vel.Z = g_GlobalVar[0][0].m_G8*sin(sigmapphi);
            output.m_PlaneTrueData.m_Pos.X = input.m_PlaneTrueData.m_Pos.X+output.m_PlaneTrueData.m_Vel.X * input.m_Interval;
            output.m_PlaneTrueData.m_Pos.Y = input.m_PlaneTrueData.m_Pos.Y+output.m_PlaneTrueData.m_Vel.Y * input.m_Interval;
            output.m_PlaneTrueData.m_Pos.Z = input.m_PlaneTrueData.m_Pos.Z+output.m_PlaneTrueData.m_Vel.Z * input.m_Interval;    
@@ -188,8 +188,8 @@ bool NaviLocalAlgoTest2(const NaviInput &input, NaviOutput &output)
     int interval = input.m_Interval;
 
     // How to use global var.
-    g_GlobalVar[0][0].m_G1 = 0;
-    g_GlobalVar[0][0].m_G2 = 0;
+    g_GlobalVar[0].m_G[0] = 0;
+    g_GlobalVar[0].m_G[1] = 0;
 
    output.m_PlaneTrueData.m_Pos = Position(40000, 10000, 0);
     return true;

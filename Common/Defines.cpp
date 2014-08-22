@@ -153,22 +153,12 @@ void __declspec(dllexport) GlobalInit()
     ExplosionTypeImages[ExplosionType1] = Image::FromFile(TEXT("Explosion1.png"));
     ExplosionTypeImages[ExplosionType2] = Image::FromFile(TEXT("Explosion2.png"));
 
-    typedef GlobalVarFrame *GlobalVarFrameP;
-    g_GlobalVar = new GlobalVarFrameP[PLANE_COUNT];
-    for (int i = 0; i < PLANE_COUNT; ++i)
+    g_GlobalVar = new GlobalVarFrame[PLANE_COUNT + TARGET_COUNT_MAX];
+    for (int i = 0; i < PLANE_COUNT + TARGET_COUNT_MAX; ++i)
     {
-        g_GlobalVar[i] = new GlobalVarFrame[TARGET_COUNT_MAX];
-        for (int j = 0; j < TARGET_COUNT_MAX; ++j)
+        for (int j = 0; j < GLOBAL_VAR_FRAME_SIZE; ++j)
         {
-            g_GlobalVar[i][j].m_G1 = 0.0;
-            g_GlobalVar[i][j].m_G2 = 0.0;
-            g_GlobalVar[i][j].m_G3 = 0.0;
-            g_GlobalVar[i][j].m_G4 = 0.0;
-            g_GlobalVar[i][j].m_G5 = 0.0;
-            g_GlobalVar[i][j].m_G6 = 0.0;
-            g_GlobalVar[i][j].m_G7 = 0.0;
-            g_GlobalVar[i][j].m_G8 = 0.0;
-            g_GlobalVar[i][j].m_G9 = 0.0;
+           g_GlobalVar[i].m_G[j] = 0.0;
         }
     }
 
@@ -177,10 +167,6 @@ void __declspec(dllexport) GlobalInit()
 
 void __declspec(dllexport) GlobalShut()
 {
-    for (int i = 0; i < PLANE_COUNT; ++i)
-    {
-        delete[] g_GlobalVar[i];
-    }
     delete[] g_GlobalVar;
 
     for (int i = StateMapBackground0; i < StateMapBackgroundLast; ++i)

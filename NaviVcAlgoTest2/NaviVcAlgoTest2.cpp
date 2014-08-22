@@ -63,7 +63,7 @@ BOOL CNaviVcAlgoTest2App::InitInstance()
 	return TRUE;
 }
 
-__declspec(dllimport) GlobalVarFrame **g_GlobalVar;
+__declspec(dllimport) GlobalVarFrame *g_GlobalVar;
 
 extern "C" __declspec(dllexport) bool NaviVcAlgoTest2(const NaviInput &input, NaviOutput &output)
 {
@@ -71,8 +71,8 @@ extern "C" __declspec(dllexport) bool NaviVcAlgoTest2(const NaviInput &input, Na
     int interval = input.m_Interval;
 
     // How to use global var.
-    g_GlobalVar[0][0].m_G1 = 0;
-    g_GlobalVar[0][0].m_G2 = 0;
+    g_GlobalVar[0].m_G[0] = 0;
+    g_GlobalVar[0].m_G[1] = 0;
 
     output.m_PlaneTrueData.m_Pos = Position(30000, 20000, 0);
     return true;

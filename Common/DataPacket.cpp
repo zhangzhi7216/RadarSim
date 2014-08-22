@@ -151,4 +151,4 @@ CArchive & operator >> (CArchive &ar, GlobalDataPacket &packet)
     return ar;
 }
 
-__declspec(dllexport) GlobalVarFrame **g_GlobalVar = NULL;
+__declspec(dllexport) GlobalVarFrame *g_GlobalVar = NULL;
