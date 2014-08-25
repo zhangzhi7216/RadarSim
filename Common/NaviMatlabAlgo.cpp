@@ -245,7 +245,7 @@ bool NaviMatlabAlgo::Run(const NaviInput &input, NaviOutput &output)
     {
         for (int j = 0; j < n; ++j)
         {
-            g_GlobalVar[i].m_G[j] = p[j * n + i];
+            g_GlobalVar[i].m_G[j] = p[j * m + i];
         }
     }
 
