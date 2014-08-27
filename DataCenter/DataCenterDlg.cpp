@@ -1419,6 +1419,7 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
             miss.m_Color = TargetColorRed;
             m_Missiles.push_back(miss);
         }
+        m_Missiles.erase(m_Missiles.begin() + targetSize, m_Missiles.end());
 #else
         int missileSize = 0;
         ar >> missileSize;
