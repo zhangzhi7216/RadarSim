@@ -41,16 +41,7 @@ SuspiciousPoint = permute(globalVarsMatrix(1,22:24,1:20),[3 2 1]);
 SuspiciousCount = find(SuspiciousPoint(:,1)==0,1)-1;%求非零行数
 SuspiciousPoint = SuspiciousPoint(1:SuspiciousCount,:); 
 
-h = plot3(InAssociatedPoint(:,1),InAssociatedPoint(:,2),InAssociatedPoint(:,3),'g.','linewidth',0.5);
-grid on;
-pause(0.00005);
-delete(h);
-f = plot3(SuspiciousPoint(:,1),SuspiciousPoint(:,2),SuspiciousPoint(:,3),'k.','linewidth',0.5);
-legend(f,sprintf('Suspicious Points %d',size(SuspiciousPoint,2)),'Location','NorthEast');
-pause(0.00005);
-delete(f);
-pause(0.00005);
-
+plot3(InAssociatedPoint(:,1),InAssociatedPoint(:,2),InAssociatedPoint(:,3),'g')
 for PlaneNum = 1:1:PlaneCount
     if(PlaneX(PlaneNum,end)==0 && PlaneY(PlaneNum,end)==0 && PlaneZ(PlaneNum,end)==0)
     plot3(PlaneX(PlaneNum,1:end-1),PlaneY(PlaneNum,1:end-1),PlaneZ(PlaneNum,1:end-1),'linewidth',2);
