@@ -1,13 +1,8 @@
 function [ fusionDatas, filterDatas, controlDatas, globalVarsOutput ] = FusionMatlabAlgoTest1( planeTrueDatas, targetNoiseDatas, globalVars, interval )
 T = interval;
 Q = 0;
-Tnum = size(targetNoiseDatas,2);                          %敌机个数
+Tnum = size(targetNoiseDatas,2)/8;                          %敌机个数
 Onum = size(planeTrueDatas,1);                      %我机个数
-REsm = [targetNoiseDatas(1,1,6),targetNoiseDatas(2,1,6),targetNoiseDatas(3,1,6)];
-RInf = [targetNoiseDatas(1,1,6),targetNoiseDatas(1,1,7),targetNoiseDatas(2,1,6),targetNoiseDatas(2,1,7),targetNoiseDatas(3,1,6),targetNoiseDatas(3,1,7)];
-VarREsm = REsm' * REsm;
-VarRInf = RInf' * RInf;
-Association = zeros(Tnum,1);%初始化目标关联矩阵
 
 globalVarsMatrix = zeros(Tnum+Onum,25,25);
 for k = 1:Tnum+Onum
@@ -16,9 +11,24 @@ for k = 1:Tnum+Onum
     end
 end
 globalVarsMatrixOutput = globalVarsMatrix;
-%msgbox(num2str(targetNoiseDatas(1:1, 2:2)));
-%msgbox(num2str(targetNoiseDatas(2:2, 2:2)));
-%msgbox(num2str(targetNoiseDatas(3:3, 2:2)));
+
+targetNoiseDatasTrans = zeros(Onum,Tnum,8);
+for k = 1:Onum
+    for i = 1:Tnum
+        targetNoiseDatasTrans(k,i,:) = permute(targetNoiseDatas(k,(8*i-7):8*i),[1 3 2]); 
+    end    
+end
+
+REsm = [targetNoiseDatasTrans(1,1,6),targetNoiseDatasTrans(2,1,6),targetNoiseDatasTrans(3,1,6)];
+RInf = [targetNoiseDatasTrans(1,1,6),targetNoiseDatasTrans(1,1,7),targetNoiseDatasTrans(2,1,6),targetNoiseDatasTrans(2,1,7),targetNoiseDatasTrans(3,1,6),targetNoiseDatasTrans(3,1,7)];
+VarREsm = REsm' * REsm;
+VarRInf = RInf' * RInf;
+Association = zeros(Tnum,1);%初始化目标关联矩阵
+
+
+%msgbox(num2str(targetNoiseDatasTrans(1:1, 2:2)));
+%msgbox(num2str(targetNoiseDatasTrans(2:2, 2:2)));
+%msgbox(num2str(targetNoiseDatasTrans(3:3, 2:2)));
 
 %计算我机与敌机最大距离，辨别是否离开Esm滤波区域
 for k = 1:Tnum
@@ -35,14 +45,23 @@ if(DistanceMin>2e5)
       Target(k).ZEsm = zeros(Onum,1);
       if(planeTrueDatas(1,1)==0)
            Target(k).P_UKFEsm = diag([1,0.01,0.0001,1,0.01,0.0001,1,0.01,0.0001]);
+           globalVarsMatrix(1,1,1:11) = permute([0;100;400000;110;23000;-440;10;0;0;0;0]',[3 2 1]);
+globalVarsMatrix(2,1,1:11) = permute([0;101;410000;24000;19000;-460;5;0;0;0;0]',[3 2 1]);
+globalVarsMatrix(3,1,1:11) = permute([0;102;420000;40000;18000;-480;-5;0;0;0;0]',[3 2 1]);
+globalVarsMatrix(4,1,1:11) = permute([0;103;430000;30300;17000;-480;0;0;0;0;0]',[3 2 1]);
+for k = 1:7
+    for i = 1:25
+        globalVars(k,(25*i-24):25*i) = permute(globalVarsIn(k,:,i),[3 2 1]);         
+    end
+end
       end
    end
    
    %根据ID号对Esm段滤波进行关联
    for k=1:Onum
        for i=1:Tnum
-            TargetID = targetNoiseDatas(k,i,2)+1;
-            Target(TargetID).ZEsm(k,1) = targetNoiseDatas(k,i,4); 
+            TargetID = targetNoiseDatasTrans(k,i,2)+1;
+            Target(TargetID).ZEsm(k,1) = targetNoiseDatasTrans(k,i,4); 
        end
    end
 
@@ -63,13 +82,13 @@ if(DistanceMin>2e5)
        [Target(k).X_e_UKFEsmNew,Target(k).P_UKFEsmNew]=UKF_Origin(T,Q,VarREsm,Target(k).X_e_UKFEsm,Target(k).ZEsm,Ownship,Target(k).P_UKFEsm);
        Target(k).X_e_UKFEsm = [Target(k).X_e_UKFEsmNew(1,1);Target(k).X_e_UKFEsmNew(4,1);Target(k).X_e_UKFEsmNew(7,1);Target(k).X_e_UKFEsmNew(2,1);Target(k).X_e_UKFEsmNew(5,1);Target(k).X_e_UKFEsmNew(8,1);Target(k).X_e_UKFEsmNew(3,1);Target(k).X_e_UKFEsmNew(6,1);Target(k).X_e_UKFEsmNew(9,1)];
        globalVarsMatrixOutput(k,1,1) = planeTrueDatas(1,1);
-       globalVarsMatrixOutput(k,1,2) = k-1;
+       globalVarsMatrixOutput(k,1,2) = 100+k-1;
        globalVarsMatrixOutput(k,1,3:11) = permute(Target(k).X_e_UKFEsm,[3,2,1]);
        Target(k).P_UKFEsm = Target(k).P_UKFEsmNew;
        globalVarsMatrixOutput(k,1:9,12:20) = permute(Target(k).P_UKFEsm,[3,2,1]);
     end
-       globalVarsOutput = zeros(Tnum,625);
-       for k = 1:Tnum
+       globalVarsOutput = zeros(Tnum+Onum,625);
+       for k = 1:Tnum+Onum
            for i = 1:25
                globalVarsOutput(k,(25*i-24):25*i) = permute(globalVarsMatrixOutput(k,:,i),[3 2 1]);         
            end
@@ -82,6 +101,7 @@ if(DistanceMin>2e5)
        filterDatas(k,:) = Target(k).X_e_UKFEsm';
        controlDatas = planeTrueDatas;
     end
+    msgbox('Message 1');
 elseif(DistanceMin<2e5 && DistanceMin>2e4)
    %输入我机的位置
    for k=1:Onum
@@ -101,10 +121,10 @@ elseif(DistanceMin<2e5 && DistanceMin>2e4)
             Target(k).X_e_UKFInf = [Target(k).X_e_UKFInf(1,1);Target(k).X_e_UKFInf(4,1);Target(k).X_e_UKFInf(7,1);Target(k).X_e_UKFInf(2,1);Target(k).X_e_UKFInf(5,1);Target(k).X_e_UKFInf(8,1);Target(k).X_e_UKFInf(3,1);Target(k).X_e_UKFInf(6,1);Target(k).X_e_UKFInf(9,1)];
       end      
    end
-   targetNoiseDatasTrans = permute(targetNoiseDatas,[3 2 1]);%这里做三维数组的转置是为了方便处理数据
+   targetNoiseDatasTransTrans = permute(targetNoiseDatasTrans,[3 2 1]);%这里做三维数组的转置是为了方便处理数据
    for i = 1:Onum
        for k = 1:Tnum
-           Target(k).ZInf(2*i-1:2*i,1) = targetNoiseDatasTrans(4:5,k,i); 
+           Target(k).ZInf(2*i-1:2*i,1) = targetNoiseDatasTransTrans(4:5,k,i); 
        end
    end
    TargetDisorder(:,:,1) = [Target(1).ZInf(:,1),Target(2).ZInf(:,1),Target(3).ZInf(:,1),Target(4).ZInf(:,1)];
@@ -168,13 +188,13 @@ elseif(DistanceMin<2e5 && DistanceMin>2e4)
         [Target(k).X_e_UKFInfNew,Target(k).P_UKFInfNew]=UKF_Origin1(T,Q,VarRInf,Target(k).X_e_UKFInf,Target(k).ZInfEquivalent,Ownship,Target(k).P_UKFInf); %这里的初始状态等分距离部分调通了修改为Esm的末状态
         Target(k).X_e_UKFInf = [Target(k).X_e_UKFInfNew(1,1);Target(k).X_e_UKFInfNew(4,1);Target(k).X_e_UKFInfNew(7,1);Target(k).X_e_UKFInfNew(2,1);Target(k).X_e_UKFInfNew(5,1);Target(k).X_e_UKFInfNew(8,1);Target(k).X_e_UKFInfNew(3,1);Target(k).X_e_UKFInfNew(6,1);Target(k).X_e_UKFInfNew(9,1)];
         globalVarsMatrixOutput(k,10,1) = planeTrueDatas(1,1);
-        globalVarsMatrixOutput(k,10,2) = k-1;
+        globalVarsMatrixOutput(k,10,2) = 100+k-1;
         globalVarsMatrixOutput(k,10,3:11) = permute(Target(k).X_e_UKFInf,[3 2 1]);
         Target(k).P_UKFInf = Target(k).P_UKFInfNew;
         globalVarsMatrixOutput(k,10:18,12:20) = permute(Target(k).P_UKFInf,[3 2 1]);
    end
-   globalVarsOutput = zeros(Tnum,625);
-   for k = 1:Tnum
+   globalVarsOutput = zeros(Tnum+Onum,625);
+   for k = 1:Tnum+Onum
        for i = 1:25
            globalVarsOutput(k,(25*i-24):25*i) = permute(globalVarsMatrixOutput(k,:,i),[3 2 1]);         
        end
@@ -187,5 +207,6 @@ elseif(DistanceMin<2e5 && DistanceMin>2e4)
        filterDatas(k,:) = Target(k).X_e_UKFInf';
        controlDatas = planeTrueDatas;
     end
+    msgbox('Message 2');
 end
 
