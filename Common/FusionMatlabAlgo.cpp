@@ -219,8 +219,10 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         for (int iPlane = 0; iPlane < m; ++iPlane)
         {
             ControlDataPacket packet;
+            packet.m_FusionData = output.m_FusionData;
             packet.m_ControlData.m_Time = p[iPlane + 0 * m];
             packet.m_ControlData.m_Id = p[iPlane + 1 * m];
+            packet.m_ControlData.m_C1 = p[iPlane + 2 * m];
             output.m_ControlDatas.push_back(packet);
         }
 

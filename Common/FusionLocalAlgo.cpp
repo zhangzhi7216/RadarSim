@@ -129,6 +129,7 @@ bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output)
         packet.m_FusionData = output.m_FusionData;
         packet.m_ControlData.m_Time = noiseDatas[iPlane].m_PlaneTrueData.m_Time;
         packet.m_ControlData.m_Id = noiseDatas[iPlane].m_PlaneTrueData.m_Id;
+        packet.m_ControlData.m_C1 = 1.234;
         output.m_ControlDatas.push_back(packet);
     }
     return true;

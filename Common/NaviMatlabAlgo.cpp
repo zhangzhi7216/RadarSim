@@ -208,19 +208,20 @@ bool NaviMatlabAlgo::Run(const NaviInput &input, NaviOutput &output)
     Array *globalVarsOutput = outputList[2];
 
     p = mxGetPr(planeTrueDataOutput);
-   output.m_PlaneTrueData.m_Time = p[0];
-   output.m_PlaneTrueData.m_Id = p[1];
-   output.m_PlaneTrueData.m_Pos.X = p[2];
-   output.m_PlaneTrueData.m_Pos.Y = p[3];
-   output.m_PlaneTrueData.m_Pos.Z = p[4];
-   output.m_PlaneTrueData.m_Vel.X = p[5];
-   output.m_PlaneTrueData.m_Vel.Y = p[6];
-   output.m_PlaneTrueData.m_Vel.Z = p[7];
-   output.m_PlaneTrueData.m_Acc.X = p[8];
-   output.m_PlaneTrueData.m_Acc.Y = p[9];
-   output.m_PlaneTrueData.m_Acc.Z = p[10];
+    output.m_PlaneTrueData.m_Time = p[0];
+    output.m_PlaneTrueData.m_Id = p[1];
+    output.m_PlaneTrueData.m_Pos.X = p[2];
+    output.m_PlaneTrueData.m_Pos.Y = p[3];
+    output.m_PlaneTrueData.m_Pos.Z = p[4];
+    output.m_PlaneTrueData.m_Vel.X = p[5];
+    output.m_PlaneTrueData.m_Vel.Y = p[6];
+    output.m_PlaneTrueData.m_Vel.Z = p[7];
+    output.m_PlaneTrueData.m_Acc.X = p[8];
+    output.m_PlaneTrueData.m_Acc.Y = p[9];
+    output.m_PlaneTrueData.m_Acc.Z = p[10];
 
     int m = mxGetM(missileTrueDatasOutput), n = mxGetN(missileTrueDatasOutput);
+    p = mxGetPr(missileTrueDatasOutput);
     for (int iMissile = 0; iMissile < m; ++iMissile)
     {
         TrueDataFrame missileTrueData;
