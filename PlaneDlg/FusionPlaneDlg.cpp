@@ -281,10 +281,43 @@ void CFusionPlaneDlg::DoFusion()
         AfxMessageBox(TEXT("融合算法运行错误."));
         return;
     }
+
     // Set Plane true data.
     for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
     {
         m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(it->second.second.m_PlaneTrueData);
+    }
+
+    // Check fusion output.
+    int planeSize = m_NoiseDatas.size();
+    int targetSize = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size();
+    if (m_FusionOutput.m_FusionData.m_FusionDatas.size() != targetSize)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("融合算法输出的融合数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
+        AfxMessageBox(msg);
+        return;
+    }
+    if (m_FusionOutput.m_FusionData.m_FilterDatas.size() != targetSize)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("融合算法输出的滤波数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
+        AfxMessageBox(msg);
+        return;
+    }
+    if (m_FusionOutput.m_FusionData.m_NoiseDatas.size() != targetSize)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("融合算法输出的噪声数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), targetSize);
+        AfxMessageBox(msg);
+        return;
+    }
+    if (m_FusionOutput.m_ControlDatas.size() != planeSize)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("融合算法输出的控制数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_ControlDatas.size(), planeSize);
+        AfxMessageBox(msg);
+        return;
     }
 
 #ifdef _DEV

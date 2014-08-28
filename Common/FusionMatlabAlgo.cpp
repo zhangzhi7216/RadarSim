@@ -171,6 +171,13 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
 
         p = mxGetPr(fusionDatas);
         int m = mxGetM(fusionDatas), n = mxGetN(fusionDatas);
+        if (m != targetSize || n != 11)
+        {
+            CString msg;
+            msg.AppendFormat(TEXT("Matlab融合算法输出的融合数据维度(%d, %d)错误！应该是(%d, %d)！请检查你的融合算法！"), m, n, targetSize, 11);
+            AfxMessageBox(msg);
+            return false;
+        }
         for (int iTarget = 0; iTarget < m; ++iTarget)
         {
             TrueDataFrame fusionData;
@@ -191,6 +198,13 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         p = mxGetPr(filterDatas);
         m = mxGetM(filterDatas);
         n = mxGetN(filterDatas);
+        if (m != targetSize || n != 11)
+        {
+            CString msg;
+            msg.AppendFormat(TEXT("Matlab融合算法输出的滤波数据维度(%d, %d)错误！应该是(%d, %d)！请检查你的融合算法！"), m, n, targetSize, 11);
+            AfxMessageBox(msg);
+            return false;
+        }
         for (int iTarget = 0; iTarget < m; ++iTarget)
         {
             TrueDataFrame filterData;
@@ -216,6 +230,13 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         p = mxGetPr(controlDatas);
         m = mxGetM(controlDatas);
         n = mxGetN(controlDatas);
+        if (m != planeSize || n != 3)
+        {
+            CString msg;
+            msg.AppendFormat(TEXT("Matlab融合算法输出的控制数据维度(%d, %d)错误！应该是(%d, %d)！请检查你的融合算法！"), m, n, targetSize, 3);
+            AfxMessageBox(msg);
+            return false;
+        }
         for (int iPlane = 0; iPlane < m; ++iPlane)
         {
             ControlDataPacket packet;
@@ -229,6 +250,13 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         p = mxGetPr(outputGlobalVar);
         m = mxGetM(outputGlobalVar);
         n = mxGetN(outputGlobalVar);
+        if (m != planeSize + targetSize || n != GLOBAL_VAR_FRAME_SIZE)
+        {
+            CString msg;
+            msg.AppendFormat(TEXT("Matlab融合算法输出的全局变量维度(%d, %d)错误！应该是(%d, %d)！请检查你的融合算法！"), m, n, planeSize + targetSize, GLOBAL_VAR_FRAME_SIZE);
+            AfxMessageBox(msg);
+            return false;
+        }
         for (int i = 0; i < m; ++i)
         {
             for (int j = 0; j < n; ++j)

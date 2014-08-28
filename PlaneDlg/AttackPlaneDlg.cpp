@@ -251,7 +251,7 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     input.m_FilterDatas = packet.m_FusionData.m_FilterDatas;
     input.m_ControlData = packet.m_ControlData;
     input.m_Interval = m_GlobalData.m_Interval;
-    input.m_PlaneTrueData.m_Time = packet.m_FusionData.m_PlaneTrueDatas[0].m_Time;
+    input.m_PlaneTrueData.m_Time = packet.m_FusionData.m_NoiseDatas[0].m_PlaneTrueData.m_Time;
     input.m_PlaneTrueData.m_Id = m_Plane.m_Id;
     input.m_PlaneTrueData.m_Pos = m_Plane.m_Position;
     input.m_PlaneTrueData.m_Vel = m_Plane.m_Vel;
@@ -259,7 +259,7 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
     for (int i = 0; i < m_Missiles.size(); ++i)
     {
         TrueDataFrame missileTrueData;
-        missileTrueData.m_Time = packet.m_FusionData.m_PlaneTrueDatas[0].m_Time;
+        missileTrueData.m_Time = packet.m_FusionData.m_NoiseDatas[0].m_PlaneTrueData.m_Time;
         missileTrueData.m_Id = m_Missiles[i].m_Id;
         missileTrueData.m_Pos = m_Missiles[i].m_Position;
         missileTrueData.m_Vel = m_Missiles[i].m_Vel;
@@ -267,6 +267,11 @@ void CAttackPlaneDlg::DoNavi(const ControlDataPacket &packet)
         input.m_MissileTrueDatas.push_back(missileTrueData);
     }
     m_NaviOutput = NaviOutput();
+    for (int i = 0; i < m_Missiles.size(); ++i)
+    {
+        m_NaviOutput.m_MissileTrueDatas.push_back(TrueDataFrame());
+    }
+
     if (!m_NaviAlgo)
     {
         AfxMessageBox(TEXT("尚未指定导航算法."));
