@@ -129,10 +129,10 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
                 p[(iPlane * targetSize + iTarget) + 0 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Time;
                 p[(iPlane * targetSize + iTarget) + 1 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Id;
                 p[(iPlane * targetSize + iTarget) + 2 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Dis;
-                p[(iPlane * targetSize + iTarget) + 3 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_DisVar;
-                p[(iPlane * targetSize + iTarget) + 4 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
-                p[(iPlane * targetSize + iTarget) + 5 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_ThetaVar;
-                p[(iPlane * targetSize + iTarget) + 6 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
+                p[(iPlane * targetSize + iTarget) + 3 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
+                p[(iPlane * targetSize + iTarget) + 4 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
+                p[(iPlane * targetSize + iTarget) + 5 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_DisVar;
+                p[(iPlane * targetSize + iTarget) + 6 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_ThetaVar;
                 p[(iPlane * targetSize + iTarget) + 7 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_PhiVar;
             }
         }
