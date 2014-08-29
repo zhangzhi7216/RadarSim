@@ -1,8 +1,13 @@
 function [ fusionDatas, filterDatas, controlDatas, globalVarsOutput ] = FusionMatlabAlgoTest1( planeTrueDatas, targetNoiseDatas, globalVars, interval )
+h = msgbox(num2str(planeTrueDatas),'true');
+set(h,'Position',[100 100 300 100]);
+msgbox(num2str(targetNoiseDatas),'noise');
+
 T = interval;
 Q = 0;
-Tnum = size(targetNoiseDatas,2)/8;                          %敌机个数
 Onum = size(planeTrueDatas,1);                      %我机个数
+Tnum = size(targetNoiseDatas,1)/Onum;                          %敌机个数
+
 
 globalVarsMatrix = zeros(Tnum+Onum,25,25);
 for k = 1:Tnum+Onum
@@ -12,10 +17,11 @@ for k = 1:Tnum+Onum
 end
 globalVarsMatrixOutput = globalVarsMatrix;
 
+targetNoiseDatas(:,4:5) = targetNoiseDatas(:,4:5)/57.2957795785523;
 targetNoiseDatasTrans = zeros(Onum,Tnum,8);
 for k = 1:Onum
     for i = 1:Tnum
-        targetNoiseDatasTrans(k,i,:) = permute(targetNoiseDatas(k,(8*i-7):8*i),[1 3 2]); 
+        targetNoiseDatasTrans(k,i,:) = permute(targetNoiseDatas(4*k-4+i,:),[1 3 2]); 
     end    
 end
 
@@ -31,6 +37,10 @@ for k=1:Tnum
         globalVarsMatrix(2,1,1:11) = permute([0;101;410000;24000;19000;-460;5;0;0;0;0]',[3 2 1]);
         globalVarsMatrix(3,1,1:11) = permute([0;102;420000;40000;18000;-480;-5;0;0;0;0]',[3 2 1]);
         globalVarsMatrix(4,1,1:11) = permute([0;103;430000;30300;17000;-480;0;0;0;0;0]',[3 2 1]);
+% globalVarsMatrix(1,1,1:11) = permute([0;100;3.0859e5;3.6256e3;2.3e4;-372.5;21.25;0;0.3;0.05;0]',[3 2 1]);
+% globalVarsMatrix(2,1,1:11) = permute([0;101;306500;25125;19000;-460;5;0;0;0;0]',[3 2 1]);
+% globalVarsMatrix(3,1,1:11) = permute([0;102;312000;3.8875e4;1.8e4;-480;-5;0;0;0;0]',[3 2 1]);
+% globalVarsMatrix(4,1,1:11) = permute([0;103;322000;2.5238e4;1.7e4;-480;-45;0;0;-0.2;0]',[3 2 1]);
    end
 end
 %msgbox(num2str(targetNoiseDatasTrans(1:1, 2:2)));
@@ -44,9 +54,9 @@ for k = 1:Tnum
     end
 end
 DistanceMin = min(min(distanceEsm));
-msgbox('Message 0');
 %Esm探测范围内滤波
 if(DistanceMin>2e5)
+   msgbox('Start 1');
     %赋初值
    for k=1:Tnum
       Target(k).ZEsm = zeros(Onum,1);
@@ -54,26 +64,30 @@ if(DistanceMin>2e5)
            Target(k).P_UKFEsm = diag([1,0.01,0.0001,1,0.01,0.0001,1,0.01,0.0001]);
       end
    end
+   msgbox('Start 1.1');
    
    %根据ID号对Esm段滤波进行关联
    for k=1:Onum
        for i=1:Tnum
-            TargetID = targetNoiseDatasTrans(k,i,2)+1;
+            TargetID = targetNoiseDatasTrans(k,i,2)+1-100;
             Target(TargetID).ZEsm(k,1) = targetNoiseDatasTrans(k,i,4); 
        end
    end
+   msgbox('Start 1.2');
 
    %输入我机的位置
    for k=1:Onum
        Ownship(k).P = (planeTrueDatas(k,3:11))';
        Ownship(k).P = [Ownship(k).P(1,1);Ownship(k).P(4,1);Ownship(k).P(7,1);Ownship(k).P(2,1);Ownship(k).P(5,1);Ownship(k).P(8,1);Ownship(k).P(3,1);Ownship(k).P(6,1);Ownship(k).P(9,1)];
    end
+   msgbox('Start 1.3');
 
    %输入敌机的位置
    for k=1:Tnum
        Target(k).X_e_UKFEsm = permute(globalVarsMatrix(k,1,3:11),[3,2,1]);
        Target(k).X_e_UKFEsm = [Target(k).X_e_UKFEsm(1,1);Target(k).X_e_UKFEsm(4,1);Target(k).X_e_UKFEsm(7,1);Target(k).X_e_UKFEsm(2,1);Target(k).X_e_UKFEsm(5,1);Target(k).X_e_UKFEsm(8,1);Target(k).X_e_UKFEsm(3,1);Target(k).X_e_UKFEsm(6,1);Target(k).X_e_UKFEsm(9,1)];
    end
+   msgbox('Start 1.4');
    
    %ESM-UKF滤波
     for k = 1:Tnum
@@ -85,22 +99,34 @@ if(DistanceMin>2e5)
        Target(k).P_UKFEsm = Target(k).P_UKFEsmNew;
        globalVarsMatrixOutput(k,1:9,12:20) = permute(Target(k).P_UKFEsm,[3,2,1]);
     end
+    msgbox('Start 1.5');
        globalVarsOutput = zeros(Tnum+Onum,625);
        for k = 1:Tnum+Onum
            for i = 1:25
                globalVarsOutput(k,(25*i-24):25*i) = permute(globalVarsMatrixOutput(k,:,i),[3 2 1]);         
            end
        end
+       msgbox('Start 1.6');
     %输出融合值
-    fusionDatas = zeros(Tnum,9);
-    filterDatas = zeros(Tnum,9);
+    fusionDatasOutput = zeros(Tnum,11);
+    filterDatasOutput = zeros(Tnum,11);
+    controlDatas = zeros(Onum,3);
     for k = 1:Tnum
-       fusionDatas(k,:) = Target(k).X_e_UKFEsm';
-       filterDatas(k,:) = Target(k).X_e_UKFEsm';
-       controlDatas = planeTrueDatas;
+       fusionDatasOutput(k,1) = planeTrueDatas(1,1);
+       fusionDatasOutput(k,2) = 100+k-1;
+       fusionDatasOutput(k,3:11) = Target(k).X_e_UKFEsm';
+       filterDatasOutput(k,1) = planeTrueDatas(1,1);
+       filterDatasOutput(k,2) = 100+k-1;
+       filterDatasOutput(k,3:11) = Target(k).X_e_UKFEsm';
     end
-    msgbox('Message 1');
+    msgbox('Start 1.7');
+    fusionDatas = fusionDatasOutput;
+    filterDatas = filterDatasOutput;
+%     msgbox(num2str(size(fusionDatas)),'fusion');
+%     msgbox(num2str(size(filterDatas)),'filter');
+     msgbox('Finish 1');
 elseif(DistanceMin<2e5 && DistanceMin>2e4)
+       msgbox('Start 2');
    %输入我机的位置
    for k=1:Onum
        Ownship(k).P = (planeTrueDatas(k,3:11))';
@@ -198,13 +224,19 @@ elseif(DistanceMin<2e5 && DistanceMin>2e4)
        end
    end
     %输出融合值
-    fusionDatas = zeros(Tnum,9);
-    filterDatas = zeros(Tnum,9);
+    fusionDatasOutput = zeros(Tnum,11);
+    filterDatasOutput = zeros(Tnum,11);
+    controlDatas = zeros(Onum,3);
     for k = 1:Tnum
-       fusionDatas(k,:) = Target(k).X_e_UKFInf';
-       filterDatas(k,:) = Target(k).X_e_UKFInf';
-       controlDatas = planeTrueDatas;
+       fusionDatasOutput(k,1) = planeTrueDatas(1,1);
+       fusionDatasOutput(k,2) = 100+k-1;
+       fusionDatasOutput(k,3:11) = Target(k).X_e_UKFInf';
+       filterDatasOutput(k,1) = planeTrueDatas(1,1);
+       filterDatasOutput(k,2) = 100+k-1;
+       filterDatasOutput(k,3:11) = Target(k).X_e_UKFInf';
     end
-    msgbox('Message 2');
+    fusionDatas = fusionDatasOutput;
+    filterDatas = filterDatasOutput;
+    msgbox('Finish 2');
 end
 
