@@ -9,11 +9,11 @@ Target::Target()
 , m_InitAcc(1, 1, 1)
 , m_Color(TargetColorOrange)
 , m_MoveType(TargetMoveTypeUniAcc)
-, m_HeadDir(1, 1, 1)
 , m_Pal(1)
 , m_Radius(100)
 , m_State(TargetStateAlive)
 {
+    m_HeadDir = m_InitVel;
 }
 
 Target::~Target(void)
@@ -43,7 +43,8 @@ void Target::MoveTo(const Position &pos)
 {
     if (!m_Position.Equals(pos))
     {
-        m_HeadDir = pos - m_Position;
+        // m_HeadDir = pos - m_Position;
+        m_HeadDir = m_Vel;
     }
     m_Position = pos;
 }
@@ -51,6 +52,7 @@ void Target::MoveTo(const Position &pos)
 void Target::Reset()
 {
     m_Position = m_InitPosition;
+    m_HeadDir = m_InitVel;
     m_Vel = m_InitVel;
     m_Acc = m_InitAcc;
 
