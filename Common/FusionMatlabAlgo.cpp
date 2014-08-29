@@ -30,7 +30,7 @@ bool FusionMatlabAlgo::Init()
     if (!m_DllHandle)
     {
         CString msg;
-        msg.AppendFormat(TEXT("æ— æ³•è£…è½½æ¨¡å—%s."), m_DllFileName);
+        msg.AppendFormat(TEXT("ÎŞ·¨×°ÔØÄ£¿é%s."), m_DllFileName);
         return false;
     }
     bool result = false;
@@ -87,7 +87,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
     if (!m_MatlabFunc)
     {
         CString msg;
-        msg.AppendFormat(TEXT("ç®—æ³•%såœ°å€é”™è¯¯."), m_Name);
+        msg.AppendFormat(TEXT("Ëã·¨%sµØÖ·´íÎó."), m_Name);
         AfxMessageBox(msg);
         return false;
     }
@@ -129,10 +129,10 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
                 p[(iPlane * targetSize + iTarget) + 0 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Time;
                 p[(iPlane * targetSize + iTarget) + 1 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Id;
                 p[(iPlane * targetSize + iTarget) + 2 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Dis;
-                p[(iPlane * targetSize + iTarget) + 3 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
-                p[(iPlane * targetSize + iTarget) + 4 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
-                p[(iPlane * targetSize + iTarget) + 5 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_DisVar;
-                p[(iPlane * targetSize + iTarget) + 6 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_ThetaVar;
+                p[(iPlane * targetSize + iTarget) + 3 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_DisVar;
+                p[(iPlane * targetSize + iTarget) + 4 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Theta;
+                p[(iPlane * targetSize + iTarget) + 5 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_ThetaVar;
+                p[(iPlane * targetSize + iTarget) + 6 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_Phi;
                 p[(iPlane * targetSize + iTarget) + 7 * (planeSize * targetSize)] = input.m_NoiseDataPackets[iPlane].m_TargetNoiseDatas[iTarget].m_PhiVar;
             }
         }
@@ -159,7 +159,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
             DestroyArray(interval);
 
             CString msg;
-            msg.AppendFormat(TEXT("ç®—æ³•%sè°ƒç”¨å¤±è´¥."), m_Name);
+            msg.AppendFormat(TEXT("Ëã·¨%sµ÷ÓÃÊ§°Ü."), m_Name);
 
             return false;
         }
@@ -174,7 +174,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         if (m != targetSize || n != 11)
         {
             CString msg;
-            msg.AppendFormat(TEXT("Matlabèåˆç®—æ³•è¾“å‡ºçš„èåˆæ•°æ®ç»´åº¦(%d, %d)é”™è¯¯ï¼åº”è¯¥æ˜¯(%d, %d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m, n, targetSize, 11);
+            msg.AppendFormat(TEXT("MatlabÈÚºÏËã·¨Êä³öµÄÈÚºÏÊı¾İÎ¬¶È(%d, %d)´íÎó£¡Ó¦¸ÃÊÇ(%d, %d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m, n, targetSize, 11);
             AfxMessageBox(msg);
             return false;
         }
@@ -201,7 +201,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         if (m != targetSize || n != 11)
         {
             CString msg;
-            msg.AppendFormat(TEXT("Matlabèåˆç®—æ³•è¾“å‡ºçš„æ»¤æ³¢æ•°æ®ç»´åº¦(%d, %d)é”™è¯¯ï¼åº”è¯¥æ˜¯(%d, %d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m, n, targetSize, 11);
+            msg.AppendFormat(TEXT("MatlabÈÚºÏËã·¨Êä³öµÄÂË²¨Êı¾İÎ¬¶È(%d, %d)´íÎó£¡Ó¦¸ÃÊÇ(%d, %d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m, n, targetSize, 11);
             AfxMessageBox(msg);
             return false;
         }
@@ -233,7 +233,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         if (m != planeSize || n != 3)
         {
             CString msg;
-            msg.AppendFormat(TEXT("Matlabèåˆç®—æ³•è¾“å‡ºçš„æ§åˆ¶æ•°æ®ç»´åº¦(%d, %d)é”™è¯¯ï¼åº”è¯¥æ˜¯(%d, %d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m, n, targetSize, 3);
+            msg.AppendFormat(TEXT("MatlabÈÚºÏËã·¨Êä³öµÄ¿ØÖÆÊı¾İÎ¬¶È(%d, %d)´íÎó£¡Ó¦¸ÃÊÇ(%d, %d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m, n, targetSize, 3);
             AfxMessageBox(msg);
             return false;
         }
@@ -253,7 +253,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         if (m != planeSize + targetSize || n != GLOBAL_VAR_FRAME_SIZE)
         {
             CString msg;
-            msg.AppendFormat(TEXT("Matlabèåˆç®—æ³•è¾“å‡ºçš„å…¨å±€å˜é‡ç»´åº¦(%d, %d)é”™è¯¯ï¼åº”è¯¥æ˜¯(%d, %d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m, n, planeSize + targetSize, GLOBAL_VAR_FRAME_SIZE);
+            msg.AppendFormat(TEXT("MatlabÈÚºÏËã·¨Êä³öµÄÈ«¾Ö±äÁ¿Î¬¶È(%d, %d)´íÎó£¡Ó¦¸ÃÊÇ(%d, %d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m, n, planeSize + targetSize, GLOBAL_VAR_FRAME_SIZE);
             AfxMessageBox(msg);
             return false;
         }
