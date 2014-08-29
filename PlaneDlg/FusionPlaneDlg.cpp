@@ -1,5 +1,5 @@
 
-// PlaneDlg.cpp : ÊµÏÖÎÄ¼ş
+// PlaneDlg.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -13,7 +13,7 @@
 #endif
 
 
-// CFusionPlaneDlg ¶Ô»°¿ò
+// CFusionPlaneDlg å¯¹è¯æ¡†
 
 
 
@@ -45,51 +45,51 @@ BEGIN_MESSAGE_MAP(CFusionPlaneDlg, CPlaneDlg)
 END_MESSAGE_MAP()
 
 
-// CFusionPlaneDlg ÏûÏ¢´¦Àí³ÌĞò
+// CFusionPlaneDlg æ¶ˆæ¯å¤„ç†ç¨‹åº
 
 BOOL CFusionPlaneDlg::OnInitDialog()
 {
     if (!m_FusionSocket->Create())
     {
-        AfxMessageBox(TEXT("Ì×½Ó×Ö´´½¨Ê§°Ü"));
+        AfxMessageBox(TEXT("å¥—æ¥å­—åˆ›å»ºå¤±è´¥"));
         exit(-1);
     }
     if (!m_FusionSocket->Listen())
     {
-        AfxMessageBox(TEXT("¼àÌıÊ§°Ü"));
+        AfxMessageBox(TEXT("ç›‘å¬å¤±è´¥"));
         exit(-1);
     }
     if (!m_FusionSocket->AsyncSelect(FD_ACCEPT))
     {
-        AfxMessageBox(TEXT("Ñ¡ÔñÊ§°Ü"));
+        AfxMessageBox(TEXT("é€‰æ‹©å¤±è´¥"));
         exit(-1);
     }
 
 	CPlaneDlg::OnInitDialog();
 
-	// ÉèÖÃ´Ë¶Ô»°¿òµÄÍ¼±ê¡£µ±Ó¦ÓÃ³ÌĞòÖ÷´°¿Ú²»ÊÇ¶Ô»°¿òÊ±£¬¿ò¼Ü½«×Ô¶¯
-	//  Ö´ĞĞ´Ë²Ù×÷
-	SetIcon(m_hIcon, TRUE);			// ÉèÖÃ´óÍ¼±ê
-	SetIcon(m_hIcon, FALSE);		// ÉèÖÃĞ¡Í¼±ê
+	// è®¾ç½®æ­¤å¯¹è¯æ¡†çš„å›¾æ ‡ã€‚å½“åº”ç”¨ç¨‹åºä¸»çª—å£ä¸æ˜¯å¯¹è¯æ¡†æ—¶ï¼Œæ¡†æ¶å°†è‡ªåŠ¨
+	//  æ‰§è¡Œæ­¤æ“ä½œ
+	SetIcon(m_hIcon, TRUE);			// è®¾ç½®å¤§å›¾æ ‡
+	SetIcon(m_hIcon, FALSE);		// è®¾ç½®å°å›¾æ ‡
 
-    // TODO: ÔÚ´ËÌí¼Ó¶îÍâµÄ³õÊ¼»¯´úÂë
+    // TODO: åœ¨æ­¤æ·»åŠ é¢å¤–çš„åˆå§‹åŒ–ä»£ç 
 
-	return TRUE;  // ³ı·Ç½«½¹µãÉèÖÃµ½¿Ø¼ş£¬·ñÔò·µ»Ø TRUE
+	return TRUE;  // é™¤éå°†ç„¦ç‚¹è®¾ç½®åˆ°æ§ä»¶ï¼Œå¦åˆ™è¿”å› TRUE
 }
 
-// Èç¹ûÏò¶Ô»°¿òÌí¼Ó×îĞ¡»¯°´Å¥£¬ÔòĞèÒªÏÂÃæµÄ´úÂë
-//  À´»æÖÆ¸ÃÍ¼±ê¡£¶ÔÓÚÊ¹ÓÃÎÄµµ/ÊÓÍ¼Ä£ĞÍµÄ MFC Ó¦ÓÃ³ÌĞò£¬
-//  Õâ½«ÓÉ¿ò¼Ü×Ô¶¯Íê³É¡£
+// å¦‚æœå‘å¯¹è¯æ¡†æ·»åŠ æœ€å°åŒ–æŒ‰é’®ï¼Œåˆ™éœ€è¦ä¸‹é¢çš„ä»£ç 
+//  æ¥ç»˜åˆ¶è¯¥å›¾æ ‡ã€‚å¯¹äºä½¿ç”¨æ–‡æ¡£/è§†å›¾æ¨¡å‹çš„ MFC åº”ç”¨ç¨‹åºï¼Œ
+//  è¿™å°†ç”±æ¡†æ¶è‡ªåŠ¨å®Œæˆã€‚
 
 void CFusionPlaneDlg::OnPaint()
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // ÓÃÓÚ»æÖÆµÄÉè±¸ÉÏÏÂÎÄ
+		CPaintDC dc(this); // ç”¨äºç»˜åˆ¶çš„è®¾å¤‡ä¸Šä¸‹æ–‡
 
 		SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
 
-		// Ê¹Í¼±êÔÚ¹¤×÷Çø¾ØĞÎÖĞ¾ÓÖĞ
+		// ä½¿å›¾æ ‡åœ¨å·¥ä½œåŒºçŸ©å½¢ä¸­å±…ä¸­
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -97,7 +97,7 @@ void CFusionPlaneDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// »æÖÆÍ¼±ê
+		// ç»˜åˆ¶å›¾æ ‡
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -106,8 +106,8 @@ void CFusionPlaneDlg::OnPaint()
 	}
 }
 
-//µ±ÓÃ»§ÍÏ¶¯×îĞ¡»¯´°¿ÚÊ±ÏµÍ³µ÷ÓÃ´Ëº¯ÊıÈ¡µÃ¹â±ê
-//ÏÔÊ¾¡£
+//å½“ç”¨æˆ·æ‹–åŠ¨æœ€å°åŒ–çª—å£æ—¶ç³»ç»Ÿè°ƒç”¨æ­¤å‡½æ•°å–å¾—å…‰æ ‡
+//æ˜¾ç¤ºã€‚
 HCURSOR CFusionPlaneDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -143,14 +143,14 @@ void CFusionPlaneDlg::AddTrueData(TrueDataPacket &packet)
     // CPlaneDlg::AddTrueData(packet);
     m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
 
-    // ÏÔÊ¾±¾Ö¡Ç°°ë²¿£¬¼´´«¸ĞÆ÷²¿·Ö
+    // æ˜¾ç¤ºæœ¬å¸§å‰åŠéƒ¨ï¼Œå³ä¼ æ„Ÿå™¨éƒ¨åˆ†
     if (m_MatlabDlg)
     {
         m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
     m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
 
-    // ÈÃÈÚºÏ»úµÄ´«¸ĞÆ÷ÕÕ³£²ÉÑù£¬½ö½öÓÃÓÚÏÔÊ¾
+    // è®©èåˆæœºçš„ä¼ æ„Ÿå™¨ç…§å¸¸é‡‡æ ·ï¼Œä»…ä»…ç”¨äºæ˜¾ç¤º
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
         if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
@@ -221,7 +221,7 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
             m_MatlabDlg->UpdateGlobalVar();
         }
 
-        // ÏÔÊ¾±¾Ö¡ºó°ë²¿£¬¼´Ì¬ÊÆ²¿·Ö£¬Ä¿±êºÍµ¼µ¯
+        // æ˜¾ç¤ºæœ¬å¸§ååŠéƒ¨ï¼Œå³æ€åŠ¿éƒ¨åˆ†ï¼Œç›®æ ‡å’Œå¯¼å¼¹
         for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
         {
             TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
@@ -257,7 +257,7 @@ void CFusionPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
     if (!m_FusionAlgo->Init())
     {
         CString msg;
-        msg.AppendFormat(TEXT("ÈÚºÏËã·¨%s³õÊ¼»¯Ê§°Ü."), m_FusionAlgo->m_Name);
+        msg.AppendFormat(TEXT("èåˆç®—æ³•%såˆå§‹åŒ–å¤±è´¥."), m_FusionAlgo->m_Name);
     }
     GetDlgItem(IDC_FUSION_ALGO)->SetWindowText(m_FusionAlgo->m_Name);
 }
@@ -266,7 +266,7 @@ void CFusionPlaneDlg::DoFusion()
 {
     if (!m_FusionAlgo)
     {
-        AfxMessageBox(TEXT("ÉĞÎ´Ö¸¶¨ÈÚºÏËã·¨."));
+        AfxMessageBox(TEXT("å°šæœªæŒ‡å®šèåˆç®—æ³•."));
         return;
     }
     FusionInput input;
@@ -278,7 +278,7 @@ void CFusionPlaneDlg::DoFusion()
     m_FusionOutput = FusionOutput();
     if (!m_FusionAlgo->Run(input, m_FusionOutput))
     {
-        AfxMessageBox(TEXT("ÈÚºÏËã·¨ÔËĞĞ´íÎó."));
+        AfxMessageBox(TEXT("èåˆç®—æ³•è¿è¡Œé”™è¯¯."));
         return;
     }
 
@@ -294,28 +294,28 @@ void CFusionPlaneDlg::DoFusion()
     if (m_FusionOutput.m_FusionData.m_FusionDatas.size() != targetSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("ÈÚºÏËã·¨Êä³öµÄÈÚºÏÊı¾İ¸öÊı(%d)²»µÈÓÚÊµ¼ÊµĞ»ú¸öÊı(%d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
+        msg.AppendFormat(TEXT("èåˆç®—æ³•è¾“å‡ºçš„èåˆæ•°æ®ä¸ªæ•°(%d)ä¸ç­‰äºå®é™…æ•Œæœºä¸ªæ•°(%d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
         AfxMessageBox(msg);
         return;
     }
     if (m_FusionOutput.m_FusionData.m_FilterDatas.size() != targetSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("ÈÚºÏËã·¨Êä³öµÄÂË²¨Êı¾İ¸öÊı(%d)²»µÈÓÚÊµ¼ÊµĞ»ú¸öÊı(%d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
+        msg.AppendFormat(TEXT("èåˆç®—æ³•è¾“å‡ºçš„æ»¤æ³¢æ•°æ®ä¸ªæ•°(%d)ä¸ç­‰äºå®é™…æ•Œæœºä¸ªæ•°(%d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
         AfxMessageBox(msg);
         return;
     }
-    if (m_FusionOutput.m_FusionData.m_NoiseDatas.size() != targetSize)
+    if (m_FusionOutput.m_FusionData.m_NoiseDatas.size() != planeSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("ÈÚºÏËã·¨Êä³öµÄÔëÉùÊı¾İ¸öÊı(%d)²»µÈÓÚÊµ¼ÊµĞ»ú¸öÊı(%d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), targetSize);
+        msg.AppendFormat(TEXT("èåˆç®—æ³•è¾“å‡ºçš„å™ªå£°æ•°æ®ä¸ªæ•°(%d)ä¸ç­‰äºå®é™…æˆ‘æœºä¸ªæ•°(%d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), planeSize);
         AfxMessageBox(msg);
         return;
     }
     if (m_FusionOutput.m_ControlDatas.size() != planeSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("ÈÚºÏËã·¨Êä³öµÄ¿ØÖÆÊı¾İ¸öÊı(%d)²»µÈÓÚÊµ¼ÊÎÒ»ú¸öÊı(%d)£¡Çë¼ì²éÄãµÄÈÚºÏËã·¨£¡"), m_FusionOutput.m_ControlDatas.size(), planeSize);
+        msg.AppendFormat(TEXT("èåˆç®—æ³•è¾“å‡ºçš„æ§åˆ¶æ•°æ®ä¸ªæ•°(%d)ä¸ç­‰äºå®é™…æˆ‘æœºä¸ªæ•°(%d)ï¼è¯·æ£€æŸ¥ä½ çš„èåˆç®—æ³•ï¼"), m_FusionOutput.m_ControlDatas.size(), planeSize);
         AfxMessageBox(msg);
         return;
     }
