@@ -13,7 +13,7 @@
 #endif
 
 
-// CFusionPlaneDlg 对话框
+// CFusionPlaneDlg 对话�?
 
 
 
@@ -51,7 +51,7 @@ BOOL CFusionPlaneDlg::OnInitDialog()
 {
     if (!m_FusionSocket->Create())
     {
-        AfxMessageBox(TEXT("套接字创建失败"));
+        AfxMessageBox(TEXT("套接字创建失�?));
         exit(-1);
     }
     if (!m_FusionSocket->Listen())
@@ -67,19 +67,19 @@ BOOL CFusionPlaneDlg::OnInitDialog()
 
 	CPlaneDlg::OnInitDialog();
 
-	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
-	//  执行此操作
-	SetIcon(m_hIcon, TRUE);			// 设置大图标
-	SetIcon(m_hIcon, FALSE);		// 设置小图标
+	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自�?
+	//  执行此操�?
+	SetIcon(m_hIcon, TRUE);			// 设置大图�?
+	SetIcon(m_hIcon, FALSE);		// 设置小图�?
 
     // TODO: 在此添加额外的初始化代码
 
-	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
+	return TRUE;  // 除非将焦点设置到控件，否则返�?TRUE
 }
 
 // 如果向对话框添加最小化按钮，则需要下面的代码
-//  来绘制该图标。对于使用文档/视图模型的 MFC 应用程序，
-//  这将由框架自动完成。
+//  来绘制该图标。对于使用文�?视图模型�?MFC 应用程序�?
+//  这将由框架自动完成�?
 
 void CFusionPlaneDlg::OnPaint()
 {
@@ -107,7 +107,7 @@ void CFusionPlaneDlg::OnPaint()
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
-//显示。
+//显示�?
 HCURSOR CFusionPlaneDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
@@ -150,7 +150,7 @@ void CFusionPlaneDlg::AddTrueData(TrueDataPacket &packet)
     }
     m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
 
-    // 让融合机的传感器照常采样，仅仅用于显示
+    // 让融合机的传感器照常采样，仅仅用于显�?
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
         if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
@@ -257,7 +257,7 @@ void CFusionPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
     if (!m_FusionAlgo->Init())
     {
         CString msg;
-        msg.AppendFormat(TEXT("融合算法%s初始化失败."), m_FusionAlgo->m_Name);
+        msg.AppendFormat(TEXT("融合算法%s初始化失�?"), m_FusionAlgo->m_Name);
     }
     GetDlgItem(IDC_FUSION_ALGO)->SetWindowText(m_FusionAlgo->m_Name);
 }
@@ -294,28 +294,28 @@ void CFusionPlaneDlg::DoFusion()
     if (m_FusionOutput.m_FusionData.m_FusionDatas.size() != targetSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的融合数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
+        msg.AppendFormat(TEXT("融合算法输出的融合数据个�?%d)不等于实际敌机个�?%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
         AfxMessageBox(msg);
         return;
     }
     if (m_FusionOutput.m_FusionData.m_FilterDatas.size() != targetSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的滤波数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
+        msg.AppendFormat(TEXT("融合算法输出的滤波数据个�?%d)不等于实际敌机个�?%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
         AfxMessageBox(msg);
         return;
     }
     if (m_FusionOutput.m_FusionData.m_NoiseDatas.size() != planeSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的噪声数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), planeSize);
+        msg.AppendFormat(TEXT("融合算法输出的噪声数据个�?%d)不等于实际我机个�?%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), planeSize);
         AfxMessageBox(msg);
         return;
     }
     if (m_FusionOutput.m_ControlDatas.size() != planeSize)
     {
         CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的控制数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_ControlDatas.size(), planeSize);
+        msg.AppendFormat(TEXT("融合算法输出的控制数据个�?%d)不等于实际我机个�?%d)！请检查你的融合算法！"), m_FusionOutput.m_ControlDatas.size(), planeSize);
         AfxMessageBox(msg);
         return;
     }
