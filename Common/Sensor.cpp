@@ -135,6 +135,17 @@ bool Sensor::IsInRange(int i, double d, double t, double p)
     return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi / 2;
 }
 
+bool Sensor::IsInRange(int i, Position rel)
+{
+    if (i >= m_TargetDistances.size() || i >= m_TargetThetas.size() || i >= m_TargetPhis.size())
+    {
+        return false;
+    }
+    double d = Distance(rel), t = Theta(rel) - Theta(m_Plane.m_HeadDir), p = Phi(rel) - Phi(m_Plane.m_HeadDir);
+
+    return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi / 2;
+}
+
 bool Sensor::IsShowTargetData(int i, int j)
 {
     if (i >= m_TargetDistances.size() || i >= m_TargetThetas.size() || i >= m_TargetPhis.size()

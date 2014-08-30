@@ -591,6 +591,12 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
             frame.m_DisVar = m_Radar.m_DisVar;
             frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
             frame.m_ThetaVar = m_Infrared.m_ThetaVar;
+            Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
+            if (!m_Infrared.IsInRange(i, rel))
+            {
+                frame.m_Theta = m_Esm.m_TargetThetas[i].back();
+                frame.m_ThetaVar = m_Esm.m_ThetaVar;
+            }
             frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
             frame.m_PhiVar = m_Infrared.m_PhiVar;
         }
