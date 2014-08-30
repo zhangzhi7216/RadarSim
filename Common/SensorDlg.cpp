@@ -15,6 +15,13 @@ CSensorDlg::CSensorDlg(LPCWSTR title, Sensor &sensor, CCommonDlg *dlg, CWnd* pPa
     , m_Sensor(sensor)
     , m_Dlg(dlg)
     , m_Initialized(false)
+    , m_SensorMaxDis(TEXT("0"))
+    , m_SensorMaxTheta(TEXT("0"))
+    , m_SensorMaxPhi(TEXT("0"))
+    , m_SensorDisVar(TEXT("0"))
+    , m_SensorThetaVar(TEXT("0"))
+    , m_SensorPhiVar(TEXT("0"))
+    , m_SensorProDet(TEXT("0"))
 {
     m_Ctrl = new CSensorCtrl(m_Sensor);
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -37,13 +44,13 @@ void CSensorDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Control(pDX, IDC_SENSOR, *m_Ctrl);
     DDX_Text(pDX, IDC_SENSOR_TYPE, Sensor::SensorTypeNames[m_Sensor.m_Type]);
     DDX_Check(pDX, IDC_SENSOR_ENABLE, m_Sensor.m_Enable);
-    DDX_Text(pDX, IDC_SENSOR_MAX_DIS, m_Sensor.m_MaxDis);
-    DDX_Text(pDX, IDC_SENSOR_MAX_THETA, m_Sensor.m_MaxTheta);
-    DDX_Text(pDX, IDC_SENSOR_MAX_PHI, m_Sensor.m_MaxPhi);
-    DDX_Text(pDX, IDC_SENSOR_DIS_VAR, m_Sensor.m_DisVar);
-    DDX_Text(pDX, IDC_SENSOR_THETA_VAR, m_Sensor.m_ThetaVar);
-    DDX_Text(pDX, IDC_SENSOR_PHI_VAR, m_Sensor.m_PhiVar);
-    DDX_Text(pDX, IDC_SENSOR_PRO_DET, m_Sensor.m_ProDet);
+    DDX_Text(pDX, IDC_SENSOR_MAX_DIS, m_SensorMaxDis);
+    DDX_Text(pDX, IDC_SENSOR_MAX_THETA, m_SensorMaxTheta);
+    DDX_Text(pDX, IDC_SENSOR_MAX_PHI, m_SensorMaxPhi);
+    DDX_Text(pDX, IDC_SENSOR_DIS_VAR, m_SensorDisVar);
+    DDX_Text(pDX, IDC_SENSOR_THETA_VAR, m_SensorThetaVar);
+    DDX_Text(pDX, IDC_SENSOR_PHI_VAR, m_SensorPhiVar);
+    DDX_Text(pDX, IDC_SENSOR_PRO_DET, m_SensorProDet);
     DDX_Check(pDX, IDC_SENSOR_SHOW_SCANLINE, m_Sensor.m_ShowScanline);
     DDX_Check(pDX, IDC_SENSOR_SHOW_TRACK, m_Sensor.m_ShowTrack);
     DDX_Control(pDX, IDC_SENSOR_TARGET_ID, m_TargetId);
@@ -251,6 +258,14 @@ void CSensorDlg::Reset()
 {
     m_Ctrl->Reset();
 
+    m_SensorMaxDis.Format(TEXT("%lf"), m_Sensor.m_MaxDis);
+    m_SensorMaxTheta.Format(TEXT("%lf"), m_Sensor.m_MaxTheta);
+    m_SensorMaxPhi.Format(TEXT("%lf"), m_Sensor.m_MaxPhi);
+    m_SensorDisVar.Format(TEXT("%lf"), m_Sensor.m_DisVar);
+    m_SensorThetaVar.Format(TEXT("%lf"), m_Sensor.m_ThetaVar);
+    m_SensorPhiVar.Format(TEXT("%lf"), m_Sensor.m_PhiVar);
+    m_SensorProDet.Format(TEXT("%lf"), m_Sensor.m_ProDet);
+
     m_TargetId.ResetContent();
     m_TargetColor.SetCurSel(CB_ERR);
 
@@ -272,7 +287,8 @@ void CSensorDlg::OnEnChangeSensorMaxDis()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_MaxDis = GetDlgItemInt(IDC_SENSOR_MAX_DIS);
+    GetDlgItemTextW(IDC_SENSOR_MAX_DIS, m_SensorMaxDis);
+    m_Sensor.m_MaxDis = _tcstod((LPCWSTR)m_SensorMaxDis, 0);
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
@@ -288,7 +304,8 @@ void CSensorDlg::OnEnChangeSensorMaxTheta()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_MaxTheta = GetDlgItemInt(IDC_SENSOR_MAX_THETA);
+    GetDlgItemTextW(IDC_SENSOR_MAX_THETA, m_SensorMaxTheta);
+    m_Sensor.m_MaxTheta = _tcstod((LPCWSTR)m_SensorMaxTheta, 0);
     m_Ctrl->DrawThetaRange();
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
@@ -305,7 +322,8 @@ void CSensorDlg::OnEnChangeSensorMaxPhi()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_MaxPhi = GetDlgItemInt(IDC_SENSOR_MAX_PHI);
+    GetDlgItemTextW(IDC_SENSOR_MAX_PHI, m_SensorMaxPhi);
+    m_Sensor.m_MaxPhi = _tcstod((LPCWSTR)m_SensorMaxPhi, 0);
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
@@ -321,7 +339,8 @@ void CSensorDlg::OnEnChangeSensorDisVar()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_DisVar = GetDlgItemInt(IDC_SENSOR_DIS_VAR);
+    GetDlgItemTextW(IDC_SENSOR_DIS_VAR, m_SensorDisVar);
+    m_Sensor.m_DisVar = _tcstod((LPCWSTR)m_SensorDisVar, 0);
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
@@ -337,7 +356,8 @@ void CSensorDlg::OnEnChangeSensorThetaVar()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_ThetaVar = GetDlgItemInt(IDC_SENSOR_THETA_VAR);
+    GetDlgItemTextW(IDC_SENSOR_THETA_VAR, m_SensorThetaVar);
+    m_Sensor.m_ThetaVar = _tcstod((LPCWSTR)m_SensorThetaVar, 0);
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
@@ -353,7 +373,8 @@ void CSensorDlg::OnEnChangeSensorPhiVar()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_PhiVar = GetDlgItemInt(IDC_SENSOR_PHI_VAR);
+    GetDlgItemTextW(IDC_SENSOR_PHI_VAR, m_SensorPhiVar);
+    m_Sensor.m_PhiVar = _tcstod((LPCWSTR)m_SensorPhiVar, 0);
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
@@ -369,7 +390,8 @@ void CSensorDlg::OnEnChangeSensorProDet()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_Sensor.m_ProDet = GetDlgItemInt(IDC_SENSOR_PRO_DET);
+    GetDlgItemTextW(IDC_SENSOR_PRO_DET, m_SensorProDet);
+    m_Sensor.m_ProDet = _tcstod((LPCWSTR)m_SensorProDet, 0);
     m_Ctrl->DrawTargets();
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();

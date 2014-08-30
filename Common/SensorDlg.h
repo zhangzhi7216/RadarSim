@@ -41,7 +41,6 @@ public:
     virtual void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnBnClickedSensorEnable();
-    afx_msg void OnEnChangeSensorMaxDis();
     CComboBox m_TargetId;
     afx_msg void OnBnClickedSensorShowTrack();
     afx_msg void OnCbnSelchangeSensorTargetId();
@@ -50,10 +49,19 @@ public:
 
     void Reset();
     void AddTarget(Target &target);
+    afx_msg void OnEnChangeSensorMaxDis();
     afx_msg void OnEnChangeSensorMaxTheta();
     afx_msg void OnEnChangeSensorMaxPhi();
     afx_msg void OnEnChangeSensorDisVar();
     afx_msg void OnEnChangeSensorThetaVar();
     afx_msg void OnEnChangeSensorPhiVar();
     afx_msg void OnEnChangeSensorProDet();
+
+    CString m_SensorMaxDis;
+    CString m_SensorMaxTheta;
+    CString m_SensorMaxPhi;
+    CString m_SensorDisVar;
+    CString m_SensorThetaVar;
+    CString m_SensorPhiVar;
+    CString m_SensorProDet;
 };

@@ -53,26 +53,26 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_CurrentFrame(0)
     , m_CurrentRound(0)
     , m_SensorEnable(FALSE)
-    , m_SensorMaxDis(0)
-    , m_SensorMaxTheta(0)
-    , m_SensorMaxPhi(0)
-    , m_SensorDisVar(0)
-    , m_SensorThetaVar(0)
-    , m_SensorPhiVar(0)
-    , m_SensorProDet(0)
+    , m_SensorMaxDis(TEXT("0"))
+    , m_SensorMaxTheta(TEXT("0"))
+    , m_SensorMaxPhi(TEXT("0"))
+    , m_SensorDisVar(TEXT("0"))
+    , m_SensorThetaVar(TEXT("0"))
+    , m_SensorPhiVar(TEXT("0"))
+    , m_SensorProDet(TEXT("0"))
     , m_ExtDataEnable(FALSE)
     , m_PlaneId(0)
-    , m_PlanePosX(0)
-    , m_PlanePosY(0)
-    , m_PlanePosZ(0)
-    , m_PlaneVelX(0)
-    , m_PlaneVelY(0)
-    , m_PlaneVelZ(0)
-    , m_PlaneAccX(0)
-    , m_PlaneAccY(0)
-    , m_PlaneAccZ(0)
-    , m_PlanePal(0)
-    , m_PlaneRadius(0)
+    , m_PlanePosX(TEXT("0"))
+    , m_PlanePosY(TEXT("0"))
+    , m_PlanePosZ(TEXT("0"))
+    , m_PlaneVelX(TEXT("0"))
+    , m_PlaneVelY(TEXT("0"))
+    , m_PlaneVelZ(TEXT("0"))
+    , m_PlaneAccX(TEXT("0"))
+    , m_PlaneAccY(TEXT("0"))
+    , m_PlaneAccZ(TEXT("0"))
+    , m_PlanePal(TEXT("0"))
+    , m_PlaneRadius(TEXT("0"))
     , m_ExtDataPath(_T(""))
     , m_OutputPlaneTrue(_T("PlaneTrue.dat"))
     , m_OutputTargetTrue(_T("TargetTrue.dat"))
@@ -1135,13 +1135,14 @@ void CDataCenterDlg::OnCbnSelchangeDcSensorId()
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
         m_SensorEnable = sensor.m_Enable;
-        m_SensorMaxDis = sensor.m_MaxDis;
-        m_SensorMaxTheta = sensor.m_MaxTheta;
-        m_SensorMaxPhi = sensor.m_MaxPhi;
-        m_SensorDisVar = sensor.m_DisVar;
-        m_SensorThetaVar = sensor.m_ThetaVar;
-        m_SensorPhiVar = sensor.m_PhiVar;
-        m_SensorProDet = sensor.m_ProDet;
+        m_SensorMaxDis.Format(TEXT("%lf"), sensor.m_MaxDis);
+        m_SensorMaxTheta.Format(TEXT("%lf"), sensor.m_MaxTheta);
+        m_SensorMaxPhi.Format(TEXT("%lf"), sensor.m_MaxPhi);
+        m_SensorDisVar.Format(TEXT("%lf"), sensor.m_DisVar);
+        m_SensorThetaVar.Format(TEXT("%lf"), sensor.m_ThetaVar);
+        m_SensorPhiVar.Format(TEXT("%lf"), sensor.m_PhiVar);
+        m_SensorProDet.Format(TEXT("%lf"), sensor.m_ProDet);
+
         UpdateData(FALSE);
     }
 }
@@ -1246,14 +1247,14 @@ void CDataCenterDlg::OnEnChangeDcSensorMaxDis()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorMaxDis = GetDlgItemInt(IDC_DC_SENSOR_MAX_DIS);
+    GetDlgItemTextW(IDC_DC_SENSOR_MAX_DIS, m_SensorMaxDis);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_MaxDis = m_SensorMaxDis;
+        sensor.m_MaxDis = _tcstod((LPCWSTR)m_SensorMaxDis, 0);
     }
 }
 
@@ -1265,14 +1266,14 @@ void CDataCenterDlg::OnEnChangeDcSensorMaxTheta()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorMaxTheta = GetDlgItemInt(IDC_DC_SENSOR_MAX_THETA);
+    GetDlgItemTextW(IDC_DC_SENSOR_MAX_THETA, m_SensorMaxTheta);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_MaxTheta = m_SensorMaxTheta;
+        sensor.m_MaxTheta = _tcstod((LPCWSTR)m_SensorMaxTheta, 0);
     }
 }
 
@@ -1284,14 +1285,14 @@ void CDataCenterDlg::OnEnChangeDcSensorMaxPhi()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorMaxPhi = GetDlgItemInt(IDC_DC_SENSOR_MAX_PHI);
+    GetDlgItemTextW(IDC_DC_SENSOR_MAX_PHI, m_SensorMaxPhi);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_MaxPhi = m_SensorMaxPhi;
+        sensor.m_MaxPhi = _tcstod((LPCWSTR)m_SensorMaxPhi, 0);
     }
 }
 
@@ -1303,14 +1304,14 @@ void CDataCenterDlg::OnEnChangeDcSensorDisVar()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorDisVar = GetDlgItemInt(IDC_DC_SENSOR_DIS_VAR);
+    GetDlgItemTextW(IDC_DC_SENSOR_DIS_VAR, m_SensorDisVar);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_DisVar = m_SensorDisVar;
+        sensor.m_DisVar = _tcstod((LPCWSTR)m_SensorDisVar, 0);
     }
 }
 
@@ -1322,14 +1323,14 @@ void CDataCenterDlg::OnEnChangeDcSensorThetaVar()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorThetaVar = GetDlgItemInt(IDC_DC_SENSOR_THETA_VAR);
+    GetDlgItemTextW(IDC_DC_SENSOR_THETA_VAR, m_SensorThetaVar);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_ThetaVar = m_SensorThetaVar;
+        sensor.m_ThetaVar = _tcstod((LPCWSTR)m_SensorThetaVar, 0);
     }
 }
 
@@ -1341,14 +1342,14 @@ void CDataCenterDlg::OnEnChangeDcSensorPhiVar()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorPhiVar = GetDlgItemInt(IDC_DC_SENSOR_PHI_VAR);
+    GetDlgItemTextW(IDC_DC_SENSOR_PHI_VAR, m_SensorPhiVar);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_PhiVar = m_SensorPhiVar;
+        sensor.m_PhiVar = _tcstod((LPCWSTR)m_SensorPhiVar, 0);
     }
 }
 
@@ -1360,14 +1361,14 @@ void CDataCenterDlg::OnEnChangeDcSensorProDet()
     // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
 
     // TODO:  在此添加控件通知处理程序代码
-    m_SensorProDet = GetDlgItemInt(IDC_DC_SENSOR_PRO_DET);
+    GetDlgItemTextW(IDC_DC_SENSOR_PRO_DET, m_SensorProDet);
     int index = m_SensorIdSel.GetCurSel();
     int count = m_SensorIdSel.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
         SensorId sensorId = (SensorId)index;
         Sensor &sensor = m_Sensors[sensorId];
-        sensor.m_ProDet = m_SensorProDet;
+        sensor.m_ProDet = _tcstod((LPCWSTR)m_SensorProDet, 0);
     }
 }
 
@@ -1605,17 +1606,17 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneId()
         m_PlaneMotion.SetCurSel(target.m_MoveType);
         m_PlaneType.SetCurSel(target.m_Type);
         m_PlaneColor.SetCurSel(target.m_Color);
-        m_PlanePosX = target.m_InitPosition.X;
-        m_PlanePosY = target.m_InitPosition.Y;
-        m_PlanePosZ = target.m_InitPosition.Z;
-        m_PlaneVelX = target.m_InitVel.X;
-        m_PlaneVelY = target.m_InitVel.Y;
-        m_PlaneVelZ = target.m_InitVel.Z;
-        m_PlaneAccX = target.m_InitAcc.X;
-        m_PlaneAccY = target.m_InitAcc.Y;
-        m_PlaneAccZ = target.m_InitAcc.Z;
-        m_PlanePal = target.m_Pal;
-        m_PlaneRadius = target.m_Radius;
+        m_PlanePosX.Format(TEXT("%lf"), target.m_InitPosition.X);
+        m_PlanePosY.Format(TEXT("%lf"), target.m_InitPosition.Y);
+        m_PlanePosZ.Format(TEXT("%lf"), target.m_InitPosition.Z);
+        m_PlaneVelX.Format(TEXT("%lf"), target.m_InitVel.X);
+        m_PlaneVelY.Format(TEXT("%lf"), target.m_InitVel.Y);
+        m_PlaneVelZ.Format(TEXT("%lf"), target.m_InitVel.Z);
+        m_PlaneAccX.Format(TEXT("%lf"), target.m_InitAcc.X);
+        m_PlaneAccY.Format(TEXT("%lf"), target.m_InitAcc.Y);
+        m_PlaneAccZ.Format(TEXT("%lf"), target.m_InitAcc.Z);
+        m_PlanePal.Format(TEXT("%lf"), target.m_Pal);
+        m_PlaneRadius.Format(TEXT("%lf"), target.m_Radius);
         UpdateData(FALSE);
     }
 }
@@ -1709,8 +1710,8 @@ void CDataCenterDlg::OnEnChangeDcPlanePosX()
         }
         Target &target = *p;
 
-        m_PlanePosX = GetDlgItemInt(IDC_DC_PLANE_POS_X);
-        target.m_InitPosition.X = m_PlanePosX;
+        GetDlgItemTextW(IDC_DC_PLANE_POS_X, m_PlanePosX);
+        target.m_InitPosition.X = _tcstod((LPCWSTR)m_PlanePosX, 0);
         UpdateData(FALSE);
     }
 }
@@ -1738,8 +1739,8 @@ void CDataCenterDlg::OnEnChangeDcPlanePosY()
         }
         Target &target = *p;
 
-        m_PlanePosY = GetDlgItemInt(IDC_DC_PLANE_POS_Y);
-        target.m_InitPosition.Y = m_PlanePosY;
+        GetDlgItemTextW(IDC_DC_PLANE_POS_Y, m_PlanePosY);
+        target.m_InitPosition.Y = _tcstod((LPCWSTR)m_PlanePosY, 0);
         UpdateData(FALSE);
     }
 }
@@ -1767,8 +1768,8 @@ void CDataCenterDlg::OnEnChangeDcPlanePosZ()
         }
         Target &target = *p;
 
-        m_PlanePosZ = GetDlgItemInt(IDC_DC_PLANE_POS_Z);
-        target.m_InitPosition.Z = m_PlanePosZ;
+        GetDlgItemTextW(IDC_DC_PLANE_POS_Z, m_PlanePosZ);
+        target.m_InitPosition.Z = _tcstod((LPCWSTR)m_PlanePosZ, 0);
         UpdateData(FALSE);
     }
 }
@@ -1796,8 +1797,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelX()
         }
         Target &target = *p;
 
-        m_PlaneVelX = GetDlgItemInt(IDC_DC_PLANE_VEL_X);
-        target.m_InitVel.X = m_PlaneVelX;
+        GetDlgItemTextW(IDC_DC_PLANE_VEL_X, m_PlaneVelX);
+        target.m_InitVel.X = _tcstod((LPCWSTR)m_PlaneVelX, 0);
         UpdateData(FALSE);
     }
 }
@@ -1825,8 +1826,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelY()
         }
         Target &target = *p;
 
-        m_PlaneVelY = GetDlgItemInt(IDC_DC_PLANE_VEL_Y);
-        target.m_InitVel.Y = m_PlaneVelY;
+        GetDlgItemTextW(IDC_DC_PLANE_VEL_Y, m_PlaneVelY);
+        target.m_InitVel.Y = _tcstod((LPCWSTR)m_PlaneVelY, 0);
         UpdateData(FALSE);
     }
 }
@@ -1854,8 +1855,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelZ()
         }
         Target &target = *p;
 
-        m_PlaneVelZ = GetDlgItemInt(IDC_DC_PLANE_VEL_Z);
-        target.m_InitVel.Z = m_PlaneVelZ;
+        GetDlgItemTextW(IDC_DC_PLANE_VEL_Z, m_PlaneVelZ);
+        target.m_InitVel.Z = _tcstod((LPCWSTR)m_PlaneVelZ, 0);
         UpdateData(FALSE);
     }
 }
@@ -1883,8 +1884,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccX()
         }
         Target &target = *p;
 
-        m_PlaneAccX = GetDlgItemInt(IDC_DC_PLANE_ACC_X);
-        target.m_InitAcc.X = m_PlaneAccX;
+        GetDlgItemTextW(IDC_DC_PLANE_ACC_X, m_PlaneAccX);
+        target.m_InitAcc.X = _tcstod((LPCWSTR)m_PlaneAccX, 0);
         UpdateData(FALSE);
     }
 }
@@ -1912,8 +1913,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccY()
         }
         Target &target = *p;
 
-        m_PlaneAccY = GetDlgItemInt(IDC_DC_PLANE_ACC_Y);
-        target.m_InitAcc.Y = m_PlaneAccY;
+        GetDlgItemTextW(IDC_DC_PLANE_ACC_Y, m_PlaneAccY);
+        target.m_InitAcc.Y = _tcstod((LPCWSTR)m_PlaneAccY, 0);
         UpdateData(FALSE);
     }
 }
@@ -1941,8 +1942,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccZ()
         }
         Target &target = *p;
 
-        m_PlaneAccZ = GetDlgItemInt(IDC_DC_PLANE_ACC_Z);
-        target.m_InitAcc.Z = m_PlaneAccZ;
+        GetDlgItemTextW(IDC_DC_PLANE_ACC_Z, m_PlaneAccZ);
+        target.m_InitAcc.Z = _tcstod((LPCWSTR)m_PlaneAccZ, 0);
         UpdateData(FALSE);
     }
 }
@@ -1970,8 +1971,8 @@ void CDataCenterDlg::OnEnChangeDcPlanePal()
         }
         Target &target = *p;
 
-        m_PlanePal = GetDlgItemInt(IDC_DC_PLANE_PAL);
-        target.m_Pal = m_PlanePal;
+        GetDlgItemTextW(IDC_DC_PLANE_PAL, m_PlanePal);
+        target.m_Pal = _tcstod((LPCWSTR)m_PlanePal, 0);
         UpdateData(FALSE);
     }
 }
@@ -1999,8 +2000,8 @@ void CDataCenterDlg::OnEnChangeDcPlaneRadius()
         }
         Target &target = *p;
 
-        m_PlaneRadius = GetDlgItemInt(IDC_DC_PLANE_RADIUS);
-        target.m_Radius = m_PlaneRadius;
+        GetDlgItemTextW(IDC_DC_PLANE_RADIUS, m_PlaneRadius);
+        target.m_Radius = _tcstod((LPCWSTR)m_PlaneRadius, 0);
         UpdateData(FALSE);
     }
 }
