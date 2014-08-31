@@ -499,6 +499,10 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
         frame.m_Dis = m_Radar.m_TargetDistances[i].back();
         frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
+		if (!m_Infrared.IsInRange(i, rel))
+		{
+			frame.m_Theta = m_Esm.m_TargetThetas[i].back();
+		}
         frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
         if (!(frame.m_Dis == 0 && frame.m_Theta == 0 && frame.m_Phi == 0))
         {
