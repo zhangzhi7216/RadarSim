@@ -903,7 +903,7 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
             return;
         }
 
-        int index = (m_CurrentFrame - m_GlobalData.m_StartTime) / m_GlobalData.m_Interval;
+        int index = m_CurrentFrame / m_GlobalData.m_Interval;
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
