@@ -49,7 +49,7 @@ namespace Utility
 
     double WhiteNoise(double value, double var)
     {
-        return value + (double)rand() / (double)RAND_MAX * var;
+        return value + (double)rand() / (double)RAND_MAX * var *var;
     }
     double ColorNoise(double value, double var)
     {

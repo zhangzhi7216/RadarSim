@@ -656,7 +656,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
     m_FusionDatas.push_back(packet);
 
-    int index = m_CurrentFrame / m_GlobalData.m_Interval;
+    int index = (m_CurrentFrame - m_GlobalData.m_StartTime) / m_GlobalData.m_Interval;
 
     /////// 以下为本帧内容显示
     // 显示本帧我机
@@ -714,7 +714,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
     /////// 以下为下一帧内容校正
     // 校正攻击机位置
-    if (m_CurrentRound < m_GlobalData.m_Rounds)
+    if (m_CurrentFrame < m_GlobalData.m_EndTime)
     {
         TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
         m_PlaneClients[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;
@@ -903,7 +903,7 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
             return;
         }
 
-        int index = m_CurrentFrame / m_GlobalData.m_Interval;
+        int index = (m_CurrentFrame - m_GlobalData.m_StartTime) / m_GlobalData.m_Interval;
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {

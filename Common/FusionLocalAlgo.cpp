@@ -137,29 +137,42 @@ bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output)
 
 bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output)
 {
-    // This is how to use global var.
-    g_GlobalVar[0].m_G[0] = 0;
-    g_GlobalVar[0].m_G[1] = 0;
     const vector<NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
     int interval = input.m_Interval;
 
     int nTargets = noiseDatas.front().m_TargetNoiseDatas.size();
     int nPlanes = noiseDatas.size();
-    for (int iTarget = 0; iTarget < nTargets; ++iTarget)
-    {
-        TrueDataFrame frame;
-        assert(noiseDatas.front().m_TargetNoiseDatas.size() > iTarget);
-        frame.m_Time = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Time;
-        frame.m_Id = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Id;
-        for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
-        {
-            // frame += noiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
-        }
-        // frame /= nPlanes;
-        output.m_FusionData.m_FusionDatas.push_back(frame);
-        // frame = noiseDatas.back().m_TargetNoiseDatas[iTarget];
-        output.m_FusionData.m_FilterDatas.push_back(frame);
-    }
+	static int t = 0;
+	for (int iTarget = 0; iTarget < nTargets; ++iTarget)
+	{
+		TrueDataFrame frame;
+		assert(noiseDatas.front().m_TargetNoiseDatas.size() > iTarget);
+		frame.m_Time = t * interval;
+		frame.m_Id = 100 + iTarget;
+		if (iTarget == 0)
+		{
+			frame.m_Pos = Position(400000, 110, 23000);
+			frame.m_Vel = Position(-440, 10, 0);
+		}
+		else if (iTarget == 1)
+		{
+			frame.m_Pos = Position(410000, 24000, 19000);
+			frame.m_Vel = Position(-460, 5, 0);
+		}
+		else if (iTarget == 2)
+		{
+			frame.m_Pos = Position(420000, 40000, 18000);
+			frame.m_Vel = Position(-480, -5, 0);
+		}
+		else if (iTarget == 3)
+		{
+			frame.m_Pos = Position(430000, 30300, 17000);
+			frame.m_Vel = Position(-480, 0, 0);
+		}
+		frame.m_Pos += (frame.m_Vel * t);
+		output.m_FusionData.m_FusionDatas.push_back(frame);
+		output.m_FusionData.m_FilterDatas.push_back(frame);
+	}
     for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
     {
         output.m_FusionData.m_NoiseDatas.push_back(noiseDatas[iPlane]);
@@ -173,5 +186,6 @@ bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output)
         packet.m_ControlData.m_Id = noiseDatas[iPlane].m_PlaneTrueData.m_Id;
         output.m_ControlDatas.push_back(packet);
     }
-    return true;
+	t++;
+	return true;
 }

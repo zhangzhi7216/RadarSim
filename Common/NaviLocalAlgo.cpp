@@ -61,24 +61,9 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 	double MissileVel;//导弹速度
 	Kphi = 6.0; Ktheta = 3.0;
 	relativedistancemin = 1500;
-	attackdistancelim = pow(10.0,5);
-	MissileVel = 300;
+	attackdistancelim = 1.5*pow(10.0,5);
+	MissileVel = 1000;
 	TargetCount = input.m_FusionDatas.size();
-	if(input.m_FusionDatas[0].m_Vel.X==0&&input.m_FusionDatas[0].m_Vel.Y==0&&input.m_FusionDatas[0].m_Vel.Z==0)
-	{
-		output.m_PlaneTrueData.m_Vel.X = input.m_PlaneTrueData.m_Vel.X;
-		output.m_PlaneTrueData.m_Vel.Y = input.m_PlaneTrueData.m_Vel.Y;
-		output.m_PlaneTrueData.m_Vel.Z = input.m_PlaneTrueData.m_Vel.Z;
-		output.m_PlaneTrueData.m_Pos.X = input.m_PlaneTrueData.m_Pos.X;
-		output.m_PlaneTrueData.m_Pos.Y = input.m_PlaneTrueData.m_Pos.Y;
-		output.m_PlaneTrueData.m_Pos.Z = input.m_PlaneTrueData.m_Pos.Z;
-		output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
-		output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
-		output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
-		g_GlobalVar[0].m_G[24] = sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2));//全局变量存储初始状态速度大小
-	}
-	else
-	{
 		attackdistancemin = sqrt(pow((input.m_FusionDatas[0].m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((input.m_FusionDatas[0].m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2)+pow((input.m_FusionDatas[0].m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
 		for (unsigned int i = 0 ; i<TargetCount ; i++)
 		{
@@ -138,9 +123,9 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 			output.m_PlaneTrueData.m_Acc.X = input.m_PlaneTrueData.m_Acc.X;
 			output.m_PlaneTrueData.m_Acc.Y = input.m_PlaneTrueData.m_Acc.Y;
 			output.m_PlaneTrueData.m_Acc.Z = input.m_PlaneTrueData.m_Acc.Z;
-			output.m_PlaneTrueData.m_Vel.X = g_GlobalVar[0].m_G[24]*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
-			output.m_PlaneTrueData.m_Vel.Y = g_GlobalVar[0].m_G[24]*cos(sigmapphi)*sin(sigmaptheta);
-			output.m_PlaneTrueData.m_Vel.Z = g_GlobalVar[0].m_G[24]*sin(sigmapphi);
+			output.m_PlaneTrueData.m_Vel.X = 	sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2))*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
+			output.m_PlaneTrueData.m_Vel.Y = sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2))*cos(sigmapphi)*sin(sigmaptheta);
+			output.m_PlaneTrueData.m_Vel.Z = sqrt(pow(input.m_PlaneTrueData.m_Vel.X,2)+pow(input.m_PlaneTrueData.m_Vel.Y,2)+pow(input.m_PlaneTrueData.m_Vel.Z,2))*sin(sigmapphi);
 			output.m_PlaneTrueData.m_Pos.X = input.m_PlaneTrueData.m_Pos.X+output.m_PlaneTrueData.m_Vel.X * input.m_Interval;
 			output.m_PlaneTrueData.m_Pos.Y = input.m_PlaneTrueData.m_Pos.Y+output.m_PlaneTrueData.m_Vel.Y * input.m_Interval;
 			output.m_PlaneTrueData.m_Pos.Z = input.m_PlaneTrueData.m_Pos.Z+output.m_PlaneTrueData.m_Vel.Z * input.m_Interval; 
@@ -224,14 +209,11 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 					output.m_MissileTrueDatas[i].m_Vel.X = MissileVel*cos(sigmapphi)*cos(sigmaptheta);//这里先按照匀速导引
 					output.m_MissileTrueDatas[i].m_Vel.Y = MissileVel*cos(sigmapphi)*sin(sigmaptheta);
 					output.m_MissileTrueDatas[i].m_Vel.Z = MissileVel*sin(sigmapphi);
-					output.m_MissileTrueDatas[i].m_Pos.X = input.m_MissileTrueDatas[i].m_Pos.X+output.m_MissileTrueDatas[i].m_Vel.X * input.m_Interval;
-					output.m_MissileTrueDatas[i].m_Pos.Y = input.m_MissileTrueDatas[i].m_Pos.Y+output.m_MissileTrueDatas[i].m_Vel.Y * input.m_Interval;
-					output.m_MissileTrueDatas[i].m_Pos.Z = input.m_MissileTrueDatas[i].m_Pos.Z+output.m_MissileTrueDatas[i].m_Vel.Z * input.m_Interval;
+					output.m_MissileTrueDatas[i].m_Pos = missile.m_Pos + output.m_MissileTrueDatas[i].m_Vel* input.m_Interval;
 				}
 
 			}	
 		} 
-	}
 	return true;
 }
 
