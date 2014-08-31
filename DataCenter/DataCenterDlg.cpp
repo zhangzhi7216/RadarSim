@@ -714,7 +714,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
     /////// 以下为下一帧内容校正
     // 校正攻击机位置
-    if (m_CurrentFrame < m_GlobalData.m_EndTime)
+    if (m_CurrentFrame < m_GlobalData.m_EndTime - m_GlobalData.m_Interval)
     {
         TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
         m_PlaneClients[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;

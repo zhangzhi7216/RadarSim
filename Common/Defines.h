@@ -23,7 +23,7 @@ using namespace Gdiplus;
 #ifdef _DEV
 #define MISSILE_HIT_THRESHOLD 10000
 #else
-#define MISSILE_HIT_THRESHOLD 2000
+#define MISSILE_HIT_THRESHOLD 7000
 #endif
 
 typedef struct __declspec(dllexport) Point3D
