@@ -169,7 +169,7 @@ bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output)
 			frame.m_Pos = Position(430000, 30300, 17000);
 			frame.m_Vel = Position(-480, 0, 0);
 		}
-		frame.m_Pos += (frame.m_Vel * t);
+		frame.m_Pos += (frame.m_Vel * t * interval);
 		output.m_FusionData.m_FusionDatas.push_back(frame);
 		output.m_FusionData.m_FilterDatas.push_back(frame);
 	}
