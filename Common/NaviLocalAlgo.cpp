@@ -53,7 +53,7 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 	//TrueDataFrame Missile;//用真值数据格式分解绝对坐标系下导弹的融合值
 	unsigned int TargetCount;
 	double rphi,rtheta,qphi,qtheta,yitatphi,yitattheta,yitapphi,yitaptheta,sigmatphi,sigmattheta,sigmapphi,sigmaptheta;//我机与敌机距离，我机与敌机视线角，我机与敌机速度与视线的夹角，我机与敌机绝对坐标系下速度夹角在俯仰与方位上的分量
-	double rphideri,rthetaderi,qphideri,qthetaderi,sigmaphideri,sigmathetaderi;//距离，视线角，速度绝对坐标系下的夹角在俯仰与方位上的变化量
+	double rphideri,rthetaderi,qphideri,qthetaderi,sigmaphideri,sigmathetaderi;//距离，视线角， 速度绝对坐标系下的夹角在俯仰与方位上的变化量
 	double attackdistance,attackdistancemin,attackdistancelim;//攻击机距离阈值
 	double Kphi,Ktheta;//比例导引常数
 	double TargetChoice;
@@ -61,7 +61,7 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 	double MissileVel;//导弹速度
 	Kphi = 6.0; Ktheta = 3.0;
 	relativedistancemin = 1500;
-	attackdistancelim = 1.5*pow(10.0,5);
+	attackdistancelim = 2*pow(10.0,5);
 	MissileVel = 1000;
 	TargetCount = input.m_FusionDatas.size();
 		attackdistancemin = sqrt(pow((input.m_FusionDatas[0].m_Pos.X - input.m_PlaneTrueData.m_Pos.X),2)+pow((input.m_FusionDatas[0].m_Pos.Y - input.m_PlaneTrueData.m_Pos.Y),2)+pow((input.m_FusionDatas[0].m_Pos.Z - input.m_PlaneTrueData.m_Pos.Z),2));
