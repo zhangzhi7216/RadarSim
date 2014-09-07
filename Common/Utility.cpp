@@ -12,12 +12,12 @@ namespace Utility
 
     double Theta(const Position &rel)
     {
-        return atan(rel.Y / rel.X) * 57.2957795785523;
+        return atan(rel.Y / rel.X) * 57.2957795130823208768;
     }
 
     double Phi(const Position &rel)
     {
-        return asin(rel.Z / Distance(rel)) * 57.2957795785523;
+        return asin(rel.Z / Distance(rel)) * 57.2957795130823208768;
     }
 
     double Distance(const Position &src, const Position &dst)
@@ -40,8 +40,8 @@ namespace Utility
 
     Position Rel(double dis, double theta, double phi)
     {
-        double z = sin(phi / 57.2957795785523) * dis;
-        double ydx = tan(theta / 57.2957795785523);
+        double z = sin(phi / 57.2957795130823208768) * dis;
+        double ydx = tan(theta / 57.2957795130823208768);
         double x = sqrt((pow(dis, 2) - pow(z, 2)) / (1 + pow(ydx, 2)));
         double y = x * ydx;
         return Position(x, y, z);
@@ -49,8 +49,26 @@ namespace Utility
 
     double WhiteNoise(double value, double var)
     {
-        return value + (double)rand() / (double)RAND_MAX * var;
-    }
+		float v0,v1, v2, s;     
+		float nextNextGaussian;    
+		//int haveNextNextGaussian=0;    
+		do  
+		{    
+			do     
+			{      
+				v1 = 2 * (((double)rand()/(double)RAND_MAX))-1;   // between -1.0 and 1.0
+				v2 = 2 * (((double)rand()/(double)RAND_MAX))-1;   // between -1.0 and 1.0
+				s = v1 * v1 + v2 * v2;
+			} while (s >= 1 || s == 0);
+			double multiplier = double(sqrt(-2*log(s)/s));
+			nextNextGaussian = v2 * multiplier;
+			//haveNextNextGaussian = 1;
+			v0=v1 * multiplier;
+			//均值为0，方差为1的标准正态分布
+		}while(s >= 1 || s == 0);
+		return value + v0 * var * var;                        //产生均值为a,方差为b的随机信号
+        //return value + (double)rand() / (double)RAND_MAX * var;
+	}
     double ColorNoise(double value, double var)
     {
         // 在这里加色噪声.
