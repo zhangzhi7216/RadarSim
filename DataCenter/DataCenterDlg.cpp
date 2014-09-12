@@ -861,14 +861,18 @@ void CDataCenterDlg::FinishSim()
     OutputFusionData();
     OutputFilterData();
 
+    bool oldShowMatlabDlg = m_ShowMatlabDlg;
+    if (m_ShowMatlabDlg)
+    {
+        m_MatlabDlg.Stop();
+        m_ShowMatlabDlg = false;
+    }
+
+    COneTimeMatlabDlg dlg;
+    dlg.Run();
+
     if (m_CurrentRound >= m_GlobalData.m_Rounds)
     {
-        if (m_ShowMatlabDlg)
-        {
-            m_MatlabDlg.Stop();
-            m_ShowMatlabDlg = false;
-        }
-
         for (int i = 0; i < m_EvalItems.size(); ++i)
         {
             m_EvalItems[i].Run(wstring(m_OutputPlaneTrue),
@@ -877,13 +881,16 @@ void CDataCenterDlg::FinishSim()
                 wstring(m_OutputFusion),
                 wstring(m_OutputFilter));
         }
-        COneTimeMatlabDlg dlg;
-        dlg.Run();
 
         GetDlgItem(IDOK)->EnableWindow(TRUE);
     }
     else
     {
+        if (oldShowMatlabDlg)
+        {
+            m_ShowMatlabDlg = true;
+            m_MatlabDlg.Show();
+        }
         StartSim();
     }
 }
