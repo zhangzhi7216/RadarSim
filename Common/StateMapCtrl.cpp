@@ -89,7 +89,8 @@ void CStateMapCtrl::DrawTargets()
             {
                 Position end = m_StateMap.m_PlanePaths[i].back();
                 Position start = m_StateMap.m_PlanePaths[i][m_StateMap.m_PlanePaths[i].size() - 2];
-                double angle = -Theta(end - start);
+                Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                double angle = -Theta(physRel);
                 if (end.X < start.X)
                 {
                     angle += 180;
@@ -189,7 +190,8 @@ void CStateMapCtrl::DrawTargets()
             {
                 Position end = m_StateMap.m_TargetPaths[i].back();
                 Position start = m_StateMap.m_TargetPaths[i][m_StateMap.m_TargetPaths[i].size() - 2];
-                double angle = -Theta(end - start);
+                Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                double angle = -Theta(physRel);
                 if (end.X < start.X)
                 {
                     angle += 180;
@@ -264,7 +266,8 @@ void CStateMapCtrl::DrawTargets()
             {
                 Position end = m_StateMap.m_MissilePaths[i].back();
                 Position start = m_StateMap.m_MissilePaths[i][m_StateMap.m_MissilePaths[i].size() - 2];
-                double angle = -Theta(end - start);
+                Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                double angle = -Theta(physRel);
                 if (end.X < start.X)
                 {
                     angle += 180;
