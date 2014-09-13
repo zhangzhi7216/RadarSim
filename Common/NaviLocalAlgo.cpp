@@ -59,7 +59,7 @@ bool NaviLocalAlgoTest1(const NaviInput &input, NaviOutput &output)
 	double TargetChoice;
 	double relativedistance,relativedistancemin;//相对距离，进行攻击的距离阈值
 	double MissileVel;//导弹速度
-	Kphi = 6.0; Ktheta = 3.0;
+	Kphi = 6.0; Ktheta = 2.0;
 	relativedistancemin = 1500;
 	attackdistancelim = 2*pow(10.0,5);
 	MissileVel = 1000;
@@ -229,7 +229,7 @@ bool NaviLocalAlgoTest2(const NaviInput &input, NaviOutput &output)
 	double TargetChoice;
 	double relativedistance,relativedistancemin;//相对距离，进行攻击的距离阈值
 	double MissileVel;//导弹速度
-	Kphi = 6.0; Ktheta = 3.0;
+	Kphi = 6.0; Ktheta = 2.0;
 	relativedistancemin = 1500;
 	attackdistancelim = pow(10.0,5);
 	MissileVel = 300;

@@ -147,7 +147,7 @@ void CFusionPlaneDlg::AddTrueData(TrueDataPacket &packet)
     {
         m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
-    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, packet.m_PlaneTrueData.m_Vel, (TargetState)packet.m_PlaneTrueData.m_State);
 
     // 让融合机的传感器照常采样，仅仅用于显示
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
@@ -224,7 +224,7 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
         for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
         {
             TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
-            m_StateMap.AddTargetData(i, frame.m_Pos, m_TargetStates[i]);
+            m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, m_TargetStates[i]);
         }
 
         m_StateMapDlg.m_Ctrl.DrawTargets();

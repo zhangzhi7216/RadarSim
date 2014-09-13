@@ -140,7 +140,7 @@ void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
     {
         m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
-    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, packet.m_PlaneTrueData.m_Vel, (TargetState)packet.m_PlaneTrueData.m_State);
 
     // 让攻击机的传感器照常采样，仅仅用于显示
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
@@ -205,12 +205,12 @@ void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
     for (int i = 0; i < packet.m_FusionData.m_FusionDatas.size(); ++i)
     {
         TrueDataFrame &frame = packet.m_FusionData.m_FusionDatas[i];
-        m_StateMap.AddTargetData(i, frame.m_Pos, m_TargetStates[i]);
+        m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, m_TargetStates[i]);
     }
 
     for (int i = 0; i < m_Missiles.size(); ++i)
     {
-        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
+        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_Vel, m_Missiles[i].m_State);
     }
 
     m_StateMapDlg.m_Ctrl.DrawTargets();

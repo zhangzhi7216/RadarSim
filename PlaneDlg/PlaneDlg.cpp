@@ -423,9 +423,9 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         m_Radar.AddTargetData(1, rel1);
         m_Esm.AddTargetData(1, rel1);
         m_Infrared.AddTargetData(1, rel1);
-        m_StateMap.AddPlaneData(0, m_Plane.m_Position, m_Plane.m_State);
-        m_StateMap.AddTargetData(0, m_Targets[0].m_Position, m_Targets[0].m_State);
-        m_StateMap.AddTargetData(1, m_Targets[1].m_Position, m_Targets[1].m_State);
+        m_StateMap.AddPlaneData(0, m_Plane.m_Position, m_Plane.m_Vel, m_Plane.m_State);
+        m_StateMap.AddTargetData(0, m_Targets[0].m_Position, m_Targets[0].m_Vel, m_Targets[0].m_State);
+        m_StateMap.AddTargetData(1, m_Targets[1].m_Position, m_Targets[0].m_Vel, m_Targets[1].m_State);
 
         m_RadarCtrl.DrawTargets();
         m_RadarCtrl.BlendAll();
@@ -473,7 +473,7 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     {
         m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
     }
-    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, (TargetState)packet.m_PlaneTrueData.m_State);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, packet.m_PlaneTrueData.m_Vel, (TargetState)packet.m_PlaneTrueData.m_State);
 
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
@@ -507,11 +507,11 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         if (!(frame.m_Dis == 0 && frame.m_Theta == 0 && frame.m_Phi == 0))
         {
             Position noiseAbsPos = packet.m_PlaneTrueData.m_Pos + Utility::Rel(frame.m_Dis, frame.m_Theta, frame.m_Phi);
-            m_StateMap.AddTargetData(i, noiseAbsPos, TargetStateAlive);
+            m_StateMap.AddTargetData(i, noiseAbsPos, /*use true vel*/packet.m_TargetTrueDatas[i].m_Vel, TargetStateAlive);
         }
         else
         {
-            m_StateMap.AddTargetData(i, Position(0, 0, 0), TargetStateDestroyed);
+            m_StateMap.AddTargetData(i, Position(0, 0, 0), Velocity(0, 0, 0), TargetStateDestroyed);
         }
     }
 
@@ -549,7 +549,7 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 
 void CPlaneDlg::AddOtherTrueData(int i, TrueDataFrame &frame)
 {
-    m_StateMap.AddPlaneData(i + 1, frame.m_Pos, (TargetState)frame.m_State);
+    m_StateMap.AddPlaneData(i + 1, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();

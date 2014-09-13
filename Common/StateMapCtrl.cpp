@@ -85,24 +85,34 @@ void CStateMapCtrl::DrawTargets()
 
         if (m_StateMap.m_PlanePaths[i].size() > 0)
         {
-            if (m_StateMap.m_PlanePaths[i].size() > 1)
+            Position end = m_StateMap.m_PlanePaths[i].back();
+            if (m_StateMap.m_PlaneVels[i].X == 0
+                && m_StateMap.m_PlaneVels[i].Y == 0
+                && m_StateMap.m_PlaneVels[i].Z == 0)
             {
-                Position end = m_StateMap.m_PlanePaths[i].back();
-                Position start = m_StateMap.m_PlanePaths[i][m_StateMap.m_PlanePaths[i].size() - 2];
-                Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
-                double angle = -Theta(physRel);
-                if (end.X < start.X)
+                if (m_StateMap.m_PlanePaths[i].size() > 1)
+                {
+                    Position start = m_StateMap.m_PlanePaths[i][m_StateMap.m_PlanePaths[i].size() - 2];
+                    Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                    double angle = -Theta(physRel);
+                    if (end.X < start.X)
+                    {
+                        angle += 180;
+                    }
+                    graphics.RotateTransform(angle, MatrixOrderAppend);
+                }
+            }
+            else
+            {
+                Position physDir = Position(m_StateMap.m_PlaneVels[i].X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_PlaneVels[i].Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                double angle = -Theta(physDir);
+                if (physDir.X < 0)
                 {
                     angle += 180;
                 }
                 graphics.RotateTransform(angle, MatrixOrderAppend);
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
-            else
-            {
-                Position end = m_StateMap.m_PlanePaths[i].back();
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            }
+            graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
             PointF pt(0.0, 0.0);
             graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
@@ -186,24 +196,35 @@ void CStateMapCtrl::DrawTargets()
               m_StateMap.m_TargetPaths[i].back().Y == 0 &&
               m_StateMap.m_TargetPaths[i].back().Z == 0))
         {
-            if (m_StateMap.m_TargetPaths[i].size() > 1)
+            Position end = m_StateMap.m_TargetPaths[i].back();
+            if (m_StateMap.m_TargetVels[i].X == 0
+                && m_StateMap.m_TargetVels[i].Y == 0
+                && m_StateMap.m_TargetVels[i].Z == 0)
             {
-                Position end = m_StateMap.m_TargetPaths[i].back();
-                Position start = m_StateMap.m_TargetPaths[i][m_StateMap.m_TargetPaths[i].size() - 2];
-                Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
-                double angle = -Theta(physRel);
-                if (end.X < start.X)
+                if (m_StateMap.m_TargetPaths[i].size() > 1)
+                {
+                    Position start = m_StateMap.m_TargetPaths[i][m_StateMap.m_TargetPaths[i].size() - 2];
+                    Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                    double angle = -Theta(physRel);
+                    if (end.X < start.X)
+                    {
+                        angle += 180;
+                    }
+                    graphics.RotateTransform(angle, MatrixOrderAppend);
+                }
+            }
+            else
+            {
+                Position physDir = Position(m_StateMap.m_TargetVels[i].X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_TargetVels[i].Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                double angle = -Theta(physDir);
+                if (physDir.X < 0)
                 {
                     angle += 180;
                 }
                 graphics.RotateTransform(angle, MatrixOrderAppend);
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
-            else
-            {
-                Position end = m_StateMap.m_TargetPaths[i].back();
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            }
+            graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
+
             Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
                 ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
 #ifdef _DEV
@@ -262,24 +283,34 @@ void CStateMapCtrl::DrawTargets()
               m_StateMap.m_MissilePaths[i].back().Y == 0 &&
               m_StateMap.m_MissilePaths[i].back().Z == 0))
         {
-            if (m_StateMap.m_MissilePaths[i].size() > 1)
+            Position end = m_StateMap.m_MissilePaths[i].back();
+            if (m_StateMap.m_MissileVels[i].X == 0
+                && m_StateMap.m_MissileVels[i].Y == 0
+                && m_StateMap.m_MissileVels[i].Z == 0)
             {
-                Position end = m_StateMap.m_MissilePaths[i].back();
-                Position start = m_StateMap.m_MissilePaths[i][m_StateMap.m_MissilePaths[i].size() - 2];
-                Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
-                double angle = -Theta(physRel);
-                if (end.X < start.X)
+                if (m_StateMap.m_MissilePaths[i].size() > 1)
+                {
+                    Position start = m_StateMap.m_MissilePaths[i][m_StateMap.m_MissilePaths[i].size() - 2];
+                    Position physRel = Position((end - start).X / m_StateMap.m_MaxX * (double)width, (end - start).Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                    double angle = -Theta(physRel);
+                    if (end.X < start.X)
+                    {
+                        angle += 180;
+                    }
+                    graphics.RotateTransform(angle, MatrixOrderAppend);
+                }
+            }
+            else
+            {
+                Position physDir = Position(m_StateMap.m_MissileVels[i].X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_MissileVels[i].Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                double angle = -Theta(physDir);
+                if (physDir.X < 0)
                 {
                     angle += 180;
                 }
                 graphics.RotateTransform(angle, MatrixOrderAppend);
-                graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
             }
-            else
-            {
-                Position end = m_StateMap.m_MissilePaths[i].back();
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            }
             Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
                 ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
 #ifdef _DEV

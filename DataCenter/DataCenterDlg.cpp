@@ -662,7 +662,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     // 显示本帧我机
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos, (TargetState)(m_PlaneClients[i].m_PlaneTrueDatas[index].m_State));
+        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneClients[i].m_PlaneTrueDatas[index].m_State));
         m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
     }
 
@@ -699,13 +699,13 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_MatlabDlg.AddTargetFilterData(i, filterFrame);
         m_MatlabDlg.UpdateGlobalVar();
 
-        m_StateMap.AddTargetData(i, fusionFrame.m_Pos, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
+        m_StateMap.AddTargetData(i, fusionFrame.m_Pos, fusionFrame.m_Vel, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
     }
 
     // 显示本帧导弹
     for (int i = 0; i < m_Missiles.size(); ++i)
     {
-        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_State);
+        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_Vel, m_Missiles[i].m_State);
     }
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
