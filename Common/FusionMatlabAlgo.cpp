@@ -102,6 +102,8 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
     inputList.push_back(globalVar);
     Array *interval = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
     inputList.push_back(interval);
+    Array *infraredMaxDis = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
+    inputList.push_back(infraredMaxDis);
 
     double *p = mxGetPr(planeTrueDatas);
     for (int iPlane = 0; iPlane < planeSize; ++iPlane)
@@ -146,6 +148,9 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
 
     p = mxGetPr(interval);
     *p = input.m_Interval;
+
+    p = mxGetPr(infraredMaxDis);
+    *p = input.m_InfraredMaxDis;
 
     vector<Array *> outputList(4);
     bool result = m_MatlabFunc(4, &outputList[0], inputList.size(), &inputList[0]);

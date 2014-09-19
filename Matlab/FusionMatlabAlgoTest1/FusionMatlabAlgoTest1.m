@@ -1,4 +1,4 @@
-function [ fusionDatas, filterDatas, controlDatas, globalVarsOutput ] = FusionMatlabAlgoTest1( planeTrueDatas, targetNoiseDatas, globalVars, interval )
+function [ fusionDatas, filterDatas, controlDatas, globalVarsOutput ] = FusionMatlabAlgoTest1( planeTrueDatas, targetNoiseDatas, globalVars, interval, infraredMaxDis )
 
 % msg123 = msgbox(num2str(globalVars),'globalin');
 % set(msg123,'Position',[1000 100 400 300]);

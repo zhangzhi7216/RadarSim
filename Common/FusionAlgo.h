@@ -6,6 +6,7 @@ struct __declspec(dllexport) FusionInput
 {
     vector<NoiseDataPacket> m_NoiseDataPackets;
     int m_Interval;
+    double m_InfraredMaxDis;
 };
 
 struct __declspec(dllexport) FusionOutput
