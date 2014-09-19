@@ -39,8 +39,8 @@ G=[0.5*T^2 0 0;
 
 Q=eye(3)*Q;
 %滤波
-    X_extend=[X_e(:,end);zeros(6,1)];
-    P_extend=[P(:,:,end),zeros(9,6);zeros(3,9),Q,zeros(3,3);zeros(3,12),R];
+    X_extend=[X_e;zeros(6,1)];
+    P_extend=[P,zeros(9,6);zeros(3,9),Q,zeros(3,3);zeros(3,12),R];
     
     %计算sigma点
     P_sqrt=schol(P_extend);
@@ -62,12 +62,12 @@ Q=eye(3)*Q;
         P_x=P_x+v(1,j)*(Xi_sigma(:,j)-X_eNew(:,1))*(Xi_sigma(:,j)-X_eNew(:,1))';
     end
     
-        xo1=Ownship(1).P(1,end);
-        yo1=Ownship(1).P(4,end);
-        xo2=Ownship(2).P(1,end);
-        yo2=Ownship(2).P(4,end);
-        xo3=Ownship(3).P(1,end);
-        yo3=Ownship(3).P(4,end);
+        xo1=Ownship(1).P(1,1);
+        yo1=Ownship(1).P(4,1);
+        xo2=Ownship(2).P(1,1);
+        yo2=Ownship(2).P(4,1);
+        xo3=Ownship(3).P(1,1);
+        yo3=Ownship(3).P(4,1);
     
     %计算观测的sigma点
     for j=1:(2*L+1)
@@ -90,9 +90,10 @@ Q=eye(3)*Q;
        P_xz=P_xz+v(1,j)*(Xi_sigma(:,j)-X_eNew(:,1))*(Z_sigma(:,j)-Z_eNew(:,1))';
    end
    %测量更新（修正）
-   Residual=Z(:,end)-Z_eNew(:,1);
+   Residual=Z-Z_eNew(:,1);
    K=P_xz*inv(P_z);
    X_eNew(:,1)=X_eNew(:,1)+K*Residual;
    P_New=P_x-K*P_z*K';
+%    msgbox(num2str(K),'K');
 
 end
