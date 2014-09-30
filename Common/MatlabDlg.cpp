@@ -194,7 +194,6 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
             engOutputBuffer(dlg->m_Engine, s_Msg, 256);
         }
     }
-    dlg->m_ThreadLock.Unlock();
     int result = 0;
     wchar_t buf[MAX_PATH];
     GetCurrentDirectory(MAX_PATH, buf);
@@ -207,6 +206,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     {
         AfxMessageBox(TEXT("Cd engine WTF!"));
     }
+    dlg->m_ThreadLock.Unlock();
     while (true)
     {
         /*
@@ -257,7 +257,6 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         cmd += dlg->m_GlobalVar;
         cmd += ")";
         result = engEvalString(dlg->m_Engine, cmd.c_str());
-        dlg->m_ThreadLock.Unlock();
         if (result)
         {
             AfxMessageBox(TEXT("Call func engine WTF!"));
@@ -266,6 +265,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         {
             break;
         }
+        dlg->m_ThreadLock.Unlock();
 
         Sleep(1);
     }
