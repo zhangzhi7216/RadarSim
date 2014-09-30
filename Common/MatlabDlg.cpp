@@ -3,6 +3,8 @@
 
 using namespace MatlabHelper;
 
+static char s_Msg[256];
+
 CMatlabDlg::CMatlabDlg(const char *fileName,
         const char *planeTrue,
         const char *targetTrue,
@@ -29,6 +31,10 @@ CMatlabDlg::CMatlabDlg(const char *fileName,
 CMatlabDlg::~CMatlabDlg(void)
 {
     Stop();
+    if (engClose(m_Engine))
+    {
+        AfxMessageBox(TEXT("Close engine engine WTF!"));
+    }
 }
 
 void CMatlabDlg::Show()
@@ -43,6 +49,7 @@ void CMatlabDlg::Hide()
 
 void CMatlabDlg::Stop()
 {
+    /*
     m_ThreadLock.Lock();
     if (m_Thread)
     {
@@ -79,11 +86,37 @@ void CMatlabDlg::Stop()
         DestroyArray(m_GlobalVarInput);
         m_GlobalVarInput = NULL;
     }
+    */
 }
 
 void CMatlabDlg::Reset()
 {
-    Stop();
+    // Stop();
+    if (m_PlaneTrueInput)
+    {
+        DestroyArray(m_PlaneTrueInput);
+        m_PlaneTrueInput = NULL;
+    }
+    if (m_TargetTrueInput)
+    {
+        DestroyArray(m_TargetTrueInput);
+        m_TargetTrueInput = NULL;
+    }
+    if (m_TargetFusionInput)
+    {
+        DestroyArray(m_TargetFusionInput);
+        m_TargetFusionInput = NULL;
+    }
+    if (m_TargetFilterInput)
+    {
+        DestroyArray(m_TargetFilterInput);
+        m_TargetFilterInput = NULL;
+    }
+    if (m_GlobalVarInput)
+    {
+        DestroyArray(m_GlobalVarInput);
+        m_GlobalVarInput = NULL;
+    }
 
     m_PlaneTrueDatas.clear();
     m_TargetTrueDatas.clear();
@@ -94,11 +127,11 @@ void CMatlabDlg::Reset()
 void CMatlabDlg::Run()
 {
     m_Lock.Lock();
-    m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_GlobalVarInput = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
+    if (m_PlaneTrueInput == NULL) m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    if (m_TargetTrueInput == NULL) m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    if (m_TargetFusionInput == NULL) m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    if (m_TargetFilterInput == NULL) m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    if (m_GlobalVarInput == NULL) m_GlobalVarInput = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
 
     double *data = mxGetPr(m_PlaneTrueInput);
     for (int plane = 0; plane < m_PlaneTrueDatas.size(); ++plane)
@@ -161,6 +194,7 @@ void CMatlabDlg::Run()
         }
     }
 
+    /*
     m_Thread = CreateThread(NULL,
         10 * 1024 * 1024,
         MatlabRun,
@@ -169,10 +203,114 @@ void CMatlabDlg::Run()
         0);
     SetThreadPriority(m_Thread, THREAD_PRIORITY_NORMAL);
     ResumeThread(m_Thread);
+    */
+    MatlabRunSync();
     m_Lock.Unlock();
 }
 
-static char s_Msg[256];
+void CMatlabDlg::MatlabRunSync()
+{
+    m_Lock.Lock();
+    if (!(m_Engine = engOpen(NULL)))
+    {
+        AfxMessageBox(TEXT("´ò¿ªMatlabÒýÇæ´íÎó"));
+    }
+    else
+    {
+        if (engSetVisible(m_Engine, false))
+        {
+            AfxMessageBox(TEXT("Hide engine WTF!"));
+        }
+        else
+        {
+            engOutputBuffer(m_Engine, s_Msg, 256);
+        }
+    }
+    int result = 0;
+    wchar_t buf[MAX_PATH];
+    GetCurrentDirectory(MAX_PATH, buf);
+    wstring wsCurPath(buf);
+    string curPath(wsCurPath.begin(), wsCurPath.end());
+
+    string cmd = "cd \'" + curPath + "\\bin\'";
+    result = engEvalString(m_Engine, cmd.c_str());
+    if (result)
+    {
+        AfxMessageBox(TEXT("Cd engine WTF!"));
+    }
+    // while (true)
+    // {
+        /*
+        cmd += "clear";
+        result = engEvalString(m_Engine, cmd.c_str());
+        if (result)
+        {
+            AfxMessageBox(TEXT("Call clear engine WTF!"));
+        }
+        */
+        result = engPutVariable(m_Engine, m_PlaneTrue, m_PlaneTrueInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 1 engine WTF!"));
+        }
+        result = engPutVariable(m_Engine, m_TargetTrue, m_TargetTrueInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 2 engine WTF!"));
+        }
+        result = engPutVariable(m_Engine, m_TargetFusion, m_TargetFusionInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 3 engine WTF!"));
+        }
+        result = engPutVariable(m_Engine, m_TargetFilter, m_TargetFilterInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 4 engine WTF!"));
+        }
+        result = engPutVariable(m_Engine, m_GlobalVar, m_GlobalVarInput);
+        if (result)
+        {
+            AfxMessageBox(TEXT("Put var 5 engine WTF!"));
+        }
+
+        cmd = m_FileName;
+        cmd += "(";
+        cmd += m_PlaneTrue;
+        cmd += ", ";
+        cmd += m_TargetTrue;
+        cmd += ", ";
+        cmd += m_TargetFusion;
+        cmd += ", ";
+        cmd += m_TargetFilter;
+        cmd += ", ";
+        cmd += m_GlobalVar;
+        cmd += ")";
+        result = engEvalString(m_Engine, cmd.c_str());
+        if (result)
+        {
+            AfxMessageBox(TEXT("Call func engine WTF!"));
+        }
+        if (result)
+        {
+            // break;
+        }
+
+        // Sleep(1);
+    // }
+
+
+    m_Lock.Unlock();
+
+    m_Engine = 0;
+
+    /*
+    m_Lock.Lock();
+    m_Thread = 0;
+    m_Lock.Unlock();
+    return result;
+    */
+}
 
 DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
 {

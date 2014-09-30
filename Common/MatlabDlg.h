@@ -28,6 +28,7 @@ public:
     void Hide();
     void Reset();
     void Run();
+    void MatlabRunSync();
     void Stop();
     void AddPlane(Plane &plane);
     void AddTarget(Target &target);
