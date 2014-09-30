@@ -3,7 +3,7 @@
 function [X_eNew,P_New]=UKF_Origin(T,Q,R,X_e,Z,Ownship,P)
 
 %赋初值
-L=15;      %维数
+L=9;      %维数
 alpha=1e-4;
 kappa=0;
 beta=2;
@@ -36,11 +36,10 @@ G=[0.5*T^2 0 0;
     0 0 0.5*T^2;
     0 0 T;
     0 0 1];
-
-Q=eye(3)*Q;
+% Q=eye(3)*Q;
 %滤波
-    X_extend=[X_e;zeros(6,1)];
-    P_extend=[P,zeros(9,6);zeros(3,9),Q,zeros(3,3);zeros(3,12),R];
+    X_extend=X_e;
+    P_extend=P;
     
     %计算sigma点
     P_sqrt=schol(P_extend);
@@ -51,13 +50,13 @@ Q=eye(3)*Q;
     end
     %计算转移后的sigma点
     for j=1:(2*L+1)
-        Xi_sigma(:,j)=F*X_sigma(1:9,j)+G*X_sigma(10:12,j);
+        Xi_sigma(:,j)=F*X_sigma(1:9,j);
     end
     %计算状态先验估计值
     X_eNew(:,1)=Xi_sigma*w';
     
     %计算状态预测协方差
-    P_x=zeros(9,9);
+    P_x=Q;
     for j=1:(2*L+1)
         P_x=P_x+v(1,j)*(Xi_sigma(:,j)-X_eNew(:,1))*(Xi_sigma(:,j)-X_eNew(:,1))';
     end
@@ -68,18 +67,17 @@ Q=eye(3)*Q;
         yo2=Ownship(2).P(4,1);
         xo3=Ownship(3).P(1,1);
         yo3=Ownship(3).P(4,1);
-    
     %计算观测的sigma点
     for j=1:(2*L+1)
         x=Xi_sigma(1,j);y=Xi_sigma(4,j);
-        Z_sigma(:,j)=[atan((y-yo1)/(x-xo1));atan((y-yo2)/(x-xo2));atan((y-yo3)/(x-xo3))]+X_sigma(13:15,j);%此处需修改
+        Z_sigma(:,j)=[atan((y-yo1)/(x-xo1));atan((y-yo2)/(x-xo2));atan((y-yo3)/(x-xo3))];%此处需修改
     end
     
    %计算观测估计值
    Z_eNew(:,1)=Z_sigma*w';
    
    %计算观测的方差
-   P_z=zeros(3,3);
+   P_z=R;
    for j=1:(2*L+1)
        P_z=P_z+v(1,j)*(Z_sigma(:,j)-Z_eNew(:,1))*(Z_sigma(:,j)-Z_eNew(:,1))';
    end
