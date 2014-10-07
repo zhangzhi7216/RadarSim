@@ -199,6 +199,19 @@ void CAttackPlaneDlg::AddTrueData(TrueDataPacket &packet)
     }
 }
 
+void CAttackPlaneDlg::AddOtherTrueData(int i, TrueDataFrame &frame)
+{
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->AddPlaneTrueData(i + 1, frame.m_Pos);
+    }
+
+    m_StateMap.AddPlaneData(i + 1, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
+    m_StateMapDlg.m_Ctrl.DrawTargets();
+    m_StateMapDlg.m_Ctrl.BlendAll();
+    m_StateMapDlg.m_Ctrl.Invalidate();
+}
+
 void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
     // 显示本帧后半部，即态势部分，目标和导弹
