@@ -38,6 +38,7 @@ protected:
     NaviOutput m_NaviOutput;
 
     virtual void AddTrueData(TrueDataPacket &packet);
+    virtual void AddOtherTrueData(int i, TrueDataFrame &frame);
     virtual void AddControlData(ControlDataPacket &packet);
 
     vector<TargetState> m_TargetStates;
