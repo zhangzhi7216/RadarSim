@@ -49,12 +49,8 @@ void CMatlabDlg::Hide()
 
 void CMatlabDlg::Stop()
 {
-<<<<<<< HEAD
     /*
-    m_ThreadLock.Lock();
-=======
     // m_ThreadLock.Lock();
->>>>>>> origin/master
     if (m_Thread)
     {
         if (!TerminateThread(m_Thread, 0))
@@ -130,21 +126,12 @@ void CMatlabDlg::Reset()
 
 void CMatlabDlg::Run()
 {
-<<<<<<< HEAD
-    m_Lock.Lock();
+    // m_Lock.Lock();
     if (m_PlaneTrueInput == NULL) m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
     if (m_TargetTrueInput == NULL) m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
     if (m_TargetFusionInput == NULL) m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
     if (m_TargetFilterInput == NULL) m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
     if (m_GlobalVarInput == NULL) m_GlobalVarInput = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
-=======
-    // m_Lock.Lock();
-    m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    m_GlobalVarInput = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
->>>>>>> origin/master
 
     double *data = mxGetPr(m_PlaneTrueInput);
     for (int plane = 0; plane < m_PlaneTrueDatas.size(); ++plane)
@@ -216,18 +203,14 @@ void CMatlabDlg::Run()
         0);
     SetThreadPriority(m_Thread, THREAD_PRIORITY_NORMAL);
     ResumeThread(m_Thread);
-<<<<<<< HEAD
     */
     MatlabRunSync();
-    m_Lock.Unlock();
-=======
     // m_Lock.Unlock();
->>>>>>> origin/master
 }
 
 void CMatlabDlg::MatlabRunSync()
 {
-    m_Lock.Lock();
+    // m_Lock.Lock();
     if (!(m_Engine = engOpen(NULL)))
     {
         AfxMessageBox(TEXT("´ò¿ªMatlabÒýÇæ´íÎó"));
@@ -317,7 +300,7 @@ void CMatlabDlg::MatlabRunSync()
     // }
 
 
-    m_Lock.Unlock();
+    // m_Lock.Unlock();
 
     m_Engine = 0;
 
