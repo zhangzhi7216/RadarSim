@@ -37,6 +37,7 @@ public:
     int m_Size;
 
     bool m_IsShowing;
+    bool m_HasRan;
 
     CCriticalSection m_ThreadLock;
     Engine *m_Engine;

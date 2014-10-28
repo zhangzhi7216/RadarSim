@@ -23,6 +23,7 @@ CMatlabDlg::CMatlabDlg(const char *fileName,
 , m_Size(50)
 , m_Thread(NULL)
 , m_Engine(NULL)
+, m_HasRan(false)
 {
 }
 
@@ -33,16 +34,26 @@ CMatlabDlg::~CMatlabDlg(void)
 
 void CMatlabDlg::Show()
 {
-    Run();
+    // Run();
+    if (m_Thread != 0)
+    {
+        m_ThreadLock.Unlock();
+    }
+    else
+    {
+        Run();
+    }
 }
 
 void CMatlabDlg::Hide()
 {
-    Stop();
+    // Stop();
+    m_ThreadLock.Lock();
 }
 
 void CMatlabDlg::Stop()
 {
+    m_HasRan = false;
     m_ThreadLock.Lock();
     if (m_Thread)
     {
@@ -93,6 +104,7 @@ void CMatlabDlg::Reset()
 
 void CMatlabDlg::Run()
 {
+    m_HasRan = true;
     m_Lock.Lock();
     m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
     m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);

@@ -212,7 +212,7 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
         bool oldShowDataListDlg = m_ShowDataListDlg;
         if (m_ShowDataListDlg)
         {
-            m_MatlabDlg->Stop();
+            m_MatlabDlg->Hide();
             m_ShowDataListDlg = false;
         }
         DoFusion();
