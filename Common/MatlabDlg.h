@@ -41,7 +41,7 @@ public:
 
     CCriticalSection m_ThreadLock;
     Engine *m_Engine;
-    HANDLE m_Thread;
+    volatile HANDLE m_Thread;
     CCriticalSection m_Lock;
     static DWORD WINAPI MatlabRun(LPVOID lparam);
 
