@@ -311,8 +311,8 @@ void CStateMapCtrl::DrawTargets()
                 graphics.RotateTransform(angle, MatrixOrderAppend);
             }
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
-                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+            Image *targetImg = TargetTypeImages[m_StateMap.m_MissileTypes[i]];// m_StateMap.m_MissileStates[i] == TargetStateExploding ?
+                // ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
 #ifdef _DEV
             if (m_StateMap.m_MissileStates[i] == TargetStateExploding)
             {
