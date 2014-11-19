@@ -116,7 +116,9 @@ void CStateMapCtrl::DrawTargets()
             Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
             PointF pt(0.0, 0.0);
             graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
-            if (m_StateMap.m_ShowThetaRange)
+            if (m_StateMap.m_ShowThetaRange &&
+                (m_StateMap.m_PlaneTypes[i] != TargetTypeFighter &&
+                 m_StateMap.m_PlaneTypes[i] != TargetTypeBomber))
             {
                 if (m_StateMap.m_Radars[i]->m_Enable)
                 {
