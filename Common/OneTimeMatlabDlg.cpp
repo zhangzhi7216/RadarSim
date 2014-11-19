@@ -19,7 +19,7 @@ void COneTimeMatlabDlg::Stop()
 
 static char s_Msg[256];
 
-void COneTimeMatlabDlg::Run()
+void COneTimeMatlabDlg::Run(int round)
 {
     if (!(m_Engine = engOpen(NULL)))
     {
@@ -37,6 +37,16 @@ void COneTimeMatlabDlg::Run()
         }
     }
     int result = 0;
+
+    Array *roundA = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
+    double *p = mxGetPr(roundA);
+    *p = round;
+    result = engPutVariable(m_Engine, "round", roundA);
+    if (result)
+    {
+        AfxMessageBox(TEXT("Put var round engine WTF!"));
+    }
+
     wchar_t buf[MAX_PATH];
     GetCurrentDirectory(MAX_PATH, buf);
     wstring wsCurPath(buf);
@@ -48,7 +58,7 @@ void COneTimeMatlabDlg::Run()
         AfxMessageBox(TEXT("Cd engine WTF!"));
     }
 
-    cmd = "onetime_matlab_dialog()";
+    cmd = "onetime_matlab_dialog(round)";
     result = engEvalString(m_Engine, cmd.c_str());
     if (result)
     {

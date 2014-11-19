@@ -869,7 +869,7 @@ void CDataCenterDlg::FinishSim()
     }
 
     COneTimeMatlabDlg dlg;
-    dlg.Run();
+    dlg.Run(m_CurrentRound);
 
     if (m_CurrentRound >= m_GlobalData.m_Rounds)
     {
