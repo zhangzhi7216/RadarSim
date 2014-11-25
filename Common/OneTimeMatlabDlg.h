@@ -11,7 +11,7 @@ public:
     COneTimeMatlabDlg();
     virtual ~COneTimeMatlabDlg(void);
 
-    void Run();
+    void Run(int round);
     void Stop();
 
     Engine *m_Engine;

@@ -14,7 +14,7 @@
 #include "../Common/StateMapCtrl.h"
 #include "../Common/StateMapDlg.h"
 #include "../Common/CommonDlg.h"
-#include "../Common/MatlabDlg.h"
+#include "../Common/MatlabDlg2.h"
 
 #include "Target.h"
 
@@ -101,7 +101,7 @@ public:
     CDataListDlg m_DataListDlg;
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 
-    CMatlabDlg *m_MatlabDlg;
+    CMatlabDlg2 *m_MatlabDlg;
 
     bool m_ShowStateMapDlg;
     StateMap m_StateMap;

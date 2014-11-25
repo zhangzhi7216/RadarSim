@@ -27,7 +27,7 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     m_FusionSocket = new FusionSocket(this);
     m_AddMissile = true;
 
-    m_MatlabDlg = new CMatlabDlg("attack_matlab_dialog", "attack_plane_true", "attack_target_true", "attack_target_fusion", "attack_target_filter", "attack_global_var");
+    m_MatlabDlg = new CMatlabDlg2("attack_matlab_dialog", "attack_plane_true", "attack_target_true", "attack_target_fusion", "attack_target_filter", "attack_global_var");
     // m_ShowDataListDlg = true;
 }
 
@@ -209,12 +209,6 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
     m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
     if (m_NoiseDatas.size() == m_PlaneSockets.size())
     {
-        bool oldShowDataListDlg = m_ShowDataListDlg;
-        if (m_ShowDataListDlg)
-        {
-            m_MatlabDlg->Stop();
-            m_ShowDataListDlg = false;
-        }
         DoFusion();
 
         for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
@@ -225,6 +219,8 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
             m_MatlabDlg->AddTargetFilterData(i, filterFrame);
             m_MatlabDlg->UpdateGlobalVar();
         }
+
+        m_MatlabDlg->Update();
 
         // 显示本帧后半部，即态势部分，目标和导弹
         for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
@@ -243,11 +239,6 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
         }
 
         m_NoiseDatas.clear();
-        if (oldShowDataListDlg)
-        {
-            m_ShowDataListDlg = true;
-            m_MatlabDlg->Show();
-        }
     }
 }
 

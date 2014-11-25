@@ -1,4 +1,5 @@
-%function [] = onetime_matlab_dialog()
+%function [] = onetime_matlab_dialog(round)
+msgbox(num2str(round))
 close all;
 fidin1 = fopen('..\Fusion.dat'); % 打开test.txt文件，这里是同级并列的文件夹，这里是标准的格式
 fidin2 = fopen('..\TargetTrue.dat');

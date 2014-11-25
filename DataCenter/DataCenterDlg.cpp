@@ -708,6 +708,8 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_Vel, m_Missiles[i].m_State);
     }
 
+    m_MatlabDlg.Update();
+
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
@@ -861,15 +863,8 @@ void CDataCenterDlg::FinishSim()
     OutputFusionData();
     OutputFilterData();
 
-    bool oldShowMatlabDlg = m_ShowMatlabDlg;
-    if (m_ShowMatlabDlg)
-    {
-        m_MatlabDlg.Stop();
-        m_ShowMatlabDlg = false;
-    }
-
     COneTimeMatlabDlg dlg;
-    dlg.Run();
+    dlg.Run(m_CurrentRound);
 
     if (m_CurrentRound >= m_GlobalData.m_Rounds)
     {
@@ -886,11 +881,6 @@ void CDataCenterDlg::FinishSim()
     }
     else
     {
-        if (oldShowMatlabDlg)
-        {
-            m_ShowMatlabDlg = true;
-            m_MatlabDlg.Show();
-        }
         StartSim();
     }
 }

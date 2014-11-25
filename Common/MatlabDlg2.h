@@ -6,16 +6,24 @@
 
 #include "MatlabHelper.h"
 
-class __declspec(dllexport) CMatlabDlg
+class __declspec(dllexport) CMatlabDlg2
 {
 public:
-    CMatlabDlg(const char *fileName = "matlab_dialog",
+    CMatlabDlg2(const char *fileName = "matlab_dialog",
         const char *planeTrue = "plane_true",
         const char *targetTrue = "target_true",
         const char *targetFusion = "target_fusion",
         const char *targetFilter = "target_filter",
         const char *globalVar = "global_var");
-    virtual ~CMatlabDlg(void);
+    virtual ~CMatlabDlg2(void);
+
+    void Reset();
+
+    void Show();
+    void Hide();
+    bool m_IsShowing;
+
+    void Update();
 
     const char *m_FileName;
     const char *m_PlaneTrue;
@@ -24,41 +32,27 @@ public:
     const char *m_TargetFilter;
     const char *m_GlobalVar;
 
-    void Show();
-    void Hide();
-    void Reset();
-    void Run();
-    void MatlabRunSync();
-    void Stop();
-    void AddPlane(Plane &plane);
-    void AddTarget(Target &target);
-
     void SetSize(int size);
 
     int m_Size;
-
-    bool m_IsShowing;
-    bool m_HasRan;
-
-    CCriticalSection m_ThreadLock;
     Engine *m_Engine;
-    volatile HANDLE m_Thread;
-    CCriticalSection m_Lock;
-    static DWORD WINAPI MatlabRun(LPVOID lparam);
 
     void AddPlaneTrueData(int plane, Position pos);
     void AddTargetTrueData(int target, Position pos);
 
     void AddTargetFusionData(int target, const TrueDataFrame &frame);
     void AddTargetFilterData(int target, const TrueDataFrame &frame);
+    int m_PlaneDataCount;
+    int m_TargetDataCount;
+    int m_TargetFusionDataCount;
+    int m_TargetFilterDataCount;
 
     void UpdateGlobalVar();
 
-    vector<Path> m_PlaneTrueDatas;
-    vector<Path> m_TargetTrueDatas;
-
-    vector<vector<TrueDataFrame>> m_TargetFusionDatas;
-    vector<vector<TrueDataFrame>> m_TargetFilterDatas;
+    void AddPlane(Plane &plane);
+    int m_PlaneCount;
+    void AddTarget(Target &target);
+    int m_TargetCount;
 
     Array *m_PlaneTrueInput;
     Array *m_TargetTrueInput;
@@ -66,4 +60,3 @@ public:
     Array *m_TargetFilterInput;
     Array *m_GlobalVarInput;
 };
-

@@ -214,6 +214,11 @@ void CAttackPlaneDlg::AddOtherTrueData(int i, TrueDataFrame &frame)
 
 void CAttackPlaneDlg::AddControlData(ControlDataPacket &packet)
 {
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->Update();
+    }
+
     // 显示本帧后半部，即态势部分，目标和导弹
     for (int i = 0; i < packet.m_FusionData.m_FusionDatas.size(); ++i)
     {

@@ -542,6 +542,11 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_DataListCtrl.AddTargetData();
     m_DataListDlg.m_Ctrl->AddTargetData();
 
+    if (m_MatlabDlg)
+    {
+        m_MatlabDlg->Update();
+    }
+
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
@@ -552,6 +557,7 @@ void CPlaneDlg::AddOtherTrueData(int i, TrueDataFrame &frame)
     if (m_MatlabDlg && i < PLANE_COUNT - 2 /*ºöÂÔ¹¥»÷»ú*/)
     {
         m_MatlabDlg->AddPlaneTrueData(i + 1, frame.m_Pos);
+        m_MatlabDlg->Update();
     }
 
     if (i < PLANE_COUNT - 2 /*ºöÂÔ¹¥»÷»ú*/)

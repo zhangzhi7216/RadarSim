@@ -116,7 +116,9 @@ void CStateMapCtrl::DrawTargets()
             Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
             PointF pt(0.0, 0.0);
             graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
-            if (m_StateMap.m_ShowThetaRange)
+            if (m_StateMap.m_ShowThetaRange &&
+                (m_StateMap.m_PlaneTypes[i] != TargetTypeFighter &&
+                 m_StateMap.m_PlaneTypes[i] != TargetTypeBomber))
             {
                 if (m_StateMap.m_Radars[i]->m_Enable)
                 {
@@ -311,8 +313,8 @@ void CStateMapCtrl::DrawTargets()
                 graphics.RotateTransform(angle, MatrixOrderAppend);
             }
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
-                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+            Image *targetImg = TargetTypeImages[m_StateMap.m_MissileTypes[i]];// m_StateMap.m_MissileStates[i] == TargetStateExploding ?
+                // ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
 #ifdef _DEV
             if (m_StateMap.m_MissileStates[i] == TargetStateExploding)
             {

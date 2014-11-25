@@ -259,6 +259,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MatlabDlg2.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\MatlabHelper.cpp"
 				>
 			</File>
@@ -406,6 +410,10 @@
 			</File>
 			<File
 				RelativePath=".\MatlabDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MatlabDlg2.h"
 				>
 			</File>
 			<File
