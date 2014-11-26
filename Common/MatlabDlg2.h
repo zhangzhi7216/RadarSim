@@ -42,17 +42,17 @@ public:
 
     void AddTargetFusionData(int target, const TrueDataFrame &frame);
     void AddTargetFilterData(int target, const TrueDataFrame &frame);
-    int m_PlaneDataCount;
-    int m_TargetDataCount;
-    int m_TargetFusionDataCount;
-    int m_TargetFilterDataCount;
+
+    vector<Path> m_PlaneTrueDatas;
+    vector<Path> m_TargetTrueDatas;
+
+    vector<vector<TrueDataFrame>> m_TargetFusionDatas;
+    vector<vector<TrueDataFrame>> m_TargetFilterDatas;
 
     void UpdateGlobalVar();
 
     void AddPlane(Plane &plane);
-    int m_PlaneCount;
     void AddTarget(Target &target);
-    int m_TargetCount;
 
     Array *m_PlaneTrueInput;
     Array *m_TargetTrueInput;
