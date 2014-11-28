@@ -217,7 +217,7 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
             m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
             TrueDataFrame &filterFrame = m_FusionOutput.m_FusionData.m_FilterDatas[i];
             m_MatlabDlg->AddTargetFilterData(i, filterFrame);
-            m_MatlabDlg->UpdateGlobalVar();
+            // m_MatlabDlg->UpdateGlobalVar();
         }
 
         m_MatlabDlg->Update();

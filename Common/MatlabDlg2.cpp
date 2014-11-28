@@ -92,8 +92,8 @@ void CMatlabDlg2::Update()
     if (m_PlaneTrueInput == NULL)
     {
         m_PlaneTrueInput = CreateDoubleArray(m_PlaneTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    }
-    {
+    // }
+    // {
         double *data = mxGetPr(m_PlaneTrueInput);
         for (int plane = 0; plane < m_PlaneTrueDatas.size(); ++plane)
         {
@@ -108,8 +108,8 @@ void CMatlabDlg2::Update()
     if (m_TargetTrueInput == NULL)
     {
         m_TargetTrueInput = CreateDoubleArray(m_TargetTrueDatas.size(), m_Size * MATLAB_DRAW_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    }
-    {
+    // }
+    // {
         double *data = mxGetPr(m_TargetTrueInput);
         for (int target = 0; target < m_TargetTrueDatas.size(); ++target)
         {
@@ -124,8 +124,8 @@ void CMatlabDlg2::Update()
     if (m_TargetFusionInput == NULL)
     {
         m_TargetFusionInput = CreateDoubleArray(m_TargetFusionDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    }
-    {
+    // }
+    // {
         double *data = mxGetPr(m_TargetFusionInput);
         for (int target = 0; target < m_TargetFusionDatas.size(); ++target)
         {
@@ -146,8 +146,8 @@ void CMatlabDlg2::Update()
     if (m_TargetFilterInput == NULL)
     {
         m_TargetFilterInput = CreateDoubleArray(m_TargetFilterDatas.size(), m_Size * MATLAB_DRAW_FUSION_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    }
-    {
+    // }
+    // {
         double *data = mxGetPr(m_TargetFilterInput);
         for (int target = 0; target < m_TargetFilterDatas.size(); ++target)
         {
@@ -168,8 +168,8 @@ void CMatlabDlg2::Update()
     if (m_GlobalVarInput == NULL)
     {
         m_GlobalVarInput = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
-    }
-    {
+    // }
+    // {
         double *data = mxGetPr(m_GlobalVarInput);
         for (int i = 0; i < PLANE_COUNT + TARGET_COUNT_MAX; ++i)
         {
@@ -279,9 +279,9 @@ void CMatlabDlg2::AddPlaneTrueData(int plane, Position pos)
     if (m_PlaneTrueInput)
     {
         double *data = mxGetPr(m_PlaneTrueInput);
-        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 0) * m_PlaneTrueDatas[plane].size() + plane] = pos.X;
-        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 1) * m_PlaneTrueDatas[plane].size() + plane] = pos.Y;
-        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 2) * m_PlaneTrueDatas[plane].size() + plane] = pos.Z;
+        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 0) * m_PlaneTrueDatas.size() + plane] = pos.X;
+        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 1) * m_PlaneTrueDatas.size() + plane] = pos.Y;
+        data[(m_PlaneTrueDatas[plane].size() * MATLAB_DRAW_TRUE_DATA_SIZE + 2) * m_PlaneTrueDatas.size() + plane] = pos.Z;
     }
 
     m_PlaneTrueDatas[plane].push_back(pos);

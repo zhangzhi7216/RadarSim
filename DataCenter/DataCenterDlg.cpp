@@ -697,7 +697,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
         TrueDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
         m_MatlabDlg.AddTargetFilterData(i, filterFrame);
-        m_MatlabDlg.UpdateGlobalVar();
+        // m_MatlabDlg.UpdateGlobalVar();
 
         m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
     }
