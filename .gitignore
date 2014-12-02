@@ -5,7 +5,6 @@
 *.pydevproject
 .project
 .metadata
-bin/
 tmp/
 *.tmp
 *.bak
@@ -219,3 +218,4 @@ DataCenter/Fusion.dat
 DataCenter/PlaneTrue.dat
 DataCenter/TargetTrue.dat
 DataCenter/TargetNoise.dat
+Doc/html/
