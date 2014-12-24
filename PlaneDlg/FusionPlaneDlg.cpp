@@ -27,7 +27,7 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     m_FusionSocket = new FusionSocket(this);
     m_AddMissile = true;
 
-    m_MatlabDlg = new CMatlabDlg2("attack_matlab_dialog", "attack_plane_true", "attack_target_true", "attack_target_fusion", "attack_target_filter", "attack_global_var");
+    m_MatlabDlg = new CMatlabDlg3("attack_matlab_dialog.dll", "attack_matlab_dialog");
     // m_ShowDataListDlg = true;
 }
 

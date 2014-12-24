@@ -904,14 +904,6 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            TrueDataPacket packet;
-            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[index];
-            for (int j = 0; j < m_TargetClients.size(); ++j)
-            {
-                packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[index]);
-            }
-            m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
-
             if (m_PlaneClients[i].m_PlaneSocket->IsFusion() || m_PlaneClients[i].m_PlaneSocket->IsAttack())
             {
                 for (int j = 0; j < PLANE_COUNT; ++j)
@@ -922,6 +914,14 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
                     }
                 }
             }
+            TrueDataPacket packet;
+            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[index];
+            for (int j = 0; j < m_TargetClients.size(); ++j)
+            {
+                packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[index]);
+            }
+            m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
+
         }
     }
 }

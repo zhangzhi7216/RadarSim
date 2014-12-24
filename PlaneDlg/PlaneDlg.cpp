@@ -557,7 +557,7 @@ void CPlaneDlg::AddOtherTrueData(int i, TrueDataFrame &frame)
     if (m_MatlabDlg && i < PLANE_COUNT - 2 /*ºöÂÔ¹¥»÷»ú*/)
     {
         m_MatlabDlg->AddPlaneTrueData(i + 1, frame.m_Pos);
-        m_MatlabDlg->Update();
+        // m_MatlabDlg->Update();
     }
 
     if (i < PLANE_COUNT - 2 /*ºöÂÔ¹¥»÷»ú*/)
