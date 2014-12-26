@@ -22,5 +22,11 @@ public:
     CString m_DllFileName, m_FuncName;
     HMODULE m_DllHandle;
     RealFunc m_MatlabFunc;
+
+    Array *m_PlaneTrueDatas;
+    Array *m_TargetNoiseDatas;
+    Array *m_GlobalVar;
+    Array *m_Interval;
+    Array *m_InfraredMaxDis;
 };
 

@@ -4,6 +4,11 @@
 FusionMatlabAlgo::FusionMatlabAlgo(void)
 : m_DllHandle(0)
 , m_MatlabFunc(0)
+, m_PlaneTrueDatas(NULL)
+, m_TargetNoiseDatas(NULL)
+, m_GlobalVar(NULL)
+, m_Interval(NULL)
+, m_InfraredMaxDis(NULL)
 {
 }
 
@@ -13,11 +18,37 @@ FusionMatlabAlgo::FusionMatlabAlgo(const CString &name, const CString &dllFileNa
 , m_FuncName(funcName)
 , m_DllHandle(0)
 , m_MatlabFunc(0)
+, m_PlaneTrueDatas(NULL)
+, m_TargetNoiseDatas(NULL)
+, m_GlobalVar(NULL)
+, m_Interval(NULL)
+, m_InfraredMaxDis(NULL)
 {
 }
 
 FusionMatlabAlgo::~FusionMatlabAlgo(void)
 {
+    if (m_PlaneTrueDatas != NULL)
+    {
+        DestroyArray(m_PlaneTrueDatas);
+    }
+    if (m_TargetNoiseDatas != NULL)
+    {
+        DestroyArray(m_TargetNoiseDatas);
+    }
+    if (m_GlobalVar != NULL)
+    {
+        DestroyArray(m_GlobalVar);
+    }
+    if (m_Interval != NULL)
+    {
+        DestroyArray(m_Interval);
+    }
+    if (m_InfraredMaxDis != NULL)
+    {
+        DestroyArray(m_InfraredMaxDis);
+    }
+
     if (m_DllHandle)
     {
         FreeLibrary(m_DllHandle);
@@ -91,21 +122,39 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         AfxMessageBox(msg);
         return false;
     }
+
     int planeSize = input.m_NoiseDataPackets.size();
     int targetSize = input.m_NoiseDataPackets[0].m_TargetNoiseDatas.size();
-    vector<Array *> inputList;
-    Array *planeTrueDatas = CreateDoubleArray(planeSize, MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    inputList.push_back(planeTrueDatas);
-    Array *targetNoiseDatas = CreateDoubleArray(planeSize * targetSize, MATLAB_FUSION_NOISE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
-    inputList.push_back(targetNoiseDatas);
-    Array *globalVar = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
-    inputList.push_back(globalVar);
-    Array *interval = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
-    inputList.push_back(interval);
-    Array *infraredMaxDis = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
-    inputList.push_back(infraredMaxDis);
 
-    double *p = mxGetPr(planeTrueDatas);
+    if (m_PlaneTrueDatas == NULL)
+    {
+        m_PlaneTrueDatas = CreateDoubleArray(planeSize, MATLAB_FUSION_TRUE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    }
+    if (m_TargetNoiseDatas == NULL)
+    {
+        m_TargetNoiseDatas = CreateDoubleArray(planeSize * targetSize, MATLAB_FUSION_NOISE_DATA_SIZE, (const unsigned char *)NULL, 0, 0);
+    }
+    if (m_GlobalVar == NULL)
+    {
+        m_GlobalVar = CreateDoubleArray(PLANE_COUNT + TARGET_COUNT_MAX, GLOBAL_VAR_FRAME_SIZE, (const unsigned char *)NULL, 0, 0);
+    }
+    if (m_Interval == NULL)
+    {
+        m_Interval = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
+    }
+    if (m_InfraredMaxDis == NULL)
+    {
+        m_InfraredMaxDis = CreateDoubleArray(1, 1, (const unsigned char *)NULL, 0, 0);
+    }
+
+    vector<Array *> inputList;
+    inputList.push_back(m_PlaneTrueDatas);
+    inputList.push_back(m_TargetNoiseDatas);
+    inputList.push_back(m_GlobalVar);
+    inputList.push_back(m_Interval);
+    inputList.push_back(m_InfraredMaxDis);
+
+    double *p = mxGetPr(m_PlaneTrueDatas);
     for (int iPlane = 0; iPlane < planeSize; ++iPlane)
     {
         p[iPlane + 0 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Time;
@@ -121,7 +170,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         p[iPlane + 10 * planeSize] = input.m_NoiseDataPackets[iPlane].m_PlaneTrueData.m_Acc.Z;
     }
 
-    p = mxGetPr(targetNoiseDatas);
+    p = mxGetPr(m_TargetNoiseDatas);
     for (int iPlane = 0; iPlane < planeSize; ++iPlane)
     {
         for (int iTarget = 0; iTarget < targetSize; ++iTarget)
@@ -137,7 +186,7 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         }
     }
 
-    p = mxGetPr(globalVar);
+    p = mxGetPr(m_GlobalVar);
     for (int i = 0; i < PLANE_COUNT + TARGET_COUNT_MAX; ++i)
     {
         for (int j = 0; j < GLOBAL_VAR_FRAME_SIZE; ++j)
@@ -146,21 +195,16 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
         }
     }
 
-    p = mxGetPr(interval);
+    p = mxGetPr(m_Interval);
     *p = input.m_Interval;
 
-    p = mxGetPr(infraredMaxDis);
+    p = mxGetPr(m_InfraredMaxDis);
     *p = input.m_InfraredMaxDis;
 
     vector<Array *> outputList(4);
     bool result = m_MatlabFunc(4, &outputList[0], inputList.size(), &inputList[0]);
     if (!result)
     {
-        DestroyArray(planeTrueDatas);
-        DestroyArray(targetNoiseDatas);
-        DestroyArray(globalVar);
-        DestroyArray(interval);
-
         CString msg;
         msg.AppendFormat(TEXT("À„∑®%sµ˜”√ ß∞‹."), m_Name);
 
@@ -267,11 +311,6 @@ bool FusionMatlabAlgo::Run(const FusionInput &input, FusionOutput &output)
             g_GlobalVar[i].m_G[j] = p[j * m + i];
         }
     }
-
-    DestroyArray(planeTrueDatas);
-    DestroyArray(targetNoiseDatas);
-    DestroyArray(globalVar);
-    DestroyArray(interval);
 
     DestroyArray(fusionDatas);
     DestroyArray(filterDatas);
