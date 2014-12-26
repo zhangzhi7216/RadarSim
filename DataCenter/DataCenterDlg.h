@@ -10,7 +10,8 @@
 #include "PlaneClient.h"
 #include "TargetClient.h"
 #include "../Common/DataPacket.h"
-#include "../Common/MatlabDlg3.h"
+// #include "../Common/MatlabDlg3.h"
+#include "../Common/MatlabDlg.h"
 
 #include "FusionAlgo.h"
 #include "NaviAlgo.h"
@@ -53,7 +54,7 @@ protected:
     CStateMapDlg m_StateMapDlg;
 
     bool m_ShowMatlabDlg;
-    CMatlabDlg3 m_MatlabDlg;
+    CMatlabDlg m_MatlabDlg;
 
     DataCenterSocket *m_DataCenterSocket;
     bool m_FusionConnected;
