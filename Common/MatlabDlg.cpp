@@ -53,13 +53,12 @@ void CMatlabDlg::Show()
 
 void CMatlabDlg::Hide()
 {
-    // Stop();
+    Stop();
     // m_ThreadLock.Lock();
 }
 
 void CMatlabDlg::Stop()
 {
-    /*
     m_HasRan = false;
     // m_ThreadLock.Lock();
     if (m_Thread)
@@ -97,12 +96,11 @@ void CMatlabDlg::Stop()
         DestroyArray(m_GlobalVarInput);
         m_GlobalVarInput = NULL;
     }
-    */
 }
 
 void CMatlabDlg::Reset()
 {
-    // Stop();
+    Stop();
     if (m_PlaneTrueInput)
     {
         DestroyArray(m_PlaneTrueInput);
@@ -206,7 +204,6 @@ void CMatlabDlg::Run()
         }
     }
 
-    /*
     m_Thread = CreateThread(NULL,
         10 * 1024 * 1024,
         MatlabRun,
@@ -215,8 +212,7 @@ void CMatlabDlg::Run()
         0);
     SetThreadPriority(m_Thread, THREAD_PRIORITY_NORMAL);
     ResumeThread(m_Thread);
-    */
-    MatlabRunSync();
+    // MatlabRunSync();
     // m_Lock.Unlock();
 }
 
@@ -432,6 +428,10 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
     dlg->m_Thread = 0;
     // dlg->m_Lock.Unlock();
     return result;
+}
+
+void CMatlabDlg::Update()
+{
 }
 
 void CMatlabDlg::AddPlane(Plane &plane)

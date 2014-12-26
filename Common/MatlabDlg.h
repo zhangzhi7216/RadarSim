@@ -30,6 +30,7 @@ public:
     void Run();
     void MatlabRunSync();
     void Stop();
+    void Update();
     void AddPlane(Plane &plane);
     void AddTarget(Target &target);
 
