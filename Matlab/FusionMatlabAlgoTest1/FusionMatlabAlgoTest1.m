@@ -5,7 +5,8 @@ function [ fusionDatas, filterDatas, controlDatas, globalVarsOutput ] = FusionMa
 T = interval;
 % sigma = 0.05;                        %过程噪声均方差
 % Q = sigma.^2;                   %过程噪声方差
-Q = diag([0.05^2,0.05^2,0.05^2,0.05^2,0.05^2,0.05^2,0.05^2,0.05^2,0.05^2]);
+% Q = diag([40000,200,0.1,40000,200,0.1,40000,200,0.1]); 
+G = [T^2/2 0 0;T 0 0;1 0 0;0 T^2/2 0;0 T 0;0 1 0;0 0 T^2/2;0 0 T;0 0 1];
 Onum = size(planeTrueDatas,1);                      %我机个数
 Tnum = size(targetNoiseDatas,1)/Onum;                          %敌机个数
 
@@ -33,19 +34,16 @@ for k = 1:Onum
         targetNoiseDatasTrans(k,i,:) = permute(targetNoiseDatas(4*k-4+i,:),[1 3 2]); 
     end    
 end
-
-REsm = [targetNoiseDatasTrans(1,1,7),targetNoiseDatasTrans(2,1,7),targetNoiseDatasTrans(3,1,7)];
-RInf = [targetNoiseDatasTrans(1,1,7),targetNoiseDatasTrans(1,1,8),targetNoiseDatasTrans(2,1,7),targetNoiseDatasTrans(2,1,8),targetNoiseDatasTrans(3,1,7),targetNoiseDatasTrans(3,1,8)];
-VarREsm = REsm' * REsm;
-VarRInf = RInf' * RInf;
+VarREsm = diag([(sqrt(targetNoiseDatasTrans(1,1,7))/180*pi)^2,(sqrt(targetNoiseDatasTrans(2,1,7))/180*pi)^2,(sqrt(targetNoiseDatasTrans(3,1,7))/180*pi)^2]);
+VarRInf = diag([(sqrt(targetNoiseDatasTrans(1,1,7))/180*pi)^2,(sqrt(targetNoiseDatasTrans(1,1,8))/180*pi)^2,(sqrt(targetNoiseDatasTrans(2,1,7))/180*pi)^2,(sqrt(targetNoiseDatasTrans(2,1,8))/180*pi)^2,(sqrt(targetNoiseDatasTrans(3,1,7))/180*pi)^2,(sqrt(targetNoiseDatasTrans(3,1,8))/180*pi)^2]);
 Association = zeros(10,1);%初始化目标关联矩阵
 
 
 if(planeTrueDatas(1,1)==0)
-        globalVarsMatrix(1,1,1:11) = permute([0;100;400000;110;23000;-481;30;0;0;0;0],[3 2 1]);
-        globalVarsMatrix(2,1,1:11) = permute([0;101;400000;24000;19000;-482;0;0;0;-0.05;0],[3 2 1]);
-        globalVarsMatrix(3,1,1:11) = permute([0;102;400000;40000;18000;-483;-5;0;0;0;0],[3 2 1]);
-        globalVarsMatrix(4,1,1:11) = permute([0;103;400000;30300;17000;-484;0;0;0.05;0;0],[3 2 1]);
+        globalVarsMatrix(1,1,1:11) = permute([0;100;400000+20000;120500+6000;20100;-340-30;5;0;0;0;0],[3 2 1]);
+        globalVarsMatrix(2,1,1:11) = permute([0;101;400000+18000;165000-5000;19000;-340-28;0;0;0;0;0],[3 2 1]);
+        globalVarsMatrix(3,1,1:11) = permute([0;102;400000+19000;150000+6000;20000;-340-29;0;0;0;0;0],[3 2 1]);
+        globalVarsMatrix(4,1,1:11) = permute([0;103;400000+20000;135000+5000;21000;-340-30;0;0;0.05;0;0],[3 2 1]);
 end
 % msg10 = msgbox(num2str([globalVarsMatrix(1,1,1:11);globalVarsMatrix(2,1,1:11);globalVarsMatrix(3,1,1:11);globalVarsMatrix(4,1,1:11)]),'globalstate');
 % set(msg10,'Position',[1000 100 300 150]);
@@ -62,9 +60,15 @@ for k = 1:Tnum
 end
 DistanceMax = max(max(distanceEsm));
 % msgbox(num2str(DistanceMax));
-
+if(DistanceMax>3.5*infraredMaxDis)
+   Q = G*diag([2e-1,2e-1,1e-4])*G';                   %过程噪声方差
+elseif(DistanceMax>3*infraredMaxDis && DistanceMax<=3.5*infraredMaxDis)
+   Q = G*diag([4e-4,4e-4,1e-4])*G';
+else
+   Q = G*diag([4e-4,4e-4,1e-4])*G'; 
+end
 %Esm探测范围内滤波
-if(DistanceMax>1.5e5)
+if(DistanceMax>infraredMaxDis)
 % if(DistanceMax<3e5)
  if(planeTrueDatas(1,1)~=0)
     %赋初值
@@ -138,7 +142,7 @@ if(DistanceMax>1.5e5)
  else
    for k=1:Tnum
        Target(k).X_e_UKFEsm = permute(globalVarsMatrix(k,1,3:11),[3,2,1]);
-       Target(k).P_UKFEsm = diag([1,0.01,0.0001,1,0.01,0.0001,1,0.01,0.0001]);
+       Target(k).P_UKFEsm = diag([4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4]);
        globalVarsMatrixOutput(k,1,1) = planeTrueDatas(1,1);
        globalVarsMatrixOutput(k,1,2) = 100+k-1;
        globalVarsMatrixOutput(k,1,3:11) = permute(Target(k).X_e_UKFEsm,[3,2,1]);
@@ -163,8 +167,16 @@ if(DistanceMax>1.5e5)
 % elseif(DistanceMax<=1e5)
 else
 % elseif(DistanceMax>3e5)
-Q = diag([1,0.1^2,0.1^2,1,0.1^2,0.1^2,1,0.1^2,0.1^2]);
+Q = G*diag([4e-4,4e-4,1e-4])*G';                   %过程噪声方差
 if(any(any(targetNoiseDatasTrans(:,:,4)))==1)
+   %判断未被击落的敌机目标
+   TnumExist = 0;
+   for k=1:Tnum
+       if(any(targetNoiseDatasTrans(:,k,4))==1)
+           TnumExist = TnumExist+1;
+           TargetExist(TnumExist,1) = k;
+       end
+   end
    %输入我机的位置
    for k=1:Onum
        Ownship(k).P = (planeTrueDatas(k,3:11))';
@@ -176,6 +188,7 @@ if(any(any(targetNoiseDatasTrans(:,:,4)))==1)
       if(globalVarsMatrix(1,10,1:11)==permute(zeros(11,1),[3 2 1]))
 %             Target(k).P_UKFInf = diag([1,0.01,0.0001,1,0.01,0.0001,1,0.01,0.0001]);
             Target(k).P_UKFInf = permute(globalVarsMatrix(k,1:9,12:20),[3 2 1]);
+%             Target(k).P_UKFInf = diag([4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4,4e-4]);
             Target(k).X_e_UKFInf = permute(globalVarsMatrix(k,1,3:11),[3 2 1]);
             Target(k).X_e_UKFInf = [Target(k).X_e_UKFInf(1,1);Target(k).X_e_UKFInf(4,1);Target(k).X_e_UKFInf(7,1);Target(k).X_e_UKFInf(2,1);Target(k).X_e_UKFInf(5,1);Target(k).X_e_UKFInf(8,1);Target(k).X_e_UKFInf(3,1);Target(k).X_e_UKFInf(6,1);Target(k).X_e_UKFInf(9,1)];
       else
@@ -184,21 +197,26 @@ if(any(any(targetNoiseDatasTrans(:,:,4)))==1)
             Target(k).X_e_UKFInf = [Target(k).X_e_UKFInf(1,1);Target(k).X_e_UKFInf(4,1);Target(k).X_e_UKFInf(7,1);Target(k).X_e_UKFInf(2,1);Target(k).X_e_UKFInf(5,1);Target(k).X_e_UKFInf(8,1);Target(k).X_e_UKFInf(3,1);Target(k).X_e_UKFInf(6,1);Target(k).X_e_UKFInf(9,1)];
       end      
    end
-%    msgbox('Message 1');
    targetNoiseDatasTransVerse = permute(targetNoiseDatasTrans,[3 2 1]);%这里做三维数组的转置是为了方便处理数据
    for i = 1:Onum
        for k = 1:Tnum
            Target(k).ZInf(2*i-1:2*i,1) = targetNoiseDatasTransVerse(4:5,k,i); 
        end
    end
-   TargetDisorder = [Target(1).ZInf(:,1),Target(2).ZInf(:,1),Target(3).ZInf(:,1),Target(4).ZInf(:,1)];
+   TargetDisorder(:,1) = Target(TargetExist(1,1)).ZInf(:,1);
+   if(TnumExist>1)
+       for k = 2:TnumExist
+          TargetDisorder = cat(2,TargetDisorder,Target(TargetExist(k,1)).ZInf(:,1));
+       end
+   end
+%    TargetDisorder = [Target(1).ZInf(:,1),Target(2).ZInf(:,1),Target(3).ZInf(:,1),Target(4).ZInf(:,1)];
    AssociationCount = 0;
 %    msgbox('Message 6');
 %    msgbox(num2str(TargetDisorder),'TargetDisorder');
    %Inf目标关联
-     for a = 1:Tnum
-       for b = 1:Tnum
-           for c = 1:Tnum
+     for a = 1:TnumExist
+       for b = 1:TnumExist
+           for c = 1:TnumExist
             TargetTheta = [TargetDisorder(1,a);TargetDisorder(3,b);TargetDisorder(5,c)];
             TargetPhi = [TargetDisorder(2,a);TargetDisorder(4,b);TargetDisorder(6,c)];
             OwnShipX = [Ownship(1).P(1,1);Ownship(2).P(1,1);Ownship(3).P(1,1)];
@@ -224,33 +242,32 @@ if(any(any(targetNoiseDatasTrans(:,:,4)))==1)
 %      msgbox('Message 2');
    %目标排序
    AssociationInOrder = zeros(10,1);
-       for k = 1:Tnum
+       for k = 1:TnumExist
            for l = 1:size(Association,2)
-               distance(l,1) = ((Target(k).X_e_UKFInf(1,end)-Association(1,l))^2 + (Target(k).X_e_UKFInf(4,end)-Association(2,l))^2)^0.5;           
+               distance(l,1) = ((Target(TargetExist(k,1)).X_e_UKFInf(1,end)-Association(1,l))^2 + (Target(TargetExist(k,1)).X_e_UKFInf(4,end)-Association(2,l))^2)^0.5;           
            end
            [DistanceMax,DistanceMaxID] = min(distance);
            AssociationInOrder(:,k) = Association(:,DistanceMaxID);
        end   
    %以关联后目标作为测量值，配对测量值与初始状态
    Comparemin = 1;
-   MapVector = zeros(Tnum,1);
-   for k = 1:Tnum
-       Target(k).ZInfComp = atan((Target(k).X_e_UKFInf(4,1)-Ownship(1).P(4,end))/(Target(k).X_e_UKFInf(1,1)-Ownship(1).P(1,end))); 
+   MapVector = zeros(TnumExist,1);
+   for k = 1:TnumExist
+       Target(TargetExist(k,1)).ZInfComp = atan((Target(TargetExist(k,1)).X_e_UKFInf(4,1)-Ownship(1).P(4,end))/(Target(TargetExist(k,1)).X_e_UKFInf(1,1)-Ownship(1).P(1,end))); 
        ZInfEquivalent(:,1,k) = [AssociationInOrder(5,k);AssociationInOrder(8,k);AssociationInOrder(6,k);AssociationInOrder(9,k);AssociationInOrder(7,k);AssociationInOrder(10,k)];
    end
-   for k = 1:Tnum
-       for l = 1:Tnum
-           Compare = abs(Target(k).ZInfComp - ZInfEquivalent(1,1,l));
+   for k = 1:TnumExist
+       for l = 1:TnumExist
+           Compare = abs(Target(TargetExist(k,1)).ZInfComp - ZInfEquivalent(1,1,l));
            if(Compare<Comparemin)
                Comparemin = Compare;
                MapVector(k,1) = l;
            end
        end
        Comparemin = 1;
-       Target(k).ZInfEquivalent = ZInfEquivalent(:,:,MapVector(k,1)); 
+       Target(TargetExist(k,1)).ZInfEquivalent = ZInfEquivalent(:,:,MapVector(k,1)); 
    end
 end
-%    msgbox('Message 3');
    %Inf-UKF滤波
    for k = 1:Tnum
         if(targetNoiseDatasTrans(:,k,4) == zeros(Onum,1))
