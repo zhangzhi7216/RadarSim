@@ -47,11 +47,11 @@ end
     TargetY = TargetY(:,1:ErrorEnd);
     TargetZ = TargetZ(:,1:ErrorEnd);
 %误差计算
-TargetXError = (TargetX-TargetTrueX)./TargetX;
-TargetYError = (TargetY-TargetTrueY)./TargetY;
-TargetZError = (TargetZ-TargetTrueZ)./TargetZ;
+TargetXError = (TargetX-TargetTrueX);
+TargetYError = (TargetY-TargetTrueY);
+TargetZError = (TargetZ-TargetTrueZ);
 figure(1);
-set(figure(1),'outerposition',[50 50 1300 800]);
+set(figure(1),'outerposition',get(0,'screensize'));
 subplot(1,4,1:2);
 for PlaneNum = 1:1:PlaneCount
     if(PlaneX(PlaneNum,end)==0 && PlaneY(PlaneNum,end)==0 && PlaneZ(PlaneNum,end)==0)
@@ -74,47 +74,47 @@ for TargetNum = 1:1:TargetCount
     hold on;
     end
     grid on;
-    title(sprintf('我机真值与敌机融合值实时曲线图'));
     xlabel('x/m');
     ylabel('y/m');
     zlabel('z/m');
 end
-subplot(2,4,3);
+subplot(4,4,3:4);
    t=1:1:size(TargetXError,2);
-   plot(t,TargetXError(1,:)','b-','linewidth',1.5);hold on;
-   plot(t,TargetYError(1,:)','m-','linewidth',1.5);hold on;
-   plot(t,TargetZError(1,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetXError(1,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetYError(1,:)','g-','linewidth',1.5);hold on;
+   plot(t,TargetZError(1,:)','b-','linewidth',1.5);hold on;
+   xlim([0 t_count]);
    legend('x轴','y轴','z轴');
    grid on;
-   title(sprintf('第1架敌机各轴向位置误差'));
-   xlabel('采样次数/次');
+   title(sprintf('敌机各轴向位置误差'));
+   xlabel('帧号');
    ylabel('误差');
-subplot(2,4,4);
+subplot(4,4,7:8);
    t=1:1:size(TargetXError,2);
-   plot(t,TargetXError(2,:)','b-','linewidth',1.5);hold on;
-   plot(t,TargetYError(2,:)','m-','linewidth',1.5);hold on;
-   plot(t,TargetZError(2,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetXError(2,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetYError(2,:)','g-','linewidth',1.5);hold on;
+   plot(t,TargetZError(2,:)','b-','linewidth',1.5);hold on;
+   xlim([0 t_count]);
    grid on;
-   title(sprintf('第2架敌机各轴向位置误差'));
-   xlabel('采样次数/次');
+   xlabel('帧号');
    ylabel('误差');
-subplot(2,4,7);
+subplot(4,4,11:12);
    t=1:1:size(TargetXError,2);
-   plot(t,TargetXError(3,:)','b-','linewidth',1.5);hold on;
-   plot(t,TargetYError(3,:)','m-','linewidth',1.5);hold on;
-   plot(t,TargetZError(3,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetXError(3,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetYError(3,:)','g-','linewidth',1.5);hold on;
+   plot(t,TargetZError(3,:)','b-','linewidth',1.5);hold on;
+   xlim([0 t_count]);
    grid on;
-   title(sprintf('第3架敌机各轴向位置误差'));
-   xlabel('采样次数/次');
+   xlabel('帧号');
    ylabel('误差');
-subplot(2,4,8);
+subplot(4,4,15:16);
    t=1:1:size(TargetXError,2);
-   plot(t,TargetXError(4,:)','b-','linewidth',1.5);hold on;
-   plot(t,TargetYError(4,:)','m-','linewidth',1.5);hold on;
-   plot(t,TargetZError(4,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetXError(4,:)','r-','linewidth',1.5);hold on;
+   plot(t,TargetYError(4,:)','g-','linewidth',1.5);hold on;
+   plot(t,TargetZError(4,:)','b-','linewidth',1.5);hold on;
+   xlim([0 t_count]);
    grid on;
-   title(sprintf('第4架敌机各轴向位置误差'));
-   xlabel('采样次数/次');
+   xlabel('帧号');
    ylabel('误差');
 end
 
