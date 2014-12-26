@@ -41,6 +41,7 @@ using namespace std;
 #define TIMES 10
 #define TIME_FRAMES 100
 #define WM_TIME_FRAME (WM_USER + 1)
+#define INTERNAL_INTERVAL_MS 800
 
 
 CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
@@ -838,7 +839,7 @@ void CDataCenterDlg::StartSim()
     GenerateTrueData();
     // m_CurrentFrame = 0;
     m_CurrentFrame = m_GlobalData.m_StartTime;
-    SetTimer(WM_TIME_FRAME, 800, NULL);
+    SetTimer(WM_TIME_FRAME, INTERNAL_INTERVAL_MS, NULL);
 }
 
 void CDataCenterDlg::PauseSim()
@@ -849,7 +850,7 @@ void CDataCenterDlg::PauseSim()
 void CDataCenterDlg::ResumeSim()
 {
     m_CurrentFrame += m_GlobalData.m_Interval;
-    SetTimer(WM_TIME_FRAME, 800, NULL);
+    SetTimer(WM_TIME_FRAME, INTERNAL_INTERVAL_MS, NULL);
 }
 
 void CDataCenterDlg::FinishSim()
