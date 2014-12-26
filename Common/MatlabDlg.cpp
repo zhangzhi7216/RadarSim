@@ -367,27 +367,32 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         result = engPutVariable(dlg->m_Engine, dlg->m_PlaneTrue, dlg->m_PlaneTrueInput);
         if (result)
         {
-            AfxMessageBox(TEXT("Put var 1 engine WTF!"));
+            // AfxMessageBox(TEXT("Put var 1 engine WTF!"));
+            continue;
         }
         result = engPutVariable(dlg->m_Engine, dlg->m_TargetTrue, dlg->m_TargetTrueInput);
         if (result)
         {
-            AfxMessageBox(TEXT("Put var 2 engine WTF!"));
+            // AfxMessageBox(TEXT("Put var 2 engine WTF!"));
+            continue;
         }
         result = engPutVariable(dlg->m_Engine, dlg->m_TargetFusion, dlg->m_TargetFusionInput);
         if (result)
         {
-            AfxMessageBox(TEXT("Put var 3 engine WTF!"));
+            // AfxMessageBox(TEXT("Put var 3 engine WTF!"));
+            continue;
         }
         result = engPutVariable(dlg->m_Engine, dlg->m_TargetFilter, dlg->m_TargetFilterInput);
         if (result)
         {
-            AfxMessageBox(TEXT("Put var 4 engine WTF!"));
+            // AfxMessageBox(TEXT("Put var 4 engine WTF!"));
+            continue;
         }
         result = engPutVariable(dlg->m_Engine, dlg->m_GlobalVar, dlg->m_GlobalVarInput);
         if (result)
         {
-            AfxMessageBox(TEXT("Put var 5 engine WTF!"));
+            // AfxMessageBox(TEXT("Put var 5 engine WTF!"));
+            continue;
         }
 
         cmd = dlg->m_FileName;
@@ -405,11 +410,7 @@ DWORD WINAPI CMatlabDlg::MatlabRun(LPVOID lparam)
         result = engEvalString(dlg->m_Engine, cmd.c_str());
         if (result)
         {
-            AfxMessageBox(TEXT("Call func engine WTF!"));
-        }
-        if (result)
-        {
-            break;
+            continue;
         }
         // dlg->m_ThreadLock.Unlock();
 
