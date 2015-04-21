@@ -107,7 +107,7 @@ void CAttackPlaneDlg::ResetCtrls()
 void CAttackPlaneDlg::ConnectDataCenter()
 {
     CPlaneDlg::ConnectDataCenter();
-    m_DataCenterSocket->SendAttack();
+    // m_DataCenterSocket->SendAttack();
 }
 
 void CAttackPlaneDlg::SendNoiseData(NoiseDataPacket &packet)

@@ -14,9 +14,10 @@ public:
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
-    void SendFusionAddr(int port);
+    void SendImFusion(int port);
+    void SendImRadar();
+    void SendImDetect();
     void SendFusionData(FusionDataPacket &packet);
-    void SendAttack();
 
 public:
     CPlaneDlg *m_Dlg;

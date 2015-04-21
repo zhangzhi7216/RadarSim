@@ -774,7 +774,7 @@ void CDataCenterDlg::StartSim()
             }
             m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[index]);
         }
-        if (m_PlaneClients[i].m_PlaneSocket->IsAttack())
+        if (m_PlaneClients[i].m_PlaneSocket->IsRadar())
         {
             int index = m_NaviAlgoSel.GetCurSel();
             int count = m_NaviAlgoSel.GetCount();
@@ -786,16 +786,6 @@ void CDataCenterDlg::StartSim()
                 index = 0;
             }
             m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[index]);
-        }
-        if (m_PlaneClients[i].m_PlaneSocket->IsFusion() || m_PlaneClients[i].m_PlaneSocket->IsAttack())
-        {
-            for (int j = 0; j < PLANE_COUNT; ++j)
-            {
-                if (i != j)
-                {
-                    m_PlaneClients[i].m_PlaneSocket->SendOtherPlane(m_PlaneClients[j].m_Plane);
-                }
-            }
         }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
@@ -905,16 +895,6 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
 
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            if (m_PlaneClients[i].m_PlaneSocket->IsFusion() || m_PlaneClients[i].m_PlaneSocket->IsAttack())
-            {
-                for (int j = 0; j < PLANE_COUNT; ++j)
-                {
-                    if (i != j)
-                    {
-                        m_PlaneClients[i].m_PlaneSocket->SendOtherTrueData(j < i ? j : j - 1, m_PlaneClients[j].m_PlaneTrueDatas[index]);
-                    }
-                }
-            }
             TrueDataPacket packet;
             packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[index];
             for (int j = 0; j < m_TargetClients.size(); ++j)

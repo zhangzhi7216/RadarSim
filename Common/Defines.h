@@ -212,7 +212,8 @@ enum PacketType
 {
     PacketTypeImFusion = 0,
     PacketTypeFusionAddr,
-    PacketTypeImAttack,
+    PacketTypeImRadar,
+    PacketTypeImDetect,
     PacketTypeReset,
     PacketTypePlane,
     PacketTypeOtherPlane,

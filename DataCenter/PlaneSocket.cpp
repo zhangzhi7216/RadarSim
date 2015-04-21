@@ -7,7 +7,8 @@
 PlaneSocket::PlaneSocket(CDataCenterDlg *dlg)
 : m_Dlg(dlg)
 , m_IsFusion(false)
-, m_IsAttack(false)
+, m_IsRadar(false)
+, m_IsDetect(false)
 , m_FusionAddrSent(false)
 {
 }
@@ -140,9 +141,14 @@ bool PlaneSocket::IsFusion()
     return m_IsFusion;
 }
 
-bool PlaneSocket::IsAttack()
+bool PlaneSocket::IsRadar()
 {
-    return m_IsAttack;
+    return m_IsRadar;
+}
+
+bool PlaneSocket::IsDetect()
+{
+    return m_IsDetect;
 }
 
 void PlaneSocket::OnReceive(int nErrorCode)
@@ -164,16 +170,21 @@ void PlaneSocket::OnReceive(int nErrorCode)
             m_Dlg->SetFusionAddr(addr, port);
         }
         break;
-    case PacketTypeImAttack:
-        {
-            m_IsAttack = true;
-        }
-        break;
     case PacketTypeFusionData:
         {
             FusionDataPacket packet;
             ar >> packet;
             m_Dlg->AddFusionData(packet);
+        }
+        break;
+    case PacketTypeImRadar:
+        {
+            m_IsRadar = true;
+        }
+        break;
+    case PacketTypeImDetect:
+        {
+            m_IsDetect = true;
         }
         break;
     default:

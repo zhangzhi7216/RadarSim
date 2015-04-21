@@ -209,7 +209,7 @@ void DataCenterSocket::OnClose(int nErrorCode)
     CSocket::OnClose(nErrorCode);
 }
 
-void DataCenterSocket::SendFusionAddr(int port)
+void DataCenterSocket::SendImFusion(int port)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -218,12 +218,21 @@ void DataCenterSocket::SendFusionAddr(int port)
     ar.Flush();
 }
 
-void DataCenterSocket::SendAttack()
+void DataCenterSocket::SendImRadar()
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
 
-    ar << PacketTypeImAttack;
+    ar << PacketTypeImRadar;
+    ar.Flush();
+}
+
+void DataCenterSocket::SendImDetect()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeImDetect;
     ar.Flush();
 }
 

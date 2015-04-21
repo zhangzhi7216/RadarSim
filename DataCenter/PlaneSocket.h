@@ -35,12 +35,14 @@ public:
     void SendTrueData(TrueDataPacket &packet);
     void SendOtherTrueData(int i, TrueDataFrame &frame);
     bool IsFusion();
-    bool IsAttack();
+    bool IsRadar();
+    bool IsDetect();
 
 protected:
     CDataCenterDlg *m_Dlg;
     bool m_IsFusion;
-    bool m_IsAttack;
+    bool m_IsRadar;
+    bool m_IsDetect;
     bool m_FusionAddrSent;
 };
 

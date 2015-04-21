@@ -119,7 +119,7 @@ void CFusionPlaneDlg::ConnectDataCenter()
     CString addr;
     UINT port;
     m_FusionSocket->GetSockName(addr, port);
-    m_DataCenterSocket->SendFusionAddr(port);
+    m_DataCenterSocket->SendImFusion(port);
 }
 
 void CFusionPlaneDlg::ConnectFusion(const CString &addr, int port)
