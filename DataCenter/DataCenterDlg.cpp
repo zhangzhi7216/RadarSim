@@ -97,13 +97,21 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     m_Sensors[SensorIdEsm].m_ThetaRangeColor = Color::Red;
     m_Sensors[SensorIdEsm].m_ShowHeight = FALSE;
 
-    m_Sensors[SensorIdInfrared].m_Type = Sensor::SensorTypeNonSource;
-    m_Sensors[SensorIdInfrared].m_MaxDis = 250;
-    m_Sensors[SensorIdInfrared].m_MaxTheta = 60;
-    m_Sensors[SensorIdInfrared].m_ShowScanline = FALSE;
-    m_Sensors[SensorIdInfrared].m_ShowThetaRange = FALSE;
-    m_Sensors[SensorIdInfrared].m_ThetaRangeColor = Color::Yellow;
-    m_Sensors[SensorIdInfrared].m_ShowHeight = FALSE;
+    m_Sensors[SensorIdTong].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdTong].m_MaxDis = 250;
+    m_Sensors[SensorIdTong].m_MaxTheta = 60;
+    m_Sensors[SensorIdTong].m_ShowScanline = FALSE;
+    m_Sensors[SensorIdTong].m_ShowThetaRange = FALSE;
+    m_Sensors[SensorIdTong].m_ThetaRangeColor = Color::Yellow;
+    m_Sensors[SensorIdTong].m_ShowHeight = FALSE;
+
+    m_Sensors[SensorIdLei].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdLei].m_MaxDis = 250;
+    m_Sensors[SensorIdLei].m_MaxTheta = 60;
+    m_Sensors[SensorIdLei].m_ShowScanline = FALSE;
+    m_Sensors[SensorIdLei].m_ShowThetaRange = FALSE;
+    m_Sensors[SensorIdLei].m_ThetaRangeColor = Color::Yellow;
+    m_Sensors[SensorIdLei].m_ShowHeight = FALSE;
 }
 
 CDataCenterDlg::~CDataCenterDlg()
@@ -260,13 +268,9 @@ BOOL CDataCenterDlg::OnInitDialog()
         m_PlaneMotion.InsertString(i, TargetMoveTypeNames[i]);
     }
 
-    for (int i = 0; i < PLANE_COUNT; ++i)
-    {
-        m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
-        CString s;
-        s.AppendFormat(TEXT("我机%d"), i);
-        m_PlaneIdSel.InsertString(i, s);
-    }
+    m_Plane.m_Color = TargetColorRed;
+    CString s(TEXT("我机"));
+    m_PlaneIdSel.InsertString(0, s);
     m_PlaneIdSel.SetCurSel(0);
     OnCbnSelchangeDcPlaneId();
 
@@ -423,9 +427,9 @@ void CDataCenterDlg::AddPlaneSocket()
     int i;
     for (i = 0; i < PLANE_COUNT; ++i)
     {
-        if (m_PlaneClients[i].m_PlaneSocket == NULL)
+        if (m_PlaneSockets[i] == NULL)
         {
-            m_PlaneClients[i].m_PlaneSocket = socket;
+            m_PlaneSockets[i] = socket;
             break;
         }
     }
@@ -456,9 +460,9 @@ void CDataCenterDlg::SetFusionAddr(const CString &addr, int port)
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        if (m_PlaneClients[i].m_PlaneSocket)
+        if (m_PlaneSockets[i])
         {
-            m_PlaneClients[i].m_PlaneSocket->SendFusionAddr(m_FusionAddr, m_FusionPort);
+            m_PlaneSockets[i]->SendFusionAddr(m_FusionAddr, m_FusionPort);
         }
     }
     if (m_FusionConnected && m_ConnectedPlanes == PLANE_COUNT)
@@ -472,11 +476,11 @@ void CDataCenterDlg::ResetSockets()
     m_Lock.Lock();
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        if (m_PlaneClients[i].m_PlaneSocket)
+        if (m_PlaneSockets[i])
         {
-            m_PlaneClients[i].m_PlaneSocket->Close();
-            delete m_PlaneClients[i].m_PlaneSocket;
-            m_PlaneClients[i].m_PlaneSocket = NULL;
+            m_PlaneSockets[i]->Close();
+            delete m_PlaneSockets[i];
+            m_PlaneSockets[i] = NULL;
         }
     }
 
@@ -507,7 +511,7 @@ void CDataCenterDlg::ResetPlanes()
 {
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_PlaneClients[i].m_Plane.Reset();
+        m_Plane.Reset();
     }
 }
 
@@ -536,13 +540,13 @@ void CDataCenterDlg::GeneratePlaneClients()
 {
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_PlaneClients[i].m_Plane.m_Type = (TargetType)i;
-        m_PlaneClients[i].m_Plane.m_MoveType = (TargetMoveType)(i % 2);
-        m_PlaneClients[i].m_Plane.m_Position = Position(100, 10 + 200 * i, 100);
-        // m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, ((double)rand() - (double)RAND_MAX / 2) / ((double)RAND_MAX / 2) * 2, rand() % 3);
-        m_PlaneClients[i].m_Plane.m_Vel = Position(i + 1, 0, rand() % 3);
-        m_PlaneClients[i].m_Plane.m_Acc = Position(rand() % 1, rand() % 1, rand() % 1);
-        m_PlaneClients[i].m_Plane.m_Color = (TargetColor)i;
+        m_Plane.m_Type = (TargetType)i;
+        m_Plane.m_MoveType = (TargetMoveType)(i % 2);
+        m_Plane.m_Position = Position(100, 10 + 200 * i, 100);
+        // m_Plane.m_Vel = Position(i + 1, ((double)rand() - (double)RAND_MAX / 2) / ((double)RAND_MAX / 2) * 2, rand() % 3);
+        m_Plane.m_Vel = Position(i + 1, 0, rand() % 3);
+        m_Plane.m_Acc = Position(rand() % 1, rand() % 1, rand() % 1);
+        m_Plane.m_Color = (TargetColor)i;
     }
 }
 
@@ -565,7 +569,7 @@ void CDataCenterDlg::GenerateTrueData()
 {
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_PlaneClients[i].m_PlaneTrueDatas.clear();
+        m_PlaneTrueDatas.clear();
     }
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
@@ -591,7 +595,7 @@ void CDataCenterDlg::GenerateTrueData()
             {
                 TrueDataFrame frame;
                 ifs >> frame;
-                m_PlaneClients[i].m_PlaneTrueDatas.push_back(frame);
+                m_PlaneTrueDatas.push_back(frame);
             }
         }
         for (int i = 0; i < m_TargetClients.size(); ++i)
@@ -616,17 +620,17 @@ void CDataCenterDlg::GenerateTrueData()
             {
                 if (i != m_GlobalData.m_StartTime)
                 {
-                    m_PlaneClients[j].m_Plane.Move(m_GlobalData.m_Interval);
+                    m_Plane.Move(m_GlobalData.m_Interval);
                 }
-                // m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
-                // m_PlaneClients[j].m_Plane.m_Position = m_PlaneClients[j].m_Plane.m_Position + Position(3, 3, 3);
+                // m_Plane.m_Position = m_Plane.m_Position + Position(rand() % 3, (double)rand() / (double)RAND_MAX * cos(j * 3.1415926), rand() % 2);
+                // m_Plane.m_Position = m_Plane.m_Position + Position(3, 3, 3);
                 TrueDataFrame frame;
                 frame.m_Time = i;
-                frame.m_Id = m_PlaneClients[j].m_Plane.m_Id;
-                frame.m_Pos = m_PlaneClients[j].m_Plane.m_Position;
-                frame.m_Vel = m_PlaneClients[j].m_Plane.m_Vel;
-                frame.m_Acc = m_PlaneClients[j].m_Plane.m_Acc;
-                m_PlaneClients[j].m_PlaneTrueDatas.push_back(frame);
+                frame.m_Id = m_Plane.m_Id;
+                frame.m_Pos = m_Plane.m_Position;
+                frame.m_Vel = m_Plane.m_Vel;
+                frame.m_Acc = m_Plane.m_Acc;
+                m_PlaneTrueDatas.push_back(frame);
             }
             for (int j = 0; j < m_TargetClients.size(); ++j)
             {
@@ -663,8 +667,8 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     // 显示本帧我机
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_StateMap.AddPlaneData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneClients[i].m_PlaneTrueDatas[index].m_State));
-        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneClients[i].m_PlaneTrueDatas[index].m_Pos);
+        m_StateMap.AddPlaneData(i, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneTrueDatas[index].m_State));
+        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneTrueDatas[index].m_Pos);
     }
 
     // 检测本帧是否发生爆炸
@@ -719,8 +723,8 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     // 校正攻击机位置
     if (m_CurrentFrame < m_GlobalData.m_EndTime - m_GlobalData.m_Interval)
     {
-        TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
-        m_PlaneClients[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;
+        // TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
+        // m_PlaneSockets[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;
     }
 
     // 校正导弹位置
@@ -755,14 +759,21 @@ void CDataCenterDlg::StartSim()
     // GenerateTargetClients();
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_PlaneClients[i].m_PlaneSocket->SendReset();
-        m_PlaneClients[i].m_PlaneSocket->SendPlane(m_PlaneClients[i].m_Plane);
-        m_PlaneClients[i].m_PlaneSocket->SendRadar(m_Sensors[SensorIdRadar]);
-        m_PlaneClients[i].m_PlaneSocket->SendEsm(m_Sensors[SensorIdEsm]);
-        m_PlaneClients[i].m_PlaneSocket->SendInfrared(m_Sensors[SensorIdInfrared]);
-        m_PlaneClients[i].m_PlaneSocket->SendStateMap(m_StateMap);
-        if (m_PlaneClients[i].m_PlaneSocket->IsFusion())
+        m_PlaneSockets[i]->SendReset();
+        m_PlaneSockets[i]->SendPlane(m_Plane);
+        if (m_PlaneSockets[i]->IsRadar())
         {
+            m_PlaneSockets[i]->SendRadar(m_Sensors[SensorIdRadar]);
+            m_PlaneSockets[i]->SendEsm(m_Sensors[SensorIdEsm]);
+        }
+        if (m_PlaneSockets[i]->IsRadar())
+        {
+            m_PlaneSockets[i]->SendTong(m_Sensors[SensorIdTong]);
+            m_PlaneSockets[i]->SendLei(m_Sensors[SensorIdLei]);
+        }
+        if (m_PlaneSockets[i]->IsFusion())
+        {
+            m_PlaneSockets[i]->SendStateMap(m_StateMap);
             int index = m_FusionAlgoSel.GetCurSel();
             int count = m_FusionAlgoSel.GetCount();
             if ((index != CB_ERR) && (count >= 1))
@@ -772,33 +783,20 @@ void CDataCenterDlg::StartSim()
             {
                 index = 0;
             }
-            m_PlaneClients[i].m_PlaneSocket->SendFusionAlgo(m_FusionAlgos[index]);
-        }
-        if (m_PlaneClients[i].m_PlaneSocket->IsRadar())
-        {
-            int index = m_NaviAlgoSel.GetCurSel();
-            int count = m_NaviAlgoSel.GetCount();
-            if ((index != CB_ERR) && (count >= 1))
-            {
-            }
-            else
-            {
-                index = 0;
-            }
-            m_PlaneClients[i].m_PlaneSocket->SendNaviAlgo(m_NaviAlgos[index]);
+            m_PlaneSockets[i]->SendFusionAlgo(m_FusionAlgos[index]);
         }
         for (int j = 0; j < m_TargetClients.size(); ++j)
         {
-            m_PlaneClients[i].m_PlaneSocket->SendTarget(m_TargetClients[j].m_Target);
+            m_PlaneSockets[i]->SendTarget(m_TargetClients[j].m_Target);
         }
-        m_PlaneClients[i].m_PlaneSocket->SendGlobalData(m_GlobalData);
+        m_PlaneSockets[i]->SendGlobalData(m_GlobalData);
     }
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        m_StateMap.AddPlane(m_PlaneClients[i].m_Plane, &m_Sensors[SensorIdRadar], &m_Sensors[SensorIdEsm], &m_Sensors[SensorIdInfrared]);
-        m_StateMapDlg.AddPlane(m_PlaneClients[i].m_Plane);
-        m_MatlabDlg.AddPlane(m_PlaneClients[i].m_Plane);
+        m_StateMap.AddPlane(m_Plane, &m_Sensors[SensorIdRadar], &m_Sensors[SensorIdEsm], &m_Sensors[SensorIdTong], &m_Sensors[SensorIdLei]);
+        m_StateMapDlg.AddPlane(m_Plane);
+        m_MatlabDlg.AddPlane(m_Plane);
     }
 
     for (int i = 0; i < m_TargetClients.size(); ++i)
@@ -896,12 +894,12 @@ void CDataCenterDlg::OnTimer(UINT_PTR nIDEvent)
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
             TrueDataPacket packet;
-            packet.m_PlaneTrueData = m_PlaneClients[i].m_PlaneTrueDatas[index];
+            packet.m_PlaneTrueData = m_PlaneTrueDatas[index];
             for (int j = 0; j < m_TargetClients.size(); ++j)
             {
                 packet.m_TargetTrueDatas.push_back(m_TargetClients[j].m_TargetTrueDatas[index]);
             }
-            m_PlaneClients[i].m_PlaneSocket->SendTrueData(packet);
+            m_PlaneSockets[i]->SendTrueData(packet);
 
         }
     }
@@ -1371,7 +1369,7 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
         // ar >> PLANE_COUNT;
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            ar >> m_PlaneClients[i].m_Plane;
+            ar >> m_Plane;
         }
         int targetSize = 0;
         ar >> targetSize;
@@ -1460,7 +1458,7 @@ void CDataCenterDlg::OnBnClickedConfigSave()
         // ar << PLANE_COUNT;
         for (int i = 0; i < PLANE_COUNT; ++i)
         {
-            ar << m_PlaneClients[i].m_Plane;
+            ar << m_Plane;
         }
         ar << m_TargetClients.size();
         for (int i = 0; i < m_TargetClients.size(); ++i)
@@ -1573,7 +1571,7 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneId()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1609,7 +1607,7 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneMotion()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1631,7 +1629,7 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneColor()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1653,7 +1651,7 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneType()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1680,7 +1678,7 @@ void CDataCenterDlg::OnEnChangeDcPlanePosX()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1709,7 +1707,7 @@ void CDataCenterDlg::OnEnChangeDcPlanePosY()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1738,7 +1736,7 @@ void CDataCenterDlg::OnEnChangeDcPlanePosZ()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1767,7 +1765,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelX()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1796,7 +1794,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelY()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1825,7 +1823,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelZ()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1854,7 +1852,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccX()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1883,7 +1881,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccY()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1912,7 +1910,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccZ()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1941,7 +1939,7 @@ void CDataCenterDlg::OnEnChangeDcPlanePal()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -1970,7 +1968,7 @@ void CDataCenterDlg::OnEnChangeDcPlaneRadius()
         Target *p = NULL;
         if (index < PLANE_COUNT)
         {
-            p = &m_PlaneClients[index].m_Plane;
+            p = &m_Plane;
         }
         else
         {
@@ -2011,11 +2009,11 @@ void CDataCenterDlg::DumpTrueData(LPCWSTR path)
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        ofs << m_PlaneClients[i].m_PlaneTrueDatas.size() << endl;
+        ofs << m_PlaneTrueDatas.size() << endl;
         ofs << endl;
-        for (int j = 0; j < m_PlaneClients[i].m_PlaneTrueDatas.size(); ++j)
+        for (int j = 0; j < m_PlaneTrueDatas.size(); ++j)
         {
-            ofs << m_PlaneClients[i].m_PlaneTrueDatas[j] << endl;
+            ofs << m_PlaneTrueDatas[j] << endl;
         }
         ofs << endl;
     }
@@ -2104,7 +2102,7 @@ void CDataCenterDlg::OutputPlaneTrueData()
     ofs << endl;
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
-        vector<TrueDataFrame> &trueDatas = m_PlaneClients[i].m_PlaneTrueDatas;
+        vector<TrueDataFrame> &trueDatas = m_PlaneTrueDatas;
         ofs << trueDatas.size() << endl;
         ofs << endl;
         for (int j = 0; j < trueDatas.size(); ++j)

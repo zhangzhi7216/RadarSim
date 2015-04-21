@@ -202,10 +202,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PlaneClient.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\PlaneSocket.cpp"
 				>
 			</File>
@@ -249,10 +245,6 @@
 			</File>
 			<File
 				RelativePath=".\DataCenterSocket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PlaneClient.h"
 				>
 			</File>
 			<File

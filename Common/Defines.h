@@ -218,9 +218,8 @@ enum PacketType
     PacketTypePlane,
     PacketTypeOtherPlane,
     PacketTypeTarget,
-    PacketTypeRadar,
-    PacketTypeEsm,
-    PacketTypeInfrared,
+    PacketTypeSensor1,
+    PacketTypeSensor2,
     PacketTypeStateMap,
     PacketTypeFusionAlgo,
     PacketTypeNaviAlgo,
@@ -246,7 +245,8 @@ enum SensorId
 {
     SensorIdRadar = 0,
     SensorIdEsm,
-    SensorIdInfrared,
+    SensorIdTong,
+    SensorIdLei,
     SensorIdLast,
 };
 extern CString __declspec(dllimport) SensorIdNames[SensorIdLast];

@@ -223,10 +223,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\EsmDlg.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\EvalItem.cpp"
 				>
 			</File>
@@ -374,10 +370,6 @@
 			</File>
 			<File
 				RelativePath=".\Defines.h"
-				>
-			</File>
-			<File
-				RelativePath=".\EsmDlg.h"
 				>
 			</File>
 			<File

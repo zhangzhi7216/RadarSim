@@ -142,16 +142,27 @@ void CStateMapCtrl::DrawTargets()
                         -m_StateMap.m_Esms[i]->m_MaxTheta / 2.0,
                         m_StateMap.m_Esms[i]->m_MaxTheta);
                 }
-                if (m_StateMap.m_Infrareds[i]->m_Enable)
+                if (m_StateMap.m_Tongs[i]->m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Infrareds[i]->m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Tongs[i]->m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Infrareds[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Infrareds[i]->m_MaxTheta / 2.0,
-                        m_StateMap.m_Infrareds[i]->m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Tongs[i]->m_MaxTheta / 2.0,
+                        m_StateMap.m_Tongs[i]->m_MaxTheta);
+                }
+                if (m_StateMap.m_Leis[i]->m_Enable)
+                {
+                    Pen pen(m_StateMap.m_Leis[i]->m_ThetaRangeColor);
+                    graphics.DrawPie(&pen,
+                        (float)(pt.X - m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Leis[i]->m_MaxTheta / 2.0,
+                        m_StateMap.m_Leis[i]->m_MaxTheta);
                 }
             }
 

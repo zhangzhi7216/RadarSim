@@ -41,7 +41,8 @@ void StateMap::Reset()
 
     m_Radars.clear();
     m_Esms.clear();
-    m_Infrareds.clear();
+    m_Tongs.clear();
+    m_Leis.clear();
 }
 
 void StateMap::AddPlaneData(int plane, Position pos, Velocity vel, TargetState state)
@@ -51,7 +52,7 @@ void StateMap::AddPlaneData(int plane, Position pos, Velocity vel, TargetState s
     m_PlaneStates[plane] = state;
 }
 
-void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
+void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *tong, Sensor *lei)
 {
     m_PlaneTypes.push_back(plane.m_Type);
     m_PlaneColors.push_back(plane.m_Color);
@@ -61,7 +62,8 @@ void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrar
 
     m_Radars.push_back(radar);
     m_Esms.push_back(esm);
-    m_Infrareds.push_back(infrared);
+    m_Tongs.push_back(tong);
+    m_Leis.push_back(lei);
 }
 
 void StateMap::AddTarget(Target &target)

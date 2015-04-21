@@ -7,7 +7,6 @@
 
 #include "../Common/StateMap.h"
 #include "../Common/StateMapDlg.h"
-#include "PlaneClient.h"
 #include "TargetClient.h"
 #include "../Common/DataPacket.h"
 // #include "../Common/MatlabDlg3.h"
@@ -74,7 +73,9 @@ public:
     afx_msg void OnBnClickedOk();
 
     Sensor m_Sensors[SensorIdLast];
-    PlaneClient m_PlaneClients[PLANE_COUNT];
+    Plane m_Plane;
+    vector<TrueDataFrame> m_PlaneTrueDatas;
+    PlaneSocket *m_PlaneSockets[PLANE_COUNT];
     vector<TargetClient> m_TargetClients;
     vector<Missile> m_Missiles;
 

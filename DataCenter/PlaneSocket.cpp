@@ -68,7 +68,7 @@ void PlaneSocket::SendRadar(Sensor &radar)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeRadar << radar;
+    ar << PacketTypeSensor1 << radar;
     ar.Flush();
 }
 
@@ -76,15 +76,23 @@ void PlaneSocket::SendEsm(Sensor &esm)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeEsm << esm;
+    ar << PacketTypeSensor2 << esm;
     ar.Flush();
 }
 
-void PlaneSocket::SendInfrared(Sensor &infrared)
+void PlaneSocket::SendTong(Sensor &tong)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeInfrared << infrared;
+    ar << PacketTypeSensor1 << tong;
+    ar.Flush();
+}
+
+void PlaneSocket::SendLei(Sensor &lei)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeSensor2 << lei;
     ar.Flush();
 }
 

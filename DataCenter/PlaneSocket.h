@@ -27,7 +27,8 @@ public:
     void SendTarget(Target &target);
     void SendRadar(Sensor &radar);
     void SendEsm(Sensor &esm);
-    void SendInfrared(Sensor &infrared);
+    void SendTong(Sensor &Tong);
+    void SendLei(Sensor &lei);
     void SendStateMap(StateMap &stateMap);
     void SendFusionAlgo(FusionAlgo *algo);
     void SendNaviAlgo(NaviAlgo *algo);

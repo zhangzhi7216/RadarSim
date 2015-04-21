@@ -24,20 +24,20 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
     , m_Title(title)
     , m_Initialized(false)
     , m_DlgType(DlgTypePlane)
-    , m_ShowRadarDlg(false)
-    , m_Radar(Sensor::SensorTypeSource, m_Plane, m_GlobalData)
-    , m_RadarCtrl(m_Radar)
-    , m_RadarDlg(TEXT("雷达"), m_Radar, this)
-    , m_ShowEsmDlg(false)
-    , m_Esm(Sensor::SensorTypeNonSource, m_Plane, m_GlobalData)
-    , m_EsmCtrl(m_Esm)
-    , m_EsmDlg(TEXT("ESM"), m_Esm, this)
+    , m_ShowSensor1Dlg(false)
+    , m_Sensor1(Sensor::SensorTypeSource, m_Plane, m_GlobalData)
+    , m_Sensor1Ctrl(m_Sensor1)
+    , m_Sensor1Dlg(TEXT("雷达"), m_Sensor1, this)
+    , m_ShowSensor2Dlg(false)
+    , m_Sensor2(Sensor::SensorTypeNonSource, m_Plane, m_GlobalData)
+    , m_Sensor2Ctrl(m_Sensor2)
+    , m_Sensor2Dlg(TEXT("ESM"), m_Sensor2, this)
     , m_ShowInfraredDlg(false)
     , m_Infrared(Sensor::SensorTypeNonSource, m_Plane, m_GlobalData)
     , m_InfraredCtrl(m_Infrared)
     , m_InfraredDlg(TEXT("红外"), m_Infrared, this)
     , m_ShowDataListDlg(false)
-    , m_DataList(m_Radar, m_Esm, m_Infrared)
+    , m_DataList(m_Sensor1, m_Sensor2, m_Infrared)
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
     , m_MatlabDlg(NULL)
@@ -49,8 +49,8 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-    m_RadarDlg.m_Dlg = this;
-    m_EsmDlg.m_Dlg = this;
+    m_Sensor1Dlg.m_Dlg = this;
+    m_Sensor2Dlg.m_Dlg = this;
     m_InfraredDlg.m_Dlg = this;
     m_DataListDlg.m_Dlg = this;
 
@@ -61,8 +61,8 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
 void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_RADAR_CTRL, m_RadarCtrl);
-    DDX_Control(pDX, IDC_ESM_CTRL, m_EsmCtrl);
+    DDX_Control(pDX, IDC_SENSOR1_CTRL, m_Sensor1Ctrl);
+    DDX_Control(pDX, IDC_SENSOR2_CTRL, m_Sensor2Ctrl);
     DDX_Control(pDX, IDC_INFRARED_CTRL, m_InfraredCtrl);
     DDX_Control(pDX, IDC_DATALIST_CTRL, m_DataListCtrl);
 }
@@ -72,8 +72,8 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CCommonDlg)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
     ON_WM_SIZE()
-    ON_STN_DBLCLK(IDC_RADAR_CTRL, &CPlaneDlg::OnStnDblclickRadarCtrl)
-    ON_STN_DBLCLK(IDC_ESM_CTRL, &CPlaneDlg::OnStnDblclickEsmCtrl)
+    ON_STN_DBLCLK(IDC_SENSOR1_CTRL, &CPlaneDlg::OnStnDblclickSensor1Ctrl)
+    ON_STN_DBLCLK(IDC_SENSOR2_CTRL, &CPlaneDlg::OnStnDblclickSensor2Ctrl)
     ON_STN_DBLCLK(IDC_INFRARED_CTRL, &CPlaneDlg::OnStnDblclickInfraredCtrl)
     ON_WM_TIMER()
     ON_NOTIFY(NM_DBLCLK, IDC_DATALIST_CTRL, &CPlaneDlg::OnNMDblclkDatalistCtrl)
@@ -105,19 +105,19 @@ BOOL CPlaneDlg::OnInitDialog()
 
     Resize();
 
-    CSensorDlg::CreateDlg(m_RadarDlg);
-    if (m_ShowRadarDlg)
+    CSensorDlg::CreateDlg(m_Sensor1Dlg);
+    if (m_ShowSensor1Dlg)
     {
-        m_RadarDlg.ShowWindow(SW_SHOW);
+        m_Sensor1Dlg.ShowWindow(SW_SHOW);
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
     }
 
-    CSensorDlg::CreateDlg(m_EsmDlg);
-    if (m_ShowEsmDlg)
+    CSensorDlg::CreateDlg(m_Sensor2Dlg);
+    if (m_ShowSensor2Dlg)
     {
-        m_EsmDlg.ShowWindow(SW_SHOW);
+        m_Sensor2Dlg.ShowWindow(SW_SHOW);
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -227,21 +227,21 @@ void CPlaneDlg::Resize()
     RECT rect;
     GetClientRect(&rect);
 
-    // Resize Radar.
+    // Resize Sensor1.
     int left = rect.left + PAD, width = (rect.right - rect.left) / 2 - PAD * 2, top = rect.top + PAD, height = (rect.bottom - rect.top) / 2 - PAD * 2;
     if (width > height)
     {
         width = height;
     }
-    GetDlgItem(IDC_RADAR_CTRL_GRP)->MoveWindow(left, top, width, height);
+    GetDlgItem(IDC_SENSOR1_CTRL_GRP)->MoveWindow(left, top, width, height);
 
     left = left + PAD;
     width = width - PAD *2;
     top = top + PAD * 2;
     height = height - PAD * 3;
-    m_RadarCtrl.MoveWindow(left, top, width, height);
+    m_Sensor1Ctrl.MoveWindow(left, top, width, height);
 
-    // Resize ESM.
+    // Resize Sensor2..
     left = rect.left + PAD;
     width = (rect.right - rect.left) / 2 - PAD * 2;
     top = (rect.bottom - rect.top) / 2 + PAD;
@@ -250,13 +250,13 @@ void CPlaneDlg::Resize()
     {
         width = height;
     }
-    GetDlgItem(IDC_ESM_CTRL_GRP)->MoveWindow(left, top, width, height);
+    GetDlgItem(IDC_SENSOR2_CTRL_GRP)->MoveWindow(left, top, width, height);
 
     left = left + PAD;
     width = width - PAD *2;
     top = top + PAD * 2;
     height = height - PAD * 3;
-    m_EsmCtrl.MoveWindow(left, top, width, height);
+    m_Sensor2Ctrl.MoveWindow(left, top, width, height);
 
     // Resize DataList.
     left = left + width + PAD + PAD * 2;
@@ -316,33 +316,33 @@ void CPlaneDlg::OnSize(UINT nType, int cx, int cy)
     }
 }
 
-void CPlaneDlg::OnStnDblclickRadarCtrl()
+void CPlaneDlg::OnStnDblclickSensor1Ctrl()
 {
     // TODO: 在此添加控件通知处理程序代码
-    if (m_ShowRadarDlg)
+    if (m_ShowSensor1Dlg)
     {
-        m_RadarDlg.ShowWindow(SW_HIDE);
-        m_ShowRadarDlg = false;
+        m_Sensor1Dlg.ShowWindow(SW_HIDE);
+        m_ShowSensor1Dlg = false;
     }
     else
     {
-        m_RadarDlg.ShowWindow(SW_SHOW);
-        m_ShowRadarDlg = true;
+        m_Sensor1Dlg.ShowWindow(SW_SHOW);
+        m_ShowSensor1Dlg = true;
     }
 }
 
-void CPlaneDlg::OnStnDblclickEsmCtrl()
+void CPlaneDlg::OnStnDblclickSensor2Ctrl()
 {
     // TODO: 在此添加控件通知处理程序代码
-    if (m_ShowEsmDlg)
+    if (m_ShowSensor2Dlg)
     {
-        m_EsmDlg.ShowWindow(SW_HIDE);
-        m_ShowEsmDlg = false;
+        m_Sensor2Dlg.ShowWindow(SW_HIDE);
+        m_ShowSensor2Dlg = false;
     }
     else
     {
-        m_EsmDlg.ShowWindow(SW_SHOW);
-        m_ShowEsmDlg = true;
+        m_Sensor2Dlg.ShowWindow(SW_SHOW);
+        m_ShowSensor2Dlg = true;
     }
 }
 
@@ -417,31 +417,31 @@ void CPlaneDlg::OnTimer(UINT_PTR nIDEvent)
         Position rel0 = m_Targets[0].m_Position - m_Plane.m_Position;
         Position rel1 = m_Targets[1].m_Position - m_Plane.m_Position;
 
-        m_Radar.AddTargetData(0, rel0);
-        m_Esm.AddTargetData(0, rel0);
+        m_Sensor1.AddTargetData(0, rel0);
+        m_Sensor2.AddTargetData(0, rel0);
         m_Infrared.AddTargetData(0, rel0);
-        m_Radar.AddTargetData(1, rel1);
-        m_Esm.AddTargetData(1, rel1);
+        m_Sensor1.AddTargetData(1, rel1);
+        m_Sensor2.AddTargetData(1, rel1);
         m_Infrared.AddTargetData(1, rel1);
         m_StateMap.AddPlaneData(0, m_Plane.m_Position, m_Plane.m_Vel, m_Plane.m_State);
         m_StateMap.AddTargetData(0, m_Targets[0].m_Position, m_Targets[0].m_Vel, m_Targets[0].m_State);
         m_StateMap.AddTargetData(1, m_Targets[1].m_Position, m_Targets[0].m_Vel, m_Targets[1].m_State);
 
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
 
-        m_RadarDlg.m_Ctrl->DrawTargets();
-        m_RadarDlg.m_Ctrl->BlendAll();
-        m_RadarDlg.m_Ctrl->Invalidate();
+        m_Sensor1Dlg.m_Ctrl->DrawTargets();
+        m_Sensor1Dlg.m_Ctrl->BlendAll();
+        m_Sensor1Dlg.m_Ctrl->Invalidate();
 
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
 
-        m_EsmDlg.m_Ctrl->DrawTargets();
-        m_EsmDlg.m_Ctrl->BlendAll();
-        m_EsmDlg.m_Ctrl->Invalidate();
+        m_Sensor2Dlg.m_Ctrl->DrawTargets();
+        m_Sensor2Dlg.m_Ctrl->BlendAll();
+        m_Sensor2Dlg.m_Ctrl->Invalidate();
 
         m_InfraredCtrl.DrawTargets();
         m_InfraredCtrl.BlendAll();
@@ -483,8 +483,8 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         }
         Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
 
-        m_Radar.AddTargetData(i, rel);
-        m_Esm.AddTargetData(i, rel);
+        m_Sensor1.AddTargetData(i, rel);
+        m_Sensor2.AddTargetData(i, rel);
         m_Infrared.AddTargetData(i, rel);
 
         m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
@@ -497,11 +497,11 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         NoiseDataFrame frame;
         frame.m_Time = packet.m_PlaneTrueData.m_Time;
         frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
-        frame.m_Dis = m_Radar.m_TargetDistances[i].back();
+        frame.m_Dis = m_Sensor1.m_TargetDistances[i].back();
         frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
 		if (!m_Infrared.IsInRange(i, rel))
 		{
-			frame.m_Theta = m_Esm.m_TargetThetas[i].back();
+			frame.m_Theta = m_Sensor2.m_TargetThetas[i].back();
 		}
         frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
         if (!(frame.m_Dis == 0 && frame.m_Theta == 0 && frame.m_Phi == 0))
@@ -515,21 +515,21 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         }
     }
 
-    m_RadarCtrl.DrawTargets();
-    m_RadarCtrl.BlendAll();
-    m_RadarCtrl.Invalidate();
+    m_Sensor1Ctrl.DrawTargets();
+    m_Sensor1Ctrl.BlendAll();
+    m_Sensor1Ctrl.Invalidate();
 
-    m_RadarDlg.m_Ctrl->DrawTargets();
-    m_RadarDlg.m_Ctrl->BlendAll();
-    m_RadarDlg.m_Ctrl->Invalidate();
+    m_Sensor1Dlg.m_Ctrl->DrawTargets();
+    m_Sensor1Dlg.m_Ctrl->BlendAll();
+    m_Sensor1Dlg.m_Ctrl->Invalidate();
 
-    m_EsmCtrl.DrawTargets();
-    m_EsmCtrl.BlendAll();
-    m_EsmCtrl.Invalidate();
+    m_Sensor2Ctrl.DrawTargets();
+    m_Sensor2Ctrl.BlendAll();
+    m_Sensor2Ctrl.Invalidate();
 
-    m_EsmDlg.m_Ctrl->DrawTargets();
-    m_EsmDlg.m_Ctrl->BlendAll();
-    m_EsmDlg.m_Ctrl->Invalidate();
+    m_Sensor2Dlg.m_Ctrl->DrawTargets();
+    m_Sensor2Dlg.m_Ctrl->BlendAll();
+    m_Sensor2Dlg.m_Ctrl->Invalidate();
 
     m_InfraredCtrl.DrawTargets();
     m_InfraredCtrl.BlendAll();
@@ -604,15 +604,15 @@ void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePack
         {
             frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
             frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
-            frame.m_Dis = m_Radar.m_TargetDistances[i].back();
-            frame.m_DisVar = m_Radar.m_DisVar;
+            frame.m_Dis = m_Sensor1.m_TargetDistances[i].back();
+            frame.m_DisVar = m_Sensor1.m_DisVar;
             frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
             frame.m_ThetaVar = m_Infrared.m_ThetaVar;
             Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
             if (!m_Infrared.IsInRange(i, rel))
             {
-                frame.m_Theta = m_Esm.m_TargetThetas[i].back();
-                frame.m_ThetaVar = m_Esm.m_ThetaVar;
+                frame.m_Theta = m_Sensor2.m_TargetThetas[i].back();
+                frame.m_ThetaVar = m_Sensor2.m_ThetaVar;
             }
             frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
             frame.m_PhiVar = m_Infrared.m_PhiVar;
@@ -648,13 +648,13 @@ void CPlaneDlg::ResetCtrls()
 
     ResetSensors();
 
-    m_RadarCtrl.Reset();
-    m_EsmCtrl.Reset();
+    m_Sensor1Ctrl.Reset();
+    m_Sensor2Ctrl.Reset();
     m_InfraredCtrl.Reset();
     m_DataListCtrl.Reset();
 
-    m_RadarDlg.Reset();
-    m_EsmDlg.Reset();
+    m_Sensor1Dlg.Reset();
+    m_Sensor2Dlg.Reset();
     m_InfraredDlg.Reset();
     if (m_MatlabDlg)
     {
@@ -667,20 +667,20 @@ void CPlaneDlg::ResetCtrls()
 
 void CPlaneDlg::ResetSensors()
 {
-    m_Radar.Reset();
-    m_Esm.Reset();
+    m_Sensor1.Reset();
+    m_Sensor2.Reset();
     m_Infrared.Reset();
     m_DataList.Reset();
 
     m_StateMap.Reset();
 
-    m_Esm.m_MaxDis = 250;
-    m_Esm.m_MaxTheta = 90;
+    m_Sensor2.m_MaxDis = 250;
+    m_Sensor2.m_MaxTheta = 90;
     m_Infrared.m_MaxDis = 350;
     m_Infrared.m_MaxTheta = 60;
 
-    m_Esm.m_ThetaRangeColor = Color::Red;
-    m_Esm.m_ShowHeight = FALSE;
+    m_Sensor2.m_ThetaRangeColor = Color::Red;
+    m_Sensor2.m_ShowHeight = FALSE;
     m_Infrared.m_ShowScanline = FALSE;
     m_Infrared.m_ShowThetaRange = FALSE;
     m_Infrared.m_ThetaRangeColor = Color::Yellow;
@@ -690,15 +690,15 @@ void CPlaneDlg::ResetSensors()
     m_StateMap.m_ExplosionType = ExplosionType0;
 }
 
-void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared)
+void CPlaneDlg::AddPlane(Plane &plane, Sensor *sensor1, Sensor *sensor2, Sensor *infrared)
 {
     CString newTitle = m_Title;
     newTitle.AppendFormat(TEXT("%d"), plane.m_Id);
     SetWindowTextW(newTitle);
     CString newSubDlgTitle = newTitle + TEXT("雷达");
-    m_RadarDlg.SetWindowTextW(newSubDlgTitle);
+    m_Sensor1Dlg.SetWindowTextW(newSubDlgTitle);
     newSubDlgTitle = newTitle + TEXT("ESM");
-    m_EsmDlg.SetWindowTextW(newSubDlgTitle);
+    m_Sensor2Dlg.SetWindowTextW(newSubDlgTitle);
     newSubDlgTitle = newTitle + TEXT("红外");
     m_InfraredDlg.SetWindowTextW(newSubDlgTitle);
     newSubDlgTitle = newTitle + TEXT("数据列表");
@@ -710,7 +710,7 @@ void CPlaneDlg::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infra
     {
         m_MatlabDlg->AddPlane(plane);
     }
-    m_StateMap.AddPlane(plane, radar, esm, infrared);
+    m_StateMap.AddPlane(plane, sensor1, sensor2, infrared);
     m_StateMapDlg.AddPlane(plane);
 }
 
@@ -720,7 +720,7 @@ void CPlaneDlg::AddOtherPlane(Plane &plane)
     {
         m_MatlabDlg->AddPlane(plane);
     }
-    m_StateMap.AddPlane(plane, &m_Radar, &m_Esm, &m_Infrared);
+    m_StateMap.AddPlane(plane, &m_Sensor1, &m_Sensor2, &m_Infrared);
     m_StateMapDlg.AddPlane(plane);
 }
 
@@ -728,19 +728,19 @@ void CPlaneDlg::AddTarget(Target &target)
 {
     m_Targets.push_back(target);
 
-    m_Radar.AddTarget(target);
-    m_Esm.AddTarget(target);
+    m_Sensor1.AddTarget(target);
+    m_Sensor2.AddTarget(target);
     m_Infrared.AddTarget(target);
     m_DataList.AddTarget(target);
     m_StateMap.AddTarget(target);
 
-    m_RadarCtrl.AddTarget(target);
-    m_EsmCtrl.AddTarget(target);
+    m_Sensor1Ctrl.AddTarget(target);
+    m_Sensor2Ctrl.AddTarget(target);
     m_InfraredCtrl.AddTarget(target);
     m_DataListCtrl.AddTarget(target);
 
-    m_RadarDlg.AddTarget(target);
-    m_EsmDlg.AddTarget(target);
+    m_Sensor1Dlg.AddTarget(target);
+    m_Sensor2Dlg.AddTarget(target);
     m_InfraredDlg.AddTarget(target);
     m_DataListDlg.AddTarget(target);
     m_StateMapDlg.AddTarget(target);
@@ -769,13 +769,13 @@ void CPlaneDlg::AddMissile(int id)
 
 void CPlaneDlg::OnSubDlgClose(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        OnStnDblclickRadarCtrl();
+        OnStnDblclickSensor1Ctrl();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        OnStnDblclickEsmCtrl();
+        OnStnDblclickSensor2Ctrl();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -793,20 +793,20 @@ void CPlaneDlg::OnSubDlgClose(void *subDlg)
 
 void CPlaneDlg::OnSubDlgEnable(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
@@ -816,31 +816,31 @@ void CPlaneDlg::OnSubDlgEnable(void *subDlg)
 
 void CPlaneDlg::OnSubDlgShowScanline(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
 }
 
 void CPlaneDlg::OnSubDlgShowTrack(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -852,17 +852,17 @@ void CPlaneDlg::OnSubDlgShowTrack(void *subDlg)
 
 void CPlaneDlg::OnSubDlgTargetColor(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -874,17 +874,17 @@ void CPlaneDlg::OnSubDlgTargetColor(void *subDlg)
 
 void CPlaneDlg::OnSubDlgMaxDis(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -900,19 +900,19 @@ void CPlaneDlg::OnSubDlgMaxDis(void *subDlg)
 
 void CPlaneDlg::OnSubDlgMaxTheta(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawThetaRange();
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawThetaRange();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawThetaRange();
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawThetaRange();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -929,17 +929,17 @@ void CPlaneDlg::OnSubDlgMaxTheta(void *subDlg)
 
 void CPlaneDlg::OnSubDlgMaxPhi(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -951,17 +951,17 @@ void CPlaneDlg::OnSubDlgMaxPhi(void *subDlg)
 
 void CPlaneDlg::OnSubDlgDisVar(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -973,17 +973,17 @@ void CPlaneDlg::OnSubDlgDisVar(void *subDlg)
 
 void CPlaneDlg::OnSubDlgThetaVar(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -995,17 +995,17 @@ void CPlaneDlg::OnSubDlgThetaVar(void *subDlg)
 
 void CPlaneDlg::OnSubDlgPhiVar(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -1017,17 +1017,17 @@ void CPlaneDlg::OnSubDlgPhiVar(void *subDlg)
 
 void CPlaneDlg::OnSubDlgProDet(void *subDlg)
 {
-    if (subDlg == (void *)&m_RadarDlg)
+    if (subDlg == (void *)&m_Sensor1Dlg)
     {
-        m_RadarCtrl.DrawTargets();
-        m_RadarCtrl.BlendAll();
-        m_RadarCtrl.Invalidate();
+        m_Sensor1Ctrl.DrawTargets();
+        m_Sensor1Ctrl.BlendAll();
+        m_Sensor1Ctrl.Invalidate();
     }
-    else if (subDlg == (void *)&m_EsmDlg)
+    else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_EsmCtrl.DrawTargets();
-        m_EsmCtrl.BlendAll();
-        m_EsmCtrl.Invalidate();
+        m_Sensor2Ctrl.DrawTargets();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
     else if (subDlg == (void *)&m_InfraredDlg)
     {
@@ -1144,96 +1144,65 @@ void CPlaneDlg::SetPlane(Plane &plane)
 {
     m_Plane = plane;
 
-    AddPlane(m_Plane, &m_Radar, &m_Esm, &m_Infrared);
+    AddPlane(m_Plane, &m_Sensor1, &m_Sensor2, &m_Infrared);
 }
 
-void CPlaneDlg::SetRadar(Sensor &radar)
+void CPlaneDlg::SetSensor1(Sensor &sensor1)
 {
-    m_Radar.m_Type = radar.m_Type;
-    m_Radar.m_Enable = radar.m_Enable;
-    m_Radar.m_MaxDis = radar.m_MaxDis;
-    m_Radar.m_MaxTheta = radar.m_MaxTheta;
-    m_Radar.m_MaxPhi = radar.m_MaxPhi;
-    m_Radar.m_DisVar = radar.m_DisVar;
-    m_Radar.m_ThetaVar = radar.m_ThetaVar;
-    m_Radar.m_PhiVar = radar.m_PhiVar;
-    m_Radar.m_ProDet = radar.m_ProDet;
-    m_Radar.m_ThetaRangeColor = radar.m_ThetaRangeColor;
-    m_Radar.m_ShowHeight = radar.m_ShowHeight;
+    m_Sensor1.m_Type = sensor1.m_Type;
+    m_Sensor1.m_Enable = sensor1.m_Enable;
+    m_Sensor1.m_MaxDis = sensor1.m_MaxDis;
+    m_Sensor1.m_MaxTheta = sensor1.m_MaxTheta;
+    m_Sensor1.m_MaxPhi = sensor1.m_MaxPhi;
+    m_Sensor1.m_DisVar = sensor1.m_DisVar;
+    m_Sensor1.m_ThetaVar = sensor1.m_ThetaVar;
+    m_Sensor1.m_PhiVar = sensor1.m_PhiVar;
+    m_Sensor1.m_ProDet = sensor1.m_ProDet;
+    m_Sensor1.m_ThetaRangeColor = sensor1.m_ThetaRangeColor;
+    m_Sensor1.m_ShowHeight = sensor1.m_ShowHeight;
 
-    m_RadarCtrl.DrawThetaRange();
-    m_RadarCtrl.DrawTargets();
-    m_RadarCtrl.BlendAll();
-    m_RadarCtrl.Invalidate();
+    m_Sensor1Ctrl.DrawThetaRange();
+    m_Sensor1Ctrl.DrawTargets();
+    m_Sensor1Ctrl.BlendAll();
+    m_Sensor1Ctrl.Invalidate();
 
-    m_RadarDlg.m_Ctrl->DrawThetaRange();
-    m_RadarDlg.m_Ctrl->DrawTargets();
-    m_RadarDlg.m_Ctrl->BlendAll();
-    m_RadarDlg.m_Ctrl->Invalidate();
+    m_Sensor1Dlg.m_Ctrl->DrawThetaRange();
+    m_Sensor1Dlg.m_Ctrl->DrawTargets();
+    m_Sensor1Dlg.m_Ctrl->BlendAll();
+    m_Sensor1Dlg.m_Ctrl->Invalidate();
 
-    m_RadarDlg.UpdateData(FALSE);
+    m_Sensor1Dlg.UpdateData(FALSE);
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();
     m_StateMapDlg.m_Ctrl.Invalidate();
 }
 
-void CPlaneDlg::SetEsm(Sensor &esm)
+void CPlaneDlg::SetSensor2(Sensor &sensor2)
 {
-    m_Esm.m_Type = esm.m_Type;
-    m_Esm.m_Enable = esm.m_Enable;
-    m_Esm.m_MaxDis = esm.m_MaxDis;
-    m_Esm.m_MaxTheta = esm.m_MaxTheta;
-    m_Esm.m_MaxPhi = esm.m_MaxPhi;
-    m_Esm.m_DisVar = esm.m_DisVar;
-    m_Esm.m_ThetaVar = esm.m_ThetaVar;
-    m_Esm.m_PhiVar = esm.m_PhiVar;
-    m_Esm.m_ProDet = esm.m_ProDet;
-    m_Esm.m_ThetaRangeColor = esm.m_ThetaRangeColor;
-    m_Esm.m_ShowHeight = esm.m_ShowHeight;
+    m_Sensor2.m_Type = sensor2.m_Type;
+    m_Sensor2.m_Enable = sensor2.m_Enable;
+    m_Sensor2.m_MaxDis = sensor2.m_MaxDis;
+    m_Sensor2.m_MaxTheta = sensor2.m_MaxTheta;
+    m_Sensor2.m_MaxPhi = sensor2.m_MaxPhi;
+    m_Sensor2.m_DisVar = sensor2.m_DisVar;
+    m_Sensor2.m_ThetaVar = sensor2.m_ThetaVar;
+    m_Sensor2.m_PhiVar = sensor2.m_PhiVar;
+    m_Sensor2.m_ProDet = sensor2.m_ProDet;
+    m_Sensor2.m_ThetaRangeColor = sensor2.m_ThetaRangeColor;
+    m_Sensor2.m_ShowHeight = sensor2.m_ShowHeight;
 
-    m_EsmCtrl.DrawThetaRange();
-    m_EsmCtrl.DrawTargets();
-    m_EsmCtrl.BlendAll();
-    m_EsmCtrl.Invalidate();
+    m_Sensor2Ctrl.DrawThetaRange();
+    m_Sensor2Ctrl.DrawTargets();
+    m_Sensor2Ctrl.BlendAll();
+    m_Sensor2Ctrl.Invalidate();
 
-    m_EsmDlg.m_Ctrl->DrawThetaRange();
-    m_EsmDlg.m_Ctrl->DrawTargets();
-    m_EsmDlg.m_Ctrl->BlendAll();
-    m_EsmDlg.m_Ctrl->Invalidate();
+    m_Sensor2Dlg.m_Ctrl->DrawThetaRange();
+    m_Sensor2Dlg.m_Ctrl->DrawTargets();
+    m_Sensor2Dlg.m_Ctrl->BlendAll();
+    m_Sensor2Dlg.m_Ctrl->Invalidate();
 
-    m_EsmDlg.UpdateData(FALSE);
-
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
-}
-
-void CPlaneDlg::SetInfrared(Sensor &infrared)
-{
-    m_Infrared.m_Type = infrared.m_Type;
-    m_Infrared.m_Enable = infrared.m_Enable;
-    m_Infrared.m_MaxDis = infrared.m_MaxDis;
-    m_Infrared.m_MaxTheta = infrared.m_MaxTheta;
-    m_Infrared.m_MaxPhi = infrared.m_MaxPhi;
-    m_Infrared.m_DisVar = infrared.m_DisVar;
-    m_Infrared.m_ThetaVar = infrared.m_ThetaVar;
-    m_Infrared.m_PhiVar = infrared.m_PhiVar;
-    m_Infrared.m_ProDet = infrared.m_ProDet;
-    m_Infrared.m_ThetaRangeColor = infrared.m_ThetaRangeColor;
-    m_Infrared.m_ShowHeight = infrared.m_ShowHeight;
-
-    m_InfraredCtrl.DrawThetaRange();
-    m_InfraredCtrl.DrawTargets();
-    m_InfraredCtrl.BlendAll();
-    m_InfraredCtrl.Invalidate();
-
-    m_InfraredDlg.m_Ctrl->DrawThetaRange();
-    m_InfraredDlg.m_Ctrl->DrawTargets();
-    m_InfraredDlg.m_Ctrl->BlendAll();
-    m_InfraredDlg.m_Ctrl->Invalidate();
-
-    m_InfraredDlg.UpdateData(FALSE);
+    m_Sensor2Dlg.UpdateData(FALSE);
 
     m_StateMapDlg.m_Ctrl.DrawTargets();
     m_StateMapDlg.m_Ctrl.BlendAll();

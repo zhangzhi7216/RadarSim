@@ -27,7 +27,8 @@ public:
 
     vector<Sensor *> m_Radars;
     vector<Sensor *> m_Esms;
-    vector<Sensor *> m_Infrareds;
+    vector<Sensor *> m_Tongs;
+    vector<Sensor *> m_Leis;
 
     vector<TargetType> m_TargetTypes;
     vector<TargetColor> m_TargetColors;
@@ -42,7 +43,7 @@ public:
     vector<TargetState> m_MissileStates;
 
     void Reset();
-    void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
+    void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *tong, Sensor *lei);
     void AddPlaneData(int plane, Position pos, Velocity vel, TargetState state);
     void AddTarget(Target &target);
     void AddTargetData(int target, Position pos, Velocity vel, TargetState state);

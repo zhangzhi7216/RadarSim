@@ -6,7 +6,6 @@
 #include "../Common/Resource.h"
 #include "../Common/SensorCtrl.h"
 #include "../Common/SensorDlg.h"
-#include "../Common/EsmDlg.h"
 #include "../Common/InfraredCtrl.h"
 #include "../Common/InfraredDlg.h"
 #include "../Common/DataListCtrl.h"
@@ -78,17 +77,17 @@ public:
     bool m_AddMissile;
     afx_msg void OnTimer(UINT_PTR nIDEvent);
 
-    bool m_ShowRadarDlg;
-    Sensor m_Radar;
-    CSensorCtrl m_RadarCtrl;
-    CSensorDlg m_RadarDlg;
-    virtual afx_msg void OnStnDblclickRadarCtrl();
+    bool m_ShowSensor1Dlg;
+    Sensor m_Sensor1;
+    CSensorCtrl m_Sensor1Ctrl;
+    CSensorDlg m_Sensor1Dlg;
+    virtual afx_msg void OnStnDblclickSensor1Ctrl();
 
-    bool m_ShowEsmDlg;
-    Sensor m_Esm;
-    CSensorCtrl m_EsmCtrl;
-    CEsmDlg m_EsmDlg;
-    afx_msg void OnStnDblclickEsmCtrl();
+    bool m_ShowSensor2Dlg;
+    Sensor m_Sensor2;
+    CSensorCtrl m_Sensor2Ctrl;
+    CSensorDlg m_Sensor2Dlg;
+    afx_msg void OnStnDblclickSensor2Ctrl();
 
     bool m_ShowInfraredDlg;
     Sensor m_Infrared;
@@ -110,7 +109,7 @@ public:
 
     virtual void ResetCtrls();
     void ResetSensors();
-    void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *infrared);
+    void AddPlane(Plane &plane, Sensor *sensor1, Sensor *sensor2, Sensor *infrared);
     void AddOtherPlane(Plane &plane);
     void AddTarget(Target &target);
     void AddMissile(int id);
@@ -144,9 +143,8 @@ public:
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void AddPlaneSocket();
     virtual void SetPlane(Plane &plane);
-    virtual void SetRadar(Sensor &radar);
-    virtual void SetEsm(Sensor &esm);
-    virtual void SetInfrared(Sensor &infrared);
+    virtual void SetSensor1(Sensor &sensor1);
+    virtual void SetSensor2(Sensor &sensor2);
     virtual void SetStateMap(StateMap &stateMap);
     virtual void SetFusionAlgo(FusionAlgo *algo);
     virtual void SetNaviAlgo(NaviAlgo *algo);
