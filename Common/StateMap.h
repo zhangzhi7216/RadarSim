@@ -19,31 +19,17 @@ public:
 
     ExplosionType m_ExplosionType;
 
-    vector<TargetType> m_PlaneTypes;
-    vector<TargetColor> m_PlaneColors;
+    vector<Plane> m_Planes;
     vector<Path> m_PlanePaths;
-    vector<Velocity> m_PlaneVels;
-    vector<TargetState> m_PlaneStates;
 
-    vector<Sensor *> m_Radars;
-    vector<Sensor *> m_Esms;
-    vector<Sensor *> m_Tongs;
-    vector<Sensor *> m_Leis;
-
-    vector<TargetType> m_TargetTypes;
-    vector<TargetColor> m_TargetColors;
+    vector<Target> m_Targets;
     vector<Path> m_TargetPaths;
-    vector<Velocity> m_TargetVels;
-    vector<TargetState> m_TargetStates;
 
-    vector<TargetType> m_MissileTypes;
-    vector<TargetColor> m_MissileColors;
+    vector<Missile> m_Missiles;
     vector<Path> m_MissilePaths;
-    vector<Velocity> m_MissileVels;
-    vector<TargetState> m_MissileStates;
 
     void Reset();
-    void AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *tong, Sensor *lei);
+    void AddPlane(Plane &plane);
     void AddPlaneData(int plane, Position pos, Velocity vel, TargetState state);
     void AddTarget(Target &target);
     void AddTargetData(int target, Position pos, Velocity vel, TargetState state);

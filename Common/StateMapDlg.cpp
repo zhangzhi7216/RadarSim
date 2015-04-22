@@ -375,8 +375,8 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneId()
     int count = m_PlaneId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_PlaneType.SetCurSel(m_StateMap.m_PlaneTypes[index]);
-        m_PlaneColor.SetCurSel(m_StateMap.m_PlaneColors[index]);
+        m_PlaneType.SetCurSel(m_StateMap.m_Planes[index].m_Type);
+        m_PlaneColor.SetCurSel(m_StateMap.m_Planes[index].m_Color);
     }
 }
 
@@ -387,7 +387,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneType()
     int count = m_PlaneId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_PlaneTypes[index] = (TargetType)m_PlaneType.GetCurSel();
+        m_StateMap.m_Planes[index].m_Type = (TargetType)m_PlaneType.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -401,7 +401,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneColor()
     int count = m_PlaneId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_PlaneColors[index] = (TargetColor)m_PlaneColor.GetCurSel();
+        m_StateMap.m_Planes[index].m_Color = (TargetColor)m_PlaneColor.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -415,8 +415,8 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetId()
     int count = m_TargetId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_TargetType.SetCurSel(m_StateMap.m_TargetTypes[index]);
-        m_TargetColor.SetCurSel(m_StateMap.m_TargetColors[index]);
+        m_TargetType.SetCurSel(m_StateMap.m_Targets[index].m_Type);
+        m_TargetColor.SetCurSel(m_StateMap.m_Targets[index].m_Color);
     }
 }
 
@@ -427,7 +427,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetType()
     int count = m_TargetId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_TargetTypes[index] = (TargetType)m_TargetType.GetCurSel();
+        m_StateMap.m_Targets[index].m_Type = (TargetType)m_TargetType.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -441,7 +441,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetColor()
     int count = m_TargetId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_TargetColors[index] = (TargetColor)m_TargetColor.GetCurSel();
+        m_StateMap.m_Targets[index].m_Color = (TargetColor)m_TargetColor.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -455,8 +455,8 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileId()
     int count = m_MissileId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_MissileType.SetCurSel(m_StateMap.m_MissileTypes[index]);
-        m_MissileColor.SetCurSel(m_StateMap.m_MissileColors[index]);
+        m_MissileType.SetCurSel(m_StateMap.m_Missiles[index].m_Type);
+        m_MissileColor.SetCurSel(m_StateMap.m_Missiles[index].m_Color);
     }
 }
 
@@ -467,7 +467,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileType()
     int count = m_MissileId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_MissileTypes[index] = (TargetType)m_MissileType.GetCurSel();
+        m_StateMap.m_Missiles[index].m_Type = (TargetType)m_MissileType.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();
@@ -481,7 +481,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileColor()
     int count = m_MissileId.GetCount();
     if ((index != CB_ERR) && (count >= 1))
     {
-        m_StateMap.m_MissileColors[index] = (TargetColor)m_MissileColor.GetCurSel();
+        m_StateMap.m_Missiles[index].m_Color = (TargetColor)m_MissileColor.GetCurSel();
         m_Ctrl.DrawTargets();
         m_Ctrl.BlendAll();
         m_Ctrl.Invalidate();

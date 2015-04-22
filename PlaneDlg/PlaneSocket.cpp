@@ -28,20 +28,6 @@ void PlaneSocket::OnReceive(int nErrorCode)
             m_Dlg->AddNoiseData(make_pair(this, packet));
         }
         break;
-    case PacketTypeControlData:
-        {
-            ControlDataPacket packet;
-            ar >> packet;
-            m_Dlg->AddControlData(packet);
-        }
-        break;
-    case PacketTypeControlDataAck:
-        {
-            ControlDataAckPacket packet;
-            ar >> packet;
-            m_Dlg->AddControlDataAck(packet);
-        }
-        break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;
@@ -57,12 +43,4 @@ void PlaneSocket::OnClose(int nErrorCode)
     AfxMessageBox(TEXT("与飞机的连接断开"));
     m_Dlg->ResetSockets();
     CSocket::OnClose(nErrorCode);
-}
-
-void PlaneSocket::SendControlData(ControlDataPacket &packet)
-{
-    CSocketFile file(this);
-    CArchive ar(&file, CArchive::store);
-    ar << PacketTypeControlData << packet;
-    ar.Flush();
 }

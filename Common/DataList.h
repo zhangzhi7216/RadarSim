@@ -7,10 +7,11 @@
 class __declspec(dllexport) DataList
 {
 public:
-    DataList(Sensor &radar, Sensor &esm, Sensor &infrared);
+    DataList(Sensor &sensor1, CString sensor1Title, Sensor &sensor2, CString sensor2Title);
     virtual ~DataList(void);
 
-    Sensor &m_Radar, &m_Esm, &m_Infrared;
+    Sensor &m_Sensor1, &m_Sensor2;
+    CString m_Sensor1Title, m_Sensor2Title;
 
     vector<TargetColor> m_TargetColors;
     vector<vector<int>> m_Times;

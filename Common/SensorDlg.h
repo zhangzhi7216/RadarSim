@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Sensor.h"
+#include "Target.h"
 #include "SensorCtrl.h"
 #include "CommonDlg.h"
 

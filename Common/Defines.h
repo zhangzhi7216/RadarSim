@@ -216,7 +216,6 @@ enum PacketType
     PacketTypeImDetect,
     PacketTypeReset,
     PacketTypePlane,
-    PacketTypeOtherPlane,
     PacketTypeTarget,
     PacketTypeSensor1,
     PacketTypeSensor2,
@@ -225,11 +224,8 @@ enum PacketType
     PacketTypeNaviAlgo,
     PacketTypeGlobalData,
     PacketTypeTrueData,
-    PacketTypeOtherTrueData,
     PacketTypeNoiseData,
     PacketTypeFusionData,
-    PacketTypeControlData,
-    PacketTypeControlDataAck,
 };
 
 enum NoiseType

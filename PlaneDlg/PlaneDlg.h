@@ -6,15 +6,11 @@
 #include "../Common/Resource.h"
 #include "../Common/SensorCtrl.h"
 #include "../Common/SensorDlg.h"
-#include "../Common/InfraredCtrl.h"
-#include "../Common/InfraredDlg.h"
 #include "../Common/DataListCtrl.h"
 #include "../Common/DataListDlg.h"
 #include "../Common/StateMapCtrl.h"
 #include "../Common/StateMapDlg.h"
 #include "../Common/CommonDlg.h"
-// #include "../Common/MatlabDlg3.h"
-#include "../Common/MatlabDlg.h"
 
 #include "Target.h"
 
@@ -37,7 +33,14 @@ class CPlaneDlg : public CCommonDlg
 {
 // 构造
 public:
-	CPlaneDlg(LPCWSTR title, CWnd* pParent = NULL);	// 标准构造函数
+	CPlaneDlg(LPCWSTR title
+        , bool hasSensor1
+        , CString sensor1Title
+        , bool hasSensor2
+        , CString sensor2Title
+        , bool hasDataList
+        , bool hasStateMap
+        , CWnd* pParent = NULL);	// 标准构造函数
 
 // 对话框数据
 	enum { IDD = IDD_PLANE_DIALOG };
@@ -62,57 +65,44 @@ public:
     void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
 
-    enum DlgType
-    {
-        DlgTypePlane,
-        DlgTypeFusionPlane,
-        DlgTypeAttackPlane,
-    };
-    DlgType m_DlgType;
+    virtual void ResetCtrls();
+    void ResetSensors();
+    void AddPlane(Plane &plane);
+    void AddOtherPlane(Plane &plane);
+    void AddTarget(Target &target);
+    void AddMissile(int id);
 
     GlobalDataPacket m_GlobalData;
     Plane m_Plane;
     vector<Target> m_Targets;
-    vector<Missile> m_Missiles;
-    bool m_AddMissile;
-    afx_msg void OnTimer(UINT_PTR nIDEvent);
 
+    bool m_HasSensor1;
     bool m_ShowSensor1Dlg;
     Sensor m_Sensor1;
+    CString m_Sensor1Title;
     CSensorCtrl m_Sensor1Ctrl;
     CSensorDlg m_Sensor1Dlg;
     virtual afx_msg void OnStnDblclickSensor1Ctrl();
 
+    bool m_HasSensor2;
     bool m_ShowSensor2Dlg;
     Sensor m_Sensor2;
+    CString m_Sensor2Title;
     CSensorCtrl m_Sensor2Ctrl;
     CSensorDlg m_Sensor2Dlg;
     afx_msg void OnStnDblclickSensor2Ctrl();
 
-    bool m_ShowInfraredDlg;
-    Sensor m_Infrared;
-    CInfraredCtrl m_InfraredCtrl;
-    CInfraredDlg m_InfraredDlg;
-    afx_msg void OnStnDblclickInfraredCtrl();
-
+    bool m_HasDataList;;
     bool m_ShowDataListDlg;
     DataList m_DataList;
     CDataListCtrl m_DataListCtrl;
     CDataListDlg m_DataListDlg;
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
 
-    CMatlabDlg *m_MatlabDlg;
-
+    bool m_HasStateMap;;
     bool m_ShowStateMapDlg;
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
-
-    virtual void ResetCtrls();
-    void ResetSensors();
-    void AddPlane(Plane &plane, Sensor *sensor1, Sensor *sensor2, Sensor *infrared);
-    void AddOtherPlane(Plane &plane);
-    void AddTarget(Target &target);
-    void AddMissile(int id);
 
     virtual void OnSubDlgClose(void *subDlg);
 
@@ -147,16 +137,12 @@ public:
     virtual void SetSensor2(Sensor &sensor2);
     virtual void SetStateMap(StateMap &stateMap);
     virtual void SetFusionAlgo(FusionAlgo *algo);
-    virtual void SetNaviAlgo(NaviAlgo *algo);
     virtual void SetGlobalData(GlobalDataPacket &packet);
     virtual void AddTrueData(TrueDataPacket &packet);
-    virtual void AddOtherTrueData(int i, TrueDataFrame &frame);
     virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
     typedef pair<PlaneSocket *, NoiseDataPacket> SocketPacketPair;
     virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
-    virtual void AddControlData(ControlDataPacket &packet);
-    virtual void AddControlDataAck(ControlDataAckPacket &packet);
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;

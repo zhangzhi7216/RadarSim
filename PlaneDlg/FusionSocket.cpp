@@ -18,39 +18,6 @@ void FusionSocket::OnAccept(int nErrorCode)
     CSocket::OnAccept(nErrorCode);
 }
 
-void FusionSocket::OnReceive(int nErrorCode)
-{
-    CSocketFile file(this);
-    CArchive ar(&file, CArchive::load);
-
-    int type;
-    ar >> type;
-    switch (type)
-    {
-    case PacketTypeControlData:
-        {
-            ControlDataPacket packet;
-            ar >> packet;
-            m_Dlg->AddControlData(packet);
-        }
-        break;
-    case PacketTypeControlDataAck:
-        {
-            ControlDataAckPacket packet;
-            ar >> packet;
-            m_Dlg->AddControlDataAck(packet);
-        }
-        break;
-    default:
-        AfxMessageBox(TEXT("未知数据包类型"));
-        break;
-    }
-
-    ar.Flush();
-    AsyncSelect(FD_READ);
-    CSocket::OnReceive(nErrorCode);
-}
-
 void FusionSocket::OnClose(int nErrorCode)
 {
     AfxMessageBox(TEXT("与融合机的连接断开"));
@@ -64,13 +31,5 @@ void FusionSocket::SendNoiseData(NoiseDataPacket &packet)
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
     ar << PacketTypeNoiseData << packet;
-    ar.Flush();
-}
-
-void FusionSocket::SendControlDataAck(ControlDataAckPacket &packet)
-{
-    CSocketFile file(this);
-    CArchive ar(&file, CArchive::store);
-    ar << PacketTypeControlDataAck << packet;
     ar.Flush();
 }

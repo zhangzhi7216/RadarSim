@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Sensor.h"
+#include "Target.h"
 #include "Utility.h"
 using namespace Utility;
 

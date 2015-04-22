@@ -34,67 +34,67 @@ void CDataListCtrl::AddTarget(Target &target)
 
 void CDataListCtrl::AddTargetData()
 {
-    for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
-    {
-        int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;
-        if (!m_DataList.m_Esm.IsShowTargetData(i, j) &&
-            !m_DataList.m_Infrared.IsShowTargetData(i, j) &&
-            !m_DataList.m_Infrared.IsShowTargetData(i, j))
-        {
-            continue;
-        }
-        int row = InsertItem(0, TEXT(""));
-        SetItemData(row, TargetColors[m_DataList.m_TargetColors[i]].ToCOLORREF());
-        CString str;
-        str.AppendFormat(TEXT("%d"), m_DataList.m_Times[i].back());
-        SetItemText(row, ColumnTime, str);
-        if (m_DataList.m_Esm.m_Enable)
-        {
-            if (m_DataList.m_Esm.IsShowTargetData(i, j))
-            {
-                CString str;
-                str.AppendFormat(TEXT("%f"), m_DataList.m_Esm.m_TargetThetas[i].back());
-                SetItemText(row, ColumnEsmTheta, str);
-            }
-        }
-        if (m_DataList.m_Infrared.m_Enable)
-        {
-            if (m_DataList.m_Infrared.IsShowTargetData(i, j))
-            {
-                {
-                    CString str;
-                    str.AppendFormat(TEXT("%f"), m_DataList.m_Infrared.m_TargetThetas[i].back());
-                    SetItemText(row, ColumnInfraredTheta, str);
-                }
-                {
-                    CString str;
-                    str.AppendFormat(TEXT("%f"), m_DataList.m_Infrared.m_TargetPhis[i].back());
-                    SetItemText(row, ColumnInfraredPhi, str);
-                }
-            }
-        }
-        if (m_DataList.m_Radar.m_Enable)
-        {
-            if (m_DataList.m_Radar.IsShowTargetData(i, j))
-            {
-                {
-                    CString str;
-                    str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetDistances[i].back());
-                    SetItemText(row, ColumnRadarDistance, str);
-                }
-                {
-                    CString str;
-                    str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetThetas[i].back());
-                    SetItemText(row, ColumnRadarTheta, str);
-                }
-                {
-                    CString str;
-                    str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetPhis[i].back());
-                    SetItemText(row, ColumnRadarPhi, str);
-                }
-            }
-        }
-    }
+    //for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
+    //{
+    //    int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;
+    //    if (!m_DataList.m_Esm.IsShowTargetData(i, j) &&
+    //        !m_DataList.m_Infrared.IsShowTargetData(i, j) &&
+    //        !m_DataList.m_Infrared.IsShowTargetData(i, j))
+    //    {
+    //        continue;
+    //    }
+    //    int row = InsertItem(0, TEXT(""));
+    //    SetItemData(row, TargetColors[m_DataList.m_TargetColors[i]].ToCOLORREF());
+    //    CString str;
+    //    str.AppendFormat(TEXT("%d"), m_DataList.m_Times[i].back());
+    //    SetItemText(row, ColumnTime, str);
+    //    if (m_DataList.m_Esm.m_Enable)
+    //    {
+    //        if (m_DataList.m_Esm.IsShowTargetData(i, j))
+    //        {
+    //            CString str;
+    //            str.AppendFormat(TEXT("%f"), m_DataList.m_Esm.m_TargetThetas[i].back());
+    //            SetItemText(row, ColumnEsmTheta, str);
+    //        }
+    //    }
+    //    if (m_DataList.m_Infrared.m_Enable)
+    //    {
+    //        if (m_DataList.m_Infrared.IsShowTargetData(i, j))
+    //        {
+    //            {
+    //                CString str;
+    //                str.AppendFormat(TEXT("%f"), m_DataList.m_Infrared.m_TargetThetas[i].back());
+    //                SetItemText(row, ColumnInfraredTheta, str);
+    //            }
+    //            {
+    //                CString str;
+    //                str.AppendFormat(TEXT("%f"), m_DataList.m_Infrared.m_TargetPhis[i].back());
+    //                SetItemText(row, ColumnInfraredPhi, str);
+    //            }
+    //        }
+    //    }
+    //    if (m_DataList.m_Radar.m_Enable)
+    //    {
+    //        if (m_DataList.m_Radar.IsShowTargetData(i, j))
+    //        {
+    //            {
+    //                CString str;
+    //                str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetDistances[i].back());
+    //                SetItemText(row, ColumnRadarDistance, str);
+    //            }
+    //            {
+    //                CString str;
+    //                str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetThetas[i].back());
+    //                SetItemText(row, ColumnRadarTheta, str);
+    //            }
+    //            {
+    //                CString str;
+    //                str.AppendFormat(TEXT("%f"), m_DataList.m_Radar.m_TargetPhis[i].back());
+    //                SetItemText(row, ColumnRadarPhi, str);
+    //            }
+    //        }
+    //    }
+    //}
 }
 
 BEGIN_MESSAGE_MAP(CDataListCtrl, CListCtrl)

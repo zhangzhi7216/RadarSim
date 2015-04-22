@@ -20,6 +20,27 @@ Target::~Target(void)
 {
 }
 
+Target &Target::operator =(const Target &t)
+{
+    if (this == &t)
+    {
+        return *this;
+    }
+
+    m_Id = t.m_Id;
+    m_Type = t.m_Type;
+    m_InitPosition = t.m_InitPosition;
+    m_InitVel = t.m_InitVel;
+    m_InitAcc = t.m_InitAcc;
+    m_Color = t.m_Color;
+    m_MoveType = t.m_MoveType;
+    m_Pal = t.m_Pal;
+    m_Radius = t.m_Radius;
+    m_State = t.m_State;
+
+    return *this;
+}
+
 void Target::Move(double t)
 {
     Position pos;

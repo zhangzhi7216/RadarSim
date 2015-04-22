@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Target.h"
 #include "DataPacket.h"
+
+class Target;
 
 class __declspec(dllexport) Sensor
 {
@@ -15,7 +16,7 @@ public:
 
     static CString SensorTypeNames[SensorTypeLast];
 
-    Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData);
+    Sensor(SensorType type, Target &plane, GlobalDataPacket &globalData);
     Sensor();
     virtual ~Sensor(void);
 
@@ -41,7 +42,7 @@ public:
     vector<TargetColor> m_TargetColors;
     vector<vector<double>> m_TargetDistances, m_TargetThetas, m_TargetPhis;
     GlobalDataPacket &m_GlobalData;
-    Plane &m_Plane;
+    Target &m_Plane;
 
     void Reset();
     void AddTarget(Target &target);

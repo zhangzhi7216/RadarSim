@@ -68,9 +68,9 @@ void CStateMapCtrl::DrawTargets()
     graphics.SetSmoothingMode(SmoothingModeAntiAlias);
     graphics.SetTextRenderingHint(TextRenderingHintAntiAlias);
 
-    for (int i = 0; i < m_StateMap.m_PlaneTypes.size(); ++i)
+    for (int i = 0; i < m_StateMap.m_Planes.size(); ++i)
     {
-        Pen pen(TargetColors[m_StateMap.m_PlaneColors[i]], TARGET_TRACK_WIDTH);
+        Pen pen(TargetColors[m_StateMap.m_Planes[i].m_Color], TARGET_TRACK_WIDTH);
         if (m_StateMap.m_ShowTrack)
         {
             for (int j = 1; j < m_StateMap.m_PlanePaths[i].size(); ++j)
@@ -86,9 +86,9 @@ void CStateMapCtrl::DrawTargets()
         if (m_StateMap.m_PlanePaths[i].size() > 0)
         {
             Position end = m_StateMap.m_PlanePaths[i].back();
-            if (m_StateMap.m_PlaneVels[i].X == 0
-                && m_StateMap.m_PlaneVels[i].Y == 0
-                && m_StateMap.m_PlaneVels[i].Z == 0)
+            if (m_StateMap.m_Planes[i].m_Vel.X == 0
+                && m_StateMap.m_Planes[i].m_Vel.Y == 0
+                && m_StateMap.m_Planes[i].m_Vel.Z == 0)
             {
                 if (m_StateMap.m_PlanePaths[i].size() > 1)
                 {
@@ -104,7 +104,7 @@ void CStateMapCtrl::DrawTargets()
             }
             else
             {
-                Position physDir = Position(m_StateMap.m_PlaneVels[i].X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_PlaneVels[i].Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                Position physDir = Position(m_StateMap.m_Planes[i].m_Vel.X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_Planes[i].m_Vel.Y / m_StateMap.m_MaxY * (double)height, 0.0);
                 double angle = -Theta(physDir);
                 if (physDir.X < 0)
                 {
@@ -113,56 +113,56 @@ void CStateMapCtrl::DrawTargets()
                 graphics.RotateTransform(angle, MatrixOrderAppend);
             }
             graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            Image *planeImg = TargetTypeImages[m_StateMap.m_PlaneTypes[i]];
+            Image *planeImg = TargetTypeImages[m_StateMap.m_Planes[i].m_Type];
             PointF pt(0.0, 0.0);
             graphics.DrawImage(planeImg, PointF(pt.X - (double)planeImg->GetWidth() / 2.0, pt.Y - (double)planeImg->GetHeight() / 2.0));
             if (m_StateMap.m_ShowThetaRange &&
-                (m_StateMap.m_PlaneTypes[i] != TargetTypeFighter &&
-                 m_StateMap.m_PlaneTypes[i] != TargetTypeBomber))
+                (m_StateMap.m_Planes[i].m_Type != TargetTypeFighter &&
+                 m_StateMap.m_Planes[i].m_Type != TargetTypeBomber))
             {
-                if (m_StateMap.m_Radars[i]->m_Enable)
+                if (m_StateMap.m_Planes[i].m_Radar.m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Radars[i]->m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Planes[i].m_Radar.m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Radars[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Radars[i]->m_MaxTheta / 2.0,
-                        m_StateMap.m_Radars[i]->m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Planes[i].m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Planes[i].m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Planes[i].m_Radar.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Planes[i].m_Radar.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Planes[i].m_Radar.m_MaxTheta / 2.0,
+                        m_StateMap.m_Planes[i].m_Radar.m_MaxTheta);
                 }
-                if (m_StateMap.m_Esms[i]->m_Enable)
+                if (m_StateMap.m_Planes[i].m_Esm.m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Esms[i]->m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Planes[i].m_Esm.m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Esms[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Esms[i]->m_MaxTheta / 2.0,
-                        m_StateMap.m_Esms[i]->m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Planes[i].m_Esm.m_MaxTheta / 2.0,
+                        m_StateMap.m_Planes[i].m_Esm.m_MaxTheta);
                 }
-                if (m_StateMap.m_Tongs[i]->m_Enable)
+                if (m_StateMap.m_Planes[i].m_Tong.m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Tongs[i]->m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Planes[i].m_Tong.m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Tongs[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Tongs[i]->m_MaxTheta / 2.0,
-                        m_StateMap.m_Tongs[i]->m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Planes[i].m_Tong.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Planes[i].m_Tong.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Planes[i].m_Tong.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Planes[i].m_Tong.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Planes[i].m_Tong.m_MaxTheta / 2.0,
+                        m_StateMap.m_Planes[i].m_Tong.m_MaxTheta);
                 }
-                if (m_StateMap.m_Leis[i]->m_Enable)
+                if (m_StateMap.m_Planes[i].m_Lei.m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Leis[i]->m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Planes[i].m_Lei.m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Leis[i]->m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Leis[i]->m_MaxTheta / 2.0,
-                        m_StateMap.m_Leis[i]->m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Planes[i].m_Lei.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Planes[i].m_Lei.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Planes[i].m_Lei.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Planes[i].m_Lei.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Planes[i].m_Lei.m_MaxTheta / 2.0,
+                        m_StateMap.m_Planes[i].m_Lei.m_MaxTheta);
                 }
             }
 
@@ -170,7 +170,7 @@ void CStateMapCtrl::DrawTargets()
 
             if (m_StateMap.m_ShowHeight)
             {
-                SolidBrush brush(TargetColors[m_StateMap.m_PlaneColors[i]]);
+                SolidBrush brush(TargetColors[m_StateMap.m_Planes[i].m_Color]);
                 CString str;
                 str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_PlanePaths[i].back().Z);
                 Font font(TEXT("Calibri"), 9);
@@ -181,11 +181,11 @@ void CStateMapCtrl::DrawTargets()
         }
     }
 
-    for (int i = 0; i < m_StateMap.m_TargetTypes.size(); ++i)
+    for (int i = 0; i < m_StateMap.m_Targets.size(); ++i)
     {
         if (m_StateMap.m_ShowTrack)
         {
-            Pen pen(TargetColors[m_StateMap.m_TargetColors[i]], TARGET_TRACK_WIDTH);
+            Pen pen(TargetColors[m_StateMap.m_Targets[i].m_Color], TARGET_TRACK_WIDTH);
             for (int j = 1; j < m_StateMap.m_TargetPaths[i].size(); ++j)
             {
                 if ((m_StateMap.m_TargetPaths[i][j - 1].X == 0 &&
@@ -210,9 +210,9 @@ void CStateMapCtrl::DrawTargets()
               m_StateMap.m_TargetPaths[i].back().Z == 0))
         {
             Position end = m_StateMap.m_TargetPaths[i].back();
-            if (m_StateMap.m_TargetVels[i].X == 0
-                && m_StateMap.m_TargetVels[i].Y == 0
-                && m_StateMap.m_TargetVels[i].Z == 0)
+            if (m_StateMap.m_Targets[i].m_Vel.X == 0
+                && m_StateMap.m_Targets[i].m_Vel.Y == 0
+                && m_StateMap.m_Targets[i].m_Vel.Z == 0)
             {
                 if (m_StateMap.m_TargetPaths[i].size() > 1)
                 {
@@ -228,7 +228,7 @@ void CStateMapCtrl::DrawTargets()
             }
             else
             {
-                Position physDir = Position(m_StateMap.m_TargetVels[i].X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_TargetVels[i].Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                Position physDir = Position(m_StateMap.m_Targets[i].m_Vel.X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_Targets[i].m_Vel.Y / m_StateMap.m_MaxY * (double)height, 0.0);
                 double angle = -Theta(physDir);
                 if (physDir.X < 0)
                 {
@@ -238,16 +238,16 @@ void CStateMapCtrl::DrawTargets()
             }
             graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
 
-            Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
-                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
+            Image *targetImg = m_StateMap.m_Targets[i].m_State == TargetStateExploding ?
+                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Targets[i].m_Type];
 #ifdef _DEV
-            if (m_StateMap.m_TargetStates[i] == TargetStateExploding)
+            if (m_StateMap.m_Targets[i].m_State == TargetStateExploding)
             {
-                Image *targetImg = m_StateMap.m_TargetStates[i] == TargetStateExploding ?
-                    ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_TargetTypes[i]];
+                Image *targetImg = m_StateMap.m_Targets[i].m_State == TargetStateExploding ?
+                    ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Targets[i].m_Type];
             }
 #endif
-            if (m_StateMap.m_TargetStates[i] != TargetStateDestroyed)
+            if (m_StateMap.m_Targets[i].m_State != TargetStateDestroyed)
             {
                 PointF pt(0.0, 0.0);
                 graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
@@ -257,7 +257,7 @@ void CStateMapCtrl::DrawTargets()
 
             if (m_StateMap.m_ShowHeight)
             {
-                SolidBrush brush(TargetColors[m_StateMap.m_TargetColors[i]]);
+                SolidBrush brush(TargetColors[m_StateMap.m_Targets[i].m_Color]);
                 CString str;
                 str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_TargetPaths[i].back().Z);
                 Font font(TEXT("Calibri"), 9);
@@ -272,7 +272,7 @@ void CStateMapCtrl::DrawTargets()
     {
         if (m_StateMap.m_ShowTrack)
         {
-            Pen pen(TargetColors[m_StateMap.m_MissileColors[i]], TARGET_TRACK_WIDTH);
+            Pen pen(TargetColors[m_StateMap.m_Missiles[i].m_Color], TARGET_TRACK_WIDTH);
             for (int j = 1; j < m_StateMap.m_MissilePaths[i].size(); ++j)
             {
                 if ((m_StateMap.m_MissilePaths[i][j - 1].X == 0 &&
@@ -297,9 +297,9 @@ void CStateMapCtrl::DrawTargets()
               m_StateMap.m_MissilePaths[i].back().Z == 0))
         {
             Position end = m_StateMap.m_MissilePaths[i].back();
-            if (m_StateMap.m_MissileVels[i].X == 0
-                && m_StateMap.m_MissileVels[i].Y == 0
-                && m_StateMap.m_MissileVels[i].Z == 0)
+            if (m_StateMap.m_Missiles[i].m_Vel.X == 0
+                && m_StateMap.m_Missiles[i].m_Vel.Y == 0
+                && m_StateMap.m_Missiles[i].m_Vel.Z == 0)
             {
                 if (m_StateMap.m_MissilePaths[i].size() > 1)
                 {
@@ -315,7 +315,7 @@ void CStateMapCtrl::DrawTargets()
             }
             else
             {
-                Position physDir = Position(m_StateMap.m_MissileVels[i].X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_MissileVels[i].Y / m_StateMap.m_MaxY * (double)height, 0.0);
+                Position physDir = Position(m_StateMap.m_Missiles[i].m_Vel.X / m_StateMap.m_MaxX * (double)width, m_StateMap.m_Missiles[i].m_Vel.Y / m_StateMap.m_MaxY * (double)height, 0.0);
                 double angle = -Theta(physDir);
                 if (physDir.X < 0)
                 {
@@ -324,16 +324,16 @@ void CStateMapCtrl::DrawTargets()
                 graphics.RotateTransform(angle, MatrixOrderAppend);
             }
                 graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
-            Image *targetImg = TargetTypeImages[m_StateMap.m_MissileTypes[i]];// m_StateMap.m_MissileStates[i] == TargetStateExploding ?
-                // ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+            Image *targetImg = TargetTypeImages[m_StateMap.m_Missiles[i].m_Type];// m_StateMap.m_Missiles[i].m_State == TargetStateExploding ?
+                // ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Missiles[i].m_Type];
 #ifdef _DEV
-            if (m_StateMap.m_MissileStates[i] == TargetStateExploding)
+            if (m_StateMap.m_Missiles[i].m_State == TargetStateExploding)
             {
-                Image *targetImg = m_StateMap.m_MissileStates[i] == TargetStateExploding ?
-                    ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_MissileTypes[i]];
+                Image *targetImg = m_StateMap.m_Missiles[i].m_State == TargetStateExploding ?
+                    ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Missiles[i].m_Type];
             }
 #endif
-            if (m_StateMap.m_MissileStates[i] != TargetStateDestroyed)
+            if (m_StateMap.m_Missiles[i].m_State != TargetStateDestroyed)
             {
                 PointF pt(0.0, 0.0);
                 graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
@@ -343,7 +343,7 @@ void CStateMapCtrl::DrawTargets()
 
             if (m_StateMap.m_ShowHeight)
             {
-                SolidBrush brush(TargetColors[m_StateMap.m_MissileColors[i]]);
+                SolidBrush brush(TargetColors[m_StateMap.m_Missiles[i].m_Color]);
                 CString str;
                 str.AppendFormat(TEXT("%d"), (int)m_StateMap.m_MissilePaths[i].back().Z);
                 Font font(TEXT("Calibri"), 9);

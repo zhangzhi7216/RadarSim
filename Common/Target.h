@@ -1,10 +1,14 @@
 #pragma once
 
+#include "Sensor.h"
+
 class __declspec(dllexport) Target
 {
 public:
     Target();
     virtual ~Target(void);
+
+    Target &operator =(const Target &);
 
     int m_Id;
     TargetType m_Type;
@@ -29,6 +33,8 @@ public:
     TargetColor m_Color;
 
     TargetState m_State;
+
+    Sensor m_Radar, m_Esm, m_Tong, m_Lei;
 
     void Move(double t);
     void MoveTo(const Position &pos);

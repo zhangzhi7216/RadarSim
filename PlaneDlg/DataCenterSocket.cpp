@@ -44,14 +44,11 @@ void DataCenterSocket::OnReceive(int nErrorCode)
         {
             Plane plane;
             ar >> plane;
+            ar >> plane.m_Radar;
+            ar >> plane.m_Esm;
+            ar >> plane.m_Tong;
+            ar >> plane.m_Lei;
             m_Dlg->SetPlane(plane);
-        }
-        break;
-    case PacketTypeOtherPlane:
-        {
-            Plane plane;
-            ar >> plane;
-            m_Dlg->AddOtherPlane(plane);
         }
         break;
     case PacketTypeTarget:
@@ -121,41 +118,6 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             }
         }
         break;
-    case PacketTypeNaviAlgo:
-        {
-            int type;
-            ar >> type;
-            switch (type)
-            {
-            case NaviAlgoTypeLocal:
-                {
-                    NaviAlgo *algo = new NaviLocalAlgo;
-                    ar >> *algo;
-                    m_Dlg->SetNaviAlgo(algo);
-                }
-                break;
-            case NaviAlgoTypeVc:
-                {
-                    NaviAlgo *algo = new NaviVcAlgo;
-                    ar >> *algo;
-                    m_Dlg->SetNaviAlgo(algo);
-                }
-                break;
-            case NaviAlgoTypeMatlab:
-                {
-                    NaviAlgo *algo = new NaviMatlabAlgo;
-                    ar >> *algo;
-                    m_Dlg->SetNaviAlgo(algo);
-                }
-                break;
-            default:
-                CString msg;
-                msg.AppendFormat(TEXT("未知导航算法类型%d."), type);
-                AfxMessageBox(msg);
-                break;
-            }
-        }
-        break;
     case PacketTypeGlobalData:
         {
             GlobalDataPacket packet;
@@ -171,14 +133,6 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             NoiseDataPacket noisePacket;
             m_Dlg->PackNoiseData(packet, noisePacket);
             m_Dlg->SendNoiseData(noisePacket);
-        }
-        break;
-    case PacketTypeOtherTrueData:
-        {
-            int i;
-            TrueDataFrame frame;
-            ar >> i >> frame;
-            m_Dlg->AddOtherTrueData(i, frame);
         }
         break;
     default:

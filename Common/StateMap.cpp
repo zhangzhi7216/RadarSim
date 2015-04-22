@@ -21,64 +21,39 @@ void StateMap::Reset()
     m_ShowTrack = TRUE;
     m_ShowThetaRange = TRUE;
 
-    m_PlaneTypes.clear();
-    m_PlaneColors.clear();
+    m_Planes.clear();
     m_PlanePaths.clear();
-    m_PlaneVels.clear();
-    m_PlaneStates.clear();
 
-    m_TargetTypes.clear();
-    m_TargetColors.clear();
+    m_Targets.clear();
     m_TargetPaths.clear();
-    m_TargetVels.clear();
-    m_TargetStates.clear();
 
-    m_MissileTypes.clear();
-    m_MissileColors.clear();
+    m_Missiles.clear();
     m_MissilePaths.clear();
-    m_MissileVels.clear();
-    m_MissileStates.clear();
-
-    m_Radars.clear();
-    m_Esms.clear();
-    m_Tongs.clear();
-    m_Leis.clear();
 }
 
 void StateMap::AddPlaneData(int plane, Position pos, Velocity vel, TargetState state)
 {
+    m_Planes[plane].m_Vel = vel;
+    m_Planes[plane].m_State = state;
     m_PlanePaths[plane].push_back(pos);
-    m_PlaneVels[plane] = vel;
-    m_PlaneStates[plane] = state;
 }
 
-void StateMap::AddPlane(Plane &plane, Sensor *radar, Sensor *esm, Sensor *tong, Sensor *lei)
+void StateMap::AddPlane(Plane &plane)
 {
-    m_PlaneTypes.push_back(plane.m_Type);
-    m_PlaneColors.push_back(plane.m_Color);
+    m_Planes.push_back(plane);
     m_PlanePaths.push_back(Path());
-    m_PlaneVels.push_back(plane.m_InitVel);
-    m_PlaneStates.push_back(plane.m_State);
-
-    m_Radars.push_back(radar);
-    m_Esms.push_back(esm);
-    m_Tongs.push_back(tong);
-    m_Leis.push_back(lei);
 }
 
 void StateMap::AddTarget(Target &target)
 {
-    m_TargetTypes.push_back(target.m_Type);
-    m_TargetColors.push_back(target.m_Color);
+    m_Targets.push_back(target);
     m_TargetPaths.push_back(Path());
-    m_TargetVels.push_back(target.m_InitVel);
-    m_TargetStates.push_back(target.m_State);
 }
 
 void StateMap::AddTargetData(int target, Position pos, Velocity vel, TargetState state)
 {
-    m_TargetVels[target] = vel;
-    m_TargetStates[target] = state;
+    m_Targets[target].m_Vel = vel;
+    m_Targets[target].m_State = state;
     if (state != TargetStateDestroyed)
     {
         m_TargetPaths[target].push_back(pos);
@@ -87,17 +62,14 @@ void StateMap::AddTargetData(int target, Position pos, Velocity vel, TargetState
 
 void StateMap::AddMissile(Missile &miss)
 {
-    m_MissileTypes.push_back(miss.m_Type);
-    m_MissileColors.push_back(miss.m_Color);
+    m_Missiles.push_back(miss);
     m_MissilePaths.push_back(Path());
-    m_MissileVels.push_back(miss.m_InitVel);
-    m_MissileStates.push_back(miss.m_State);
 }
 
 void StateMap::AddMissileData(int miss, Position pos, Velocity vel, TargetState state)
 {
-    m_MissileVels[miss] = vel;
-    m_MissileStates[miss] = state;
+    m_Missiles[miss].m_Vel = vel;
+    m_Missiles[miss].m_State = state;
     if (state != TargetStateDestroyed)
     {
         m_MissilePaths[miss].push_back(pos);
