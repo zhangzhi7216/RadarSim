@@ -42,7 +42,7 @@ public:
     vector<TargetColor> m_TargetColors;
     vector<vector<double>> m_TargetDistances, m_TargetThetas, m_TargetPhis;
     GlobalDataPacket &m_GlobalData;
-    Target &m_Plane;
+    Target *m_Plane;
 
     void Reset();
     void AddTarget(Target &target);

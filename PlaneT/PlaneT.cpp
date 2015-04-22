@@ -72,7 +72,7 @@ BOOL CPlaneTApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	CPlaneDlg dlg(TEXT("我机"));
+	CPlaneDlg dlg(TEXT("通侦与雷侦"), true, TEXT("通侦"), true, TEXT("雷侦"), true, false);
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

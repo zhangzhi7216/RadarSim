@@ -22,7 +22,7 @@ Sensor::Sensor()
 , m_ThetaRangeColor(Color::Green)
 , m_ShowHeight(TRUE)
 , m_GlobalData(GlobalDataPacket())
-, m_Plane(Plane())
+, m_Plane(NULL)
 {
 }
 
@@ -42,7 +42,7 @@ Sensor::Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData)
 , m_ThetaRangeColor(Color::Green)
 , m_ShowHeight(TRUE)
 , m_GlobalData(globalData)
-, m_Plane(plane)
+, m_Plane(&plane)
 {
 }
 
@@ -79,7 +79,7 @@ void Sensor::AddTarget(Target &target)
 void Sensor::AddTargetData(int target, Position rel)
 {
     // 角度采与机头的相对夹角
-    double d = Distance(rel), t = Theta(rel) - Theta(m_Plane.m_HeadDir), p = Phi(rel) - Phi(m_Plane.m_HeadDir);
+    double d = Distance(rel), t = Theta(rel) - Theta(m_Plane->m_HeadDir), p = Phi(rel) - Phi(m_Plane->m_HeadDir);
     if (IsInRange(target, d, t, p))
     {
         double sample = (double)rand();
@@ -142,7 +142,7 @@ bool Sensor::IsInRange(int i, Position rel)
     {
         return false;
     }
-    double d = Distance(rel), t = Theta(rel) - Theta(m_Plane.m_HeadDir), p = Phi(rel) - Phi(m_Plane.m_HeadDir);
+    double d = Distance(rel), t = Theta(rel) - Theta(m_Plane->m_HeadDir), p = Phi(rel) - Phi(m_Plane->m_HeadDir);
 
     return d <= m_MaxDis && abs(t) <= m_MaxTheta / 2 && abs(p) <= m_MaxPhi / 2;
 }

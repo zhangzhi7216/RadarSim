@@ -49,8 +49,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NaviVcAlgoTest2", "NaviVcAl
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlaneR", "PlaneR\PlaneR.vcproj", "{C961458A-0969-422B-9C2D-F59C63837703}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlaneT", "PlaneT\PlaneT.vcproj", "{C797141B-057F-4076-9ABD-C720201CCA81}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlaneTSetup", "PlaneTSetup\PlaneTSetup.vdproj", "{25F82678-58BD-4C4A-8C2F-8493FDECB9AB}"
 EndProject
