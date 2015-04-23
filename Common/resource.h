@@ -12,7 +12,9 @@
 #define IDC_SENSOR_ENABLE               4004
 #define IDC_SENSOR_PARAM_GRP            4005
 #define IDC_SENSOR_TYPE                 4006
+#define IDC_SENSOR_ID                   4006
 #define IDC_SENSOR_TYPE_STATIC          4007
+#define IDC_SENSOR_ID_STATIC            4007
 #define IDC_SENSOR_MAX_DIS_STATIC       4008
 #define IDC_SENSOR_MAX_DIS              4009
 #define IDC_SENSOR_MAX_THETA_STATIC     4010

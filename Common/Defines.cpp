@@ -92,8 +92,9 @@ CString __declspec(dllexport) NoiseTypeNames[] =
 CString __declspec(dllexport) SensorIdNames[] =
 {
     TEXT("À×´ï"),
-    TEXT("ESM"),
-    TEXT("ºìÍâ"),
+    TEXT("AIS"),
+    TEXT("Í¨Õì"),
+    TEXT("À×Õì"),
 };
 
 CArchive & operator << (CArchive &ar, Position &pos)

@@ -14,13 +14,14 @@ CStateMapDlg::CStateMapDlg(LPCWSTR title, StateMap &stateMap, CCommonDlg *dlg, C
     , m_StateMap(stateMap)
     , m_Dlg(dlg)
     , m_Initialized(false)
-    , m_Ctrl(stateMap)
 {
+    m_Ctrl = new CStateMapCtrl(m_StateMap);
     m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 CStateMapDlg::~CStateMapDlg()
 {
+    delete m_Ctrl;
 }
 
 void CStateMapDlg::CreateDlg(CStateMapDlg &dlg)
@@ -32,7 +33,7 @@ void CStateMapDlg::CreateDlg(CStateMapDlg &dlg)
 void CStateMapDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    DDX_Control(pDX, IDC_STATEMAP, m_Ctrl);
+    DDX_Control(pDX, IDC_STATEMAP, *m_Ctrl);
     DDX_Check(pDX, IDC_STATEMAP_SHOW_TRACK, m_StateMap.m_ShowTrack);
     DDX_Check(pDX, IDC_STATEMAP_SHOW_THETA_RANGE, m_StateMap.m_ShowThetaRange);
     DDX_Control(pDX, IDC_STATEMAP_BACKGROUND, m_Background);
@@ -280,7 +281,7 @@ void CStateMapDlg::OnSize(UINT nType, int cx, int cy)
 
 void CStateMapDlg::Reset()
 {
-    m_Ctrl.Reset();
+    m_Ctrl->Reset();
 
     m_Background.SetCurSel(m_StateMap.m_Background);
 
@@ -326,18 +327,22 @@ void CStateMapDlg::OnBnClickedStatemapShowTrack()
 {
     // TODO: 在此添加控件通知处理程序代码
     m_StateMap.m_ShowTrack = !m_StateMap.m_ShowTrack;
-    m_Ctrl.DrawTargets();
-    m_Ctrl.BlendAll();
-    m_Ctrl.Invalidate();
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+
+    m_Dlg->OnSubDlgStateMapChange(this);
 }
 
 void CStateMapDlg::OnBnClickedStatemapShowThetaRange()
 {
     // TODO: 在此添加控件通知处理程序代码
     m_StateMap.m_ShowThetaRange = !m_StateMap.m_ShowThetaRange;
-    m_Ctrl.DrawTargets();
-    m_Ctrl.BlendAll();
-    m_Ctrl.Invalidate();
+    m_Ctrl->DrawTargets();
+    m_Ctrl->BlendAll();
+    m_Ctrl->Invalidate();
+
+    m_Dlg->OnSubDlgStateMapChange(this);
 }
 
 void CStateMapDlg::OnCbnSelchangeStatemapBackground()
@@ -348,9 +353,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapBackground()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Background = (StateMapBackground)index;
-        m_Ctrl.DrawBackground();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawBackground();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -362,9 +369,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapExplosionType()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_ExplosionType = (ExplosionType)index;
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -388,9 +397,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneType()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Planes[index].m_Type = (TargetType)m_PlaneType.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -402,9 +413,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneColor()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Planes[index].m_Color = (TargetColor)m_PlaneColor.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -428,9 +441,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetType()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Targets[index].m_Type = (TargetType)m_TargetType.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -442,9 +457,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetColor()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Targets[index].m_Color = (TargetColor)m_TargetColor.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -468,9 +485,11 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileType()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Missiles[index].m_Type = (TargetType)m_MissileType.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }
 
@@ -482,8 +501,10 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileColor()
     if ((index != CB_ERR) && (count >= 1))
     {
         m_StateMap.m_Missiles[index].m_Color = (TargetColor)m_MissileColor.GetCurSel();
-        m_Ctrl.DrawTargets();
-        m_Ctrl.BlendAll();
-        m_Ctrl.Invalidate();
+        m_Ctrl->DrawTargets();
+        m_Ctrl->BlendAll();
+        m_Ctrl->Invalidate();
+
+        m_Dlg->OnSubDlgStateMapChange(this);
     }
 }

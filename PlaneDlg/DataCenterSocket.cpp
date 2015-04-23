@@ -60,18 +60,14 @@ void DataCenterSocket::OnReceive(int nErrorCode)
         break;
     case PacketTypeSensor1:
         {
-            Plane foo;
-            GlobalDataPacket bar;
-            Sensor s(Sensor::SensorTypeNonSource, foo, bar);
+            Sensor s;
             ar >> s;
             m_Dlg->SetSensor1(s);
         }
         break;
     case PacketTypeSensor2:
         {
-            Plane foo;
-            GlobalDataPacket bar;
-            Sensor s(Sensor::SensorTypeNonSource, foo, bar);
+            Sensor s;
             ar >> s;
             m_Dlg->SetSensor2(s);
         }

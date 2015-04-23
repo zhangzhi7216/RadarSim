@@ -243,14 +243,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\InfraredCtrl.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredDlg.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\MatlabDlg.cpp"
 				>
 			</File>
@@ -394,14 +386,6 @@
 			</File>
 			<File
 				RelativePath=".\GeneralAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredCtrl.h"
-				>
-			</File>
-			<File
-				RelativePath=".\InfraredDlg.h"
 				>
 			</File>
 			<File

@@ -24,32 +24,31 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title
                      , CString sensor1Title
                      , bool hasSensor2
                      , CString sensor2Title
-                     , bool hasDataList
                      , bool hasStateMap
+                     , bool hasDataList
                      , CWnd* pParent /*=NULL*/)
     : CCommonDlg(CPlaneDlg::IDD, pParent)
     , m_Title(title)
     , m_Initialized(false)
     , m_HasSensor1(hasSensor1)
     , m_ShowSensor1Dlg(false)
-    , m_Sensor1(Sensor::SensorTypeSource, m_Plane, m_GlobalData)
     , m_Sensor1Title(sensor1Title)
     , m_Sensor1Ctrl(m_Sensor1)
-    , m_Sensor1Dlg(sensor1Title, m_Sensor1, this)
+    , m_Sensor1Dlg(m_Sensor1Title, m_Sensor1, this)
     , m_HasSensor2(hasSensor2)
     , m_ShowSensor2Dlg(false)
-    , m_Sensor2(Sensor::SensorTypeNonSource, m_Plane, m_GlobalData)
     , m_Sensor2Title(sensor2Title)
     , m_Sensor2Ctrl(m_Sensor2)
-    , m_Sensor2Dlg(sensor2Title, m_Sensor2, this)
+    , m_Sensor2Dlg(m_Sensor2Title, m_Sensor2, this)
+    , m_HasStateMap(hasStateMap)
+    , m_ShowStateMapDlg(false)
+    , m_StateMapCtrl(m_StateMap)
+    , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_HasDataList(hasDataList)
     , m_ShowDataListDlg(false)
     , m_DataList(m_Sensor1, TEXT(""), m_Sensor2, TEXT(""))
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
-    , m_HasStateMap(hasStateMap)
-    , m_ShowStateMapDlg(true)
-    , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_DataCenterSocket(0)
     , m_FusionSocket(0)
 {
@@ -57,6 +56,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title
 
     m_Sensor1Dlg.m_Dlg = this;
     m_Sensor2Dlg.m_Dlg = this;
+    m_StateMapDlg.m_Dlg = this;
     m_DataListDlg.m_Dlg = this;
 
     m_DataCenterSocket = new DataCenterSocket(this);
@@ -78,6 +78,7 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CCommonDlg)
     ON_WM_SIZE()
     ON_STN_DBLCLK(IDC_SENSOR1_CTRL, &CPlaneDlg::OnStnDblclickSensor1Ctrl)
     ON_STN_DBLCLK(IDC_SENSOR2_CTRL, &CPlaneDlg::OnStnDblclickSensor2Ctrl)
+    ON_STN_DBLCLK(IDC_STATEMAP_CTRL, &CPlaneDlg::OnStnDblclickStateMapCtrl)
     ON_NOTIFY(NM_DBLCLK, IDC_DATALIST_CTRL, &CPlaneDlg::OnNMDblclkDatalistCtrl)
     ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
@@ -135,11 +136,18 @@ BOOL CPlaneDlg::OnInitDialog()
     }
 
     CStateMapDlg::CreateDlg(m_StateMapDlg);
+    if (m_ShowStateMapDlg)
+    {
+        m_StateMapDlg.ShowWindow(SW_SHOW);
+    }
+    {
+        AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    }
 
     ResetCtrls();
     ResetSockets();
 
-    ConnectDataCenter();
+    // ConnectDataCenter();
 
     if (m_ShowStateMapDlg)
     {
@@ -193,64 +201,78 @@ void CPlaneDlg::Resize()
     RECT rect;
     GetClientRect(&rect);
 
-    // Resize Sensor1.
-    int left = rect.left + PAD, width = (rect.right - rect.left) / 2 - PAD * 2, top = rect.top + PAD, height = (rect.bottom - rect.top) / 2 - PAD * 2;
-    if (width > height)
+    int left = rect.left + PAD, width = (rect.right - rect.left) / 2 - PAD * 2, top = rect.top + PAD, height = 0;
+    if (m_HasStateMap)
     {
-        width = height;
+        // Resize StateMap..
+        height = rect.bottom - rect.top - PAD * 2;
+        if (width > height)
+        {
+            width = height;
+        }
+        GetDlgItem(IDC_STATEMAP_CTRL_GRP)->ShowWindow(TRUE);
+        GetDlgItem(IDC_STATEMAP_CTRL_GRP)->MoveWindow(left, top, width, height);
+        
+        left = left + PAD;
+        width = width - PAD *2;
+        top = top + PAD * 2;
+        height = height - PAD * 3;
+        m_StateMapCtrl.ShowWindow(TRUE);
+        m_StateMapCtrl.MoveWindow(left, top, width, height);
     }
-    GetDlgItem(IDC_SENSOR1_CTRL_GRP)->MoveWindow(left, top, width, height);
-
-    left = left + PAD;
-    width = width - PAD *2;
-    top = top + PAD * 2;
-    height = height - PAD * 3;
-    m_Sensor1Ctrl.MoveWindow(left, top, width, height);
-
-    // Resize Sensor2..
-    left = rect.left + PAD;
-    width = (rect.right - rect.left) / 2 - PAD * 2;
-    top = (rect.bottom - rect.top) / 2 + PAD;
-    height = (rect.bottom - rect.top) / 2 - PAD * 2;
-    if (width > height)
+    else
     {
-        width = height;
-    }
-    GetDlgItem(IDC_SENSOR2_CTRL_GRP)->MoveWindow(left, top, width, height);
+        // Resize Sensor1.
+        height = (rect.bottom - rect.top) / 2 - PAD * 2;
+        if (width > height)
+        {
+            width = height;
+        }
+        GetDlgItem(IDC_SENSOR1_CTRL_GRP)->SetWindowTextW(m_Sensor1Title);
+        GetDlgItem(IDC_SENSOR1_CTRL_GRP)->ShowWindow(TRUE);
+        GetDlgItem(IDC_SENSOR1_CTRL_GRP)->MoveWindow(left, top, width, height);
 
-    left = left + PAD;
-    width = width - PAD *2;
-    top = top + PAD * 2;
-    height = height - PAD * 3;
-    m_Sensor2Ctrl.MoveWindow(left, top, width, height);
+        left = left + PAD;
+        width = width - PAD *2;
+        top = top + PAD * 2;
+        height = height - PAD * 3;
+        m_Sensor1Ctrl.ShowWindow(TRUE);
+        m_Sensor1Ctrl.MoveWindow(left, top, width, height);
+
+        // Resize Sensor2..
+        left = rect.left + PAD;
+        width = (rect.right - rect.left) / 2 - PAD * 2;
+        top = (rect.bottom - rect.top) / 2 + PAD;
+        height = (rect.bottom - rect.top) / 2 - PAD * 2;
+        if (width > height)
+        {
+            width = height;
+        }
+        GetDlgItem(IDC_SENSOR2_CTRL_GRP)->SetWindowTextW(m_Sensor2Title);
+        GetDlgItem(IDC_SENSOR2_CTRL_GRP)->ShowWindow(TRUE);
+        GetDlgItem(IDC_SENSOR2_CTRL_GRP)->MoveWindow(left, top, width, height);
+
+        left = left + PAD;
+        width = width - PAD *2;
+        top = top + PAD * 2;
+        height = height - PAD * 3;
+        m_Sensor2Ctrl.ShowWindow(TRUE);
+        m_Sensor2Ctrl.MoveWindow(left, top, width, height);
+    }
 
     // Resize DataList.
     left = left + width + PAD + PAD * 2;
     width = rect.right - PAD - left;
     top = rect.top + PAD;
-    height = (rect.bottom - rect.top) / 2 - PAD * 2;
+    height = rect.bottom - rect.top - PAD * 2;
     GetDlgItem(IDC_DATALIST_CTRL_GRP)->MoveWindow(left, top, width, height);
 
-    // Resize fusion & navi algo.
     left = left + PAD;
     top = top + PAD * 2;
     width = width - PAD * 2;
     height = height - PAD * 3;
 
     m_DataListCtrl.MoveWindow(left, top, width, height);
-
-    // Resize Infrared.
-    left = left - PAD;
-    width = width + PAD * 2;
-    top = (rect.bottom - rect.top) / 2 + PAD;
-    height = (rect.bottom - rect.top) / 2 - PAD * 2;
-    GetDlgItem(IDC_INFRARED_CTRL_GRP)->MoveWindow(left, top, width, height);
-
-    left = left + PAD;
-    width = width - PAD * 2;
-    top = top + PAD * 2;
-    height = height - PAD * 3;
-    // m_InfraredCtrl.MoveWindow(left, top, width, height);
 }
 
 void CPlaneDlg::OnSize(UINT nType, int cx, int cy)
@@ -293,6 +315,22 @@ void CPlaneDlg::OnStnDblclickSensor2Ctrl()
         m_ShowSensor2Dlg = true;
     }
 }
+
+void CPlaneDlg::OnStnDblclickStateMapCtrl()
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+    if (m_ShowStateMapDlg)
+    {
+        m_StateMapDlg.ShowWindow(SW_HIDE);
+        m_ShowStateMapDlg = false;
+    }
+    else
+    {
+        m_StateMapDlg.ShowWindow(SW_SHOW);
+        m_ShowStateMapDlg = true;
+    }
+}
+
 
 void CPlaneDlg::OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult)
 {
@@ -370,9 +408,9 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_DataListCtrl.AddTargetData();
     m_DataListDlg.m_Ctrl->AddTargetData();
 
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 bool NoiseDataFrameComp(const NoiseDataFrame &f1, const NoiseDataFrame f2)
@@ -533,9 +571,9 @@ void CPlaneDlg::OnSubDlgEnable(void *subDlg)
         m_Sensor1Ctrl.Invalidate();
     }
 
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 void CPlaneDlg::OnSubDlgShowScanline(void *subDlg)
@@ -599,9 +637,9 @@ void CPlaneDlg::OnSubDlgMaxDis(void *subDlg)
         m_Sensor2Ctrl.Invalidate();
     }
 
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 void CPlaneDlg::OnSubDlgMaxTheta(void *subDlg)
@@ -621,9 +659,9 @@ void CPlaneDlg::OnSubDlgMaxTheta(void *subDlg)
         m_Sensor2Ctrl.Invalidate();
     }
 
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 void CPlaneDlg::OnSubDlgMaxPhi(void *subDlg)
@@ -704,6 +742,13 @@ void CPlaneDlg::OnSubDlgProDet(void *subDlg)
         m_Sensor2Ctrl.BlendAll();
         m_Sensor2Ctrl.Invalidate();
     }
+}
+
+void CPlaneDlg::OnSubDlgStateMapChange(void *subDlg)
+{
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
 }
 
 void CPlaneDlg::ConnectDataCenter()
@@ -818,17 +863,7 @@ void CPlaneDlg::SetPlane(Plane &plane)
 
 void CPlaneDlg::SetSensor1(Sensor &sensor1)
 {
-    m_Sensor1.m_Type = sensor1.m_Type;
-    m_Sensor1.m_Enable = sensor1.m_Enable;
-    m_Sensor1.m_MaxDis = sensor1.m_MaxDis;
-    m_Sensor1.m_MaxTheta = sensor1.m_MaxTheta;
-    m_Sensor1.m_MaxPhi = sensor1.m_MaxPhi;
-    m_Sensor1.m_DisVar = sensor1.m_DisVar;
-    m_Sensor1.m_ThetaVar = sensor1.m_ThetaVar;
-    m_Sensor1.m_PhiVar = sensor1.m_PhiVar;
-    m_Sensor1.m_ProDet = sensor1.m_ProDet;
-    m_Sensor1.m_ThetaRangeColor = sensor1.m_ThetaRangeColor;
-    m_Sensor1.m_ShowHeight = sensor1.m_ShowHeight;
+    m_Sensor1 = sensor1;
 
     m_Sensor1Ctrl.DrawThetaRange();
     m_Sensor1Ctrl.DrawTargets();
@@ -842,24 +877,14 @@ void CPlaneDlg::SetSensor1(Sensor &sensor1)
 
     m_Sensor1Dlg.UpdateData(FALSE);
 
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 void CPlaneDlg::SetSensor2(Sensor &sensor2)
 {
-    m_Sensor2.m_Type = sensor2.m_Type;
-    m_Sensor2.m_Enable = sensor2.m_Enable;
-    m_Sensor2.m_MaxDis = sensor2.m_MaxDis;
-    m_Sensor2.m_MaxTheta = sensor2.m_MaxTheta;
-    m_Sensor2.m_MaxPhi = sensor2.m_MaxPhi;
-    m_Sensor2.m_DisVar = sensor2.m_DisVar;
-    m_Sensor2.m_ThetaVar = sensor2.m_ThetaVar;
-    m_Sensor2.m_PhiVar = sensor2.m_PhiVar;
-    m_Sensor2.m_ProDet = sensor2.m_ProDet;
-    m_Sensor2.m_ThetaRangeColor = sensor2.m_ThetaRangeColor;
-    m_Sensor2.m_ShowHeight = sensor2.m_ShowHeight;
+    m_Sensor2 = sensor2;
 
     m_Sensor2Ctrl.DrawThetaRange();
     m_Sensor2Ctrl.DrawTargets();
@@ -873,9 +898,9 @@ void CPlaneDlg::SetSensor2(Sensor &sensor2)
 
     m_Sensor2Dlg.UpdateData(FALSE);
 
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 void CPlaneDlg::SetStateMap(StateMap &stateMap)
@@ -889,10 +914,10 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMap.m_MaxY = stateMap.m_MaxY;
     m_StateMap.m_ShowHeight = stateMap.m_ShowHeight;
 
-    m_StateMapDlg.m_Ctrl.DrawBackground();
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawBackground();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 }
 
 void CPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
@@ -902,19 +927,4 @@ void CPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
 void CPlaneDlg::SetGlobalData(GlobalDataPacket &packet)
 {
     m_GlobalData = packet;
-}
-
-void CPlaneDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
-{
-    // TODO: 在此添加消息处理程序代码和/或调用默认值
-    if (m_ShowStateMapDlg)
-    {
-        m_StateMapDlg.ShowWindow(SW_HIDE);
-        m_ShowStateMapDlg = false;
-    }
-    else
-    {
-        m_StateMapDlg.ShowWindow(SW_SHOW);
-        m_ShowStateMapDlg = true;
-    }
 }

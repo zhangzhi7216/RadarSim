@@ -29,5 +29,7 @@ public:
     virtual void OnSubDlgPhiVar(void *subDlg) {}
 
     virtual void OnSubDlgProDet(void *subDlg) {}
+
+    virtual void OnSubDlgStateMapChange(void *subDlg) {}
 };
 

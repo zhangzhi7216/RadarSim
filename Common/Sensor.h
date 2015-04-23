@@ -7,20 +7,13 @@ class Target;
 class __declspec(dllexport) Sensor
 {
 public:
-    enum SensorType
-    {
-        SensorTypeSource = 0,
-        SensorTypeNonSource,
-        SensorTypeLast,
-    };
-
-    static CString SensorTypeNames[SensorTypeLast];
-
-    Sensor(SensorType type, Target &plane, GlobalDataPacket &globalData);
+    Sensor(SensorId id, Target &plane, GlobalDataPacket &globalData);
     Sensor();
     virtual ~Sensor(void);
 
-    SensorType m_Type;
+    Sensor &operator =(const Sensor &);
+
+    SensorId m_Id;
     BOOL m_Enable;
 
     double m_MaxDis;

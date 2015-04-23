@@ -15,7 +15,9 @@
 #define IDC_ESM_CTRL_GRP                1003
 #define IDC_SENSOR2_CTRL_GRP            1003
 #define IDC_INFRARED_CTRL               1004
+#define IDC_STATEMAP_CTRL               1004
 #define IDC_INFRARED_CTRL_GRP           1005
+#define IDC_STATEMAP_CTRL_GRP           1005
 #define IDC_DATALIST_CTRL_GRP           1006
 #define IDC_DATALIST_CTRL               1007
 #define IDC_IP                          1008

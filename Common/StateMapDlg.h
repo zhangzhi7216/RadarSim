@@ -31,7 +31,8 @@ protected:
 public:
     CString m_Title;
     StateMap &m_StateMap;
-    CStateMapCtrl m_Ctrl;
+    CCommonDlg *m_Dlg;
+    CStateMapCtrl *m_Ctrl;
     afx_msg void OnClose();
 
     bool m_Initialized;
@@ -65,6 +66,4 @@ public:
     afx_msg void OnCbnSelchangeStatemapMissileColor();
     CComboBox m_PlaneId;
     afx_msg void OnCbnSelchangeStatemapPlaneId();
-
-    CCommonDlg *m_Dlg;
 };

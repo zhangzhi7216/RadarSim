@@ -38,8 +38,8 @@ public:
         , CString sensor1Title
         , bool hasSensor2
         , CString sensor2Title
-        , bool hasDataList
         , bool hasStateMap
+        , bool hasDataList = true
         , CWnd* pParent = NULL);	// 标准构造函数
 
 // 对话框数据
@@ -77,20 +77,27 @@ public:
     vector<Target> m_Targets;
 
     bool m_HasSensor1;
+    CString m_Sensor1Title;
     bool m_ShowSensor1Dlg;
     Sensor m_Sensor1;
-    CString m_Sensor1Title;
     CSensorCtrl m_Sensor1Ctrl;
     CSensorDlg m_Sensor1Dlg;
     virtual afx_msg void OnStnDblclickSensor1Ctrl();
 
     bool m_HasSensor2;
+    CString m_Sensor2Title;
     bool m_ShowSensor2Dlg;
     Sensor m_Sensor2;
-    CString m_Sensor2Title;
     CSensorCtrl m_Sensor2Ctrl;
     CSensorDlg m_Sensor2Dlg;
     afx_msg void OnStnDblclickSensor2Ctrl();
+
+    bool m_HasStateMap;;
+    bool m_ShowStateMapDlg;
+    StateMap m_StateMap;
+    CStateMapCtrl m_StateMapCtrl;
+    CStateMapDlg m_StateMapDlg;
+    afx_msg void OnStnDblclickStateMapCtrl();
 
     bool m_HasDataList;;
     bool m_ShowDataListDlg;
@@ -98,11 +105,6 @@ public:
     CDataListCtrl m_DataListCtrl;
     CDataListDlg m_DataListDlg;
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
-
-    bool m_HasStateMap;;
-    bool m_ShowStateMapDlg;
-    StateMap m_StateMap;
-    CStateMapDlg m_StateMapDlg;
 
     virtual void OnSubDlgClose(void *subDlg);
 
@@ -128,6 +130,8 @@ public:
 
     virtual void OnSubDlgProDet(void *subDlg);
 
+    virtual void OnSubDlgStateMapChange(void *subDlg);
+
     virtual void ResetSockets();
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
@@ -146,5 +150,4 @@ public:
 
     DataCenterSocket *m_DataCenterSocket;
     FusionSocket *m_FusionSocket;
-    afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
 };

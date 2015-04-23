@@ -42,7 +42,7 @@ void CSensorDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_SENSOR, *m_Ctrl);
-    DDX_Text(pDX, IDC_SENSOR_TYPE, Sensor::SensorTypeNames[m_Sensor.m_Type]);
+    DDX_Text(pDX, IDC_SENSOR_ID, SensorIdNames[m_Sensor.m_Id]);
     DDX_Check(pDX, IDC_SENSOR_ENABLE, m_Sensor.m_Enable);
     DDX_Text(pDX, IDC_SENSOR_MAX_DIS, m_SensorMaxDis);
     DDX_Text(pDX, IDC_SENSOR_MAX_THETA, m_SensorMaxTheta);
@@ -133,8 +133,8 @@ void CSensorDlg::Resize()
     width = 80;
     top = top + PAD * 2;
     height = 20;
-    GetDlgItem(IDC_SENSOR_TYPE_STATIC)->MoveWindow(left, top, width, height);
-    GetDlgItem(IDC_SENSOR_TYPE)->MoveWindow(left + width, top, width, height);
+    GetDlgItem(IDC_SENSOR_ID_STATIC)->MoveWindow(left, top, width, height);
+    GetDlgItem(IDC_SENSOR_ID)->MoveWindow(left + width, top, width, height);
 
     top = top + height + PAD;
     GetDlgItem(IDC_SENSOR_ENABLE)->MoveWindow(left, top, width, height);

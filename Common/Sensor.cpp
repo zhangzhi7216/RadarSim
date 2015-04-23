@@ -4,10 +4,8 @@
 #include "Utility.h"
 using namespace Utility;
 
-CString Sensor::SensorTypeNames[] = {TEXT("有源传感器"), TEXT("无源传感器")};
-
 Sensor::Sensor()
-: m_Type(SensorTypeSource)
+: m_Id(SensorIdRadar)
 , m_Enable(TRUE)
 , m_MaxDis(300)
 , m_MaxTheta(120)
@@ -26,8 +24,8 @@ Sensor::Sensor()
 {
 }
 
-Sensor::Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData)
-: m_Type(type)
+Sensor::Sensor(SensorId id, Plane &plane, GlobalDataPacket &globalData)
+: m_Id(id)
 , m_Enable(TRUE)
 , m_MaxDis(300)
 , m_MaxTheta(120)
@@ -48,6 +46,31 @@ Sensor::Sensor(SensorType type, Plane &plane, GlobalDataPacket &globalData)
 
 Sensor::~Sensor(void)
 {
+}
+
+Sensor &Sensor::operator =(const Sensor &s)
+{
+    if (this == &s)
+    {
+        return *this;
+    }
+
+    m_Id = s.m_Id;
+    m_Enable = s.m_Enable;
+    m_MaxDis = s.m_MaxDis;
+    m_MaxTheta = s.m_MaxTheta;
+    m_MaxPhi = s.m_MaxPhi;
+    m_DisVar = s.m_DisVar;
+    m_ThetaVar = s.m_ThetaVar;
+    m_PhiVar = s.m_PhiVar;
+    m_ProDet = s.m_ProDet;
+    m_ShowScanline = s.m_ShowScanline;
+    m_ShowTrack = s.m_ShowTrack;
+    m_ShowThetaRange = s.m_ShowThetaRange;
+    m_ThetaRangeColor = s.m_ThetaRangeColor;
+    m_ShowHeight = s.m_ShowHeight;
+
+    return *this;
 }
 
 void Sensor::Reset()
@@ -161,9 +184,9 @@ bool Sensor::IsShowTargetData(int i, int j)
 
 CArchive & operator << (CArchive &ar, Sensor &sensor)
 {
-    int type = (int)sensor.m_Type;
+    int id = (int)sensor.m_Id;
     COLORREF color = sensor.m_ThetaRangeColor.ToCOLORREF();
-    ar << type << sensor.m_Enable
+    ar << id << sensor.m_Enable
         << sensor.m_MaxDis << sensor.m_MaxTheta << sensor.m_MaxPhi
         << sensor.m_DisVar << sensor.m_ThetaVar << sensor.m_PhiVar
         << sensor.m_ProDet
@@ -176,16 +199,16 @@ CArchive & operator << (CArchive &ar, Sensor &sensor)
 
 CArchive & operator >> (CArchive &ar, Sensor &sensor)
 {
-    int type;
+    int id;
     COLORREF color;
-    ar >> type >> sensor.m_Enable
+    ar >> id >> sensor.m_Enable
         >> sensor.m_MaxDis >> sensor.m_MaxTheta >> sensor.m_MaxPhi
         >> sensor.m_DisVar >> sensor.m_ThetaVar >> sensor.m_PhiVar
         >> sensor.m_ProDet
         >> color
         >> sensor.m_ShowThetaRange
         >> sensor.m_ShowHeight;
-    sensor.m_Type = (Sensor::SensorType)type;
+    sensor.m_Id = (SensorId)id;
     sensor.m_ThetaRangeColor.SetFromCOLORREF(color);
 
     return ar;
