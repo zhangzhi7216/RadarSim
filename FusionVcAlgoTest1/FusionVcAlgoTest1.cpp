@@ -66,41 +66,39 @@ BOOL CFusionVcAlgoTest1App::InitInstance()
 
 __declspec(dllimport) GlobalVarFrame *g_GlobalVar;
 
-extern "C" __declspec(dllexport) bool FusionVcAlgoTest1(const FusionInput &input, FusionOutput &output)
+extern "C" __declspec(dllexport) bool FusionVcAlgoTest1(FusionInput &input, FusionOutput &output)
 {
     // This is how to use global var.
     g_GlobalVar[0].m_G[0] = 0;
     g_GlobalVar[0].m_G[1] = 0;
-    const vector<NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
+    map<SensorId, NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
     int interval = input.m_Interval;
 
-    int nTargets = noiseDatas.front().m_TargetNoiseDatas.size();
-    int nPlanes = noiseDatas.size();
+    int nTargets = noiseDatas[SensorIdRadar].m_TargetNoiseDatas.size();
     for (int iTarget = 0; iTarget < nTargets; ++iTarget)
     {
         TrueDataFrame frame;
-        assert(noiseDatas.front().m_TargetNoiseDatas.size() > iTarget);
-        frame.m_Time = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Time;
-        frame.m_Id = noiseDatas.front().m_TargetNoiseDatas[iTarget].m_Id;
-        for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
+        frame.m_Time = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Time;
+        frame.m_Id = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Id;
+        for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
         {
-            // frame += noiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
+            // frame += noiseDatas[(SensorId)iSensor].m_TargetNoiseDatas[iTarget];
         }
-        // frame /= nPlanes;
+        // frame /= SensorIdLast;
         output.m_FusionData.m_FusionDatas.push_back(frame);
-        // frame = noiseDatas.front().m_TargetNoiseDatas[iTarget];
+        // frame = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget];
         output.m_FusionData.m_FilterDatas.push_back(frame);
     }
-    for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
+    for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
     {
-        output.m_FusionData.m_NoiseDatas.push_back(noiseDatas[iPlane]);
+        output.m_FusionData.m_NoiseDatas.push_back(noiseDatas[(SensorId)iSensor]);
     }
 
-    for (int iPlane = 0; iPlane < nPlanes; ++iPlane)
+    for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
     {
         ControlDataPacket packet;
-        packet.m_ControlData.m_Time = noiseDatas[iPlane].m_PlaneTrueData.m_Time;
-        packet.m_ControlData.m_Id = noiseDatas[iPlane].m_PlaneTrueData.m_Id;
+        packet.m_ControlData.m_Time = noiseDatas[(SensorId)iSensor].m_PlaneTrueData.m_Time;
+        packet.m_ControlData.m_Id = noiseDatas[(SensorId)iSensor].m_PlaneTrueData.m_Id;
         output.m_ControlDatas.push_back(packet);
     }
     return true;

@@ -17,14 +17,11 @@
 #include <vector>
 #include "CommonDlg.h"
 
-#include "DataCenterSocket.h"
-#include "FusionSocket.h"
 #include "PlaneSocket.h"
 
 #include "DataPacket.h"
 
 #include "FusionAlgo.h"
-#include "NaviAlgo.h"
 
 using namespace std;
 
@@ -130,24 +127,22 @@ public:
 
     virtual void OnSubDlgProDet(void *subDlg);
 
-    virtual void OnSubDlgStateMapChange(void *subDlg);
+    virtual void OnSubDlgStateMapBackgroundChange(void *subDlg);
+
+    virtual void OnSubDlgStateMapTargetsChange(void *subDlg);
 
     virtual void ResetSockets();
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
-    virtual void AddPlaneSocket();
     virtual void SetPlane(Plane &plane);
     virtual void SetSensor1(Sensor &sensor1);
     virtual void SetSensor2(Sensor &sensor2);
     virtual void SetStateMap(StateMap &stateMap);
-    virtual void SetFusionAlgo(FusionAlgo *algo);
     virtual void SetGlobalData(GlobalDataPacket &packet);
     virtual void AddTrueData(TrueDataPacket &packet);
     virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
-    typedef pair<PlaneSocket *, NoiseDataPacket> SocketPacketPair;
-    virtual void AddNoiseData(SocketPacketPair spp);
     virtual void SendNoiseData(NoiseDataPacket &packet);
 
-    DataCenterSocket *m_DataCenterSocket;
-    FusionSocket *m_FusionSocket;
+    PlaneSocket *m_DataCenterSocket;
+    PlaneSocket *m_FusionSocket;
 };

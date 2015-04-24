@@ -30,6 +30,8 @@ public:
 
     virtual void OnSubDlgProDet(void *subDlg) {}
 
-    virtual void OnSubDlgStateMapChange(void *subDlg) {}
+    virtual void OnSubDlgStateMapBackgroundChange(void *subDlg) {}
+
+    virtual void OnSubDlgStateMapTargetsChange(void *subDlg) {}
 };
 

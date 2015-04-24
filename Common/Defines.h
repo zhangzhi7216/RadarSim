@@ -251,7 +251,6 @@ enum FusionAlgoType
 {
     FusionAlgoTypeLocal = 0,
     FusionAlgoTypeVc,
-    FusionAlgoTypeMatlab,
     FusionAlgoTypeLast,
 };
 
@@ -260,21 +259,6 @@ enum FusionLocalAlgoType
     FusionLocalAlgoTypeTest1 = 0,
     FusionLocalAlgoTypeTest2,
     FusionLocalAlgoTypeLast,
-};
-
-enum NaviAlgoType
-{
-    NaviAlgoTypeLocal = 0,
-    NaviAlgoTypeVc,
-    NaviAlgoTypeMatlab,
-    NaviAlgoTypeLast,
-};
-
-enum NaviLocalAlgoType
-{
-    NaviLocalAlgoTypeTest1 = 0,
-    NaviLocalAlgoTypeTest2,
-    NaviLocalAlgoTypeLast,
 };
 
 extern CString __declspec(dllimport) ConfigFileName;

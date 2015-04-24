@@ -34,5 +34,4 @@ public:
 
 public:
     void Reset();
-    void AddTarget(Target &target);
 };

@@ -374,7 +374,3 @@ void CSensorCtrl::Reset()
     BlendAll();
     Invalidate();
 }
-
-void CSensorCtrl::AddTarget(Target &target)
-{
-}

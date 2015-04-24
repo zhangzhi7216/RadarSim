@@ -2,22 +2,20 @@
 
 #include "DataPacket.h"
 
-class CPlaneDlg;
+class CFusionPlaneDlg;
 
 class FusionSocket :
     public CSocket
 {
 public:
-    FusionSocket(CPlaneDlg *dlg);
+    FusionSocket(CFusionPlaneDlg *dlg);
     ~FusionSocket(void);
 
     void OnAccept(int nErrorCode);
+    void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
-    void SendNoiseData(NoiseDataPacket &packet);
-    void SendControlDataAck(ControlDataAckPacket &packet);
-
 public:
-    CPlaneDlg *m_Dlg;
+    CFusionPlaneDlg *m_Dlg;
 };
 

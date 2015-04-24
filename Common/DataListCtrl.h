@@ -24,7 +24,6 @@ public:
     DataList &m_DataList;
 
     void Reset();
-    void AddTarget(Target &target);
     void AddTargetData();
     DECLARE_MESSAGE_MAP()
     afx_msg void OnNMCustomdraw(NMHDR *pNMHDR, LRESULT *pResult);

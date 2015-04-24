@@ -1,10 +1,13 @@
 #pragma once
 
 #include "GeneralAlgo.h"
+#include <map>
+
+using namespace std;
 
 struct __declspec(dllexport) FusionInput
 {
-    vector<NoiseDataPacket> m_NoiseDataPackets;
+    map<SensorId, NoiseDataPacket> m_NoiseDataPackets;
     int m_Interval;
     double m_InfraredMaxDis;
 };

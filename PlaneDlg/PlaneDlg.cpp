@@ -59,8 +59,8 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title
     m_StateMapDlg.m_Dlg = this;
     m_DataListDlg.m_Dlg = this;
 
-    m_DataCenterSocket = new DataCenterSocket(this);
-    m_FusionSocket = new FusionSocket(this);
+    m_DataCenterSocket = new PlaneSocket(this);
+    m_FusionSocket = new PlaneSocket(this);
 }
 
 void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
@@ -408,6 +408,10 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_DataListCtrl.AddTargetData();
     m_DataListDlg.m_Ctrl->AddTargetData();
 
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
+
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -474,10 +478,6 @@ void CPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
     m_FusionSocket->SendNoiseData(packet);
 }
 
-void CPlaneDlg::AddNoiseData(SocketPacketPair spp)
-{
-}
-
 void CPlaneDlg::ResetCtrls()
 {
     m_Plane.Reset();
@@ -487,11 +487,11 @@ void CPlaneDlg::ResetCtrls()
     m_Sensor1Ctrl.Reset();
     m_Sensor2Ctrl.Reset();
     m_DataListCtrl.Reset();
+    m_StateMapCtrl.Reset();
 
     m_Sensor1Dlg.Reset();
     m_Sensor2Dlg.Reset();
     m_DataListDlg.Reset();
-
     m_StateMapDlg.Reset();
 }
 
@@ -527,10 +527,6 @@ void CPlaneDlg::AddTarget(Target &target)
     m_Sensor2.AddTarget(target);
     m_DataList.AddTarget(target);
     m_StateMap.AddTarget(target);
-
-    m_Sensor1Ctrl.AddTarget(target);
-    m_Sensor2Ctrl.AddTarget(target);
-    m_DataListCtrl.AddTarget(target);
 
     m_Sensor1Dlg.AddTarget(target);
     m_Sensor2Dlg.AddTarget(target);
@@ -571,6 +567,9 @@ void CPlaneDlg::OnSubDlgEnable(void *subDlg)
         m_Sensor1Ctrl.Invalidate();
     }
 
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -637,6 +636,9 @@ void CPlaneDlg::OnSubDlgMaxDis(void *subDlg)
         m_Sensor2Ctrl.Invalidate();
     }
 
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -659,6 +661,9 @@ void CPlaneDlg::OnSubDlgMaxTheta(void *subDlg)
         m_Sensor2Ctrl.Invalidate();
     }
 
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -744,7 +749,14 @@ void CPlaneDlg::OnSubDlgProDet(void *subDlg)
     }
 }
 
-void CPlaneDlg::OnSubDlgStateMapChange(void *subDlg)
+void CPlaneDlg::OnSubDlgStateMapBackgroundChange(void *subDlg)
+{
+    m_StateMapCtrl.DrawBackground();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
+}
+
+void CPlaneDlg::OnSubDlgStateMapTargetsChange(void *subDlg)
 {
     m_StateMapCtrl.DrawTargets();
     m_StateMapCtrl.BlendAll();
@@ -850,10 +862,6 @@ void CPlaneDlg::ResetSockets()
     }
 }
 
-void CPlaneDlg::AddPlaneSocket()
-{
-}
-
 void CPlaneDlg::SetPlane(Plane &plane)
 {
     m_Plane = plane;
@@ -877,6 +885,9 @@ void CPlaneDlg::SetSensor1(Sensor &sensor1)
 
     m_Sensor1Dlg.UpdateData(FALSE);
 
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -898,6 +909,9 @@ void CPlaneDlg::SetSensor2(Sensor &sensor2)
 
     m_Sensor2Dlg.UpdateData(FALSE);
 
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -914,14 +928,14 @@ void CPlaneDlg::SetStateMap(StateMap &stateMap)
     m_StateMap.m_MaxY = stateMap.m_MaxY;
     m_StateMap.m_ShowHeight = stateMap.m_ShowHeight;
 
+    m_StateMapCtrl.DrawBackground();
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
     m_StateMapDlg.m_Ctrl->DrawBackground();
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
-}
-
-void CPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
-{
 }
 
 void CPlaneDlg::SetGlobalData(GlobalDataPacket &packet)

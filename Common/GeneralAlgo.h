@@ -7,7 +7,7 @@ template <class TI, class TO>
 class GeneralAlgo
 {
 public:
-    typedef bool (*AlgoFunc)(const TI &, TO &);
+    typedef bool (*AlgoFunc)(TI &, TO &);
 
     GeneralAlgo()
         : m_Func(0)
@@ -24,7 +24,7 @@ public:
         return true;
     }
 
-    virtual bool Run(const TI &input, TO &output)
+    virtual bool Run(TI &input, TO &output)
     {
         if (!m_Func)
         {

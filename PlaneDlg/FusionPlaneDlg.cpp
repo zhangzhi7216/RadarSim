@@ -17,25 +17,24 @@
 
 
 
-CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title, CWnd* pParent /*=NULL*/)
-	: CPlaneDlg(title, pParent)
+CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title
+                                 , bool hasSensor1
+                                 , CString sensor1Title
+                                 , bool hasSensor2
+                                 , CString sensor2Title
+                                 , bool hasStateMap
+                                 , bool hasDataList
+                                 , CWnd* pParent /*=NULL*/)
+	: CPlaneDlg(title, hasSensor1, sensor1Title, hasSensor2, sensor2Title, hasStateMap, hasDataList, pParent)
     , m_FusionSocket(0)
     , m_FusionAlgo(NULL)
 {
-    m_DlgType = DlgTypeFusionPlane;
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_FusionSocket = new FusionSocket(this);
-    m_AddMissile = true;
-
-    // m_MatlabDlg = new CMatlabDlg3("attack_matlab_dialog.dll", "attack_matlab_dialog");
-    m_MatlabDlg = new CMatlabDlg("attack_matlab_dialog", "attack_plane_true", "attack_target_true", "attack_target_fusion", "attack_target_filter", "attack_global_var");
-    // m_ShowDataListDlg = true;
 }
 
 CFusionPlaneDlg::~CFusionPlaneDlg()
 {
-    delete m_MatlabDlg;
-    m_MatlabDlg = NULL;
 }
 
 BEGIN_MESSAGE_MAP(CFusionPlaneDlg, CPlaneDlg)
@@ -129,7 +128,7 @@ void CFusionPlaneDlg::ConnectFusion(const CString &addr, int port)
 void CFusionPlaneDlg::AddPlaneSocket()
 {
     m_Lock.Lock();
-    PlaneSocket *socket = new PlaneSocket(this);
+    FusionSocket *socket = new FusionSocket(this);
     if (m_FusionSocket->Accept(*socket))
     {
         socket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
@@ -138,106 +137,26 @@ void CFusionPlaneDlg::AddPlaneSocket()
     m_Lock.Unlock();
 }
 
-void CFusionPlaneDlg::AddTrueData(TrueDataPacket &packet)
+void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket packat)
 {
-    // CPlaneDlg::AddTrueData(packet);
-    m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
-
-    // 显示本帧前半部，即传感器部分
-    if (m_MatlabDlg)
-    {
-        m_MatlabDlg->AddPlaneTrueData(0, packet.m_PlaneTrueData.m_Pos);
-    }
-    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, packet.m_PlaneTrueData.m_Vel, (TargetState)packet.m_PlaneTrueData.m_State);
-
-    // 让融合机的传感器照常采样，仅仅用于显示
-    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
-    {
-        if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
-        {
-            continue;
-        }
-        Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
-
-        m_Radar.AddTargetData(i, rel);
-        m_Esm.AddTargetData(i, rel);
-        m_Infrared.AddTargetData(i, rel);
-
-        m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
-
-        if (m_MatlabDlg)
-        {
-            m_MatlabDlg->AddTargetTrueData(i, packet.m_TargetTrueDatas[i].m_Pos);
-        }
-    }
-
-    m_RadarCtrl.DrawTargets();
-    m_RadarCtrl.BlendAll();
-    m_RadarCtrl.Invalidate();
-
-    m_RadarDlg.m_Ctrl->DrawTargets();
-    m_RadarDlg.m_Ctrl->BlendAll();
-    m_RadarDlg.m_Ctrl->Invalidate();
-
-    m_EsmCtrl.DrawTargets();
-    m_EsmCtrl.BlendAll();
-    m_EsmCtrl.Invalidate();
-
-    m_EsmDlg.m_Ctrl->DrawTargets();
-    m_EsmDlg.m_Ctrl->BlendAll();
-    m_EsmDlg.m_Ctrl->Invalidate();
-
-    m_InfraredCtrl.DrawTargets();
-    m_InfraredCtrl.BlendAll();
-    m_InfraredCtrl.Invalidate();
-
-    m_InfraredDlg.m_Ctrl->DrawTargets();
-    m_InfraredDlg.m_Ctrl->BlendAll();
-    m_InfraredDlg.m_Ctrl->Invalidate();
-
-    m_DataListCtrl.AddTargetData();
-    m_DataListDlg.m_Ctrl->AddTargetData();
-
-    m_TargetStates.clear();
-    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
-    {
-        m_TargetStates.push_back((TargetState)packet.m_TargetTrueDatas[i].m_State);
-    }
-}
-
-void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
-{
-    m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
-    if (m_NoiseDatas.size() == m_PlaneSockets.size())
+    // m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
+    if (m_NoiseDatas.size() == SensorIdLast)
     {
         DoFusion();
-
-        for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
-        {
-            TrueDataFrame &fusionFrame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
-            m_MatlabDlg->AddTargetFusionData(i, fusionFrame);
-            TrueDataFrame &filterFrame = m_FusionOutput.m_FusionData.m_FilterDatas[i];
-            m_MatlabDlg->AddTargetFilterData(i, filterFrame);
-            // m_MatlabDlg->UpdateGlobalVar();
-        }
-
-        m_MatlabDlg->Update();
 
         // 显示本帧后半部，即态势部分，目标和导弹
         for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
         {
             TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
-            m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, m_TargetStates[i]);
+            m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
         }
 
-        m_StateMapDlg.m_Ctrl.DrawTargets();
-        m_StateMapDlg.m_Ctrl.BlendAll();
-        m_StateMapDlg.m_Ctrl.Invalidate();
-
-        for (int i = 0; i < m_PlaneSockets.size(); ++i)
-        {
-            m_PlaneSockets[i]->SendControlData(m_FusionOutput.m_ControlDatas[i]);
-        }
+        m_StateMapCtrl.DrawTargets();
+        m_StateMapCtrl.BlendAll();
+        m_StateMapCtrl.Invalidate();
+        m_StateMapDlg.m_Ctrl->DrawTargets();
+        m_StateMapDlg.m_Ctrl->BlendAll();
+        m_StateMapDlg.m_Ctrl->Invalidate();
 
         m_NoiseDatas.clear();
     }
@@ -245,7 +164,6 @@ void CFusionPlaneDlg::AddNoiseData(SocketPacketPair spp)
 
 void CFusionPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
 {
-    AddNoiseData(make_pair((PlaneSocket *)NULL, packet));
 }
 
 void CFusionPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
@@ -272,12 +190,9 @@ void CFusionPlaneDlg::DoFusion()
         return;
     }
     FusionInput input;
-    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
-    {
-        input.m_NoiseDataPackets.push_back(it->second.second);
-    }
+    input.m_NoiseDataPackets = m_NoiseDatas;
     input.m_Interval = m_GlobalData.m_Interval;
-    input.m_InfraredMaxDis = m_Infrared.m_MaxDis;
+    // input.m_InfraredMaxDis = m_Infrared.m_MaxDis;
     m_FusionOutput = FusionOutput();
     if (!m_FusionAlgo->Run(input, m_FusionOutput))
     {
@@ -286,42 +201,42 @@ void CFusionPlaneDlg::DoFusion()
     }
 
     // Set Plane true data.
-    for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
-    {
-        m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(it->second.second.m_PlaneTrueData);
-    }
+    // for (map<int, SocketPacketPair>::iterator it = m_NoiseDatas.begin(); it != m_NoiseDatas.end(); ++it)
+    // {
+    //     m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(it->second.second.m_PlaneTrueData);
+    // }
 
     // Check fusion output.
-    int planeSize = m_NoiseDatas.size();
-    int targetSize = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size();
-    if (m_FusionOutput.m_FusionData.m_FusionDatas.size() != targetSize)
-    {
-        CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的融合数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
-        AfxMessageBox(msg);
-        return;
-    }
-    if (m_FusionOutput.m_FusionData.m_FilterDatas.size() != targetSize)
-    {
-        CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的滤波数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
-        AfxMessageBox(msg);
-        return;
-    }
-    if (m_FusionOutput.m_FusionData.m_NoiseDatas.size() != planeSize)
-    {
-        CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的噪声数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), planeSize);
-        AfxMessageBox(msg);
-        return;
-    }
-    if (m_FusionOutput.m_ControlDatas.size() != planeSize)
-    {
-        CString msg;
-        msg.AppendFormat(TEXT("融合算法输出的控制数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_ControlDatas.size(), planeSize);
-        AfxMessageBox(msg);
-        return;
-    }
+    // int planeSize = m_NoiseDatas.size();
+    // int targetSize = m_NoiseDatas.begin()->second.second.m_TargetNoiseDatas.size();
+    // if (m_FusionOutput.m_FusionData.m_FusionDatas.size() != targetSize)
+    // {
+    //     CString msg;
+    //     msg.AppendFormat(TEXT("融合算法输出的融合数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FusionDatas.size(), targetSize);
+    //     AfxMessageBox(msg);
+    //     return;
+    // }
+    // if (m_FusionOutput.m_FusionData.m_FilterDatas.size() != targetSize)
+    // {
+    //     CString msg;
+    //     msg.AppendFormat(TEXT("融合算法输出的滤波数据个数(%d)不等于实际敌机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_FilterDatas.size(), targetSize);
+    //     AfxMessageBox(msg);
+    //     return;
+    // }
+    // if (m_FusionOutput.m_FusionData.m_NoiseDatas.size() != planeSize)
+    // {
+    //     CString msg;
+    //     msg.AppendFormat(TEXT("融合算法输出的噪声数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_FusionData.m_NoiseDatas.size(), planeSize);
+    //     AfxMessageBox(msg);
+    //     return;
+    // }
+    // if (m_FusionOutput.m_ControlDatas.size() != planeSize)
+    // {
+    //     CString msg;
+    //     msg.AppendFormat(TEXT("融合算法输出的控制数据个数(%d)不等于实际我机个数(%d)！请检查你的融合算法！"), m_FusionOutput.m_ControlDatas.size(), planeSize);
+    //     AfxMessageBox(msg);
+    //     return;
+    // }
 
 #ifdef _DEV
     for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
@@ -335,13 +250,6 @@ void CFusionPlaneDlg::DoFusion()
         m_FusionOutput.m_ControlDatas[i].m_FusionData = m_FusionOutput.m_FusionData;
     }
 #endif
-}
-
-void CFusionPlaneDlg::AddControlDataAck(ControlDataAckPacket &packet)
-{
-    m_FusionOutput.m_FusionData.m_PlaneTrueDatas.push_back(packet.m_PlaneTrueData);
-    m_FusionOutput.m_FusionData.m_MissileTrueDatas = packet.m_MissileTrueDatas;
-    m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionData);
 }
 
 void CFusionPlaneDlg::ResetSockets()

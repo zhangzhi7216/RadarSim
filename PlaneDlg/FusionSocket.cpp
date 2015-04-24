@@ -1,9 +1,11 @@
 #include "StdAfx.h"
 #include "FusionSocket.h"
 #include "Resource.h"
-#include "PlaneDlg.h"
+#include "FusionPlaneDlg.h"
+#include "FusionLocalAlgo.h"
+#include "FusionVcAlgo.h"
 
-FusionSocket::FusionSocket(CPlaneDlg *dlg)
+FusionSocket::FusionSocket(CFusionPlaneDlg *dlg)
 : m_Dlg(dlg)
 {
 }
@@ -18,18 +20,64 @@ void FusionSocket::OnAccept(int nErrorCode)
     CSocket::OnAccept(nErrorCode);
 }
 
+void FusionSocket::OnReceive(int nErrorCode)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::load);
+
+    int type;
+    ar >> type;
+    switch (type)
+    {
+    case PacketTypeNoiseData:
+        {
+            NoiseDataPacket packet;
+            ar >> packet;
+            m_Dlg->AddNoiseData(packet);
+        }
+        break;
+    case PacketTypeFusionAlgo:
+        {
+            int type;
+            ar >> type;
+            switch (type)
+            {
+            case FusionAlgoTypeLocal:
+                {
+                    FusionAlgo *algo = new FusionLocalAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetFusionAlgo(algo);
+                }
+                break;
+            case FusionAlgoTypeVc:
+                {
+                    FusionAlgo *algo = new FusionVcAlgo;
+                    ar >> *algo;
+                    m_Dlg->SetFusionAlgo(algo);
+                }
+                break;
+            default:
+                CString msg;
+                msg.AppendFormat(TEXT("未知融合算法类型%d."), type);
+                AfxMessageBox(msg);
+                break;
+            }
+        }
+        break;
+    default:
+        AfxMessageBox(TEXT("未知数据包类型"));
+        break;
+    }
+
+    ar.Flush();
+    AsyncSelect(FD_READ);
+    CSocket::OnReceive(nErrorCode);
+}
+
 void FusionSocket::OnClose(int nErrorCode)
 {
-    AfxMessageBox(TEXT("与融合机的连接断开"));
+    AfxMessageBox(TEXT("与我机的连接断开"));
     m_Dlg->ResetSockets();
     m_Dlg->ConnectDataCenter();
     CSocket::OnClose(nErrorCode);
-}
-
-void FusionSocket::SendNoiseData(NoiseDataPacket &packet)
-{
-    CSocketFile file(this);
-    CArchive ar(&file, CArchive::store);
-    ar << PacketTypeNoiseData << packet;
-    ar.Flush();
 }

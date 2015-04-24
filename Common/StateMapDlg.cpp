@@ -331,7 +331,7 @@ void CStateMapDlg::OnBnClickedStatemapShowTrack()
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
 
-    m_Dlg->OnSubDlgStateMapChange(this);
+    m_Dlg->OnSubDlgStateMapTargetsChange(this);
 }
 
 void CStateMapDlg::OnBnClickedStatemapShowThetaRange()
@@ -342,7 +342,7 @@ void CStateMapDlg::OnBnClickedStatemapShowThetaRange()
     m_Ctrl->BlendAll();
     m_Ctrl->Invalidate();
 
-    m_Dlg->OnSubDlgStateMapChange(this);
+    m_Dlg->OnSubDlgStateMapTargetsChange(this);
 }
 
 void CStateMapDlg::OnCbnSelchangeStatemapBackground()
@@ -357,7 +357,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapBackground()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapBackgroundChange(this);
     }
 }
 
@@ -373,7 +373,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapExplosionType()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }
 
@@ -401,7 +401,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneType()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }
 
@@ -417,7 +417,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapPlaneColor()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }
 
@@ -445,7 +445,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetType()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }
 
@@ -461,7 +461,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapTargetColor()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }
 
@@ -489,7 +489,7 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileType()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }
 
@@ -505,6 +505,6 @@ void CStateMapDlg::OnCbnSelchangeStatemapMissileColor()
         m_Ctrl->BlendAll();
         m_Ctrl->Invalidate();
 
-        m_Dlg->OnSubDlgStateMapChange(this);
+        m_Dlg->OnSubDlgStateMapTargetsChange(this);
     }
 }

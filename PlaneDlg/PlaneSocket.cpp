@@ -2,6 +2,8 @@
 #include "PlaneSocket.h"
 #include "Resource.h"
 #include "PlaneDlg.h"
+#include "FusionLocalAlgo.h"
+#include "FusionVcAlgo.h"
 
 PlaneSocket::PlaneSocket(CPlaneDlg *dlg)
 : m_Dlg(dlg)
@@ -21,11 +23,73 @@ void PlaneSocket::OnReceive(int nErrorCode)
     ar >> type;
     switch (type)
     {
-    case PacketTypeNoiseData:
+    case PacketTypeFusionAddr:
         {
-            NoiseDataPacket packet;
+            CString addr;
+            int port;
+            ar >> addr >> port;
+            m_Dlg->ConnectFusion(addr, port);
+        }
+        break;
+    case PacketTypeReset:
+        {
+            m_Dlg->ResetCtrls();
+        }
+        break;
+    case PacketTypePlane:
+        {
+            Plane plane;
+            ar >> plane;
+            ar >> plane.m_Radar;
+            ar >> plane.m_Esm;
+            ar >> plane.m_Tong;
+            ar >> plane.m_Lei;
+            m_Dlg->SetPlane(plane);
+        }
+        break;
+    case PacketTypeTarget:
+        {
+            Target target;
+            ar >> target;
+            m_Dlg->AddTarget(target);
+        }
+        break;
+    case PacketTypeSensor1:
+        {
+            Sensor s;
+            ar >> s;
+            m_Dlg->SetSensor1(s);
+        }
+        break;
+    case PacketTypeSensor2:
+        {
+            Sensor s;
+            ar >> s;
+            m_Dlg->SetSensor2(s);
+        }
+        break;
+    case PacketTypeStateMap:
+        {
+            StateMap stateMap;
+            ar >> stateMap;
+            m_Dlg->SetStateMap(stateMap);
+        }
+        break;
+    case PacketTypeGlobalData:
+        {
+            GlobalDataPacket packet;
             ar >> packet;
-            m_Dlg->AddNoiseData(make_pair(this, packet));
+            m_Dlg->SetGlobalData(packet);
+        }
+        break;
+    case PacketTypeTrueData:
+        {
+            TrueDataPacket packet;
+            ar >> packet;
+            m_Dlg->AddTrueData(packet);
+            NoiseDataPacket noisePacket;
+            m_Dlg->PackNoiseData(packet, noisePacket);
+            m_Dlg->SendNoiseData(noisePacket);
         }
         break;
     default:
@@ -40,7 +104,51 @@ void PlaneSocket::OnReceive(int nErrorCode)
 
 void PlaneSocket::OnClose(int nErrorCode)
 {
-    AfxMessageBox(TEXT("与飞机的连接断开"));
+    AfxMessageBox(TEXT("与数据中心或融合机的连接断开"));
     m_Dlg->ResetSockets();
     CSocket::OnClose(nErrorCode);
+}
+
+void PlaneSocket::SendNoiseData(NoiseDataPacket &packet)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeNoiseData << packet;
+    ar.Flush();
+}
+
+void PlaneSocket::SendImFusion(int port)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeImFusion << port;
+    ar.Flush();
+}
+
+void PlaneSocket::SendImRadar()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeImRadar;
+    ar.Flush();
+}
+
+void PlaneSocket::SendImDetect()
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeImDetect;
+    ar.Flush();
+}
+
+void PlaneSocket::SendFusionData(FusionDataPacket &packet)
+{
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+
+    ar << PacketTypeFusionData << packet;
+    ar.Flush();
 }

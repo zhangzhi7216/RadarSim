@@ -28,10 +28,6 @@ void CDataListCtrl::Reset()
     DeleteAllItems();
 }
 
-void CDataListCtrl::AddTarget(Target &target)
-{
-}
-
 void CDataListCtrl::AddTargetData()
 {
     //for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)

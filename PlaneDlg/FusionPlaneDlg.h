@@ -8,6 +8,7 @@
 #include <afxmt.h>
 #include <map>
 
+#include "FusionSocket.h"
 #include "FusionAlgo.h"
 
 using namespace std;
@@ -17,7 +18,14 @@ class CFusionPlaneDlg : public CPlaneDlg
 {
 // 构造
 public:
-	CFusionPlaneDlg(LPCWSTR title, CWnd* pParent = NULL);	// 标准构造函数
+	CFusionPlaneDlg(LPCWSTR title
+        , bool hasSensor1
+        , CString sensor1Title
+        , bool hasSensor2
+        , CString sensor2Title
+        , bool hasStateMap
+        , bool hasDataList = true
+        , CWnd* pParent = NULL);	// 标准构造函数
     ~CFusionPlaneDlg();
 
 // 实现
@@ -30,25 +38,20 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 
+public:
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void AddPlaneSocket();
-    virtual void AddTrueData(TrueDataPacket &packet);
-    virtual void AddNoiseData(SocketPacketPair spp);
-    virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void AddNoiseData(NoiseDataPacket packet);
     virtual void SetFusionAlgo(FusionAlgo *algo);
     virtual void DoFusion();
-    map<int, SocketPacketPair> m_NoiseDatas;
+    map<SensorId, NoiseDataPacket> m_NoiseDatas;
+    virtual void SendNoiseData(NoiseDataPacket &packet);
     virtual void ResetSockets();
-    virtual void AddControlDataAck(ControlDataAckPacket &packet);
 
     FusionSocket *m_FusionSocket;
-    vector<PlaneSocket *> m_PlaneSockets;
+    vector<FusionSocket *> m_PlaneSockets;
     CCriticalSection m_Lock;
-
     FusionAlgo *m_FusionAlgo;
-
     FusionOutput m_FusionOutput;
-
-    vector<TargetState> m_TargetStates;
 };

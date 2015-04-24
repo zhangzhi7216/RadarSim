@@ -15,5 +15,5 @@ public:
     FusionLocalAlgoType m_Type;
 };
 
-bool FusionLocalAlgoTest1(const FusionInput &input, FusionOutput &output);
-bool FusionLocalAlgoTest2(const FusionInput &input, FusionOutput &output);
+bool FusionLocalAlgoTest1(FusionInput &input, FusionOutput &output);
+bool FusionLocalAlgoTest2(FusionInput &input, FusionOutput &output);
