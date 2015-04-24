@@ -235,10 +235,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\FusionMatlabAlgo.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\FusionVcAlgo.cpp"
 				>
 			</File>
@@ -256,22 +252,6 @@
 			</File>
 			<File
 				RelativePath=".\MatlabHelper.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviLocalAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviMatlabAlgo.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviVcAlgo.cpp"
 				>
 			</File>
 			<File
@@ -377,10 +357,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\FusionMatlabAlgo.h"
-				>
-			</File>
-			<File
 				RelativePath=".\FusionVcAlgo.h"
 				>
 			</File>
@@ -402,22 +378,6 @@
 			</File>
 			<File
 				RelativePath=".\MatlabHelper.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviLocalAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviMatlabAlgo.h"
-				>
-			</File>
-			<File
-				RelativePath=".\NaviVcAlgo.h"
 				>
 			</File>
 			<File
