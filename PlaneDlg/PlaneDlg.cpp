@@ -68,6 +68,7 @@ void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
     CDialog::DoDataExchange(pDX);
     DDX_Control(pDX, IDC_SENSOR1_CTRL, m_Sensor1Ctrl);
     DDX_Control(pDX, IDC_SENSOR2_CTRL, m_Sensor2Ctrl);
+    DDX_Control(pDX, IDC_STATEMAP_CTRL, m_StateMapCtrl);
     DDX_Control(pDX, IDC_DATALIST_CTRL, m_DataListCtrl);
 }
 
@@ -80,7 +81,6 @@ BEGIN_MESSAGE_MAP(CPlaneDlg, CCommonDlg)
     ON_STN_DBLCLK(IDC_SENSOR2_CTRL, &CPlaneDlg::OnStnDblclickSensor2Ctrl)
     ON_STN_DBLCLK(IDC_STATEMAP_CTRL, &CPlaneDlg::OnStnDblclickStateMapCtrl)
     ON_NOTIFY(NM_DBLCLK, IDC_DATALIST_CTRL, &CPlaneDlg::OnNMDblclkDatalistCtrl)
-    ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 
@@ -554,7 +554,7 @@ void CPlaneDlg::OnSubDlgClose(void *subDlg)
     }
     else if (subDlg == (void *)&m_StateMapDlg)
     {
-        OnLButtonDblClk(0, 0);
+        OnStnDblclickStateMapCtrl();
     }
 }
 
