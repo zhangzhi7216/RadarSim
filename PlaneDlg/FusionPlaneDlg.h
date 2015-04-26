@@ -40,8 +40,8 @@ protected:
 
 public:
     virtual void CreateDataCenterSocket();
-    virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
+    virtual void SendPlaneType();
     virtual void AddPlaneSocket();
     virtual void AddNoiseData(NoiseDataPacket &packet);
     virtual void SetFusionAlgo(FusionAlgo *algo);

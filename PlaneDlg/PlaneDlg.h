@@ -30,7 +30,8 @@ class CPlaneDlg : public CCommonDlg
 {
 // ππ‘Ï
 public:
-	CPlaneDlg(LPCWSTR title
+	CPlaneDlg(PacketType planeType
+        , LPCWSTR title
         , bool hasSensor1
         , CString sensor1Title
         , bool hasSensor2
@@ -59,6 +60,7 @@ protected:
 public:
     bool m_Initialized;
     CString m_Title;
+    PacketType m_PlaneType;
     void Resize();
     afx_msg void OnSize(UINT nType, int cx, int cy);
 
@@ -134,6 +136,7 @@ public:
     virtual void CreateDataCenterSocket();
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
+    virtual void SendPlaneType();
     virtual void SetPlane(Plane &plane);
     virtual void SetSensor1(Sensor &sensor1);
     virtual void SetSensor2(Sensor &sensor2);

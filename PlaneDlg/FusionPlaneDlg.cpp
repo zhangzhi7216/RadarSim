@@ -25,7 +25,7 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title
                                  , bool hasStateMap
                                  , bool hasDataList
                                  , CWnd* pParent /*=NULL*/)
-	: CPlaneDlg(title, hasSensor1, sensor1Title, hasSensor2, sensor2Title, hasStateMap, hasDataList, pParent)
+	: CPlaneDlg(PacketTypeImFusion, title, hasSensor1, sensor1Title, hasSensor2, sensor2Title, hasStateMap, hasDataList, pParent)
     , m_FusionSocket(0)
     , m_FusionAlgo(NULL)
 {
@@ -117,9 +117,8 @@ void CFusionPlaneDlg::CreateDataCenterSocket()
     m_DataCenterSocket = new FusionSocket(this);
 }
 
-void CFusionPlaneDlg::ConnectDataCenter()
+void CFusionPlaneDlg::SendPlaneType()
 {
-    CPlaneDlg::ConnectDataCenter();
     CString addr;
     UINT port;
     m_FusionSocket->GetSockName(addr, port);

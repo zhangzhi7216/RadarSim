@@ -19,7 +19,8 @@
 
 // CPlaneDlg 对话框
 
-CPlaneDlg::CPlaneDlg(LPCWSTR title
+CPlaneDlg::CPlaneDlg(PacketType planeType
+                     , LPCWSTR title
                      , bool hasSensor1
                      , CString sensor1Title
                      , bool hasSensor2
@@ -28,6 +29,7 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title
                      , bool hasDataList
                      , CWnd* pParent /*=NULL*/)
     : CCommonDlg(CPlaneDlg::IDD, pParent)
+    , m_PlaneType(planeType)
     , m_Title(title)
     , m_Initialized(false)
     , m_HasSensor1(hasSensor1)
@@ -150,6 +152,7 @@ BOOL CPlaneDlg::OnInitDialog()
     ResetSockets();
 
     ConnectDataCenter();
+    SendPlaneType();
 
     if (m_ShowStateMapDlg)
     {
@@ -792,6 +795,18 @@ void CPlaneDlg::ConnectDataCenter()
     m_DataCenterSocket->AsyncSelect(FD_READ);
     // m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
     // AfxMessageBox(TEXT("连接到数据中心"));
+}
+
+void CPlaneDlg::SendPlaneType()
+{
+    if (m_PlaneType == PacketTypeImRadar)
+    {
+        m_DataCenterSocket->SendImRadar();
+    }
+    else if (m_PlaneType == PacketTypeImDetect)
+    {
+        m_DataCenterSocket->SendImDetect();
+    }
 }
 
 void CPlaneDlg::ConnectFusion(const CString &addr, int port)

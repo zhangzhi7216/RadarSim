@@ -647,10 +647,7 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
     /////// 以下为本帧内容显示
     // 显示本帧我机
-    for (int i = 0; i < PLANE_COUNT; ++i)
-    {
-        m_StateMap.AddPlaneData(i, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneTrueDatas[index].m_State));
-    }
+    m_StateMap.AddPlaneData(0, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneTrueDatas[index].m_State));
 
     // 检测本帧是否发生爆炸
     vector<TrueDataFrame *> targetTrueDatas;
