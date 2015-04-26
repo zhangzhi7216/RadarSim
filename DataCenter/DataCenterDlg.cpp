@@ -7,7 +7,6 @@
 #include "DataCenterDlg.h"
 
 #include "DataCenterSocket.h"
-#include "PlaneSocket.h"
 
 #include <algorithm>
 #include <math.h>
@@ -18,11 +17,6 @@
 
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
-#include "FusionMatlabAlgo.h"
-
-#include "NaviLocalAlgo.h"
-#include "NaviVcAlgo.h"
-#include "NaviMatlabAlgo.h"
 
 #include "OneTimeMatlabDlg.h"
 
@@ -48,8 +42,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
 	: CCommonDlg(CDataCenterDlg::IDD, pParent)
     , m_FusionConnected(false)
     , m_ConnectedPlanes(0)
-    , m_ShowStateMapDlg(true)
-    , m_ShowMatlabDlg(false)
+    , m_ShowStateMapDlg(false)
     , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_CurrentFrame(0)
     , m_CurrentRound(0)
@@ -87,17 +80,17 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_DataCenterSocket = new DataCenterSocket(this);
 
-    m_Sensors[SensorIdRadar].m_Type = Sensor::SensorTypeSource;
+    m_Sensors[SensorIdRadar].m_Id = SensorIdRadar;
     m_Sensors[SensorIdRadar].m_MaxDis = 350;
     m_Sensors[SensorIdRadar].m_MaxTheta = 120;
 
-    m_Sensors[SensorIdEsm].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdEsm].m_Id = SensorIdEsm;
     m_Sensors[SensorIdEsm].m_MaxDis = 300;
     m_Sensors[SensorIdEsm].m_MaxTheta = 90;
     m_Sensors[SensorIdEsm].m_ThetaRangeColor = Color::Red;
     m_Sensors[SensorIdEsm].m_ShowHeight = FALSE;
 
-    m_Sensors[SensorIdTong].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdTong].m_Id = SensorIdTong;
     m_Sensors[SensorIdTong].m_MaxDis = 250;
     m_Sensors[SensorIdTong].m_MaxTheta = 60;
     m_Sensors[SensorIdTong].m_ShowScanline = FALSE;
@@ -105,13 +98,18 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     m_Sensors[SensorIdTong].m_ThetaRangeColor = Color::Yellow;
     m_Sensors[SensorIdTong].m_ShowHeight = FALSE;
 
-    m_Sensors[SensorIdLei].m_Type = Sensor::SensorTypeNonSource;
+    m_Sensors[SensorIdLei].m_Id = SensorIdLei;
     m_Sensors[SensorIdLei].m_MaxDis = 250;
     m_Sensors[SensorIdLei].m_MaxTheta = 60;
     m_Sensors[SensorIdLei].m_ShowScanline = FALSE;
     m_Sensors[SensorIdLei].m_ShowThetaRange = FALSE;
     m_Sensors[SensorIdLei].m_ThetaRangeColor = Color::Yellow;
     m_Sensors[SensorIdLei].m_ShowHeight = FALSE;
+
+    for (int i = 0; i < PLANE_COUNT; ++i)
+    {
+        m_PlaneSockets[i] = NULL;
+    }
 }
 
 CDataCenterDlg::~CDataCenterDlg()
@@ -119,10 +117,6 @@ CDataCenterDlg::~CDataCenterDlg()
     for (int i = 0; i < m_FusionAlgos.size(); ++i)
     {
         delete m_FusionAlgos[i];
-    }
-    for (int i = 0; i < m_NaviAlgos.size(); ++i)
-    {
-        delete m_NaviAlgos[i];
     }
 }
 
@@ -294,17 +288,6 @@ BOOL CDataCenterDlg::OnInitDialog()
     }
     m_FusionAlgoSel.SetCurSel(0);
 
-    if (m_NaviAlgos.size() == 0)
-    {
-        AfxMessageBox(TEXT("未能读取任何导航算法."));
-        exit(-1);
-    }
-    for (int i = 0; i < m_NaviAlgos.size(); ++i)
-    {
-        m_NaviAlgoSel.InsertString(i, m_NaviAlgos[i]->m_Name);
-    }
-    m_NaviAlgoSel.SetCurSel(0);
-
     for (int i = 0; i < StateMapBackgroundLast; ++i)
     {
         m_StateMapBkg.InsertString(i, StateMapBackgroundNames[i]);
@@ -418,7 +401,7 @@ void CDataCenterDlg::OnSubDlgClose(void *subDlg)
 void CDataCenterDlg::AddPlaneSocket()
 {
     m_Lock.Lock();
-    PlaneSocket *socket = new PlaneSocket(this);
+    DataCenterSocket *socket = new DataCenterSocket(this);
     if (m_DataCenterSocket->Accept(*socket))
     {
         socket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
@@ -504,7 +487,6 @@ void CDataCenterDlg::ResetCtrls()
 
     m_StateMap.Reset();
     m_StateMapDlg.Reset();
-    m_MatlabDlg.Reset();
 }
 
 void CDataCenterDlg::ResetPlanes()
@@ -668,7 +650,6 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         m_StateMap.AddPlaneData(i, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneTrueDatas[index].m_State));
-        m_MatlabDlg.AddPlaneTrueData(i, m_PlaneTrueDatas[index].m_Pos);
     }
 
     // 检测本帧是否发生爆炸
@@ -697,13 +678,8 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     // 显示本帧目标
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
-        m_MatlabDlg.AddTargetTrueData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos);
         TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
-        m_MatlabDlg.AddTargetFusionData(i, fusionFrame);
         TrueDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
-        m_MatlabDlg.AddTargetFilterData(i, filterFrame);
-        // m_MatlabDlg.UpdateGlobalVar();
-
         m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
     }
 
@@ -713,11 +689,9 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_Vel, m_Missiles[i].m_State);
     }
 
-    m_MatlabDlg.Update();
-
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 
     /////// 以下为下一帧内容校正
     // 校正攻击机位置
@@ -766,7 +740,7 @@ void CDataCenterDlg::StartSim()
             m_PlaneSockets[i]->SendRadar(m_Sensors[SensorIdRadar]);
             m_PlaneSockets[i]->SendEsm(m_Sensors[SensorIdEsm]);
         }
-        if (m_PlaneSockets[i]->IsRadar())
+        if (m_PlaneSockets[i]->IsDetect())
         {
             m_PlaneSockets[i]->SendTong(m_Sensors[SensorIdTong]);
             m_PlaneSockets[i]->SendLei(m_Sensors[SensorIdLei]);
@@ -792,18 +766,18 @@ void CDataCenterDlg::StartSim()
         m_PlaneSockets[i]->SendGlobalData(m_GlobalData);
     }
 
-    for (int i = 0; i < PLANE_COUNT; ++i)
-    {
-        m_StateMap.AddPlane(m_Plane, &m_Sensors[SensorIdRadar], &m_Sensors[SensorIdEsm], &m_Sensors[SensorIdTong], &m_Sensors[SensorIdLei]);
-        m_StateMapDlg.AddPlane(m_Plane);
-        m_MatlabDlg.AddPlane(m_Plane);
-    }
+    m_Plane.m_Radar = m_Sensors[SensorIdRadar];
+    m_Plane.m_Esm = m_Sensors[SensorIdEsm];
+    m_Plane.m_Tong = m_Sensors[SensorIdTong];
+    m_Plane.m_Lei = m_Sensors[SensorIdLei];
+
+    m_StateMap.AddPlane(m_Plane);
+    m_StateMapDlg.AddPlane(m_Plane);
 
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         m_StateMap.AddTarget(m_TargetClients[i].m_Target);
         m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
-        m_MatlabDlg.AddTarget(m_TargetClients[i].m_Target);
     }
 
     for (int i = 0; i < m_Missiles.size(); ++i)
@@ -812,16 +786,10 @@ void CDataCenterDlg::StartSim()
         m_StateMapDlg.AddMissile(m_Missiles[i]);
     }
 
-    m_MatlabDlg.SetSize((m_GlobalData.m_EndTime - m_GlobalData.m_StartTime + 1) / m_GlobalData.m_Interval);
-    if (m_ShowMatlabDlg)
-    {
-        m_MatlabDlg.Show();
-    }
-
-    m_StateMapDlg.m_Ctrl.DrawBackground();
-    m_StateMapDlg.m_Ctrl.DrawTargets();
-    m_StateMapDlg.m_Ctrl.BlendAll();
-    m_StateMapDlg.m_Ctrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawBackground();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
 
     m_FusionDatas.clear();
     GenerateTrueData();
@@ -978,56 +946,9 @@ void CDataCenterDlg::ReadConfigFile()
                     m_FusionAlgos.push_back(algo);
                 }
                 break;
-            case FusionAlgoTypeMatlab:
-                {
-                    wstring name, dllFileName, funcName;
-                    ist >> name >> dllFileName >> funcName;
-                    FusionAlgo *algo = new FusionMatlabAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
-                    m_FusionAlgos.push_back(algo);
-                }
-                break;
             default:
                 CString msg;
                 msg.AppendFormat(TEXT("未知融合算法类型%d."), type);
-                AfxMessageBox(msg);
-                break;
-            }
-        }
-        else if (key == TEXT("NAVI_ALGO"))
-        {
-            int type;
-            ist >> type;
-            switch (type)
-            {
-            case NaviAlgoTypeLocal:
-                {
-                    wstring name;
-                    int localType;
-                    ist >> name;
-                    ist >> localType;
-                    NaviAlgo *algo = new NaviLocalAlgo(name.c_str(), (NaviLocalAlgoType)localType);
-                    m_NaviAlgos.push_back(algo);
-                }
-                break;
-            case NaviAlgoTypeVc:
-                {
-                    wstring name, dllFileName, funcName;
-                    ist >> name >> dllFileName >> funcName;
-                    NaviAlgo *algo = new NaviVcAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
-                    m_NaviAlgos.push_back(algo);
-                }
-                break;
-            case NaviAlgoTypeMatlab:
-                {
-                    wstring name, dllFileName, funcName;
-                    ist >> name >> dllFileName >> funcName;
-                    NaviAlgo *algo = new NaviMatlabAlgo(name.c_str(), dllFileName.c_str(), funcName.c_str());
-                    m_NaviAlgos.push_back(algo);
-                }
-                break;
-            default:
-                CString msg;
-                msg.AppendFormat(TEXT("未知导航算法类型%d."), type);
                 AfxMessageBox(msg);
                 break;
             }
@@ -1088,17 +1009,6 @@ void CDataCenterDlg::OnBnClickedStateMapDlgButton()
 void CDataCenterDlg::OnBnClickedMatlabDlgButton()
 {
     // TODO: 在此添加控件通知处理程序代码
-    if (m_ShowMatlabDlg)
-    {
-        m_MatlabDlg.Hide();
-
-        m_ShowMatlabDlg = false;
-    }
-    else
-    {
-        m_MatlabDlg.Show();
-        m_ShowMatlabDlg = true;
-    }
 }
 
 void CDataCenterDlg::OnCbnSelchangeDcSensorId()

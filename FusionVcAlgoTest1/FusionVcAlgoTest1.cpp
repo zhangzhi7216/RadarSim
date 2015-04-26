@@ -94,12 +94,5 @@ extern "C" __declspec(dllexport) bool FusionVcAlgoTest1(FusionInput &input, Fusi
         output.m_FusionData.m_NoiseDatas.push_back(noiseDatas[(SensorId)iSensor]);
     }
 
-    for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
-    {
-        ControlDataPacket packet;
-        packet.m_ControlData.m_Time = noiseDatas[(SensorId)iSensor].m_PlaneTrueData.m_Time;
-        packet.m_ControlData.m_Id = noiseDatas[(SensorId)iSensor].m_PlaneTrueData.m_Id;
-        output.m_ControlDatas.push_back(packet);
-    }
     return true;
 }

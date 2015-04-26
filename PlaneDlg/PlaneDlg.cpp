@@ -33,11 +33,13 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title
     , m_HasSensor1(hasSensor1)
     , m_ShowSensor1Dlg(false)
     , m_Sensor1Title(sensor1Title)
+    , m_Sensor1(SensorIdRadar, m_Plane, m_GlobalData)
     , m_Sensor1Ctrl(m_Sensor1)
     , m_Sensor1Dlg(m_Sensor1Title, m_Sensor1, this)
     , m_HasSensor2(hasSensor2)
     , m_ShowSensor2Dlg(false)
     , m_Sensor2Title(sensor2Title)
+    , m_Sensor2(SensorIdEsm, m_Plane, m_GlobalData)
     , m_Sensor2Ctrl(m_Sensor2)
     , m_Sensor2Dlg(m_Sensor2Title, m_Sensor2, this)
     , m_HasStateMap(hasStateMap)
@@ -58,9 +60,6 @@ CPlaneDlg::CPlaneDlg(LPCWSTR title
     m_Sensor2Dlg.m_Dlg = this;
     m_StateMapDlg.m_Dlg = this;
     m_DataListDlg.m_Dlg = this;
-
-    m_DataCenterSocket = new PlaneSocket(this);
-    m_FusionSocket = new PlaneSocket(this);
 }
 
 void CPlaneDlg::DoDataExchange(CDataExchange* pDX)
@@ -108,6 +107,9 @@ BOOL CPlaneDlg::OnInitDialog()
 
     Resize();
 
+    CreateDataCenterSocket();
+    m_FusionSocket = new PlaneSocket(this);
+
     CSensorDlg::CreateDlg(m_Sensor1Dlg);
     if (m_ShowSensor1Dlg)
     {
@@ -147,7 +149,7 @@ BOOL CPlaneDlg::OnInitDialog()
     ResetCtrls();
     ResetSockets();
 
-    // ConnectDataCenter();
+    ConnectDataCenter();
 
     if (m_ShowStateMapDlg)
     {
@@ -365,28 +367,7 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 
         m_Sensor1.AddTargetData(i, rel);
         m_Sensor2.AddTargetData(i, rel);
-
         m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
-
-        NoiseDataFrame frame;
-        frame.m_Time = packet.m_PlaneTrueData.m_Time;
-        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
-        frame.m_Dis = m_Sensor1.m_TargetDistances[i].back();
-  //      frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
-		//if (!m_Infrared.IsInRange(i, rel))
-		//{
-		//	frame.m_Theta = m_Sensor2.m_TargetThetas[i].back();
-		//}
-  //      frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
-        if (!(frame.m_Dis == 0 && frame.m_Theta == 0 && frame.m_Phi == 0))
-        {
-            Position noiseAbsPos = packet.m_PlaneTrueData.m_Pos + Utility::Rel(frame.m_Dis, frame.m_Theta, frame.m_Phi);
-            m_StateMap.AddTargetData(i, noiseAbsPos, /*use true vel*/packet.m_TargetTrueDatas[i].m_Vel, TargetStateAlive);
-        }
-        else
-        {
-            m_StateMap.AddTargetData(i, Position(0, 0, 0), Velocity(0, 0, 0), TargetStateDestroyed);
-        }
     }
 
     m_Sensor1Ctrl.DrawTargets();
@@ -441,41 +422,12 @@ bool NoiseDataFrameComp(const NoiseDataFrame &f1, const NoiseDataFrame f2)
     return f1.m_Dis < f2.m_Dis;
 }
 
-void CPlaneDlg::PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket)
+void CPlaneDlg::SendNoiseDatas(TrueDataPacket &packet)
 {
-    noisePacket.m_PlaneTrueData = packet.m_PlaneTrueData;
-    noisePacket.m_TargetNoiseDatas.clear();
-    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
-    {
-        NoiseDataFrame frame;
-        if (packet.m_TargetTrueDatas[i].m_State == TargetStateAlive)
-        {
-            frame.m_Time = noisePacket.m_PlaneTrueData.m_Time;
-            frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
-            frame.m_Dis = m_Sensor1.m_TargetDistances[i].back();
-            frame.m_DisVar = m_Sensor1.m_DisVar;
-            //frame.m_Theta = m_Infrared.m_TargetThetas[i].back();
-            //frame.m_ThetaVar = m_Infrared.m_ThetaVar;
-            //Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
-            //if (!m_Infrared.IsInRange(i, rel))
-            //{
-            //    frame.m_Theta = m_Sensor2.m_TargetThetas[i].back();
-            //    frame.m_ThetaVar = m_Sensor2.m_ThetaVar;
-            //}
-            //frame.m_Phi = m_Infrared.m_TargetPhis[i].back();
-            //frame.m_PhiVar = m_Infrared.m_PhiVar;
-        }
-        noisePacket.m_TargetNoiseDatas.push_back(frame);
-    }
-
-#ifndef _DEV
-    sort(noisePacket.m_TargetNoiseDatas.begin(), noisePacket.m_TargetNoiseDatas.end(), &NoiseDataFrameComp);
-#endif
-}
-
-void CPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
-{
-    m_FusionSocket->SendNoiseData(packet);
+    NoiseDataPacket p1 = m_Sensor1.GetNoiseData(packet);
+    NoiseDataPacket p2 = m_Sensor2.GetNoiseData(packet);
+    m_FusionSocket->SendNoiseData(p1);
+    m_FusionSocket->SendNoiseData(p2);
 }
 
 void CPlaneDlg::ResetCtrls()
@@ -763,6 +715,11 @@ void CPlaneDlg::OnSubDlgStateMapTargetsChange(void *subDlg)
     m_StateMapCtrl.Invalidate();
 }
 
+void CPlaneDlg::CreateDataCenterSocket()
+{
+    m_DataCenterSocket = new PlaneSocket(this);
+}
+
 void CPlaneDlg::ConnectDataCenter()
 {
     wstring hostName = DATA_CENTER_ADDR;
@@ -832,7 +789,8 @@ void CPlaneDlg::ConnectDataCenter()
         exit(-1);
     }
 #endif
-    m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+    m_DataCenterSocket->AsyncSelect(FD_READ);
+    // m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
     // AfxMessageBox(TEXT("连接到数据中心"));
 }
 

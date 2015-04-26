@@ -112,6 +112,11 @@ HCURSOR CFusionPlaneDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
+void CFusionPlaneDlg::CreateDataCenterSocket()
+{
+    m_DataCenterSocket = new FusionSocket(this);
+}
+
 void CFusionPlaneDlg::ConnectDataCenter()
 {
     CPlaneDlg::ConnectDataCenter();
@@ -137,17 +142,16 @@ void CFusionPlaneDlg::AddPlaneSocket()
     m_Lock.Unlock();
 }
 
-void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket packat)
+void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
 {
-    // m_NoiseDatas.insert(make_pair(spp.second.m_PlaneTrueData.m_Id, spp));
+    m_NoiseDatas[(SensorId)packet.m_SensorId] = packet;
     if (m_NoiseDatas.size() == SensorIdLast)
     {
         DoFusion();
 
-        // 显示本帧后半部，即态势部分，目标和导弹
-        for (int i = 0; i < m_FusionOutput.m_FusionData.m_FusionDatas.size(); ++i)
+        for (int i = 0; i < m_FusionDataPacket.m_FusionDatas.size(); ++i)
         {
-            TrueDataFrame &frame = m_FusionOutput.m_FusionData.m_FusionDatas[i];
+            TrueDataFrame &frame = m_FusionDataPacket.m_FusionDatas[i];
             m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
         }
 
@@ -158,11 +162,13 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket packat)
         m_StateMapDlg.m_Ctrl->BlendAll();
         m_StateMapDlg.m_Ctrl->Invalidate();
 
+        m_DataCenterSocket->SendFusionData(m_FusionDataPacket);
+
         m_NoiseDatas.clear();
     }
 }
 
-void CFusionPlaneDlg::SendNoiseData(NoiseDataPacket &packet)
+void CFusionPlaneDlg::SendNoiseDatas(TrueDataPacket &packet)
 {
 }
 
@@ -193,8 +199,8 @@ void CFusionPlaneDlg::DoFusion()
     input.m_NoiseDataPackets = m_NoiseDatas;
     input.m_Interval = m_GlobalData.m_Interval;
     // input.m_InfraredMaxDis = m_Infrared.m_MaxDis;
-    m_FusionOutput = FusionOutput();
-    if (!m_FusionAlgo->Run(input, m_FusionOutput))
+    FusionOutput output;;
+    if (!m_FusionAlgo->Run(input, output))
     {
         AfxMessageBox(TEXT("融合算法运行错误."));
         return;

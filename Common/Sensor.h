@@ -40,6 +40,7 @@ public:
     void Reset();
     void AddTarget(Target &target);
     void AddTargetData(int target, Position rel);
+    NoiseDataPacket GetNoiseData(TrueDataPacket &packet);
     bool IsInRange(int i, double d, double t, double p);
     bool IsInRange(int i, Position rel);
     bool IsShowTargetData(int i, int j);

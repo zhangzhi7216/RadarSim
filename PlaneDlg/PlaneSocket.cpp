@@ -21,6 +21,23 @@ void PlaneSocket::OnReceive(int nErrorCode)
 
     int type;
     ar >> type;
+
+    Dispatch(type, ar);
+
+    ar.Flush();
+    AsyncSelect(FD_READ);
+    CSocket::OnReceive(nErrorCode);
+}
+
+void PlaneSocket::OnClose(int nErrorCode)
+{
+    AfxMessageBox(TEXT("与数据中心或融合机的连接断开"));
+    m_Dlg->ResetSockets();
+    CSocket::OnClose(nErrorCode);
+}
+
+void PlaneSocket::Dispatch(int type, CArchive &ar)
+{
     switch (type)
     {
     case PacketTypeFusionAddr:
@@ -87,26 +104,13 @@ void PlaneSocket::OnReceive(int nErrorCode)
             TrueDataPacket packet;
             ar >> packet;
             m_Dlg->AddTrueData(packet);
-            NoiseDataPacket noisePacket;
-            m_Dlg->PackNoiseData(packet, noisePacket);
-            m_Dlg->SendNoiseData(noisePacket);
+            m_Dlg->SendNoiseDatas(packet);
         }
         break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;
     }
-
-    ar.Flush();
-    AsyncSelect(FD_READ);
-    CSocket::OnReceive(nErrorCode);
-}
-
-void PlaneSocket::OnClose(int nErrorCode)
-{
-    AfxMessageBox(TEXT("与数据中心或融合机的连接断开"));
-    m_Dlg->ResetSockets();
-    CSocket::OnClose(nErrorCode);
 }
 
 void PlaneSocket::SendNoiseData(NoiseDataPacket &packet)

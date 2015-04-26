@@ -202,10 +202,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\PlaneSocket.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -245,10 +241,6 @@
 			</File>
 			<File
 				RelativePath=".\DataCenterSocket.h"
-				>
-			</File>
-			<File
-				RelativePath=".\PlaneSocket.h"
 				>
 			</File>
 			<File

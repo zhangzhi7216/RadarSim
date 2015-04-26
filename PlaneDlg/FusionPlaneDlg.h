@@ -39,19 +39,20 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 public:
+    virtual void CreateDataCenterSocket();
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void AddPlaneSocket();
-    virtual void AddNoiseData(NoiseDataPacket packet);
+    virtual void AddNoiseData(NoiseDataPacket &packet);
     virtual void SetFusionAlgo(FusionAlgo *algo);
     virtual void DoFusion();
-    map<SensorId, NoiseDataPacket> m_NoiseDatas;
-    virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void SendNoiseDatas(TrueDataPacket &packet);
     virtual void ResetSockets();
 
     FusionSocket *m_FusionSocket;
     vector<FusionSocket *> m_PlaneSockets;
     CCriticalSection m_Lock;
     FusionAlgo *m_FusionAlgo;
-    FusionOutput m_FusionOutput;
+    map<SensorId, NoiseDataPacket> m_NoiseDatas;
+    FusionDataPacket m_FusionDataPacket;
 };

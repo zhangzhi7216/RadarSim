@@ -15,7 +15,6 @@ struct __declspec(dllexport) FusionInput
 struct __declspec(dllexport) FusionOutput
 {
     FusionDataPacket m_FusionData;
-    vector<ControlDataPacket> m_ControlDatas;
 };
 
 class __declspec(dllexport) FusionAlgo : public GeneralAlgo<FusionInput, FusionOutput>

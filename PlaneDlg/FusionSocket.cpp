@@ -6,7 +6,8 @@
 #include "FusionVcAlgo.h"
 
 FusionSocket::FusionSocket(CFusionPlaneDlg *dlg)
-: m_Dlg(dlg)
+: PlaneSocket(dlg)
+, m_Dlg(dlg)
 {
 }
 
@@ -20,13 +21,8 @@ void FusionSocket::OnAccept(int nErrorCode)
     CSocket::OnAccept(nErrorCode);
 }
 
-void FusionSocket::OnReceive(int nErrorCode)
+void FusionSocket::Dispatch(int type, CArchive &ar)
 {
-    CSocketFile file(this);
-    CArchive ar(&file, CArchive::load);
-
-    int type;
-    ar >> type;
     switch (type)
     {
     case PacketTypeNoiseData:
@@ -65,13 +61,9 @@ void FusionSocket::OnReceive(int nErrorCode)
         }
         break;
     default:
-        AfxMessageBox(TEXT("未知数据包类型"));
+        PlaneSocket::Dispatch(type, ar);
         break;
     }
-
-    ar.Flush();
-    AsyncSelect(FD_READ);
-    CSocket::OnReceive(nErrorCode);
 }
 
 void FusionSocket::OnClose(int nErrorCode)

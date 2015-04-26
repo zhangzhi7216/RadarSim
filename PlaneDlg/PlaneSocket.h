@@ -14,6 +14,8 @@ public:
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
+    virtual void Dispatch(int type, CArchive &ar);
+
     void SendNoiseData(NoiseDataPacket &packet);
     void SendImFusion(int port);
     void SendImRadar();

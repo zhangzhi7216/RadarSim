@@ -170,7 +170,7 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, TrueDataPacket &pack
 
 struct __declspec(dllexport) NoiseDataPacket
 {
-    TrueDataFrame m_PlaneTrueData;
+    int m_SensorId;
     vector<NoiseDataFrame> m_TargetNoiseDatas;
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, NoiseDataPacket &packet);

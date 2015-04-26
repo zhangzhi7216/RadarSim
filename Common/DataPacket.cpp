@@ -91,13 +91,13 @@ CArchive & operator >> (CArchive &ar, TrueDataPacket &packet)
 
 CArchive & operator << (CArchive &ar, NoiseDataPacket &packet)
 {
-    ar << packet.m_PlaneTrueData << packet.m_TargetNoiseDatas;
+    ar << packet.m_SensorId << packet.m_TargetNoiseDatas;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, NoiseDataPacket &packet)
 {
-    ar >> packet.m_PlaneTrueData >> packet.m_TargetNoiseDatas;
+    ar >> packet.m_SensorId >> packet.m_TargetNoiseDatas;
     return ar;
 }
 

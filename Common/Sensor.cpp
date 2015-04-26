@@ -105,40 +105,38 @@ void Sensor::AddTargetData(int target, Position rel)
     double d = Distance(rel), t = Theta(rel) - Theta(m_Plane->m_HeadDir), p = Phi(rel) - Phi(m_Plane->m_HeadDir);
     if (IsInRange(target, d, t, p))
     {
-        double sample = (double)rand();
-        if (sample <= (double)RAND_MAX * m_ProDet / 100.0)
+        // double sample = (double)rand();
+        // if (sample <= (double)RAND_MAX * m_ProDet / 100.0)
+        if (m_GlobalData.m_Delay)
         {
-            if (m_GlobalData.m_Delay)
-            {
-                // 在这里加延迟.
-            }
-            if (m_GlobalData.m_WildValue)
-            {
-                // 在这里加野值.
-            }
-            switch (m_GlobalData.m_NoiseType)
-            {
-            case NoiseTypeWhite:
-                m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
-                m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
-                m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
-                break;
-            case NoiseTypeColor:
-                m_TargetDistances[target].push_back(ColorNoise(d, m_DisVar));
-                m_TargetThetas[target].push_back(ColorNoise(t, m_ThetaVar));
-                m_TargetPhis[target].push_back(ColorNoise(p, m_PhiVar));
-                break;
-            case NoiseTypeMult:
-                m_TargetDistances[target].push_back(MultNoise(d, m_DisVar));
-                m_TargetThetas[target].push_back(MultNoise(t, m_ThetaVar));
-                m_TargetPhis[target].push_back(MultNoise(p, m_PhiVar));
-                break;
-            default:
-                m_TargetDistances[target].push_back(d);
-                m_TargetThetas[target].push_back(t);
-                m_TargetPhis[target].push_back(p);
-                break;
-            }
+            // 在这里加延迟.
+        }
+        if (m_GlobalData.m_WildValue)
+        {
+            // 在这里加野值.
+        }
+        switch (m_GlobalData.m_NoiseType)
+        {
+        case NoiseTypeWhite:
+            m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
+            m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
+            m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+            break;
+        case NoiseTypeColor:
+            m_TargetDistances[target].push_back(ColorNoise(d, m_DisVar));
+            m_TargetThetas[target].push_back(ColorNoise(t, m_ThetaVar));
+            m_TargetPhis[target].push_back(ColorNoise(p, m_PhiVar));
+            break;
+        case NoiseTypeMult:
+            m_TargetDistances[target].push_back(MultNoise(d, m_DisVar));
+            m_TargetThetas[target].push_back(MultNoise(t, m_ThetaVar));
+            m_TargetPhis[target].push_back(MultNoise(p, m_PhiVar));
+            break;
+        default:
+            m_TargetDistances[target].push_back(d);
+            m_TargetThetas[target].push_back(t);
+            m_TargetPhis[target].push_back(p);
+            break;
         }
     }
     else
@@ -147,6 +145,26 @@ void Sensor::AddTargetData(int target, Position rel)
         m_TargetThetas[target].push_back(0);
         m_TargetPhis[target].push_back(0);
     }
+}
+
+NoiseDataPacket Sensor::GetNoiseData(TrueDataPacket &packet)
+{
+    NoiseDataPacket np;
+    np.m_SensorId = m_Id;
+    for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
+    {
+        NoiseDataFrame frame;
+        frame.m_Time = packet.m_TargetTrueDatas[i].m_Time;
+        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+        frame.m_Dis = m_TargetDistances[i].back();
+        frame.m_Theta = m_TargetThetas[i].back();
+        frame.m_Phi = m_TargetPhis[i].back();
+        frame.m_DisVar = m_DisVar;
+        frame.m_ThetaVar = m_ThetaVar;
+        frame.m_PhiVar = m_PhiVar;
+        np.m_TargetNoiseDatas.push_back(frame);
+    }
+    return np;
 }
 
 bool Sensor::IsInRange(int i, double d, double t, double p)

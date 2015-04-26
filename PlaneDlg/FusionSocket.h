@@ -1,19 +1,19 @@
 #pragma once
 
-#include "DataPacket.h"
+#include "PlaneSocket.h"
 
 class CFusionPlaneDlg;
 
 class FusionSocket :
-    public CSocket
+    public PlaneSocket
 {
 public:
     FusionSocket(CFusionPlaneDlg *dlg);
     ~FusionSocket(void);
 
     void OnAccept(int nErrorCode);
-    void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
+    void Dispatch(int type, CArchive &ar);
 
 public:
     CFusionPlaneDlg *m_Dlg;

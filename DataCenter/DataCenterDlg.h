@@ -13,7 +13,6 @@
 #include "../Common/MatlabDlg.h"
 
 #include "FusionAlgo.h"
-#include "NaviAlgo.h"
 
 #include "CommonDlg.h"
 #include "afxwin.h"
@@ -21,7 +20,6 @@
 #include "EvalItem.h"
 
 class DataCenterSocket;
-class PlaneSocket;
 
 // CDataCenterDlg ¶Ô»°¿ò
 class CDataCenterDlg : public CCommonDlg
@@ -52,9 +50,6 @@ protected:
     StateMap m_StateMap;
     CStateMapDlg m_StateMapDlg;
 
-    bool m_ShowMatlabDlg;
-    CMatlabDlg m_MatlabDlg;
-
     DataCenterSocket *m_DataCenterSocket;
     bool m_FusionConnected;
     CString m_FusionAddr;
@@ -75,7 +70,7 @@ public:
     Sensor m_Sensors[SensorIdLast];
     Plane m_Plane;
     vector<TrueDataFrame> m_PlaneTrueDatas;
-    PlaneSocket *m_PlaneSockets[PLANE_COUNT];
+    DataCenterSocket *m_PlaneSockets[PLANE_COUNT];
     vector<TargetClient> m_TargetClients;
     vector<Missile> m_Missiles;
 
@@ -99,7 +94,6 @@ public:
     void ReadConfigFile();
 
     vector<FusionAlgo *> m_FusionAlgos;
-    vector<NaviAlgo *> m_NaviAlgos;
     CComboBox m_NoiseType;
     afx_msg void OnCbnSelchangeDcGlobalNoise();
     CComboBox m_StateMapBkg;

@@ -65,7 +65,6 @@ public:
     virtual void ResetCtrls();
     void ResetSensors();
     void AddPlane(Plane &plane);
-    void AddOtherPlane(Plane &plane);
     void AddTarget(Target &target);
     void AddMissile(int id);
 
@@ -132,6 +131,7 @@ public:
     virtual void OnSubDlgStateMapTargetsChange(void *subDlg);
 
     virtual void ResetSockets();
+    virtual void CreateDataCenterSocket();
     virtual void ConnectDataCenter();
     virtual void ConnectFusion(const CString &addr, int port);
     virtual void SetPlane(Plane &plane);
@@ -140,8 +140,7 @@ public:
     virtual void SetStateMap(StateMap &stateMap);
     virtual void SetGlobalData(GlobalDataPacket &packet);
     virtual void AddTrueData(TrueDataPacket &packet);
-    virtual void PackNoiseData(TrueDataPacket &packet, NoiseDataPacket &noisePacket);
-    virtual void SendNoiseData(NoiseDataPacket &packet);
+    virtual void SendNoiseDatas(TrueDataPacket &packet);
 
     PlaneSocket *m_DataCenterSocket;
     PlaneSocket *m_FusionSocket;
