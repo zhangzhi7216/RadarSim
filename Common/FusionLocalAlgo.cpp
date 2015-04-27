@@ -49,10 +49,52 @@ void FusionLocalAlgo::Input(CArchive &ar)
 
 bool FusionLocalAlgoTest1(FusionInput &input, FusionOutput &output)
 {
+    // This is how to use global var.
+    g_GlobalVar[0].m_G[0] = 0;
+    g_GlobalVar[0].m_G[1] = 0;
+    map<SensorId, NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
+    int interval = input.m_Interval;
+
+    int nTargets = noiseDatas[SensorIdRadar].m_TargetNoiseDatas.size();
+    for (int iTarget = 0; iTarget < nTargets; ++iTarget)
+    {
+        TrueDataFrame frame;
+        frame.m_Time = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Time;
+        frame.m_Id = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Id;
+        for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
+        {
+            // frame += noiseDatas[(SensorId)iSensor].m_TargetNoiseDatas[iTarget];
+        }
+        // frame /= SensorIdLast;
+        output.m_FusionDataPacket.m_FusionDatas.push_back(frame);
+        // frame = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget];
+    }
+
     return true;
 }
 
 bool FusionLocalAlgoTest2(FusionInput &input, FusionOutput &output)
 {
-	return true;
+    // This is how to use global var.
+    g_GlobalVar[0].m_G[0] = 0;
+    g_GlobalVar[0].m_G[1] = 0;
+    map<SensorId, NoiseDataPacket> &noiseDatas = input.m_NoiseDataPackets;
+    int interval = input.m_Interval;
+
+    int nTargets = noiseDatas[SensorIdRadar].m_TargetNoiseDatas.size();
+    for (int iTarget = 0; iTarget < nTargets; ++iTarget)
+    {
+        TrueDataFrame frame;
+        frame.m_Time = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Time;
+        frame.m_Id = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Id;
+        for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
+        {
+            // frame += noiseDatas[(SensorId)iSensor].m_TargetNoiseDatas[iTarget];
+        }
+        // frame /= SensorIdLast;
+        output.m_FusionDataPacket.m_FusionDatas.push_back(frame);
+        // frame = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget];
+    }
+
+    return true;
 }

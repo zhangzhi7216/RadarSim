@@ -676,7 +676,6 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
-        TrueDataFrame &filterFrame = m_FusionDatas.back().m_FilterDatas[i];
         m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
     }
 
@@ -696,17 +695,6 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     {
         // TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
         // m_PlaneSockets[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;
-    }
-
-    // 校正导弹位置
-    for (int i = 0; i < m_Missiles.size(); ++i)
-    {
-        TrueDataFrame &frame = packet.m_MissileTrueDatas[i];
-        m_Missiles[i].m_Position = frame.m_Pos;
-        m_Missiles[i].m_Vel = frame.m_Vel;
-        m_Missiles[i].m_Acc = frame.m_Acc;
-        // 同样不接收导弹状态，等下根据与目标的相对位置来自己判断
-        // m_Missiles[i].m_State = frame.m_State;
     }
 
     ResumeSim();
@@ -813,9 +801,7 @@ void CDataCenterDlg::FinishSim()
     // Output datas.
     OutputPlaneTrueData();
     OutputTargetTrueData();
-    OutputTargetNoiseData();
     OutputFusionData();
-    OutputFilterData();
 
     COneTimeMatlabDlg dlg;
     dlg.Run(m_CurrentRound);
@@ -2049,39 +2035,6 @@ void CDataCenterDlg::OutputTargetTrueData()
     ofs.close();
 }
 
-void CDataCenterDlg::OutputTargetNoiseData()
-{
-    wofstream ofs(m_OutputTargetNoise);
-    if (!ofs)
-    {
-        CString msg;
-        msg.AppendFormat(TEXT("打开目标测量值输出文件%s失败"), m_OutputTargetNoise);
-        AfxMessageBox(msg);
-    }
-
-    ofs << PLANE_COUNT << endl;
-    ofs << endl;
-    for (int iPlane = 0; iPlane < PLANE_COUNT - 1 /*排除攻击机*/; ++iPlane)
-    {
-        ofs << m_TargetClients.size() << endl;
-        ofs << endl;
-        for (int iTarget = 0; iTarget < m_TargetClients.size(); ++iTarget)
-        {
-            ofs << m_FusionDatas.size() << endl;
-            ofs << endl;
-            for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
-            {
-                NoiseDataFrame &frame = m_FusionDatas[iData].m_NoiseDatas[iPlane].m_TargetNoiseDatas[iTarget];
-                ofs << frame << endl;
-            }
-            ofs << endl;
-        }
-        ofs << endl;
-    }
-
-    ofs.close();
-}
-
 void CDataCenterDlg::OutputFusionData()
 {
     wofstream ofs(m_OutputFusion);
@@ -2101,33 +2054,6 @@ void CDataCenterDlg::OutputFusionData()
         for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
         {
             TrueDataFrame &frame = m_FusionDatas[iData].m_FusionDatas[iTarget];
-            ofs << frame << endl;
-        }
-        ofs << endl;
-    }
-
-    ofs.close();
-}
-
-void CDataCenterDlg::OutputFilterData()
-{
-    wofstream ofs(m_OutputFilter);
-    if (!ofs)
-    {
-        CString msg;
-        msg.AppendFormat(TEXT("打开滤波输出文件%s失败"), m_OutputFilter);
-        AfxMessageBox(msg);
-    }
-
-    ofs << m_TargetClients.size() << endl;
-    ofs << endl;
-    for (int iTarget = 0; iTarget < m_TargetClients.size(); ++iTarget)
-    {
-        ofs << m_FusionDatas.size() << endl;
-        ofs << endl;
-        for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
-        {
-            TrueDataFrame &frame = m_FusionDatas[iData].m_FilterDatas[iTarget];
             ofs << frame << endl;
         }
         ofs << endl;

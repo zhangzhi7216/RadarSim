@@ -53,6 +53,6 @@ public:
     vector<FusionSocket *> m_PlaneSockets;
     CCriticalSection m_Lock;
     FusionAlgo *m_FusionAlgo;
-    map<SensorId, NoiseDataPacket> m_NoiseDatas;
-    FusionDataPacket m_FusionDataPacket;
+    FusionInput m_FusionInput;
+    FusionOutput m_FusionOutput;
 };

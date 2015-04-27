@@ -190,9 +190,7 @@ public:
 
     void OutputPlaneTrueData();
     void OutputTargetTrueData();
-    void OutputTargetNoiseData();
     void OutputFusionData();
-    void OutputFilterData();
     CString m_EvalFunc;
     afx_msg void OnEnChangeDcEvalFunc();
     afx_msg void OnEnChangeDcEvalDll();

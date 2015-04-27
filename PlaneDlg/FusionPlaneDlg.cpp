@@ -143,14 +143,14 @@ void CFusionPlaneDlg::AddPlaneSocket()
 
 void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
 {
-    m_NoiseDatas[(SensorId)packet.m_SensorId] = packet;
-    if (m_NoiseDatas.size() == SensorIdLast)
+    m_FusionInput.m_NoiseDataPackets[(SensorId)packet.m_SensorId] = packet;
+    if (m_FusionInput.m_NoiseDataPackets.size() == SensorIdLast)
     {
         DoFusion();
 
-        for (int i = 0; i < m_FusionDataPacket.m_FusionDatas.size(); ++i)
+        for (int i = 0; i < m_FusionOutput.m_FusionDataPacket.m_FusionDatas.size(); ++i)
         {
-            TrueDataFrame &frame = m_FusionDataPacket.m_FusionDatas[i];
+            TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[i];
             m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
         }
 
@@ -161,9 +161,10 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
         m_StateMapDlg.m_Ctrl->BlendAll();
         m_StateMapDlg.m_Ctrl->Invalidate();
 
-        m_DataCenterSocket->SendFusionData(m_FusionDataPacket);
+        m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionDataPacket);
 
-        m_NoiseDatas.clear();
+        m_FusionInput.m_NoiseDataPackets.clear();
+        m_FusionOutput.m_FusionDataPacket = FusionDataPacket();
     }
 }
 
@@ -194,12 +195,7 @@ void CFusionPlaneDlg::DoFusion()
         AfxMessageBox(TEXT("尚未指定融合算法."));
         return;
     }
-    FusionInput input;
-    input.m_NoiseDataPackets = m_NoiseDatas;
-    input.m_Interval = m_GlobalData.m_Interval;
-    // input.m_InfraredMaxDis = m_Infrared.m_MaxDis;
-    FusionOutput output;;
-    if (!m_FusionAlgo->Run(input, output))
+    if (!m_FusionAlgo->Run(m_FusionInput, m_FusionOutput))
     {
         AfxMessageBox(TEXT("融合算法运行错误."));
         return;
