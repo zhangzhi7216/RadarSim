@@ -103,7 +103,7 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     m_Sensors[SensorIdLei].m_MaxTheta = 60;
     m_Sensors[SensorIdLei].m_ShowScanline = FALSE;
     m_Sensors[SensorIdLei].m_ShowThetaRange = FALSE;
-    m_Sensors[SensorIdLei].m_ThetaRangeColor = Color::Yellow;
+    m_Sensors[SensorIdLei].m_ThetaRangeColor = Color::Blue;
     m_Sensors[SensorIdLei].m_ShowHeight = FALSE;
 
     for (int i = 0; i < PLANE_COUNT; ++i)
@@ -542,7 +542,7 @@ void CDataCenterDlg::GenerateTargetClients()
         client.m_Target.m_MoveType = TargetMoveTypeUniVel;
         client.m_Target.m_Position = Position(130, 150 + 150 * i, 150) + Position(10 * (rand() % 3), 10 * (rand() % 3), 10 * (rand() % 3));
         client.m_Target.m_Vel = Position(i + 1, 0, rand() % 3);
-        client.m_Target.m_Color = (TargetColor)(i + PLANE_COUNT);
+        client.m_Target.m_Color = (TargetColor)(i + 1);
         m_TargetClients.push_back(client);
     }
 }
@@ -716,6 +716,10 @@ void CDataCenterDlg::StartSim()
 
     // GeneratePlaneClients();
     // GenerateTargetClients();
+    m_Plane.m_Radar = m_Sensors[SensorIdRadar];
+    m_Plane.m_Esm = m_Sensors[SensorIdEsm];
+    m_Plane.m_Tong = m_Sensors[SensorIdTong];
+    m_Plane.m_Lei = m_Sensors[SensorIdLei];
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
         m_PlaneSockets[i]->SendReset();
@@ -750,11 +754,6 @@ void CDataCenterDlg::StartSim()
         }
         m_PlaneSockets[i]->SendGlobalData(m_GlobalData);
     }
-
-    m_Plane.m_Radar = m_Sensors[SensorIdRadar];
-    m_Plane.m_Esm = m_Sensors[SensorIdEsm];
-    m_Plane.m_Tong = m_Sensors[SensorIdTong];
-    m_Plane.m_Lei = m_Sensors[SensorIdLei];
 
     m_StateMap.AddPlane(m_Plane);
     m_StateMapDlg.AddPlane(m_Plane);
@@ -1259,11 +1258,7 @@ void CDataCenterDlg::OnBnClickedConfigLoad()
         CString filePath = dlg.GetPathName();
         CFile file(filePath, CFile::modeRead);
         CArchive ar(&file, CArchive::load);
-        // ar >> PLANE_COUNT;
-        for (int i = 0; i < PLANE_COUNT; ++i)
-        {
-            ar >> m_Plane;
-        }
+        ar >> m_Plane;
         int targetSize = 0;
         ar >> targetSize;
         for (int i = 0; i < targetSize; ++i)
@@ -1348,11 +1343,7 @@ void CDataCenterDlg::OnBnClickedConfigSave()
         CString filePath = dlg.GetPathName();
         CFile file(filePath, CFile::modeWrite | CFile::modeCreate);
         CArchive ar(&file, CArchive::store);
-        // ar << PLANE_COUNT;
-        for (int i = 0; i < PLANE_COUNT; ++i)
-        {
-            ar << m_Plane;
-        }
+        ar << m_Plane;
         ar << m_TargetClients.size();
         for (int i = 0; i < m_TargetClients.size(); ++i)
         {
@@ -1365,6 +1356,7 @@ void CDataCenterDlg::OnBnClickedConfigSave()
             ar << m_Missiles[i];
         }
         // ar << SensorIdLast;
+
         for (int i = SensorIdRadar; i < SensorIdLast; ++i)
         {
             ar << m_Sensors[i];
@@ -1462,13 +1454,13 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneId()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
         m_PlaneId = target.m_Id;
@@ -1498,13 +1490,13 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneMotion()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1520,13 +1512,13 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneColor()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1542,13 +1534,13 @@ void CDataCenterDlg::OnCbnSelchangeDcPlaneType()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1569,13 +1561,13 @@ void CDataCenterDlg::OnEnChangeDcPlanePosX()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1598,13 +1590,13 @@ void CDataCenterDlg::OnEnChangeDcPlanePosY()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1627,13 +1619,13 @@ void CDataCenterDlg::OnEnChangeDcPlanePosZ()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1656,13 +1648,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelX()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1685,13 +1677,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelY()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1714,13 +1706,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneVelZ()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1743,13 +1735,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccX()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1772,13 +1764,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccY()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1801,13 +1793,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneAccZ()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1830,13 +1822,13 @@ void CDataCenterDlg::OnEnChangeDcPlanePal()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1859,13 +1851,13 @@ void CDataCenterDlg::OnEnChangeDcPlaneRadius()
     if ((index != CB_ERR) && (count >= 1))
     {
         Target *p = NULL;
-        if (index < PLANE_COUNT)
+        if (index == 0)
         {
             p = &m_Plane;
         }
         else
         {
-            p = &m_TargetClients[index - PLANE_COUNT].m_Target;
+            p = &m_TargetClients[index - 1].m_Target;
         }
         Target &target = *p;
 
@@ -1900,15 +1892,11 @@ void CDataCenterDlg::DumpTrueData(LPCWSTR path)
     ofs << m_GlobalData.m_EndTime << endl;
     ofs << endl;
 
-    for (int i = 0; i < PLANE_COUNT; ++i)
+    ofs << m_PlaneTrueDatas.size() << endl;
+    ofs << endl;
+    for (int j = 0; j < m_PlaneTrueDatas.size(); ++j)
     {
-        ofs << m_PlaneTrueDatas.size() << endl;
-        ofs << endl;
-        for (int j = 0; j < m_PlaneTrueDatas.size(); ++j)
-        {
-            ofs << m_PlaneTrueDatas[j] << endl;
-        }
-        ofs << endl;
+        ofs << m_PlaneTrueDatas[j] << endl;
     }
     ofs << endl;
     for (int i = 0; i < m_TargetClients.size(); ++i)
@@ -1991,18 +1979,12 @@ void CDataCenterDlg::OutputPlaneTrueData()
         AfxMessageBox(msg);
     }
 
-    ofs << PLANE_COUNT << endl;
+    vector<TrueDataFrame> &trueDatas = m_PlaneTrueDatas;
+    ofs << trueDatas.size() << endl;
     ofs << endl;
-    for (int i = 0; i < PLANE_COUNT; ++i)
+    for (int j = 0; j < trueDatas.size(); ++j)
     {
-        vector<TrueDataFrame> &trueDatas = m_PlaneTrueDatas;
-        ofs << trueDatas.size() << endl;
-        ofs << endl;
-        for (int j = 0; j < trueDatas.size(); ++j)
-        {
-            ofs << trueDatas[j] << endl;
-        }
-        ofs << endl;
+        ofs << trueDatas[j] << endl;
     }
 
     ofs.close();

@@ -38,6 +38,11 @@ Target &Target::operator =(const Target &t)
     m_Radius = t.m_Radius;
     m_State = t.m_State;
 
+    m_Radar = t.m_Radar;
+    m_Esm = t.m_Esm;
+    m_Tong = t.m_Tong;
+    m_Lei = t.m_Lei;
+
     return *this;
 }
 
