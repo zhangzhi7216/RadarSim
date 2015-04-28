@@ -43,6 +43,10 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlaneTSetup", "PlaneTSetup\
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlaneRSetup", "PlaneRSetup\PlaneRSetup.vdproj", "{EDF138A5-B8BD-4320-B49B-F9F01A111464}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenderCenter", "RenderCenter\RenderCenter.vcproj", "{C5297E9B-BDA5-4655-BD4E-DD9B4F070CBA}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DataCenterSetup", "RenderCenterSetup\RenderCenterSetup.vdproj", "{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -89,6 +93,14 @@ Global
 		{EDF138A5-B8BD-4320-B49B-F9F01A111464}.Debug|Win32.Build.0 = Debug
 		{EDF138A5-B8BD-4320-B49B-F9F01A111464}.Release|Win32.ActiveCfg = Release
 		{EDF138A5-B8BD-4320-B49B-F9F01A111464}.Release|Win32.Build.0 = Release
+		{C5297E9B-BDA5-4655-BD4E-DD9B4F070CBA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C5297E9B-BDA5-4655-BD4E-DD9B4F070CBA}.Debug|Win32.Build.0 = Debug|Win32
+		{C5297E9B-BDA5-4655-BD4E-DD9B4F070CBA}.Release|Win32.ActiveCfg = Release|Win32
+		{C5297E9B-BDA5-4655-BD4E-DD9B4F070CBA}.Release|Win32.Build.0 = Release|Win32
+		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Debug|Win32.ActiveCfg = Debug
+		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Debug|Win32.Build.0 = Debug
+		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Release|Win32.ActiveCfg = Release
+		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Release|Win32.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
