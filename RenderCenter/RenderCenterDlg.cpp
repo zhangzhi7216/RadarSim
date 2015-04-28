@@ -1,11 +1,11 @@
 
-// ImageFinalDlg.cpp : 实现文件
+// RenderCenterDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"
-#include "ImageFinal.h"
-#include "ImageFinalDlg.h"
-#include "afxdialogex.h"
+
+#include "RenderCenter.h"
+#include "RenderCenterDlg.h"
 #include "CvvImage.h"
 #include "FeatureMatch.h"
 #include "LaplacianBlending.h"
@@ -20,7 +20,7 @@ string dir_path = "D:\\test\\imageA\\";
 string dir_path1= "D:\\test\\imageB\\";
 string dir_path2="D:\\test\\fusionimage\\";
 Directory dir;  
-CImageFinalDlg * _Global_Obj_Ptr=NULL;
+CRenderCenterDlg * _Global_Obj_Ptr=NULL;
 int i=0,j=0,k=0,l=0,m=0,h=0;
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 VOID CALLBACK TimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
@@ -156,49 +156,21 @@ VOID CALLBACK TimerProc5(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
 		h=0;
 	}
 }
-class CAboutDlg : public CDialogEx
-{
-public:
-	CAboutDlg();
 
-// 对话框数据
-	enum { IDD = IDD_ABOUTBOX };
-
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
-
-// 实现
-protected:
-	DECLARE_MESSAGE_MAP()
-};
-
-CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
-{
-}
-
-void CAboutDlg::DoDataExchange(CDataExchange* pDX)
-{
-	CDialogEx::DoDataExchange(pDX);
-}
-
-BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
-END_MESSAGE_MAP()
-
-
-// CImageFinalDlg 对话框
+// CRenderCenterDlg 对话框
 
 
 
 
-CImageFinalDlg::CImageFinalDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CImageFinalDlg::IDD, pParent)
+CRenderCenterDlg::CRenderCenterDlg(CWnd* pParent /*=NULL*/)
+	: CCommonDlg(CRenderCenterDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
-void CImageFinalDlg::DoDataExchange(CDataExchange* pDX)
+void CRenderCenterDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialogEx::DoDataExchange(pDX);
+	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_COMBO1, m_ComboL);
 	DDX_Control(pDX, IDC_IMGA, m_imageA);
 	DDX_Control(pDX, IDC_IMGB, m_imageB);
@@ -206,31 +178,31 @@ void CImageFinalDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_IMGTURN, m_imageturn);
 }
 
-BEGIN_MESSAGE_MAP(CImageFinalDlg, CDialogEx)
+BEGIN_MESSAGE_MAP(CRenderCenterDlg, CDialog)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_BN_CLICKED(IDC_INPUTA, &CImageFinalDlg::OnBnClickedInputa)
-	ON_BN_CLICKED(IDC_INPUTB, &CImageFinalDlg::OnBnClickedInputb)
-	ON_BN_CLICKED(IDC_INPUTMUBAN, &CImageFinalDlg::OnBnClickedInputmuban)
-	ON_BN_CLICKED(IDC_ENHANCE, &CImageFinalDlg::OnBnClickedEnhance)
-	ON_BN_CLICKED(IDC_REGISTRY, &CImageFinalDlg::OnBnClickedRegistry)
-	ON_BN_CLICKED(IDC_IMAGEFUSION, &CImageFinalDlg::OnBnClickedImagefusion)
-	ON_BN_CLICKED(IDC_LAPLACE, &CImageFinalDlg::OnBnClickedLaplace)
-	ON_BN_CLICKED(IDC_RATE, &CImageFinalDlg::OnBnClickedRate)
-	ON_BN_CLICKED(IDC_HISFUSION, &CImageFinalDlg::OnBnClickedHisfusion)
-	ON_BN_CLICKED(IDC_TARGET, &CImageFinalDlg::OnBnClickedTarget)
-	ON_BN_CLICKED(IDC_START, &CImageFinalDlg::OnBnClickedStart)
-	ON_BN_CLICKED(IDC_STOP, &CImageFinalDlg::OnBnClickedStop)
-	ON_BN_CLICKED(IDC_SAVE, &CImageFinalDlg::OnBnClickedSave)
+	ON_BN_CLICKED(IDC_INPUTA, &CRenderCenterDlg::OnBnClickedInputa)
+	ON_BN_CLICKED(IDC_INPUTB, &CRenderCenterDlg::OnBnClickedInputb)
+	ON_BN_CLICKED(IDC_INPUTMUBAN, &CRenderCenterDlg::OnBnClickedInputmuban)
+	ON_BN_CLICKED(IDC_ENHANCE, &CRenderCenterDlg::OnBnClickedEnhance)
+	ON_BN_CLICKED(IDC_REGISTRY, &CRenderCenterDlg::OnBnClickedRegistry)
+	ON_BN_CLICKED(IDC_IMAGEFUSION, &CRenderCenterDlg::OnBnClickedImagefusion)
+	ON_BN_CLICKED(IDC_LAPLACE, &CRenderCenterDlg::OnBnClickedLaplace)
+	ON_BN_CLICKED(IDC_RATE, &CRenderCenterDlg::OnBnClickedRate)
+	ON_BN_CLICKED(IDC_HISFUSION, &CRenderCenterDlg::OnBnClickedHisfusion)
+	ON_BN_CLICKED(IDC_TARGET, &CRenderCenterDlg::OnBnClickedTarget)
+	ON_BN_CLICKED(IDC_START, &CRenderCenterDlg::OnBnClickedStart)
+	ON_BN_CLICKED(IDC_STOP, &CRenderCenterDlg::OnBnClickedStop)
+	ON_BN_CLICKED(IDC_SAVE, &CRenderCenterDlg::OnBnClickedSave)
 END_MESSAGE_MAP()
 
 
-// CImageFinalDlg 消息处理程序
+// CRenderCenterDlg 消息处理程序
 
-BOOL CImageFinalDlg::OnInitDialog()
+BOOL CRenderCenterDlg::OnInitDialog()
 {
-	CDialogEx::OnInitDialog();
+	CDialog::OnInitDialog();
 
 	// 将“关于...”菜单项添加到系统菜单中。
 
@@ -269,24 +241,11 @@ BOOL CImageFinalDlg::OnInitDialog()
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
-void CImageFinalDlg::OnSysCommand(UINT nID, LPARAM lParam)
-{
-	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
-	{
-		CAboutDlg dlgAbout;
-		dlgAbout.DoModal();
-	}
-	else
-	{
-		CDialogEx::OnSysCommand(nID, lParam);
-	}
-}
-
 // 如果向对话框添加最小化按钮，则需要下面的代码
 //  来绘制该图标。对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CImageFinalDlg::OnPaint()
+void CRenderCenterDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -307,18 +266,18 @@ void CImageFinalDlg::OnPaint()
 	}
 	else
 	{
-		CDialogEx::OnPaint();
+		CDialog::OnPaint();
 	}
 }
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CImageFinalDlg::OnQueryDragIcon()
+HCURSOR CRenderCenterDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-int CImageFinalDlg::hsi2rgb(Mat &hsi,Mat &image)
+int CRenderCenterDlg::hsi2rgb(Mat &hsi,Mat &image)
 {
 	if(!hsi.data)
 	{  
@@ -394,7 +353,7 @@ int CImageFinalDlg::hsi2rgb(Mat &hsi,Mat &image)
 	}
 	return 0;
 }
-int CImageFinalDlg::rgb2hsi(Mat &image,Mat &hsi)
+int CRenderCenterDlg::rgb2hsi(Mat &image,Mat &hsi)
 {
 	if(!image.data)
 	{  
@@ -450,13 +409,13 @@ int CImageFinalDlg::rgb2hsi(Mat &image,Mat &hsi)
 	return 0;  
 }
 
-Mat CImageFinalDlg::GetImage(double &p,double &q)
+Mat CRenderCenterDlg::GetImage(double &p,double &q)
 {
 	//接受俯仰和方位，返回一张图片
 	Mat getimage;
 	return getimage;
 }
-void CImageFinalDlg::OnBnClickedInputa()
+void CRenderCenterDlg::OnBnClickedInputa()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	string tstring;
@@ -487,7 +446,7 @@ void CImageFinalDlg::OnBnClickedInputa()
 }
 
 
-void CImageFinalDlg::OnBnClickedInputb()
+void CRenderCenterDlg::OnBnClickedInputb()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	string tstring;
@@ -516,7 +475,7 @@ void CImageFinalDlg::OnBnClickedInputb()
 }
 
 
-void CImageFinalDlg::OnBnClickedInputmuban()
+void CRenderCenterDlg::OnBnClickedInputmuban()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	string tstring;
@@ -545,7 +504,7 @@ void CImageFinalDlg::OnBnClickedInputmuban()
 }
 
 
-void CImageFinalDlg::OnBnClickedEnhance()
+void CRenderCenterDlg::OnBnClickedEnhance()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(!img1.data)
@@ -570,7 +529,7 @@ void CImageFinalDlg::OnBnClickedEnhance()
 }
 
 
-void CImageFinalDlg::OnBnClickedRegistry()
+void CRenderCenterDlg::OnBnClickedRegistry()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(!img1.data||!img2.data)
@@ -608,7 +567,7 @@ void CImageFinalDlg::OnBnClickedRegistry()
 }
 
 
-void CImageFinalDlg::OnBnClickedImagefusion()
+void CRenderCenterDlg::OnBnClickedImagefusion()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
@@ -634,7 +593,7 @@ void CImageFinalDlg::OnBnClickedImagefusion()
 }
 
 
-void CImageFinalDlg::OnBnClickedLaplace()
+void CRenderCenterDlg::OnBnClickedLaplace()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
@@ -660,7 +619,7 @@ void CImageFinalDlg::OnBnClickedLaplace()
 }
 
 
-void CImageFinalDlg::OnBnClickedRate()
+void CRenderCenterDlg::OnBnClickedRate()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
@@ -688,7 +647,7 @@ void CImageFinalDlg::OnBnClickedRate()
 }
 
 
-void CImageFinalDlg::OnBnClickedHisfusion()
+void CRenderCenterDlg::OnBnClickedHisfusion()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
@@ -743,7 +702,7 @@ void CImageFinalDlg::OnBnClickedHisfusion()
 }
 
 
-void CImageFinalDlg::OnBnClickedTarget()
+void CRenderCenterDlg::OnBnClickedTarget()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	if(!imgtarget.data)
@@ -832,8 +791,8 @@ void CImageFinalDlg::OnBnClickedTarget()
 
 	Mat H=findHomography(m_leftinliner,m_rightinliner,CV_RANSAC);
 	std::vector<Point2f> obj_corners(4);
-	obj_corners[0]=Point(0,0);obj_corners[1]=Point(imgtarget.cols,0);
-	obj_corners[2]=Point(imgtarget.cols,imgtarget.rows);obj_corners[3]=Point(0,imgtarget.rows);
+    obj_corners[0]=cv::Point(0,0);obj_corners[1]=cv::Point(imgtarget.cols,0);
+    obj_corners[2]=cv::Point(imgtarget.cols,imgtarget.rows);obj_corners[3]=cv::Point(0,imgtarget.rows);
 	std::vector<Point2f>scene_corners(4);
 	perspectiveTransform(obj_corners,scene_corners,H);
 	rectangle(imgfusion,scene_corners[0],scene_corners[2],Scalar(0,0,255,0),1,8,0);
@@ -851,7 +810,7 @@ void CImageFinalDlg::OnBnClickedTarget()
 }
 
 
-void CImageFinalDlg::OnBnClickedStart()
+void CRenderCenterDlg::OnBnClickedStart()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	
@@ -870,7 +829,7 @@ void CImageFinalDlg::OnBnClickedStart()
 }
 
 
-void CImageFinalDlg::OnBnClickedStop()
+void CRenderCenterDlg::OnBnClickedStop()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	switch(m_ComboL.GetCurSel())
@@ -885,7 +844,7 @@ void CImageFinalDlg::OnBnClickedStop()
 }
 
 
-void CImageFinalDlg::OnBnClickedSave()
+void CRenderCenterDlg::OnBnClickedSave()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	string tstring;

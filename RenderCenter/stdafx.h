@@ -43,6 +43,15 @@
 #include <afxsock.h>            // MFC Ì×½Ó×ÖÀ©Õ¹
 
 
+#include <opencv/cv.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/nonfree/nonfree.hpp>
+#include <opencv2/legacy/legacy.hpp>
+#include <opencv2/stitching/stitcher.hpp>
+
+using namespace cv;
 
 
 

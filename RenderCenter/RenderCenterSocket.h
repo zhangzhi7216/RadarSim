@@ -7,14 +7,14 @@
 
 #include "FusionAlgo.h"
 
-class CDataCenterDlg;
+class CRenderCenterDlg;
 
-class DataCenterSocket :
+class RenderCenterSocket :
     public CSocket
 {
 public:
-    DataCenterSocket(CDataCenterDlg *dlg);
-    ~DataCenterSocket(void);
+    RenderCenterSocket(CRenderCenterDlg *dlg);
+    ~RenderCenterSocket(void);
 
     void OnAccept(int nErrorCode);
     void OnReceive(int nErrorCode);
@@ -37,7 +37,7 @@ public:
     bool IsDetect();
 
 protected:
-    CDataCenterDlg *m_Dlg;
+    CRenderCenterDlg *m_Dlg;
     bool m_IsFusion;
     bool m_IsRadar;
     bool m_IsDetect;

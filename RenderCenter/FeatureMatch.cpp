@@ -1,7 +1,6 @@
 #include "StdAfx.h"
 #include "FeatureMatch.h"
 
-
 FeatureMatch::FeatureMatch(void)
 {
 }

@@ -1,16 +1,17 @@
 
-// ImageFinalDlg.h : 头文件
+// RenderCenterDlg.h : 头文件
 //
 
 #pragma once
-#include "stdafx.h"
 
-// CImageFinalDlg 对话框
-class CImageFinalDlg : public CDialogEx
+#include "CommonDlg.h"
+
+// CRenderCenterDlg 对话框
+class CRenderCenterDlg : public CCommonDlg
 {
 // 构造
 public:
-	CImageFinalDlg(CWnd* pParent = NULL);	// 标准构造函数
+	CRenderCenterDlg(CWnd* pParent = NULL);	// 标准构造函数
 	Mat img1,img2,img3,imgtarget,imgfusion;
 	
 // 对话框数据
@@ -28,7 +29,6 @@ protected:
 
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
-	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()

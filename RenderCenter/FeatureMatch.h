@@ -1,5 +1,7 @@
 #pragma once
+
 #include "stdafx.h"
+
 #define DRAW_RICH_KEYPOINTS_MODE     0
 #define DRAW_OUTLIERS_MODE           0
 enum { NONE_FILTER = 0, CROSS_CHECK_FILTER = 1 };

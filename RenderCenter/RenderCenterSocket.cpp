@@ -1,10 +1,10 @@
 #include "StdAfx.h"
-#include "DataCenter.h"
-#include "DataCenterSocket.h"
+#include "RenderCenter.h"
+#include "RenderCenterSocket.h"
 
-#include "DataCenterDlg.h"
+#include "RenderCenterDlg.h"
 
-DataCenterSocket::DataCenterSocket(CDataCenterDlg *dlg)
+RenderCenterSocket::RenderCenterSocket(CRenderCenterDlg *dlg)
 : m_Dlg(dlg)
 , m_IsFusion(false)
 , m_IsRadar(false)
@@ -13,16 +13,16 @@ DataCenterSocket::DataCenterSocket(CDataCenterDlg *dlg)
 {
 }
 
-DataCenterSocket::~DataCenterSocket(void)
+RenderCenterSocket::~RenderCenterSocket(void)
 {
 }
 
-void DataCenterSocket::OnAccept(int nErrorCode)
+void RenderCenterSocket::OnAccept(int nErrorCode)
 {
-    m_Dlg->AddPlaneSocket();
+    // m_Dlg->AddPlaneSocket();
 }
 
-void DataCenterSocket::OnReceive(int nErrorCode)
+void RenderCenterSocket::OnReceive(int nErrorCode)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::load);
@@ -38,14 +38,14 @@ void DataCenterSocket::OnReceive(int nErrorCode)
             GetPeerName(addr, port);
             ar >> port;
             m_IsFusion = true;
-            m_Dlg->SetFusionAddr(addr, port);
+            // m_Dlg->SetFusionAddr(addr, port);
         }
         break;
     case PacketTypeFusionData:
         {
             FusionDataPacket packet;
             ar >> packet;
-            m_Dlg->AddFusionData(packet);
+            // m_Dlg->AddFusionData(packet);
         }
         break;
     case PacketTypeImRadar:
@@ -68,16 +68,16 @@ void DataCenterSocket::OnReceive(int nErrorCode)
     CSocket::OnReceive(nErrorCode);
 }
 
-void DataCenterSocket::OnClose(int nErrorCode)
+void RenderCenterSocket::OnClose(int nErrorCode)
 {
     m_IsFusion = false;
     m_FusionAddrSent = false;
-    m_Dlg->ResetCtrls();
-    m_Dlg->ResetSockets();
+    // m_Dlg->ResetCtrls();
+    // m_Dlg->ResetSockets();
     CSocket::OnClose(nErrorCode);
 }
 
-void DataCenterSocket::SendFusionAddr(const CString &addr, int port)
+void RenderCenterSocket::SendFusionAddr(const CString &addr, int port)
 {
     if (!m_IsFusion)
     {
@@ -92,7 +92,7 @@ void DataCenterSocket::SendFusionAddr(const CString &addr, int port)
     }
 }
 
-void DataCenterSocket::SendReset()
+void RenderCenterSocket::SendReset()
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -100,7 +100,7 @@ void DataCenterSocket::SendReset()
     ar.Flush();
 }
 
-void DataCenterSocket::SendPlane(Plane &plane)
+void RenderCenterSocket::SendPlane(Plane &plane)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -108,7 +108,7 @@ void DataCenterSocket::SendPlane(Plane &plane)
     ar.Flush();
 }
 
-void DataCenterSocket::SendTarget(Target &target)
+void RenderCenterSocket::SendTarget(Target &target)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -116,7 +116,7 @@ void DataCenterSocket::SendTarget(Target &target)
     ar.Flush();
 }
 
-void DataCenterSocket::SendRadar(Sensor &radar)
+void RenderCenterSocket::SendRadar(Sensor &radar)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -124,7 +124,7 @@ void DataCenterSocket::SendRadar(Sensor &radar)
     ar.Flush();
 }
 
-void DataCenterSocket::SendEsm(Sensor &esm)
+void RenderCenterSocket::SendEsm(Sensor &esm)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -132,7 +132,7 @@ void DataCenterSocket::SendEsm(Sensor &esm)
     ar.Flush();
 }
 
-void DataCenterSocket::SendTong(Sensor &tong)
+void RenderCenterSocket::SendTong(Sensor &tong)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -140,7 +140,7 @@ void DataCenterSocket::SendTong(Sensor &tong)
     ar.Flush();
 }
 
-void DataCenterSocket::SendLei(Sensor &lei)
+void RenderCenterSocket::SendLei(Sensor &lei)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -148,7 +148,7 @@ void DataCenterSocket::SendLei(Sensor &lei)
     ar.Flush();
 }
 
-void DataCenterSocket::SendStateMap(StateMap &stateMap)
+void RenderCenterSocket::SendStateMap(StateMap &stateMap)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -156,7 +156,7 @@ void DataCenterSocket::SendStateMap(StateMap &stateMap)
     ar.Flush();
 }
 
-void DataCenterSocket::SendFusionAlgo(FusionAlgo *algo)
+void RenderCenterSocket::SendFusionAlgo(FusionAlgo *algo)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -164,7 +164,7 @@ void DataCenterSocket::SendFusionAlgo(FusionAlgo *algo)
     ar.Flush();
 }
 
-void DataCenterSocket::SendGlobalData(GlobalDataPacket &packet)
+void RenderCenterSocket::SendGlobalData(GlobalDataPacket &packet)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -172,7 +172,7 @@ void DataCenterSocket::SendGlobalData(GlobalDataPacket &packet)
     ar.Flush();
 }
 
-void DataCenterSocket::SendTrueData(TrueDataPacket &packet)
+void RenderCenterSocket::SendTrueData(TrueDataPacket &packet)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
@@ -180,17 +180,17 @@ void DataCenterSocket::SendTrueData(TrueDataPacket &packet)
     ar.Flush();
 }
 
-bool DataCenterSocket::IsFusion()
+bool RenderCenterSocket::IsFusion()
 {
     return m_IsFusion;
 }
 
-bool DataCenterSocket::IsRadar()
+bool RenderCenterSocket::IsRadar()
 {
     return m_IsRadar;
 }
 
-bool DataCenterSocket::IsDetect()
+bool RenderCenterSocket::IsDetect()
 {
     return m_IsDetect;
 }
