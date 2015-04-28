@@ -44,8 +44,11 @@ EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PlaneRSetup", "PlaneRSetup\PlaneRSetup.vdproj", "{EDF138A5-B8BD-4320-B49B-F9F01A111464}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenderCenter", "RenderCenter\RenderCenter.vcproj", "{C5297E9B-BDA5-4655-BD4E-DD9B4F070CBA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{61CFEE9C-D7C7-41D6-AA1C-7045594C401E} = {61CFEE9C-D7C7-41D6-AA1C-7045594C401E}
+	EndProjectSection
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DataCenterSetup", "RenderCenterSetup\RenderCenterSetup.vdproj", "{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RenderCenterSetup", "RenderCenterSetup\RenderCenterSetup.vdproj", "{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -190,6 +190,22 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\CvvImage.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\FeatureMatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\LaplacianBlending.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\RateBlending.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\RenderCenter.cpp"
 				>
 			</File>
@@ -227,6 +243,22 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\CvvImage.h"
+				>
+			</File>
+			<File
+				RelativePath=".\FeatureMatch.h"
+				>
+			</File>
+			<File
+				RelativePath=".\LaplacianBlending.h"
+				>
+			</File>
+			<File
+				RelativePath=".\RateBlending.h"
+				>
+			</File>
 			<File
 				RelativePath=".\RenderCenter.h"
 				>
