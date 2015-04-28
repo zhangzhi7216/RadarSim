@@ -3,7 +3,6 @@
 //
 
 #include "stdafx.h"
-#include "../PlaneDlg/Resource.h"
 #include "RenderCenter.h"
 #include "RenderCenterDlg.h"
 

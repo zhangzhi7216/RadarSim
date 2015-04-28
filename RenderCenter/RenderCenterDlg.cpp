@@ -10,6 +10,9 @@
 #include "FeatureMatch.h"
 #include "LaplacianBlending.h"
 #include "RateBlending.h"
+#include "Utility.h"
+
+using namespace Utility;
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -179,9 +182,9 @@ void CRenderCenterDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CRenderCenterDlg, CDialog)
-	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDC_INPUTA, &CRenderCenterDlg::OnBnClickedInputa)
 	ON_BN_CLICKED(IDC_INPUTB, &CRenderCenterDlg::OnBnClickedInputb)
 	ON_BN_CLICKED(IDC_INPUTMUBAN, &CRenderCenterDlg::OnBnClickedInputmuban)
@@ -203,26 +206,6 @@ END_MESSAGE_MAP()
 BOOL CRenderCenterDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
-
-	// 将“关于...”菜单项添加到系统菜单中。
-
-	// IDM_ABOUTBOX 必须在系统命令范围内。
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
-
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != NULL)
-	{
-		BOOL bNameValid;
-		CString strAboutMenu;
-		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-		ASSERT(bNameValid);
-		if (!strAboutMenu.IsEmpty())
-		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-		}
-	}
 
 	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
 	//  执行此操作
@@ -424,12 +407,12 @@ void CRenderCenterDlg::OnBnClickedInputa()
 	if(tDlg.DoModal()==IDOK)
 	{
 		tFileName=tDlg.GetPathName();
-		tstring=tFileName.GetBuffer(0);
+		tstring=wstring2string(tFileName.GetBuffer(0));
 	}
 	img1=imread(tstring,1);
 	if(!img1.data)
 	{
-		MessageBox("error","no image loaded!",MB_OK);
+		MessageBox(TEXT("error","no image loaded!"),MB_OK);
 		return;
 	}
 
@@ -455,12 +438,12 @@ void CRenderCenterDlg::OnBnClickedInputb()
 	if(tDlg.DoModal()==IDOK)
 	{
 		tFileName=tDlg.GetPathName();
-		tstring=tFileName.GetBuffer(0);
+		tstring=wstring2string(tFileName.GetBuffer(0));
 	}
 	img2=imread(tstring,1);
 	if(!img2.data)
 	{
-		MessageBox("error","no image loaded!",MB_OK);
+		MessageBox(TEXT("error","no image loaded!"),MB_OK);
 		return;
 	}
 	CWnd *pWnd=GetDlgItem(IDC_IMGB);
@@ -484,12 +467,12 @@ void CRenderCenterDlg::OnBnClickedInputmuban()
 	if(tDlg.DoModal()==IDOK)
 	{
 		tFileName=tDlg.GetPathName();
-		tstring=tFileName.GetBuffer(0);
+		tstring=wstring2string(tFileName.GetBuffer(0));
 	}
 	imgtarget=imread(tstring,1);
 	if(!imgtarget.data)
 	{
-		MessageBox("error","no image loaded!",MB_OK);
+		MessageBox(TEXT("error"),TEXT("no image loaded!"),MB_OK);
 		return;
 	}
 	CWnd *pWnd=GetDlgItem(IDC_MUBAN);
@@ -509,7 +492,7 @@ void CRenderCenterDlg::OnBnClickedEnhance()
 	// TODO: 在此添加控件通知处理程序代码
 	if(!img1.data)
 	{
-		MessageBox("no image loaded!","error",MB_OK);
+		MessageBox(TEXT("no image loaded!"),TEXT("error"),MB_OK);
 		return;
 	}
 	vector<Mat> splitBGR(img1.channels());
@@ -534,7 +517,7 @@ void CRenderCenterDlg::OnBnClickedRegistry()
 	// TODO: 在此添加控件通知处理程序代码
 	if(!img1.data||!img2.data)
 	{
-		MessageBox("no image loaded!","error",MB_OK);
+		MessageBox(TEXT("no image loaded!"),TEXT("error"),MB_OK);
 		return;
 	}
 	cv::initModule_nonfree();
@@ -572,7 +555,7 @@ void CRenderCenterDlg::OnBnClickedImagefusion()
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
 	{
-		MessageBox("Two images are not the same size!","error",MB_OK);
+		MessageBox(TEXT("Two images are not the same size!"),TEXT("error"),MB_OK);
 		return;
 	}
 	double alpha=0.6;
@@ -598,7 +581,7 @@ void CRenderCenterDlg::OnBnClickedLaplace()
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
 	{
-		MessageBox("Two images are not the same size!","error",MB_OK);
+		MessageBox(TEXT("Two images are not the same size!"),TEXT("error"),MB_OK);
 		return;
 	}
 	LaplacianBlending lp;
@@ -624,7 +607,7 @@ void CRenderCenterDlg::OnBnClickedRate()
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
 	{
-		MessageBox("Two images are not the same size!","error",MB_OK);
+		MessageBox(TEXT("Two images are not the same size!"),TEXT("error"),MB_OK);
 		return;
 	}
 	RateBlending lp;
@@ -652,7 +635,7 @@ void CRenderCenterDlg::OnBnClickedHisfusion()
 	// TODO: 在此添加控件通知处理程序代码
 	if(img1.size()!=img2.size())
 	{
-		MessageBox("Two images are not the same size!","error",MB_OK);
+		MessageBox(TEXT("Two images are not the same size!"),TEXT("error"),MB_OK);
 		return;
 	}
 	Mat hsi1,hsi2,hsi3,p1,p2;
@@ -707,7 +690,7 @@ void CRenderCenterDlg::OnBnClickedTarget()
 	// TODO: 在此添加控件通知处理程序代码
 	if(!imgtarget.data)
 	{
-		MessageBox("no target image loaded!","error",MB_OK);
+		MessageBox(TEXT("no target image loaded!"),TEXT("error"),MB_OK);
 		return;
 	}
 	SiftFeatureDetector siftdtc;
@@ -854,11 +837,11 @@ void CRenderCenterDlg::OnBnClickedSave()
 	if(tDlg.DoModal()==IDOK)
 	{
 		tFileName=tDlg.GetPathName();
-		tstring=tFileName.GetBuffer(0);
+		tstring=wstring2string(tFileName.GetBuffer(0));
 	}
 	if(!imgfusion.data)
 	{
-		MessageBox("error","imgfusion is empty!",MB_OK);
+		MessageBox(TEXT("error"),TEXT("imgfusion is empty!"),MB_OK);
 		return;
 	}
 	imwrite(tstring,imgfusion);

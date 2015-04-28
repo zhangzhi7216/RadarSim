@@ -18,4 +18,6 @@ namespace Utility
     __declspec(dllexport) double MultNoise(double value, double var);
     __declspec(dllexport) void CheckMissileHit(vector<Missile> &missiles, vector<TrueDataFrame> &targetTrueDatas);
     __declspec(dllexport) void CheckMissileHit(vector<Missile> &missiles, vector<TrueDataFrame *> &targetTrueDatas);
+    __declspec(dllexport) wstring string2wstring(string str);
+    __declspec(dllexport) string wstring2string(wstring wstr);
 };
