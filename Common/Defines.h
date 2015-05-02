@@ -208,6 +208,9 @@ extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 #define DATA_CENTER_ADDR TEXT("localhost")
 #define DATA_CENTER_PORT 10086
 
+#define RENDER_CENTER_ADDR TEXT("localhost")
+#define RENDER_CENTER_PORT 10087
+
 enum PacketType
 {
     PacketTypeImFusion = 0,

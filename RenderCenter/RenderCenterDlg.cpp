@@ -167,8 +167,10 @@ VOID CALLBACK TimerProc5(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
 
 CRenderCenterDlg::CRenderCenterDlg(CWnd* pParent /*=NULL*/)
 	: CCommonDlg(CRenderCenterDlg::IDD, pParent)
+    , m_FusionSocket(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+    m_RenderCenterSocket = new RenderCenterSocket(this);
 }
 
 void CRenderCenterDlg::DoDataExchange(CDataExchange* pDX)
@@ -220,6 +222,22 @@ BOOL CRenderCenterDlg::OnInitDialog()
 	m_ComboL.AddString(_T("图像HIS融合"));
 	m_ComboL.AddString(_T("图像比率低通融合"));
 	m_ComboL.SetCurSel(0);
+
+    if (!m_RenderCenterSocket->Create(DATA_CENTER_PORT))
+    {
+        AfxMessageBox(TEXT("套接字创建失败."));
+        exit(-1);
+    }
+    if (!m_RenderCenterSocket->Listen())
+    {
+        AfxMessageBox(TEXT("监听失败."));
+        exit(-1);
+    }
+    if (!m_RenderCenterSocket->AsyncSelect(FD_ACCEPT))
+    {
+        AfxMessageBox(TEXT("选择失败."));
+        exit(-1);
+    }
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -845,4 +863,32 @@ void CRenderCenterDlg::OnBnClickedSave()
 		return;
 	}
 	imwrite(tstring,imgfusion);
+}
+
+void CRenderCenterDlg::SetFusionSocket()
+{
+    m_Lock.Lock();
+    if (m_FusionSocket != NULL)
+    {
+        AfxMessageBox(TEXT("连接已满"));
+        m_Lock.Unlock();
+        return;
+    }
+    m_FusionSocket = new RenderCenterSocket(this);
+    if (m_RenderCenterSocket->Accept(*m_FusionSocket))
+    {
+        m_RenderCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+    }
+    m_Lock.Unlock();
+}
+
+void CRenderCenterDlg::ResetFusionSocket()
+{
+    m_Lock.Lock();
+    if (m_FusionSocket != NULL)
+    {
+        m_FusionSocket->Close();
+        delete m_FusionSocket;
+    }
+    m_Lock.Unlock();
 }

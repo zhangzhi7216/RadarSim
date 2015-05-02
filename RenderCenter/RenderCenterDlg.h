@@ -5,6 +5,8 @@
 #pragma once
 
 #include "CommonDlg.h"
+#include "RenderCenterSocket.h"
+#include "afxmt.h"
 
 // CRenderCenterDlg ¶Ô»°¿ò
 class CRenderCenterDlg : public CCommonDlg
@@ -57,4 +59,10 @@ public:
 	friend VOID CALLBACK TimerProc5(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime);
 	afx_msg void OnBnClickedStop();
 	afx_msg void OnBnClickedSave();
+
+    RenderCenterSocket *m_RenderCenterSocket;
+    RenderCenterSocket *m_FusionSocket;
+    CCriticalSection m_Lock;
+    void SetFusionSocket();
+    void ResetFusionSocket();
 };
