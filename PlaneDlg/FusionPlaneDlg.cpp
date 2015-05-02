@@ -71,6 +71,7 @@ BOOL CFusionPlaneDlg::OnInitDialog()
         exit(-1);
     }
 
+    m_RenderCenterSocket = new FusionSocket(this);
 	CPlaneDlg::OnInitDialog();
 
 	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
@@ -79,7 +80,7 @@ BOOL CFusionPlaneDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
-    m_RenderCenterSocket = new FusionSocket(this);
+    ConnectRenderCenter();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -186,7 +187,8 @@ void CFusionPlaneDlg::ConnectRenderCenter()
     {
         if (!m_RenderCenterSocket->Connect(dlg.m_HostName, dlg.m_Port))
         {
-            AfxMessageBox(TEXT("连接到数据中心失败."));
+            Utility::PromptLastErrorMessage();
+            AfxMessageBox(TEXT("连接到渲染中心失败."));
             exit(-1);
         }
     }
@@ -332,6 +334,13 @@ void CFusionPlaneDlg::ResetSockets()
 {
     m_Lock.Lock();
     CPlaneDlg::ResetSockets();
+    m_RenderCenterSocket->Close();
+    BOOL reuse = TRUE;
+    m_RenderCenterSocket->SetSockOpt(SO_REUSEADDR, (void *)&reuse, sizeof(reuse), SOL_SOCKET);
+    if (!m_RenderCenterSocket->Create())
+    {
+        AfxMessageBox(TEXT("创建到渲染中心的套接字失败"));
+    }
     for (int i = 0; i < m_PlaneSockets.size(); ++i)
     {
         m_PlaneSockets[i]->Close();

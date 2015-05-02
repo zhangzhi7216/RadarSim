@@ -223,7 +223,7 @@ BOOL CRenderCenterDlg::OnInitDialog()
 	m_ComboL.AddString(_T("图像比率低通融合"));
 	m_ComboL.SetCurSel(0);
 
-    if (!m_RenderCenterSocket->Create(DATA_CENTER_PORT))
+    if (!m_RenderCenterSocket->Create(RENDER_CENTER_PORT))
     {
         AfxMessageBox(TEXT("套接字创建失败."));
         exit(-1);
