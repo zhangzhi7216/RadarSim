@@ -73,3 +73,7 @@ void FusionSocket::OnClose(int nErrorCode)
     m_Dlg->ConnectDataCenter();
     CSocket::OnClose(nErrorCode);
 }
+
+void FusionSocket::SendKeyTargetReq(double theta, double phi)
+{
+}

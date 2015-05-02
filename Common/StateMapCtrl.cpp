@@ -393,6 +393,7 @@ void CStateMapCtrl::BlendAll()
 BEGIN_MESSAGE_MAP(CStateMapCtrl, CStatic)
     ON_WM_PAINT()
     ON_WM_SIZE()
+    ON_WM_RBUTTONDOWN()
 END_MESSAGE_MAP()
 
 void CStateMapCtrl::OnPaint()
@@ -449,4 +450,15 @@ void CStateMapCtrl::Reset()
 
 void CStateMapCtrl::AddTarget(Target &target)
 {
+}
+
+void CStateMapCtrl::OnRButtonDown(UINT nFlags, CPoint point)
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+    double absX = point.x / m_StateMap.m_MaxX;
+    double absY = point.y / m_StateMap.m_MaxY;
+
+    m_StateMap.ZoomKeyTarget(absX, absY);
+
+    CStatic::OnRButtonDown(nFlags, point);
 }

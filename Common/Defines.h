@@ -229,6 +229,8 @@ enum PacketType
     PacketTypeTrueData,
     PacketTypeNoiseData,
     PacketTypeFusionData,
+    PacketTypeKeyTargetReq,
+    PacketTypeKeyTargetAck,
 };
 
 enum NoiseType

@@ -29,4 +29,5 @@ public:
 public:
     void Reset();
     void AddTarget(Target &target);
+    afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 };

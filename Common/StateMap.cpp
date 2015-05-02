@@ -9,6 +9,7 @@ StateMap::StateMap()
 , m_ShowHeight(FALSE)
 , m_Background(StateMapBackground0)
 , m_ExplosionType(ExplosionType0)
+, m_ZoomKeyTargetId(-1)
 {
 }
 
@@ -74,6 +75,12 @@ void StateMap::AddMissileData(int miss, Position pos, Velocity vel, TargetState 
     {
         m_MissilePaths[miss].push_back(pos);
     }
+}
+
+void StateMap::ZoomKeyTarget(double x, double y)
+{
+    // TODO: Add key target detect.
+    m_ZoomKeyTargetId = 0;
 }
 
 CArchive & operator << (CArchive &ar, StateMap &stateMap)

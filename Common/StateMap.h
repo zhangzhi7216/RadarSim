@@ -35,6 +35,9 @@ public:
     void AddTargetData(int target, Position pos, Velocity vel, TargetState state);
     void AddMissile(Missile &miss);
     void AddMissileData(int miss, Position pos, Velocity vel, TargetState state);
+
+    int m_ZoomKeyTargetId;
+    void ZoomKeyTarget(double x, double y);
 };
 
 __declspec(dllexport) CArchive & operator << (CArchive &ar, StateMap &stateMap);
