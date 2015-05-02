@@ -763,13 +763,13 @@ void CPlaneDlg::ConnectDataCenter()
         wistringstream ist(line);
         wstring key;
         ist >> key;
-        if (key == TEXT("IP"))
+        if (key == TEXT("DATA_CENTER_IP"))
         {
             wstring ip;
             ist >> ip;
             hostName = ip;
         }
-        else if (key == TEXT("PORT"))
+        else if (key == TEXT("DATA_CENTER_PORT"))
         {
             int configPort;
             ist >> configPort;

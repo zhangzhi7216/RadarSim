@@ -4,6 +4,12 @@
 #include "stdafx.h"
 #include "FusionPlane.h"
 #include "FusionPlaneDlg.h"
+#include "IpDlg.h"
+
+#include "Utility.h"
+#include <algorithm>
+#include <fstream>
+#include <sstream>
 
 #include <assert.h>
 
@@ -26,7 +32,8 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title
                                  , bool hasDataList
                                  , CWnd* pParent /*=NULL*/)
 	: CPlaneDlg(PacketTypeImFusion, title, hasSensor1, sensor1Title, hasSensor2, sensor2Title, hasStateMap, hasDataList, pParent)
-    , m_FusionSocket(0)
+    , m_FusionSocket(NULL)
+    , m_RenderCenterSocket(NULL)
     , m_FusionAlgo(NULL)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
@@ -72,6 +79,7 @@ BOOL CFusionPlaneDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
     // TODO: 在此添加额外的初始化代码
+    m_RenderCenterSocket = new FusionSocket(this);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -123,6 +131,73 @@ void CFusionPlaneDlg::SendPlaneType()
     UINT port;
     m_FusionSocket->GetSockName(addr, port);
     m_DataCenterSocket->SendImFusion(port);
+}
+
+void CFusionPlaneDlg::ConnectRenderCenter()
+{
+    wstring hostName = RENDER_CENTER_ADDR;
+    int port = RENDER_CENTER_PORT;
+
+    wifstream in(ConfigFileName);
+    in.imbue(locale("chs"));
+
+    wstring nextLine = TEXT("");
+
+    while(in || nextLine.length() > 0)
+    {
+        wstring line;
+        if(nextLine.length() > 0)
+        {
+            line = nextLine;  // we read ahead; use it now
+            nextLine = L"";
+        }
+        else
+        {
+            getline(in, line);
+        }
+
+        line = line.substr(0, line.find(TEXT("#")));
+
+        if (line.length() == 0)
+        {
+            continue;
+        }
+
+        wistringstream ist(line);
+        wstring key;
+        ist >> key;
+        if (key == TEXT("RENDER_CENTER_IP"))
+        {
+            wstring ip;
+            ist >> ip;
+            hostName = ip;
+        }
+        else if (key == TEXT("RENDER_CENTER_PORT"))
+        {
+            int configPort;
+            ist >> configPort;
+            port = configPort;
+        }
+    }
+
+    in.close();
+    CIpDlg dlg(hostName.c_str(), port);
+    if (IDOK == dlg.DoModal())
+    {
+        if (!m_RenderCenterSocket->Connect(dlg.m_HostName, dlg.m_Port))
+        {
+            AfxMessageBox(TEXT("连接到数据中心失败."));
+            exit(-1);
+        }
+    }
+    else
+    {
+        exit(-1);
+    }
+
+    m_RenderCenterSocket->AsyncSelect(FD_READ);
+    // m_DataCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+    // AfxMessageBox(TEXT("连接到数据中心"));
 }
 
 void CFusionPlaneDlg::ConnectFusion(const CString &addr, int port)
