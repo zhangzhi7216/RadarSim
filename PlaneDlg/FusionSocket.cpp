@@ -75,7 +75,7 @@ void FusionSocket::Dispatch(int type, CArchive &ar)
             char *buf = new char[length];
             Receive(&buf[0], length);
             DWORD written = 0;
-            WriteFile(KEY_TARGET_FILE_NAME, buf, length, &written, NULL);
+            WriteFile(file, buf, length, &written, NULL);
             delete[] buf;
             CloseHandle(file);
             m_Dlg->AddNoiseDataPhase2();

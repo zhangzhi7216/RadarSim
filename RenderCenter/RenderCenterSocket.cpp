@@ -60,11 +60,13 @@ void RenderCenterSocket::SendKeyTarget()
         OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL,
         NULL);
-    int length = GetFileSize(KEY_TARGET_FILE_NAME, NULL);
+    int length = GetFileSize(file, NULL);
+    PacketType type = PacketTypeKeyTarget;
+    Send(&type, sizeof(type));
     Send(&length, 4);
     TransmitFile(
         this->m_hSocket,
-        KEY_TARGET_FILE_NAME,
+        file,
         0,
         0,
         NULL,
