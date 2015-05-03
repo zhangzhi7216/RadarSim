@@ -877,7 +877,7 @@ void CRenderCenterDlg::SetFusionSocket()
     m_FusionSocket = new RenderCenterSocket(this);
     if (m_RenderCenterSocket->Accept(*m_FusionSocket))
     {
-        m_RenderCenterSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
+        m_FusionSocket->AsyncSelect(FD_CLOSE | FD_READ | FD_WRITE);
     }
     m_Lock.Unlock();
 }
@@ -891,4 +891,10 @@ void CRenderCenterDlg::ResetFusionSocket()
         delete m_FusionSocket;
     }
     m_Lock.Unlock();
+}
+
+void CRenderCenterDlg::RenderKeyTarget(double theta, double phi)
+{
+    // TODO: Render key target image.
+    m_FusionSocket->SendKeyTarget();
 }

@@ -15,6 +15,8 @@ public:
     void OnReceive(int nErrorCode);
     void OnClose(int nErrorCode);
 
+    void SendKeyTarget();
+
 protected:
     CRenderCenterDlg *m_Dlg;
 };

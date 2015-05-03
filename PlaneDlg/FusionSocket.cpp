@@ -60,6 +60,27 @@ void FusionSocket::Dispatch(int type, CArchive &ar)
             }
         }
         break;
+    case PacketTypeKeyTarget:
+        {
+            int length;
+            ar >> length;
+            HANDLE file = CreateFile(
+                KEY_TARGET_FILE_NAME,
+                GENERIC_READ | GENERIC_WRITE,
+                FILE_SHARE_WRITE,
+                NULL,
+                CREATE_ALWAYS,
+                FILE_ATTRIBUTE_NORMAL,
+                NULL);
+            char *buf = new char[length];
+            Receive(&buf[0], length);
+            DWORD written = 0;
+            WriteFile(KEY_TARGET_FILE_NAME, buf, length, &written, NULL);
+            delete[] buf;
+            CloseHandle(file);
+            m_Dlg->AddNoiseDataPhase2();
+        }
+        break;
     default:
         PlaneSocket::Dispatch(type, ar);
         break;
@@ -74,6 +95,10 @@ void FusionSocket::OnClose(int nErrorCode)
     CSocket::OnClose(nErrorCode);
 }
 
-void FusionSocket::SendKeyTargetReq(double theta, double phi)
+void FusionSocket::SendKeyTarget(double theta, double phi)
 {
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar << PacketTypeKeyTarget << theta << phi;
+    ar.Flush();
 }

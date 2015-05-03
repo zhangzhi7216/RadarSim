@@ -27,6 +27,13 @@ void RenderCenterSocket::OnReceive(int nErrorCode)
     ar >> type;
     switch (type)
     {
+    case PacketTypeKeyTarget:
+        {
+            double theta, phi;
+            ar >> theta >> phi;
+            m_Dlg->RenderKeyTarget(theta, phi);
+        }
+        break;
     default:
         AfxMessageBox(TEXT("未知数据包类型"));
         break;
@@ -41,4 +48,28 @@ void RenderCenterSocket::OnClose(int nErrorCode)
 {
     m_Dlg->ResetFusionSocket();
     CSocket::OnClose(nErrorCode);
+}
+
+void RenderCenterSocket::SendKeyTarget()
+{
+    HANDLE file = CreateFile(
+        KEY_TARGET_FILE_NAME,
+        GENERIC_READ,
+        FILE_SHARE_READ,
+        NULL,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        NULL);
+    int length = GetFileSize(KEY_TARGET_FILE_NAME, NULL);
+    Send(&length, 4);
+    TransmitFile(
+        this->m_hSocket,
+        KEY_TARGET_FILE_NAME,
+        0,
+        0,
+        NULL,
+        NULL,
+        TF_USE_KERNEL_APC
+        );
+    CloseHandle(file);
 }

@@ -354,6 +354,14 @@ void CStateMapCtrl::DrawTargets()
         }
     }
 
+    if (m_StateMap.m_ZoomKeyTargetId != -1)
+    {
+        Image *keyTarget = Image::FromFile(KEY_TARGET_FILE_NAME);
+        // TODO: Calculate key target position.
+        PointF pt(0.0, 0.0);
+        graphics.DrawImage(keyTarget, pt);
+    }
+
     if (m_TargetsImg)
     {
         delete m_TargetsImg;

@@ -231,18 +231,32 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
             m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
         }
 
-        m_StateMapCtrl.DrawTargets();
-        m_StateMapCtrl.BlendAll();
-        m_StateMapCtrl.Invalidate();
-        m_StateMapDlg.m_Ctrl->DrawTargets();
-        m_StateMapDlg.m_Ctrl->BlendAll();
-        m_StateMapDlg.m_Ctrl->Invalidate();
-
-        m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionDataPacket);
-
-        m_FusionInput.m_NoiseDataPackets.clear();
-        m_FusionOutput.m_FusionDataPacket = FusionDataPacket();
+        if (m_StateMap.m_ZoomKeyTargetId != -1)
+        {
+            // TODO: Get theta and phi, but from where?
+            double theta = 0, phi = 0;
+            m_RenderCenterSocket->SendKeyTarget(theta, phi);
+        }
+        else
+        {
+            AddNoiseDataPhase2();
+        }
     }
+}
+
+void CFusionPlaneDlg::AddNoiseDataPhase2()
+{
+    m_StateMapCtrl.DrawTargets();
+    m_StateMapCtrl.BlendAll();
+    m_StateMapCtrl.Invalidate();
+    m_StateMapDlg.m_Ctrl->DrawTargets();
+    m_StateMapDlg.m_Ctrl->BlendAll();
+    m_StateMapDlg.m_Ctrl->Invalidate();
+
+    m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionDataPacket);
+
+    m_FusionInput.m_NoiseDataPackets.clear();
+    m_FusionOutput.m_FusionDataPacket = FusionDataPacket();
 }
 
 void CFusionPlaneDlg::SendNoiseDatas(TrueDataPacket &packet)

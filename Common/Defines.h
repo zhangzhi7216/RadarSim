@@ -211,6 +211,8 @@ extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 #define RENDER_CENTER_ADDR TEXT("localhost")
 #define RENDER_CENTER_PORT 10087
 
+#define KEY_TARGET_FILE_NAME TEXT("key_target.bmp")
+
 enum PacketType
 {
     PacketTypeImFusion = 0,
@@ -229,8 +231,7 @@ enum PacketType
     PacketTypeTrueData,
     PacketTypeNoiseData,
     PacketTypeFusionData,
-    PacketTypeKeyTargetReq,
-    PacketTypeKeyTargetAck,
+    PacketTypeKeyTarget,
 };
 
 enum NoiseType

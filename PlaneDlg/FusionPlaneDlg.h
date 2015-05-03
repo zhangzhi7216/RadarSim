@@ -45,6 +45,7 @@ public:
     virtual void SendPlaneType();
     virtual void AddPlaneSocket();
     virtual void AddNoiseData(NoiseDataPacket &packet);
+    virtual void AddNoiseDataPhase2();
     virtual void SetFusionAlgo(FusionAlgo *algo);
     virtual void DoFusion();
     virtual void SendNoiseDatas(TrueDataPacket &packet);
