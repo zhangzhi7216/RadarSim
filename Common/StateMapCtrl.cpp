@@ -455,8 +455,11 @@ void CStateMapCtrl::AddTarget(Target &target)
 void CStateMapCtrl::OnRButtonDown(UINT nFlags, CPoint point)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
-    double absX = point.x / m_StateMap.m_MaxX;
-    double absY = point.y / m_StateMap.m_MaxY;
+    RECT rect;
+    GetWindowRect(&rect);
+    ScreenToClient(&rect);
+    double absX = (double)point.x / (rect.right - rect.left) * m_StateMap.m_MaxX;
+    double absY = (double)point.y / (rect.bottom - rect.top) * m_StateMap.m_MaxY;
 
     m_StateMap.ZoomKeyTarget(absX, absY);
 
