@@ -893,7 +893,7 @@ void CRenderCenterDlg::ResetFusionSocket()
     m_Lock.Unlock();
 }
 
-void CRenderCenterDlg::RenderKeyTarget(double theta, double phi)
+void CRenderCenterDlg::RenderKeyTarget(TrueDataFrame &keyTarget)
 {
     // TODO: Render key target image.
     m_FusionSocket->SendKeyTarget();

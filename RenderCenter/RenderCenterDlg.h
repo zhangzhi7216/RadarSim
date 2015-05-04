@@ -65,5 +65,5 @@ public:
     CCriticalSection m_Lock;
     void SetFusionSocket();
     void ResetFusionSocket();
-    void RenderKeyTarget(double theta, double phi);
+    void RenderKeyTarget(TrueDataFrame &keyTarget);
 };

@@ -65,6 +65,9 @@ bool FusionLocalAlgoTest1(FusionInput &input, FusionOutput &output)
         {
             // frame += noiseDatas[(SensorId)iSensor].m_TargetNoiseDatas[iTarget];
         }
+        frame.m_Pos = Position(800, 100 + iTarget * 250, 100);
+        frame.m_Vel = Velocity(-1, 0, 0);
+        frame.m_IsKeyTarget = iTarget % 2 ? true : false;
         // frame /= SensorIdLast;
         output.m_FusionDataPacket.m_FusionDatas.push_back(frame);
         // frame = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget];

@@ -12,6 +12,7 @@ Target::Target()
 , m_Pal(1)
 , m_Radius(100)
 , m_State(TargetStateAlive)
+, m_IsKeyTarget(false)
 {
     m_HeadDir = m_InitVel;
 }

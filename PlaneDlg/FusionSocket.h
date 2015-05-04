@@ -15,7 +15,7 @@ public:
     void OnClose(int nErrorCode);
     void Dispatch(int type, CArchive &ar);
 
-    void SendKeyTarget(double theta, double phi);
+    void SendKeyTarget(TrueDataFrame &keyTarget);
 
 public:
     CFusionPlaneDlg *m_Dlg;

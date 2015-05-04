@@ -49,6 +49,18 @@ Image __declspec(dllexport) *TargetTypeImages[] =
     Image::FromFile(TEXT("Missile.png")),
 };
 
+Image __declspec(dllexport) *TargetTypeMaskImages[] =
+{
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("HeliMask.png")),
+};
+
 CString __declspec(dllexport) TargetTypeNames[] =
 {
     TEXT("Ö±Éý»ú"),
@@ -149,6 +161,15 @@ void __declspec(dllexport) GlobalInit()
     TargetTypeImages[TargetTypeTank] = Image::FromFile(TEXT("Tank.png"));
     TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.png"));
     TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.png"));
+
+    TargetTypeMaskImages[TargetTypeHeli] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeFighter] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeAew] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeBomber] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeShipboard] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeTank] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypePanzer] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeMissile] = Image::FromFile(TEXT("HeliMask.png"));
 
     ExplosionTypeImages[ExplosionType0] = Image::FromFile(TEXT("Explosion0.png"));
     ExplosionTypeImages[ExplosionType1] = Image::FromFile(TEXT("Explosion1.png"));

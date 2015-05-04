@@ -95,10 +95,10 @@ void FusionSocket::OnClose(int nErrorCode)
     CSocket::OnClose(nErrorCode);
 }
 
-void FusionSocket::SendKeyTarget(double theta, double phi)
+void FusionSocket::SendKeyTarget(TrueDataFrame &keyTarget)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeKeyTarget << theta << phi;
+    ar << PacketTypeKeyTarget << keyTarget;
     ar.Flush();
 }

@@ -12,6 +12,7 @@ using namespace std;
 using namespace Gdiplus;
 
 #define PAD 10
+#define KEY_TARGET_HIT_THRESHOLD 100
 
 #define TARGET_TRACK_WIDTH 2
 #define TARGET_RADIUS 4
@@ -157,6 +158,7 @@ enum TargetType
 };
 
 extern Image __declspec(dllimport) *TargetTypeImages[TargetTypeLast];
+extern Image __declspec(dllimport) *TargetTypeMaskImages[TargetTypeLast];
 extern CString __declspec(dllimport) TargetTypeNames[TargetTypeLast];
 
 enum ExplosionType

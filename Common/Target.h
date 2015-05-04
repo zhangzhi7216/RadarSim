@@ -34,6 +34,8 @@ public:
 
     TargetState m_State;
 
+    bool m_IsKeyTarget;
+
     Sensor m_Radar, m_Esm, m_Tong, m_Lei;
 
     void Move(double t);

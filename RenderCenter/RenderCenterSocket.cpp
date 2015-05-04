@@ -29,9 +29,9 @@ void RenderCenterSocket::OnReceive(int nErrorCode)
     {
     case PacketTypeKeyTarget:
         {
-            double theta, phi;
-            ar >> theta >> phi;
-            m_Dlg->RenderKeyTarget(theta, phi);
+            TrueDataFrame keyTarget;
+            ar >> keyTarget;
+            m_Dlg->RenderKeyTarget(keyTarget);
         }
         break;
     default:

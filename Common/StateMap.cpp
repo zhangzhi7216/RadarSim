@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "StateMap.h"
 
+#include "Utility.h"
+
 StateMap::StateMap()
 : m_MaxX(1200)
 , m_MaxY(900)
@@ -30,6 +32,8 @@ void StateMap::Reset()
 
     m_Missiles.clear();
     m_MissilePaths.clear();
+
+    m_ZoomKeyTargetId = -1;
 }
 
 void StateMap::AddPlaneData(int plane, Position pos, Velocity vel, TargetState state)
@@ -79,8 +83,17 @@ void StateMap::AddMissileData(int miss, Position pos, Velocity vel, TargetState 
 
 void StateMap::ZoomKeyTarget(double x, double y)
 {
-    // TODO: Add key target detect.
-    m_ZoomKeyTargetId = 0;
+    Position p(x, y, 0);
+    for (int i = 0; i < m_TargetPaths.size(); i++)
+    {
+        p.Z = m_TargetPaths[i].back().Z;
+        if (Utility::Distance(m_TargetPaths[i].back(), p) <= KEY_TARGET_HIT_THRESHOLD && m_Targets[i].m_IsKeyTarget)
+        {
+            m_ZoomKeyTargetId = i;
+            return;
+        }
+    }
+    m_ZoomKeyTargetId = -1;
 }
 
 CArchive & operator << (CArchive &ar, StateMap &stateMap)

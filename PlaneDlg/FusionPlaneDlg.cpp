@@ -229,13 +229,13 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
         {
             TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[i];
             m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
+            m_StateMap.m_Targets[i].m_IsKeyTarget = frame.m_IsKeyTarget;
         }
 
         if (m_StateMap.m_ZoomKeyTargetId != -1)
         {
-            // TODO: Get theta and phi, but from where?
-            double theta = 0, phi = 0;
-            m_RenderCenterSocket->SendKeyTarget(theta, phi);
+            TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[m_StateMap.m_ZoomKeyTargetId];
+            m_RenderCenterSocket->SendKeyTarget(frame);
         }
         else
         {

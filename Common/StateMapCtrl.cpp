@@ -181,6 +181,7 @@ void CStateMapCtrl::DrawTargets()
         }
     }
 
+    // Targets.
     for (int i = 0; i < m_StateMap.m_Targets.size(); ++i)
     {
         if (m_StateMap.m_ShowTrack)
@@ -240,6 +241,8 @@ void CStateMapCtrl::DrawTargets()
 
             Image *targetImg = m_StateMap.m_Targets[i].m_State == TargetStateExploding ?
                 ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Targets[i].m_Type];
+            Image *targetMaskImg = m_StateMap.m_Targets[i].m_State == TargetStateExploding ?
+                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeMaskImages[m_StateMap.m_Targets[i].m_Type];
 #ifdef _DEV
             if (m_StateMap.m_Targets[i].m_State == TargetStateExploding)
             {
@@ -251,6 +254,10 @@ void CStateMapCtrl::DrawTargets()
             {
                 PointF pt(0.0, 0.0);
                 graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+                if (m_StateMap.m_Targets[i].m_IsKeyTarget)
+                {
+                    graphics.DrawImage(targetMaskImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+                }
             }
 
             graphics.ResetTransform();
@@ -357,9 +364,10 @@ void CStateMapCtrl::DrawTargets()
     if (m_StateMap.m_ZoomKeyTargetId != -1)
     {
         Image *keyTarget = Image::FromFile(KEY_TARGET_FILE_NAME);
-        // TODO: Calculate key target position.
-        PointF pt(0.0, 0.0);
-        graphics.DrawImage(keyTarget, pt);
+        PointF pt(m_StateMap.m_TargetPaths[m_StateMap.m_ZoomKeyTargetId].back().X / m_StateMap.m_MaxX * (double)width,
+            (double)height - m_StateMap.m_TargetPaths[m_StateMap.m_ZoomKeyTargetId].back().Y / m_StateMap.m_MaxY * (double)height);
+        graphics.DrawImage(keyTarget, PointF(pt.X - (double)keyTarget->GetWidth() / 2.0, pt.Y - (double)keyTarget->GetHeight() / 2.0));
+        delete keyTarget;
     }
 
     if (m_TargetsImg)
@@ -409,22 +417,12 @@ void CStateMapCtrl::OnPaint()
     CPaintDC dc(this); // device context for painting
     // TODO: 在此处添加消息处理程序代码
     // 不为绘图消息调用 CStatic::OnPaint()
-    RECT rect;
-    GetWindowRect(&rect);
-    ScreenToClient(&rect);
-    int width = rect.right - rect.left, height = rect.bottom - rect.top;
-    int left = rect.left, top = rect.top;
-    if (width >= height)
-    {
-        left += (width - height) / 2;
-    }
-    else
-    {
-        top += (height - width) / 2;
-    }
-
     if (m_Image)
     {
+        RECT rect;
+        GetWindowRect(&rect);
+        ScreenToClient(&rect);
+
         double left = rect.left + (double)(rect.right - rect.left - m_Image->GetWidth()) / 2,
             top = rect.top + (double)(rect.bottom - rect.top - m_Image->GetHeight()) / 2;
         Gdiplus::Graphics graphics(dc.GetSafeHdc());
@@ -463,13 +461,23 @@ void CStateMapCtrl::AddTarget(Target &target)
 void CStateMapCtrl::OnRButtonDown(UINT nFlags, CPoint point)
 {
     // TODO: 在此添加消息处理程序代码和/或调用默认值
-    RECT rect;
-    GetWindowRect(&rect);
-    ScreenToClient(&rect);
-    double absX = (double)point.x / (rect.right - rect.left) * m_StateMap.m_MaxX;
-    double absY = (double)point.y / (rect.bottom - rect.top) * m_StateMap.m_MaxY;
+    if (m_Image)
+    {
+        RECT rect;
+        GetWindowRect(&rect);
+        ScreenToClient(&rect);
 
-    m_StateMap.ZoomKeyTarget(absX, absY);
+        double left = rect.left + (double)(rect.right - rect.left - m_Image->GetWidth()) / 2,
+            top = rect.top + (double)(rect.bottom - rect.top - m_Image->GetHeight()) / 2;
+        double width = m_Image->GetWidth(),
+            height = m_Image->GetHeight();
+        point.x -= left;
+        point.y -= top;
+        double absX = (double)point.x / width * m_StateMap.m_MaxX;
+        double absY = m_StateMap.m_MaxY - (double)point.y / height * m_StateMap.m_MaxY;
+
+        m_StateMap.ZoomKeyTarget(absX, absY);
+    }
 
     CStatic::OnRButtonDown(nFlags, point);
 }
