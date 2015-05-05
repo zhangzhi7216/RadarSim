@@ -253,6 +253,14 @@ void CFusionPlaneDlg::AddNoiseDataPhase2()
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
 
+    if (m_StateMap.m_ZoomKeyTargetId != -1)
+    {
+        m_ShowZoomDlg = true;
+        m_ZoomDlg.DrawTarget();
+        m_ZoomDlg.ShowWindow(SW_SHOW);
+        m_ZoomDlg.Invalidate();
+    }
+
     m_DataCenterSocket->SendFusionData(m_FusionOutput.m_FusionDataPacket);
 
     m_FusionInput.m_NoiseDataPackets.clear();

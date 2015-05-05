@@ -53,6 +53,8 @@ CPlaneDlg::CPlaneDlg(PacketType planeType
     , m_DataList(m_Sensor1, TEXT(""), m_Sensor2, TEXT(""))
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
+    , m_ShowZoomDlg(false)
+    , m_ZoomDlg(this)
     , m_DataCenterSocket(0)
     , m_FusionSocket(0)
 {
@@ -143,6 +145,15 @@ BOOL CPlaneDlg::OnInitDialog()
     if (m_ShowStateMapDlg)
     {
         m_StateMapDlg.ShowWindow(SW_SHOW);
+    }
+    {
+        AFX_MANAGE_STATE(AfxGetStaticModuleState());
+    }
+
+    CZoomDlg::CreateDlg(m_ZoomDlg);
+    if (m_ShowZoomDlg)
+    {
+        m_ZoomDlg.ShowWindow(SW_SHOW);
     }
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -336,7 +347,6 @@ void CPlaneDlg::OnStnDblclickStateMapCtrl()
     }
 }
 
-
 void CPlaneDlg::OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult)
 {
     LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
@@ -352,6 +362,14 @@ void CPlaneDlg::OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult)
         m_DataListDlg.ShowWindow(SW_SHOW);
         m_ShowDataListDlg = true;
     }
+}
+
+void CPlaneDlg::OnCloseZoomDlg()
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+    m_ZoomDlg.ShowWindow(SW_HIDE);
+    m_ShowZoomDlg = false;
+    m_StateMap.m_ZoomKeyTargetId = -1;
 }
 
 void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
@@ -507,6 +525,10 @@ void CPlaneDlg::OnSubDlgClose(void *subDlg)
     {
         OnStnDblclickStateMapCtrl();
     }
+    else if (subDlg == (void *)&m_ZoomDlg)
+    {
+        OnCloseZoomDlg();
+    }
 }
 
 void CPlaneDlg::OnSubDlgEnable(void *subDlg)
@@ -518,8 +540,8 @@ void CPlaneDlg::OnSubDlgEnable(void *subDlg)
     }
     else if (subDlg == (void *)&m_Sensor2Dlg)
     {
-        m_Sensor1Ctrl.BlendAll();
-        m_Sensor1Ctrl.Invalidate();
+        m_Sensor2Ctrl.BlendAll();
+        m_Sensor2Ctrl.Invalidate();
     }
 
     m_StateMapCtrl.DrawTargets();

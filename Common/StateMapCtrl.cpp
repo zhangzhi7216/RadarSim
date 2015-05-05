@@ -361,14 +361,14 @@ void CStateMapCtrl::DrawTargets()
         }
     }
 
-    if (m_StateMap.m_ZoomKeyTargetId != -1)
-    {
-        Image *keyTarget = Image::FromFile(KEY_TARGET_FILE_NAME);
-        PointF pt(m_StateMap.m_TargetPaths[m_StateMap.m_ZoomKeyTargetId].back().X / m_StateMap.m_MaxX * (double)width,
-            (double)height - m_StateMap.m_TargetPaths[m_StateMap.m_ZoomKeyTargetId].back().Y / m_StateMap.m_MaxY * (double)height);
-        graphics.DrawImage(keyTarget, PointF(pt.X - (double)keyTarget->GetWidth() / 2.0, pt.Y - (double)keyTarget->GetHeight() / 2.0));
-        delete keyTarget;
-    }
+    // if (m_StateMap.m_ZoomKeyTargetId != -1)
+    // {
+    //     Image *keyTarget = Image::FromFile(KEY_TARGET_FILE_NAME);
+    //     PointF pt(m_StateMap.m_TargetPaths[m_StateMap.m_ZoomKeyTargetId].back().X / m_StateMap.m_MaxX * (double)width,
+    //         (double)height - m_StateMap.m_TargetPaths[m_StateMap.m_ZoomKeyTargetId].back().Y / m_StateMap.m_MaxY * (double)height);
+    //     graphics.DrawImage(keyTarget, PointF(pt.X - (double)keyTarget->GetWidth() / 2.0, pt.Y - (double)keyTarget->GetHeight() / 2.0));
+    //     delete keyTarget;
+    // }
 
     if (m_TargetsImg)
     {

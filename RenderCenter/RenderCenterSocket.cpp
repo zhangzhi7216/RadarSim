@@ -63,15 +63,15 @@ void RenderCenterSocket::SendKeyTarget()
     int length = GetFileSize(file, NULL);
     PacketType type = PacketTypeKeyTarget;
     Send(&type, sizeof(type));
-    Send(&length, 4);
-    TransmitFile(
-        this->m_hSocket,
-        file,
-        0,
-        0,
-        NULL,
-        NULL,
-        TF_USE_KERNEL_APC
-        );
+    // Send(&length, 4);
+    // TransmitFile(
+    //     this->m_hSocket,
+    //     file,
+    //     0,
+    //     0,
+    //     NULL,
+    //     NULL,
+    //     TF_USE_KERNEL_APC
+    //     );
     CloseHandle(file);
 }

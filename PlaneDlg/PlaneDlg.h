@@ -10,6 +10,7 @@
 #include "../Common/DataListDlg.h"
 #include "../Common/StateMapCtrl.h"
 #include "../Common/StateMapDlg.h"
+#include "../Common/ZoomDlg.h"
 #include "../Common/CommonDlg.h"
 
 #include "Target.h"
@@ -103,6 +104,10 @@ public:
     CDataListCtrl m_DataListCtrl;
     CDataListDlg m_DataListDlg;
     afx_msg void OnNMDblclkDatalistCtrl(NMHDR *pNMHDR, LRESULT *pResult);
+
+    bool m_ShowZoomDlg;
+    CZoomDlg m_ZoomDlg;
+    void OnCloseZoomDlg();
 
     virtual void OnSubDlgClose(void *subDlg);
 

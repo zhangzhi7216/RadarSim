@@ -86,11 +86,14 @@ void StateMap::ZoomKeyTarget(double x, double y)
     Position p(x, y, 0);
     for (int i = 0; i < m_TargetPaths.size(); i++)
     {
-        p.Z = m_TargetPaths[i].back().Z;
-        if (Utility::Distance(m_TargetPaths[i].back(), p) <= KEY_TARGET_HIT_THRESHOLD && m_Targets[i].m_IsKeyTarget)
+        if (m_TargetPaths.size() > i && m_TargetPaths[i].size() > 0)
         {
-            m_ZoomKeyTargetId = i;
-            return;
+            p.Z = m_TargetPaths[i].back().Z;
+            if (Utility::Distance(m_TargetPaths[i].back(), p) <= KEY_TARGET_HIT_THRESHOLD && m_Targets[i].m_IsKeyTarget)
+            {
+                m_ZoomKeyTargetId = i;
+                return;
+            }
         }
     }
     m_ZoomKeyTargetId = -1;
