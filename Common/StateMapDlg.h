@@ -41,7 +41,6 @@ public:
     void Reset();
     void AddPlane(Plane &plane);
     void AddTarget(Target &target);
-    void AddMissile(Missile &miss);
     CComboBox m_Background;
     CComboBox m_ExplosionType;
     CComboBox m_PlaneType;
@@ -49,9 +48,6 @@ public:
     CComboBox m_TargetId;
     CComboBox m_TargetType;
     CComboBox m_TargetColor;
-    CComboBox m_MissileId;
-    CComboBox m_MissileType;
-    CComboBox m_MissileColor;
     afx_msg void OnBnClickedStatemapShowTrack();
     afx_msg void OnBnClickedStatemapShowThetaRange();
     afx_msg void OnCbnSelchangeStatemapBackground();
@@ -61,9 +57,6 @@ public:
     afx_msg void OnCbnSelchangeStatemapTargetId();
     afx_msg void OnCbnSelchangeStatemapTargetType();
     afx_msg void OnCbnSelchangeStatemapTargetColor();
-    afx_msg void OnCbnSelchangeStatemapMissileId();
-    afx_msg void OnCbnSelchangeStatemapMissileType();
-    afx_msg void OnCbnSelchangeStatemapMissileColor();
     CComboBox m_PlaneId;
     afx_msg void OnCbnSelchangeStatemapPlaneId();
 };

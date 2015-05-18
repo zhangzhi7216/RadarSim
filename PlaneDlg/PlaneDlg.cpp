@@ -388,7 +388,10 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 
         m_Sensor1.AddTargetData(i, rel);
         m_Sensor2.AddTargetData(i, rel);
-        m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
+        if (!m_HasStateMap)
+        {
+            m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
+        }
     }
 
     m_Sensor1Ctrl.DrawTargets();
@@ -407,16 +410,22 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_Sensor2Dlg.m_Ctrl->BlendAll();
     m_Sensor2Dlg.m_Ctrl->Invalidate();
 
-    m_DataListCtrl.AddTargetData();
-    m_DataListDlg.m_Ctrl->AddTargetData();
+    if (!m_HasStateMap)
+    {
+        m_DataListCtrl.AddTargetData();
+        m_DataListDlg.m_Ctrl->AddTargetData();
+    }
 
-    m_StateMapCtrl.DrawTargets();
-    m_StateMapCtrl.BlendAll();
-    m_StateMapCtrl.Invalidate();
+    if (m_HasStateMap)
+    {
+        m_StateMapCtrl.DrawTargets();
+        m_StateMapCtrl.BlendAll();
+        m_StateMapCtrl.Invalidate();
 
-    m_StateMapDlg.m_Ctrl->DrawTargets();
-    m_StateMapDlg.m_Ctrl->BlendAll();
-    m_StateMapDlg.m_Ctrl->Invalidate();
+        m_StateMapDlg.m_Ctrl->DrawTargets();
+        m_StateMapDlg.m_Ctrl->BlendAll();
+        m_StateMapDlg.m_Ctrl->Invalidate();
+    }
 }
 
 bool NoiseDataFrameComp(const NoiseDataFrame &f1, const NoiseDataFrame f2)
@@ -498,13 +507,17 @@ void CPlaneDlg::AddTarget(Target &target)
 
     m_Sensor1.AddTarget(target);
     m_Sensor2.AddTarget(target);
-    m_DataList.AddTarget(target);
-    m_StateMap.AddTarget(target);
+    if (!m_HasStateMap)
+    {
+        m_DataList.AddTarget(target);
+    }
 
     m_Sensor1Dlg.AddTarget(target);
     m_Sensor2Dlg.AddTarget(target);
-    m_DataListDlg.AddTarget(target);
-    m_StateMapDlg.AddTarget(target);
+    if (!m_HasStateMap)
+    {
+        m_DataListDlg.AddTarget(target);
+    }
 }
 
 void CPlaneDlg::OnSubDlgClose(void *subDlg)

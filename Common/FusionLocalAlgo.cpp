@@ -60,12 +60,13 @@ bool FusionLocalAlgoTest1(FusionInput &input, FusionOutput &output)
     {
         TrueDataFrame frame;
         frame.m_Time = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Time;
-        frame.m_Id = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Id;
+        frame.m_Id = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Id + frame.m_Time / 100 * 100;
+        frame.m_Type = iTarget % TargetTypeLast;
         for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
         {
             // frame += noiseDatas[(SensorId)iSensor].m_TargetNoiseDatas[iTarget];
         }
-        frame.m_Pos = Position(800, 100 + iTarget * 250, 100);
+        frame.m_Pos = Position(800 - frame.m_Time, 100 + iTarget * 250, 100);
         frame.m_Vel = Velocity(-1, 0, 0);
         frame.m_IsKeyTarget = iTarget % 2 ? true : false;
         // frame /= SensorIdLast;

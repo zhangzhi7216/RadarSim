@@ -228,8 +228,21 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
         for (int i = 0; i < m_FusionOutput.m_FusionDataPacket.m_FusionDatas.size(); ++i)
         {
             TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[i];
-            m_StateMap.AddTargetData(i, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
-            m_StateMap.m_Targets[i].m_IsKeyTarget = frame.m_IsKeyTarget;
+            if (m_StateMap.m_Targets.find(frame.m_Id) == m_StateMap.m_Targets.end())
+            {
+                Target t;
+                t.m_InitPosition = frame.m_Pos;
+                t.m_Position = frame.m_Pos;
+                t.m_InitVel = frame.m_Vel;
+                t.m_Vel = frame.m_Vel;
+                t.m_Id = frame.m_Id;
+                t.m_Type = (TargetType)frame.m_Type;
+                t.m_Color = (TargetColor)(m_StateMap.m_Targets.size() % (int)TargetColorLast);
+                m_StateMap.AddTarget(t);
+                m_StateMapDlg.AddTarget(t);
+            }
+            m_StateMap.AddTargetData(frame.m_Id, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
+            m_StateMap.m_Targets[frame.m_Id].m_IsKeyTarget = frame.m_IsKeyTarget;
         }
 
         if (m_StateMap.m_ZoomKeyTargetId != -1)

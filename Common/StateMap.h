@@ -3,6 +3,10 @@
 #include "Sensor.h"
 #include "Target.h"
 
+#include <map>
+
+using namespace std;
+
 class __declspec(dllexport) StateMap
 {
 public:
@@ -22,19 +26,14 @@ public:
     vector<Plane> m_Planes;
     vector<Path> m_PlanePaths;
 
-    vector<Target> m_Targets;
-    vector<Path> m_TargetPaths;
-
-    vector<Missile> m_Missiles;
-    vector<Path> m_MissilePaths;
+    map<int, Target> m_Targets;
+    map<int, Path> m_TargetPaths;
 
     void Reset();
     void AddPlane(Plane &plane);
     void AddPlaneData(int plane, Position pos, Velocity vel, TargetState state);
     void AddTarget(Target &target);
     void AddTargetData(int target, Position pos, Velocity vel, TargetState state);
-    void AddMissile(Missile &miss);
-    void AddMissileData(int miss, Position pos, Velocity vel, TargetState state);
 
     int m_ZoomKeyTargetId;
     void ZoomKeyTarget(double x, double y);

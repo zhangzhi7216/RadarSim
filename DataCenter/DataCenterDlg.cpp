@@ -679,12 +679,6 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
         m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
     }
 
-    // œ‘ æ±æ÷°µºµØ
-    for (int i = 0; i < m_Missiles.size(); ++i)
-    {
-        m_StateMap.AddMissileData(i, m_Missiles[i].m_Position, m_Missiles[i].m_Vel, m_Missiles[i].m_State);
-    }
-
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
@@ -762,12 +756,6 @@ void CDataCenterDlg::StartSim()
     {
         m_StateMap.AddTarget(m_TargetClients[i].m_Target);
         m_StateMapDlg.AddTarget(m_TargetClients[i].m_Target);
-    }
-
-    for (int i = 0; i < m_Missiles.size(); ++i)
-    {
-        m_StateMap.AddMissile(m_Missiles[i]);
-        m_StateMapDlg.AddMissile(m_Missiles[i]);
     }
 
     m_StateMapDlg.m_Ctrl->DrawBackground();

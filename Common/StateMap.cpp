@@ -30,9 +30,6 @@ void StateMap::Reset()
     m_Targets.clear();
     m_TargetPaths.clear();
 
-    m_Missiles.clear();
-    m_MissilePaths.clear();
-
     m_ZoomKeyTargetId = -1;
 }
 
@@ -51,8 +48,7 @@ void StateMap::AddPlane(Plane &plane)
 
 void StateMap::AddTarget(Target &target)
 {
-    m_Targets.push_back(target);
-    m_TargetPaths.push_back(Path());
+    m_Targets[target.m_Id] = target;
 }
 
 void StateMap::AddTargetData(int target, Position pos, Velocity vel, TargetState state)
@@ -65,35 +61,16 @@ void StateMap::AddTargetData(int target, Position pos, Velocity vel, TargetState
     }
 }
 
-void StateMap::AddMissile(Missile &miss)
-{
-    m_Missiles.push_back(miss);
-    m_MissilePaths.push_back(Path());
-}
-
-void StateMap::AddMissileData(int miss, Position pos, Velocity vel, TargetState state)
-{
-    m_Missiles[miss].m_Vel = vel;
-    m_Missiles[miss].m_State = state;
-    if (state != TargetStateDestroyed)
-    {
-        m_MissilePaths[miss].push_back(pos);
-    }
-}
-
 void StateMap::ZoomKeyTarget(double x, double y)
 {
     Position p(x, y, 0);
-    for (int i = 0; i < m_TargetPaths.size(); i++)
+    for (map<int, Path>::iterator it = m_TargetPaths.begin(); it != m_TargetPaths.end(); it++)
     {
-        if (m_TargetPaths.size() > i && m_TargetPaths[i].size() > 0)
+        p.Z = it->second.back().Z;
+        if (Utility::Distance(it->second.back(), p) <= KEY_TARGET_HIT_THRESHOLD && m_Targets[it->first].m_IsKeyTarget)
         {
-            p.Z = m_TargetPaths[i].back().Z;
-            if (Utility::Distance(m_TargetPaths[i].back(), p) <= KEY_TARGET_HIT_THRESHOLD && m_Targets[i].m_IsKeyTarget)
-            {
-                m_ZoomKeyTargetId = i;
-                return;
-            }
+            m_ZoomKeyTargetId = it->first;
+            return;
         }
     }
     m_ZoomKeyTargetId = -1;

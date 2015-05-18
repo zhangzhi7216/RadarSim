@@ -3,13 +3,13 @@
 
 CArchive & operator << (CArchive &ar, TrueDataFrame &frame)
 {
-    ar << frame.m_Time << frame.m_Id << frame.m_Pos << frame.m_Vel << frame.m_Acc << frame.m_State;
+    ar << frame.m_Time << frame.m_Id << frame.m_Pos << frame.m_Vel << frame.m_Acc << frame.m_State << frame.m_Type;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, TrueDataFrame &frame)
 {
-    ar >> frame.m_Time >> frame.m_Id >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc >> frame.m_State;
+    ar >> frame.m_Time >> frame.m_Id >> frame.m_Pos >> frame.m_Vel >> frame.m_Acc >> frame.m_State >> frame.m_Type;
     return ar;
 }
 
