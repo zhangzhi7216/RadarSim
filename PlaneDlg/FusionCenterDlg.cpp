@@ -38,6 +38,17 @@ CFusionCenterDlg::CFusionCenterDlg(LPCWSTR title
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
     m_FusionSocket = new FusionSocket(this);
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeInt, CString(TEXT("时间(s)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeInt, CString(TEXT("批号"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("坐标X(km)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("坐标Y(km)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("坐标Z(km)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("速度X(m/s)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("速度Y(m/s)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("速度Z(m/s)"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeString, CString(TEXT("属性"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeString, CString(TEXT("威胁评级"))));
+    m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeString, CString(TEXT("类型"))));
 }
 
 CFusionCenterDlg::~CFusionCenterDlg()
@@ -228,6 +239,7 @@ void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
         for (int i = 0; i < m_FusionOutput.m_FusionDataPacket.m_FusionDatas.size(); ++i)
         {
             TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[i];
+
             if (m_StateMap.m_Targets.find(frame.m_Id) == m_StateMap.m_Targets.end())
             {
                 Target t;
@@ -243,6 +255,34 @@ void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
             }
             m_StateMap.AddTargetData(frame.m_Id, frame.m_Pos, frame.m_Vel);
             m_StateMap.m_Targets[frame.m_Id].m_IsKeyTarget = frame.m_IsKeyTarget;
+
+            if (m_DataList.m_Targets.find(frame.m_Id) == m_DataList.m_Targets.end())
+            {
+                Target t;
+                t.m_InitPosition = frame.m_Pos;
+                t.m_Position = frame.m_Pos;
+                t.m_InitVel = frame.m_Vel;
+                t.m_Vel = frame.m_Vel;
+                t.m_Id = frame.m_Id;
+                t.m_Type = (TargetType)frame.m_Type;
+                t.m_Color = (TargetColor)(m_DataList.m_Targets.size() % (int)TargetColorLast);
+                m_DataList.AddTarget(t);
+                m_DataListDlg.AddTarget(t);
+            }
+            vector<CString> data;
+            data.push_back(m_DataList.m_ColumnItems[0].MakeData(frame.m_Time));
+            data.push_back(m_DataList.m_ColumnItems[1].MakeData(0));
+            data.push_back(m_DataList.m_ColumnItems[2].MakeData(frame.m_Pos.X));
+            data.push_back(m_DataList.m_ColumnItems[3].MakeData(frame.m_Pos.Y));
+            data.push_back(m_DataList.m_ColumnItems[4].MakeData(frame.m_Pos.Z));
+            data.push_back(m_DataList.m_ColumnItems[5].MakeData(frame.m_Vel.X));
+            data.push_back(m_DataList.m_ColumnItems[6].MakeData(frame.m_Vel.Y));
+            data.push_back(m_DataList.m_ColumnItems[7].MakeData(frame.m_Vel.Z));
+            data.push_back(m_DataList.m_ColumnItems[8].MakeData(CString(TEXT(""))));
+            data.push_back(m_DataList.m_ColumnItems[9].MakeData(frame.m_IsKeyTarget ? CString(TEXT("Y")) : CString(TEXT("N"))));
+            data.push_back(m_DataList.m_ColumnItems[10].MakeData(TargetTypeNames[frame.m_Type]));
+            m_DataListCtrl.AddTargetData(frame.m_Id, data);
+            m_DataListDlg.m_Ctrl->AddTargetData(frame.m_Id, data);;
         }
 
         if (m_StateMap.m_ZoomKeyTargetId != -1)

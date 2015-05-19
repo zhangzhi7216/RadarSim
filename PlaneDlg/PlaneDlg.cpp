@@ -50,7 +50,6 @@ CPlaneDlg::CPlaneDlg(PacketType planeType
     , m_StateMapDlg(TEXT("态势"), m_StateMap, this)
     , m_HasDataList(hasDataList)
     , m_ShowDataListDlg(false)
-    , m_DataList(m_Sensor1, TEXT(""), m_Sensor2, TEXT(""))
     , m_DataListCtrl(m_DataList)
     , m_DataListDlg(TEXT("数据列表"), m_DataList, this)
     , m_ShowZoomDlg(false)
@@ -386,7 +385,69 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
         m_Sensor2.AddTargetData(i, rel);
         if (!m_HasStateMap)
         {
-            m_DataList.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time);
+            TrueDataFrame &frame = packet.m_TargetTrueDatas[i];
+            vector<CString> data;
+            data.push_back(m_DataList.m_ColumnItems[0].MakeData(frame.m_Time));
+            int next = 1;
+            int j1 = m_Sensor1.m_TargetDistances[i].size() - 1;
+            int j2 = m_Sensor2.m_TargetDistances[i].size() - 1;
+            if (m_Sensor1.IsShowTargetData(i, j1) || m_Sensor2.IsShowTargetData(i, j2))
+            {
+                if (m_Sensor1.m_Id == SensorIdRadar || m_Sensor1.m_Id == SensorIdAis)
+                {
+                    if (m_Sensor1.IsShowTargetData(i, j1))
+                    {
+                        data.push_back(m_DataList.m_ColumnItems[next].MakeData(m_Sensor1.m_TargetDistances[i][j1]));
+                    }
+                    else
+                    {
+                        data.push_back(TEXT(""));
+                    }
+                    next++;
+                }
+                if (m_Sensor1.IsShowTargetData(i, j1))
+                {
+                    data.push_back(m_DataList.m_ColumnItems[next].MakeData(m_Sensor1.m_TargetThetas[i][j1]));
+                    next++;
+                    data.push_back(m_DataList.m_ColumnItems[next].MakeData(m_Sensor1.m_TargetPhis[i][j1]));
+                    next++;
+                }
+                else
+                {
+                    data.push_back(TEXT(""));
+                    next++;
+                    data.push_back(TEXT(""));
+                    next++;
+                }
+                if (m_Sensor2.m_Id == SensorIdRadar || m_Sensor2.m_Id == SensorIdAis)
+                {
+                    if (m_Sensor2.IsShowTargetData(i, j2))
+                    {
+                        data.push_back(m_DataList.m_ColumnItems[next].MakeData(m_Sensor2.m_TargetDistances[i][j2]));
+                    }
+                    else
+                    {
+                        data.push_back(TEXT(""));
+                    }
+                    next++;
+                }
+                if (m_Sensor2.IsShowTargetData(i, j2))
+                {
+                    data.push_back(m_DataList.m_ColumnItems[next].MakeData(m_Sensor2.m_TargetThetas[i][j2]));
+                    next++;
+                    data.push_back(m_DataList.m_ColumnItems[next].MakeData(m_Sensor2.m_TargetPhis[i][j2]));
+                    next++;
+                }
+                else
+                {
+                    data.push_back(TEXT(""));
+                    next++;
+                    data.push_back(TEXT(""));
+                    next++;
+                }
+                m_DataListCtrl.AddTargetData(frame.m_Id, data);
+                m_DataListDlg.m_Ctrl->AddTargetData(frame.m_Id, data);
+            }
         }
     }
 
@@ -406,11 +467,6 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     m_Sensor2Dlg.m_Ctrl->BlendAll();
     m_Sensor2Dlg.m_Ctrl->Invalidate();
 
-    if (!m_HasStateMap)
-    {
-        m_DataListCtrl.AddTargetData();
-        m_DataListDlg.m_Ctrl->AddTargetData();
-    }
 
     if (m_HasStateMap)
     {

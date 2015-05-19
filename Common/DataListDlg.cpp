@@ -133,22 +133,20 @@ void CDataListDlg::OnSize(UINT nType, int cx, int cy)
 void CDataListDlg::OnCbnSelchangeSensorTargetId()
 {
     // TODO: 在此添加控件通知处理程序代码
-    int index = m_TargetId.GetCurSel();
-    int count = m_TargetId.GetCount();
-    if ((index != CB_ERR) && (count >= 1))
+    int index = GetDlgItemInt(IDC_DATALIST_TARGET_ID);
+    if (m_DataList.m_Targets.find(index) != m_DataList.m_Targets.end())
     {
-        m_TargetColor.SetCurSel(m_DataList.m_TargetColors[index]);
+        m_TargetColor.SetCurSel(m_DataList.m_Targets[index].m_Color);
     }
 }
 
 void CDataListDlg::OnCbnSelchangeSensorTargetColor()
 {
     // TODO: 在此添加控件通知处理程序代码
-    int index = m_TargetId.GetCurSel();
-    int count = m_TargetId.GetCount();
-    if ((index != CB_ERR) && (count >= 1))
+    int index = GetDlgItemInt(IDC_DATALIST_TARGET_ID);
+    if (m_DataList.m_Targets.find(index) != m_DataList.m_Targets.end())
     {
-        m_DataList.m_TargetColors[index] = (TargetColor)m_TargetColor.GetCurSel();
+        m_DataList.m_Targets[index].m_Color = (TargetColor)m_TargetColor.GetCurSel();
         m_Ctrl->Invalidate();
         m_Dlg->OnSubDlgTargetColor(this);
     }

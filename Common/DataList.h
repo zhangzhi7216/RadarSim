@@ -4,19 +4,54 @@
 #include "Sensor.h"
 #include "Target.h"
 
+#include <map>
+
 class __declspec(dllexport) DataList
 {
 public:
-    DataList(Sensor &sensor1, CString sensor1Title, Sensor &sensor2, CString sensor2Title);
+    enum ColumnType
+    {
+        ColumnTypeInt = 0,
+        ColumnTypeDouble,
+        ColumnTypeString,
+    };
+    struct ColumnItem
+    {
+        ColumnType type;
+        CString title;
+        ColumnItem(ColumnType tp, CString tt)
+        {
+            type = tp;
+            title = tt;
+        }
+        template<class T>
+        CString MakeData(T d)
+        {
+            CString str;
+            if (type == ColumnTypeInt)
+            {
+                str.AppendFormat(TEXT("%d"), d);
+                return str;
+            }
+            if (type == ColumnTypeDouble)
+            {
+                str.AppendFormat(TEXT("%f"), d);
+                return str;
+            }
+            if (type == ColumnTypeString)
+            {
+                str.AppendFormat(TEXT("%s"), d);
+                return str;
+            }
+        }
+    };
+
+    DataList();
     virtual ~DataList(void);
 
-    Sensor &m_Sensor1, &m_Sensor2;
-    CString m_Sensor1Title, m_Sensor2Title;
-
-    vector<TargetColor> m_TargetColors;
-    vector<vector<int>> m_Times;
+    vector<ColumnItem> m_ColumnItems;
+    map<int, Target> m_Targets;
 
     void Reset();
     void AddTarget(Target &target);
-    void AddTargetData(int target, int time);
 };

@@ -14,13 +14,10 @@ void CDataListCtrl::PreSubclassWindow()
 {
     CListCtrl::PreSubclassWindow();
 
-    InsertColumn(ColumnAisTheta, TEXT("时间(s)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnAisTheta, TEXT("AIS方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnInfraredTheta, TEXT("红外方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnInfraredPhi, TEXT("红外俯仰角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnRadarDistance, TEXT("雷达距离(km)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnRadarTheta, TEXT("雷达方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnRadarPhi, TEXT("雷达俯仰角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
+    for (int i = 0; i < m_DataList.m_ColumnItems.size(); i++)
+    {
+        InsertColumn(i, m_DataList.m_ColumnItems[i].title, LVCFMT_CENTER, LIST_ITEM_WIDTH);
+    }
 }
 
 void CDataListCtrl::Reset()
@@ -28,8 +25,14 @@ void CDataListCtrl::Reset()
     DeleteAllItems();
 }
 
-void CDataListCtrl::AddTargetData()
+void CDataListCtrl::AddTargetData(int target, vector<CString> &data)
 {
+    int row = InsertItem(0, TEXT(""));
+    for (int i = 0; i < data.size(); i++)
+    {
+        SetItemData(row, TargetColors[m_DataList.m_Targets[target].m_Color].ToCOLORREF());
+        SetItemText(row, i, data[i]);
+    }
     //for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
     //{
     //    int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;

@@ -73,6 +73,14 @@ BOOL CPlaneRApp::InitInstance()
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
 	CPlaneDlg dlg(PacketTypeImRadar, TEXT("雷达与AIS"), true, TEXT("雷达"), true, TEXT("AIS"), false, true);
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeInt, CString(TEXT("时间(s)"))));
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("雷达距离(km)"))));
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("雷达方位角(°)"))));
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("雷达俯仰角(°)"))));
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("AIS距离(km)"))));
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("AIS方位角(°)"))));
+    dlg.m_DataList.m_ColumnItems.push_back(DataList::ColumnItem(DataList::ColumnTypeDouble, CString(TEXT("AIS俯仰角(°)"))));
+
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
