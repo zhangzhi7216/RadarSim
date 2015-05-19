@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="FusionPlane"
+	Name="FusionCenter"
 	ProjectGUID="{534DE039-C448-4158-8DCC-663980E0B71C}"
-	RootNamespace="FusionPlane"
+	RootNamespace="FusionCenter"
 	Keyword="MFCProj"
 	TargetFrameworkVersion="196613"
 	>
@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../FusionPlane;"
+				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../FusionCenter;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../FusionPlane;"
+				AdditionalIncludeDirectories="../Common; ../PlaneDlg; ../FusionCenter;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;NDEBUG"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
@@ -190,11 +190,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\FusionPlane.cpp"
+				RelativePath=".\FusionCenter.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\FusionPlaneDlg.cpp"
+				RelativePath="..\PlaneDlg\FusionCenterDlg.cpp"
 				>
 			</File>
 			<File
@@ -240,11 +240,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\FusionPlane.h"
+				RelativePath=".\FusionCenter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\PlaneDlg\FusionPlaneDlg.h"
+				RelativePath="..\PlaneDlg\FusionCenterDlg.h"
 				>
 			</File>
 			<File
@@ -302,7 +302,7 @@
 	<Globals>
 		<Global
 			Name="RESOURCE_FILE"
-			Value="FusionPlaneDlg.rc"
+			Value="FusionCenterDlg.rc"
 		/>
 	</Globals>
 </VisualStudioProject>

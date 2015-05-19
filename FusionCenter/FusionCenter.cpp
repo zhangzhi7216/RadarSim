@@ -4,42 +4,42 @@
 
 #include "stdafx.h"
 #include "../PlaneDlg/Resource.h"
-#include "FusionPlane.h"
-#include "FusionPlaneDlg.h"
+#include "FusionCenter.h"
+#include "FusionCenterDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-// CFusionPlaneApp
+// CFusionCenterApp
 
-BEGIN_MESSAGE_MAP(CFusionPlaneApp, CWinAppEx)
+BEGIN_MESSAGE_MAP(CFusionCenterApp, CWinAppEx)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
 
-// CFusionPlaneApp 构造
+// CFusionCenterApp 构造
 
-CFusionPlaneApp::CFusionPlaneApp()
+CFusionCenterApp::CFusionCenterApp()
 {
 	// TODO: 在此处添加构造代码，
 	// 将所有重要的初始化放置在 InitInstance 中
     GlobalInit();
 }
 
-CFusionPlaneApp::~CFusionPlaneApp()
+CFusionCenterApp::~CFusionCenterApp()
 {
     GlobalShut();
 }
 
-// 唯一的一个 CFusionPlaneApp 对象
+// 唯一的一个 CFusionCenterApp 对象
 
-CFusionPlaneApp theApp;
+CFusionCenterApp theApp;
 
 
-// CFusionPlaneApp 初始化
+// CFusionCenterApp 初始化
 
-BOOL CFusionPlaneApp::InitInstance()
+BOOL CFusionCenterApp::InitInstance()
 {
 	// 如果一个运行在 Windows XP 上的应用程序清单指定要
 	// 使用 ComCtl32.dll 版本 6 或更高版本来启用可视化方式，
@@ -70,7 +70,7 @@ BOOL CFusionPlaneApp::InitInstance()
 	// 例如修改为公司或组织名
 	SetRegistryKey(_T("应用程序向导生成的本地应用程序"));
 
-	CFusionPlaneDlg dlg(TEXT("融合"), false, TEXT(""), false, TEXT(""), true, true);
+	CFusionCenterDlg dlg(TEXT("融合"), false, TEXT(""), false, TEXT(""), true, true);
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)

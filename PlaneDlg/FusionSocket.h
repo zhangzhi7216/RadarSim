@@ -2,13 +2,13 @@
 
 #include "PlaneSocket.h"
 
-class CFusionPlaneDlg;
+class CFusionCenterDlg;
 
 class FusionSocket :
     public PlaneSocket
 {
 public:
-    FusionSocket(CFusionPlaneDlg *dlg);
+    FusionSocket(CFusionCenterDlg *dlg);
     ~FusionSocket(void);
 
     void OnAccept(int nErrorCode);
@@ -18,6 +18,6 @@ public:
     void SendKeyTarget(TrueDataFrame &keyTarget);
 
 public:
-    CFusionPlaneDlg *m_Dlg;
+    CFusionCenterDlg *m_Dlg;
 };
 

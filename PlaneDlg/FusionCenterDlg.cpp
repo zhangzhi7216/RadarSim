@@ -2,8 +2,8 @@
 //
 
 #include "stdafx.h"
-#include "FusionPlane.h"
-#include "FusionPlaneDlg.h"
+#include "FusionCenter.h"
+#include "FusionCenterDlg.h"
 #include "IpDlg.h"
 
 #include "Utility.h"
@@ -18,12 +18,12 @@
 #endif
 
 
-// CFusionPlaneDlg 对话框
+// CFusionCenterDlg 对话框
 
 
 
 
-CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title
+CFusionCenterDlg::CFusionCenterDlg(LPCWSTR title
                                  , bool hasSensor1
                                  , CString sensor1Title
                                  , bool hasSensor2
@@ -40,20 +40,20 @@ CFusionPlaneDlg::CFusionPlaneDlg(LPCWSTR title
     m_FusionSocket = new FusionSocket(this);
 }
 
-CFusionPlaneDlg::~CFusionPlaneDlg()
+CFusionCenterDlg::~CFusionCenterDlg()
 {
 }
 
-BEGIN_MESSAGE_MAP(CFusionPlaneDlg, CPlaneDlg)
+BEGIN_MESSAGE_MAP(CFusionCenterDlg, CPlaneDlg)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
-// CFusionPlaneDlg 消息处理程序
+// CFusionCenterDlg 消息处理程序
 
-BOOL CFusionPlaneDlg::OnInitDialog()
+BOOL CFusionCenterDlg::OnInitDialog()
 {
     if (!m_FusionSocket->Create())
     {
@@ -89,7 +89,7 @@ BOOL CFusionPlaneDlg::OnInitDialog()
 //  来绘制该图标。对于使用文档/视图模型的 MFC 应用程序，
 //  这将由框架自动完成。
 
-void CFusionPlaneDlg::OnPaint()
+void CFusionCenterDlg::OnPaint()
 {
 	if (IsIconic())
 	{
@@ -116,17 +116,17 @@ void CFusionPlaneDlg::OnPaint()
 
 //当用户拖动最小化窗口时系统调用此函数取得光标
 //显示。
-HCURSOR CFusionPlaneDlg::OnQueryDragIcon()
+HCURSOR CFusionCenterDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-void CFusionPlaneDlg::CreateDataCenterSocket()
+void CFusionCenterDlg::CreateDataCenterSocket()
 {
     m_DataCenterSocket = new FusionSocket(this);
 }
 
-void CFusionPlaneDlg::SendPlaneType()
+void CFusionCenterDlg::SendPlaneType()
 {
     CString addr;
     UINT port;
@@ -134,7 +134,7 @@ void CFusionPlaneDlg::SendPlaneType()
     m_DataCenterSocket->SendImFusion(port);
 }
 
-void CFusionPlaneDlg::ConnectRenderCenter()
+void CFusionCenterDlg::ConnectRenderCenter()
 {
     wstring hostName = RENDER_CENTER_ADDR;
     int port = RENDER_CENTER_PORT;
@@ -202,11 +202,11 @@ void CFusionPlaneDlg::ConnectRenderCenter()
     // AfxMessageBox(TEXT("连接到数据中心"));
 }
 
-void CFusionPlaneDlg::ConnectFusion(const CString &addr, int port)
+void CFusionCenterDlg::ConnectFusion(const CString &addr, int port)
 {
 }
 
-void CFusionPlaneDlg::AddPlaneSocket()
+void CFusionCenterDlg::AddPlaneSocket()
 {
     m_Lock.Lock();
     FusionSocket *socket = new FusionSocket(this);
@@ -218,7 +218,7 @@ void CFusionPlaneDlg::AddPlaneSocket()
     m_Lock.Unlock();
 }
 
-void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
+void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
 {
     m_FusionInput.m_NoiseDataPackets[(SensorId)packet.m_SensorId] = packet;
     if (m_FusionInput.m_NoiseDataPackets.size() == SensorIdLast)
@@ -257,7 +257,7 @@ void CFusionPlaneDlg::AddNoiseData(NoiseDataPacket &packet)
     }
 }
 
-void CFusionPlaneDlg::AddNoiseDataPhase2()
+void CFusionCenterDlg::AddNoiseDataPhase2()
 {
     m_StateMapCtrl.DrawTargets();
     m_StateMapCtrl.BlendAll();
@@ -280,11 +280,11 @@ void CFusionPlaneDlg::AddNoiseDataPhase2()
     m_FusionOutput.m_FusionDataPacket = FusionDataPacket();
 }
 
-void CFusionPlaneDlg::SendNoiseDatas(TrueDataPacket &packet)
+void CFusionCenterDlg::SendNoiseDatas(TrueDataPacket &packet)
 {
 }
 
-void CFusionPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
+void CFusionCenterDlg::SetFusionAlgo(FusionAlgo *algo)
 {
     if (m_FusionAlgo)
     {
@@ -300,7 +300,7 @@ void CFusionPlaneDlg::SetFusionAlgo(FusionAlgo *algo)
     GetDlgItem(IDC_FUSION_ALGO)->SetWindowText(m_FusionAlgo->m_Name);
 }
 
-void CFusionPlaneDlg::DoFusion()
+void CFusionCenterDlg::DoFusion()
 {
     if (!m_FusionAlgo)
     {
@@ -365,7 +365,7 @@ void CFusionPlaneDlg::DoFusion()
 #endif
 }
 
-void CFusionPlaneDlg::ResetSockets()
+void CFusionCenterDlg::ResetSockets()
 {
     m_Lock.Lock();
     CPlaneDlg::ResetSockets();

@@ -15,11 +15,11 @@
 // 有关此类的实现，请参阅 Plane.cpp
 //
 
-class CFusionPlaneApp : public CWinAppEx
+class CFusionCenterApp : public CWinAppEx
 {
 public:
-	CFusionPlaneApp();
-    virtual ~CFusionPlaneApp();
+	CFusionCenterApp();
+    virtual ~CFusionCenterApp();
 
 // 重写
 	public:
@@ -30,4 +30,4 @@ public:
 	DECLARE_MESSAGE_MAP()
 };
 
-extern CFusionPlaneApp theApp;
+extern CFusionCenterApp theApp;

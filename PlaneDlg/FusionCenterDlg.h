@@ -1,5 +1,5 @@
 
-// FusionPlaneDlg.h : 头文件
+// FusionCenterDlg.h : 头文件
 //
 
 #pragma once
@@ -13,12 +13,12 @@
 
 using namespace std;
 
-// CFusionPlaneDlg 对话框
-class CFusionPlaneDlg : public CPlaneDlg
+// CFusionCenterDlg 对话框
+class CFusionCenterDlg : public CPlaneDlg
 {
 // 构造
 public:
-	CFusionPlaneDlg(LPCWSTR title
+	CFusionCenterDlg(LPCWSTR title
         , bool hasSensor1
         , CString sensor1Title
         , bool hasSensor2
@@ -26,7 +26,7 @@ public:
         , bool hasStateMap
         , bool hasDataList = true
         , CWnd* pParent = NULL);	// 标准构造函数
-    ~CFusionPlaneDlg();
+    ~CFusionCenterDlg();
 
 // 实现
 protected:

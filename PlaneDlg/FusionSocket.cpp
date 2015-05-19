@@ -1,11 +1,11 @@
 #include "StdAfx.h"
 #include "FusionSocket.h"
 #include "Resource.h"
-#include "FusionPlaneDlg.h"
+#include "FusionCenterDlg.h"
 #include "FusionLocalAlgo.h"
 #include "FusionVcAlgo.h"
 
-FusionSocket::FusionSocket(CFusionPlaneDlg *dlg)
+FusionSocket::FusionSocket(CFusionCenterDlg *dlg)
 : PlaneSocket(dlg)
 , m_Dlg(dlg)
 {
