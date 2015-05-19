@@ -241,7 +241,7 @@ void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
                 m_StateMap.AddTarget(t);
                 m_StateMapDlg.AddTarget(t);
             }
-            m_StateMap.AddTargetData(frame.m_Id, frame.m_Pos, frame.m_Vel, (TargetState)frame.m_State);
+            m_StateMap.AddTargetData(frame.m_Id, frame.m_Pos, frame.m_Vel);
             m_StateMap.m_Targets[frame.m_Id].m_IsKeyTarget = frame.m_IsKeyTarget;
         }
 

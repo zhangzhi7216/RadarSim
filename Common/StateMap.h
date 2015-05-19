@@ -31,9 +31,9 @@ public:
 
     void Reset();
     void AddPlane(Plane &plane);
-    void AddPlaneData(int plane, Position pos, Velocity vel, TargetState state);
+    void AddPlaneData(int plane, Position pos, Velocity vel);
     void AddTarget(Target &target);
-    void AddTargetData(int target, Position pos, Velocity vel, TargetState state);
+    void AddTargetData(int target, Position pos, Velocity vel);
 
     int m_ZoomKeyTargetId;
     void ZoomKeyTarget(double x, double y);

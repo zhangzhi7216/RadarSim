@@ -241,10 +241,8 @@ void CStateMapCtrl::DrawTargets()
             }
             graphics.TranslateTransform(end.X / m_StateMap.m_MaxX * (double)width, (double)height - end.Y / m_StateMap.m_MaxY * (double)height, MatrixOrderAppend);
 
-            Image *targetImg = m_StateMap.m_Targets[i].m_State == TargetStateExploding ?
-                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Targets[i].m_Type];
-            Image *targetMaskImg = m_StateMap.m_Targets[i].m_State == TargetStateExploding ?
-                ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeMaskImages[m_StateMap.m_Targets[i].m_Type];
+            Image *targetImg = TargetTypeImages[m_StateMap.m_Targets[i].m_Type];
+            Image *targetMaskImg = TargetTypeMaskImages[m_StateMap.m_Targets[i].m_Type];
 #ifdef _DEV
             if (m_StateMap.m_Targets[i].m_State == TargetStateExploding)
             {
@@ -252,14 +250,11 @@ void CStateMapCtrl::DrawTargets()
                     ExplosionTypeImages[m_StateMap.m_ExplosionType] : TargetTypeImages[m_StateMap.m_Targets[i].m_Type];
             }
 #endif
-            if (m_StateMap.m_Targets[i].m_State != TargetStateDestroyed)
+            PointF pt(0.0, 0.0);
+            graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
+            if (m_StateMap.m_Targets[i].m_IsKeyTarget)
             {
-                PointF pt(0.0, 0.0);
-                graphics.DrawImage(targetImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
-                if (m_StateMap.m_Targets[i].m_IsKeyTarget)
-                {
-                    graphics.DrawImage(targetMaskImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
-                }
+                graphics.DrawImage(targetMaskImg, PointF(pt.X - (double)targetImg->GetWidth() / 2.0, pt.Y - (double)targetImg->GetHeight() / 2.0));
             }
 
             graphics.ResetTransform();

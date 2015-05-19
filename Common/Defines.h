@@ -180,14 +180,6 @@ enum TargetMoveType
     TargetMoveTypeLast,
 };
 
-enum TargetState
-{
-    TargetStateAlive = 0,
-    TargetStateExploding,
-    TargetStateDestroyed,
-    TargetStateLast,
-};
-
 extern CString __declspec(dllimport) TargetMoveTypeNames[TargetMoveTypeLast];
 
 #ifdef _DEV

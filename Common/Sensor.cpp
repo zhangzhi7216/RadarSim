@@ -105,6 +105,14 @@ void Sensor::AddTargetData(int target, Position rel)
     double d = Distance(rel), t = Theta(rel) - Theta(m_Plane->m_HeadDir), p = Phi(rel) - Phi(m_Plane->m_HeadDir);
     if (IsInRange(target, d, t, p))
     {
+        double a = d, b = t, c = p;
+        // AIS直接对直角坐标系加噪
+        if (m_Id == SensorIdAis)
+        {
+            a = rel.X;
+            b = rel.Y;
+            c = rel.Z;
+        }
         // double sample = (double)rand();
         // if (sample <= (double)RAND_MAX * m_ProDet / 100.0)
         if (m_GlobalData.m_Delay)
@@ -115,29 +123,36 @@ void Sensor::AddTargetData(int target, Position rel)
         {
             // 在这里加野值.
         }
+        double na = a, nb = b, nc = c;
         switch (m_GlobalData.m_NoiseType)
         {
         case NoiseTypeWhite:
-            m_TargetDistances[target].push_back(WhiteNoise(d, m_DisVar));
-            m_TargetThetas[target].push_back(WhiteNoise(t, m_ThetaVar));
-            m_TargetPhis[target].push_back(WhiteNoise(p, m_PhiVar));
+            na = WhiteNoise(a, m_DisVar);
+            nb = WhiteNoise(b, m_ThetaVar);
+            nc = WhiteNoise(c, m_PhiVar);
             break;
         case NoiseTypeColor:
-            m_TargetDistances[target].push_back(ColorNoise(d, m_DisVar));
-            m_TargetThetas[target].push_back(ColorNoise(t, m_ThetaVar));
-            m_TargetPhis[target].push_back(ColorNoise(p, m_PhiVar));
+            na = ColorNoise(a, m_DisVar);
+            nb = ColorNoise(b, m_ThetaVar);
+            nc = ColorNoise(c, m_PhiVar);
             break;
         case NoiseTypeMult:
-            m_TargetDistances[target].push_back(MultNoise(d, m_DisVar));
-            m_TargetThetas[target].push_back(MultNoise(t, m_ThetaVar));
-            m_TargetPhis[target].push_back(MultNoise(p, m_PhiVar));
-            break;
-        default:
-            m_TargetDistances[target].push_back(d);
-            m_TargetThetas[target].push_back(t);
-            m_TargetPhis[target].push_back(p);
+            na = MultNoise(a, m_DisVar);
+            nb = MultNoise(b, m_ThetaVar);
+            nc = MultNoise(c, m_PhiVar);
             break;
         }
+        // AIS加噪后换算球面坐标
+        if (m_Id == SensorIdAis)
+        {
+            Position p = Position(na, nb, nc);
+            na = Distance(p);
+            nb = Theta(p) - Theta(m_Plane->m_HeadDir);
+            nc = Phi(p) - Phi(m_Plane->m_HeadDir);
+        }
+        m_TargetDistances[target].push_back(na);
+        m_TargetThetas[target].push_back(nb);
+        m_TargetPhis[target].push_back(nc);
     }
     else
     {

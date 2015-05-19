@@ -647,49 +647,24 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 
     /////// 以下为本帧内容显示
     // 显示本帧我机
-    m_StateMap.AddPlaneData(0, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel, (TargetState)(m_PlaneTrueDatas[index].m_State));
+    m_StateMap.AddPlaneData(0, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel);
 
-    // 检测本帧是否发生爆炸
     vector<TrueDataFrame *> targetTrueDatas;
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         targetTrueDatas.push_back(&m_TargetClients[i].m_TargetTrueDatas[index]);
-    }
-    Utility::CheckMissileHit(m_Missiles, targetTrueDatas);
-    // 校正目标位置：如果已被击落则后面真值置0
-    for (int i = 0; i < m_TargetClients.size(); ++i)
-    {
-        if (m_TargetClients[i].m_TargetTrueDatas[index].m_State == TargetStateExploding)
-        {
-            vector<TrueDataFrame> &trueDatas = m_TargetClients[i].m_TargetTrueDatas;
-            for (int j = index + 1; j < trueDatas.size(); ++j)
-            {
-                trueDatas[j].m_Pos = Position(0, 0, 0);
-                trueDatas[j].m_Vel = Point3D(0, 0, 0);
-                trueDatas[j].m_Acc = Point3D(0, 0, 0);
-                trueDatas[j].m_State = TargetStateDestroyed;
-            }
-        }
     }
 
     // 显示本帧目标
     for (int i = 0; i < m_TargetClients.size(); ++i)
     {
         TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
-        m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel, (TargetState)m_TargetClients[i].m_TargetTrueDatas[index].m_State);
+        m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel);
     }
 
     m_StateMapDlg.m_Ctrl->DrawTargets();
     m_StateMapDlg.m_Ctrl->BlendAll();
     m_StateMapDlg.m_Ctrl->Invalidate();
-
-    /////// 以下为下一帧内容校正
-    // 校正攻击机位置
-    if (m_CurrentFrame < m_GlobalData.m_EndTime - m_GlobalData.m_Interval)
-    {
-        // TrueDataFrame &frame = packet.m_PlaneTrueDatas[PLANE_COUNT - 1];
-        // m_PlaneSockets[PLANE_COUNT - 1].m_PlaneTrueDatas[index + 1] = frame;
-    }
 
     ResumeSim();
 }

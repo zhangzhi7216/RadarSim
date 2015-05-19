@@ -376,14 +376,10 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
 {
     m_Plane.MoveTo(packet.m_PlaneTrueData.m_Pos);
 
-    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, packet.m_PlaneTrueData.m_Vel, (TargetState)packet.m_PlaneTrueData.m_State);
+    m_StateMap.AddPlaneData(0, packet.m_PlaneTrueData.m_Pos, packet.m_PlaneTrueData.m_Vel);
 
     for (int i = 0; i < packet.m_TargetTrueDatas.size(); ++i)
     {
-        if (packet.m_TargetTrueDatas[i].m_State != TargetStateAlive)
-        {
-            continue;
-        }
         Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
 
         m_Sensor1.AddTargetData(i, rel);

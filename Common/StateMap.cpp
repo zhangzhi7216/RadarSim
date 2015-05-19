@@ -33,10 +33,9 @@ void StateMap::Reset()
     m_ZoomKeyTargetId = -1;
 }
 
-void StateMap::AddPlaneData(int plane, Position pos, Velocity vel, TargetState state)
+void StateMap::AddPlaneData(int plane, Position pos, Velocity vel)
 {
     m_Planes[plane].m_Vel = vel;
-    m_Planes[plane].m_State = state;
     m_PlanePaths[plane].push_back(pos);
 }
 
@@ -51,14 +50,10 @@ void StateMap::AddTarget(Target &target)
     m_Targets[target.m_Id] = target;
 }
 
-void StateMap::AddTargetData(int target, Position pos, Velocity vel, TargetState state)
+void StateMap::AddTargetData(int target, Position pos, Velocity vel)
 {
     m_Targets[target].m_Vel = vel;
-    m_Targets[target].m_State = state;
-    if (state != TargetStateDestroyed)
-    {
-        m_TargetPaths[target].push_back(pos);
-    }
+    m_TargetPaths[target].push_back(pos);
 }
 
 void StateMap::ZoomKeyTarget(double x, double y)

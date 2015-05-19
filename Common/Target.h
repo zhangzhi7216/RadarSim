@@ -32,8 +32,6 @@ public:
 
     TargetColor m_Color;
 
-    TargetState m_State;
-
     bool m_IsKeyTarget;
 
     Sensor m_Radar, m_Ais, m_Tong, m_Lei;
