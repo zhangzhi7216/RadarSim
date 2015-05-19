@@ -14,8 +14,8 @@ void CDataListCtrl::PreSubclassWindow()
 {
     CListCtrl::PreSubclassWindow();
 
-    InsertColumn(ColumnEsmTheta, TEXT("时间(s)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
-    InsertColumn(ColumnEsmTheta, TEXT("ESM方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
+    InsertColumn(ColumnAisTheta, TEXT("时间(s)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
+    InsertColumn(ColumnAisTheta, TEXT("AIS方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
     InsertColumn(ColumnInfraredTheta, TEXT("红外方位角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
     InsertColumn(ColumnInfraredPhi, TEXT("红外俯仰角(°)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
     InsertColumn(ColumnRadarDistance, TEXT("雷达距离(km)"), LVCFMT_CENTER, LIST_ITEM_WIDTH);
@@ -33,7 +33,7 @@ void CDataListCtrl::AddTargetData()
     //for (int i = 0; i < m_DataList.m_Radar.m_TargetDistances.size(); ++i)
     //{
     //    int j = m_DataList.m_Radar.m_TargetDistances[i].size() - 1;
-    //    if (!m_DataList.m_Esm.IsShowTargetData(i, j) &&
+    //    if (!m_DataList.m_Ais.IsShowTargetData(i, j) &&
     //        !m_DataList.m_Infrared.IsShowTargetData(i, j) &&
     //        !m_DataList.m_Infrared.IsShowTargetData(i, j))
     //    {
@@ -44,13 +44,13 @@ void CDataListCtrl::AddTargetData()
     //    CString str;
     //    str.AppendFormat(TEXT("%d"), m_DataList.m_Times[i].back());
     //    SetItemText(row, ColumnTime, str);
-    //    if (m_DataList.m_Esm.m_Enable)
+    //    if (m_DataList.m_Ais.m_Enable)
     //    {
-    //        if (m_DataList.m_Esm.IsShowTargetData(i, j))
+    //        if (m_DataList.m_Ais.IsShowTargetData(i, j))
     //        {
     //            CString str;
-    //            str.AppendFormat(TEXT("%f"), m_DataList.m_Esm.m_TargetThetas[i].back());
-    //            SetItemText(row, ColumnEsmTheta, str);
+    //            str.AppendFormat(TEXT("%f"), m_DataList.m_Ais.m_TargetThetas[i].back());
+    //            SetItemText(row, ColumnAisTheta, str);
     //        }
     //    }
     //    if (m_DataList.m_Infrared.m_Enable)

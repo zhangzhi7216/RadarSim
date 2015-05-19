@@ -84,11 +84,11 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     m_Sensors[SensorIdRadar].m_MaxDis = 350;
     m_Sensors[SensorIdRadar].m_MaxTheta = 120;
 
-    m_Sensors[SensorIdEsm].m_Id = SensorIdEsm;
-    m_Sensors[SensorIdEsm].m_MaxDis = 300;
-    m_Sensors[SensorIdEsm].m_MaxTheta = 90;
-    m_Sensors[SensorIdEsm].m_ThetaRangeColor = Color::Red;
-    m_Sensors[SensorIdEsm].m_ShowHeight = FALSE;
+    m_Sensors[SensorIdAis].m_Id = SensorIdAis;
+    m_Sensors[SensorIdAis].m_MaxDis = 300;
+    m_Sensors[SensorIdAis].m_MaxTheta = 90;
+    m_Sensors[SensorIdAis].m_ThetaRangeColor = Color::Red;
+    m_Sensors[SensorIdAis].m_ShowHeight = FALSE;
 
     m_Sensors[SensorIdTong].m_Id = SensorIdTong;
     m_Sensors[SensorIdTong].m_MaxDis = 250;
@@ -711,7 +711,7 @@ void CDataCenterDlg::StartSim()
     // GeneratePlaneClients();
     // GenerateTargetClients();
     m_Plane.m_Radar = m_Sensors[SensorIdRadar];
-    m_Plane.m_Esm = m_Sensors[SensorIdEsm];
+    m_Plane.m_Ais = m_Sensors[SensorIdAis];
     m_Plane.m_Tong = m_Sensors[SensorIdTong];
     m_Plane.m_Lei = m_Sensors[SensorIdLei];
     for (int i = 0; i < PLANE_COUNT; ++i)
@@ -721,7 +721,7 @@ void CDataCenterDlg::StartSim()
         if (m_PlaneSockets[i]->IsRadar())
         {
             m_PlaneSockets[i]->SendRadar(m_Sensors[SensorIdRadar]);
-            m_PlaneSockets[i]->SendEsm(m_Sensors[SensorIdEsm]);
+            m_PlaneSockets[i]->SendAis(m_Sensors[SensorIdAis]);
         }
         if (m_PlaneSockets[i]->IsDetect())
         {

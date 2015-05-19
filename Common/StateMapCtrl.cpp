@@ -131,16 +131,16 @@ void CStateMapCtrl::DrawTargets()
                         -m_StateMap.m_Planes[i].m_Radar.m_MaxTheta / 2.0,
                         m_StateMap.m_Planes[i].m_Radar.m_MaxTheta);
                 }
-                if (m_StateMap.m_Planes[i].m_Esm.m_Enable)
+                if (m_StateMap.m_Planes[i].m_Ais.m_Enable)
                 {
-                    Pen pen(m_StateMap.m_Planes[i].m_Esm.m_ThetaRangeColor);
+                    Pen pen(m_StateMap.m_Planes[i].m_Ais.m_ThetaRangeColor);
                     graphics.DrawPie(&pen,
-                        (float)(pt.X - m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width),
-                        (float)(pt.Y - m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height),
-                        (float)(m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
-                        (float)(m_StateMap.m_Planes[i].m_Esm.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
-                        -m_StateMap.m_Planes[i].m_Esm.m_MaxTheta / 2.0,
-                        m_StateMap.m_Planes[i].m_Esm.m_MaxTheta);
+                        (float)(pt.X - m_StateMap.m_Planes[i].m_Ais.m_MaxDis / m_StateMap.m_MaxX * (double)width),
+                        (float)(pt.Y - m_StateMap.m_Planes[i].m_Ais.m_MaxDis / m_StateMap.m_MaxY * (double)height),
+                        (float)(m_StateMap.m_Planes[i].m_Ais.m_MaxDis / m_StateMap.m_MaxX * (double)width * 2.0),
+                        (float)(m_StateMap.m_Planes[i].m_Ais.m_MaxDis / m_StateMap.m_MaxY * (double)height * 2.0),
+                        -m_StateMap.m_Planes[i].m_Ais.m_MaxTheta / 2.0,
+                        m_StateMap.m_Planes[i].m_Ais.m_MaxTheta);
                 }
                 if (m_StateMap.m_Planes[i].m_Tong.m_Enable)
                 {

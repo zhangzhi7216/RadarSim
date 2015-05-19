@@ -8,7 +8,7 @@ public:
     enum ColumnIndex
     {
         ColumnTime = 0,
-        ColumnEsmTheta,
+        ColumnAisTheta,
         ColumnInfraredTheta,
         ColumnInfraredPhi,
         ColumnRadarDistance,

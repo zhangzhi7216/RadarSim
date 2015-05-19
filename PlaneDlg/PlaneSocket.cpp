@@ -58,7 +58,7 @@ void PlaneSocket::Dispatch(int type, CArchive &ar)
             Plane plane;
             ar >> plane;
             ar >> plane.m_Radar;
-            ar >> plane.m_Esm;
+            ar >> plane.m_Ais;
             ar >> plane.m_Tong;
             ar >> plane.m_Lei;
             m_Dlg->SetPlane(plane);

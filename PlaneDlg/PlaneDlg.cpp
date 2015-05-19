@@ -41,7 +41,7 @@ CPlaneDlg::CPlaneDlg(PacketType planeType
     , m_HasSensor2(hasSensor2)
     , m_ShowSensor2Dlg(false)
     , m_Sensor2Title(sensor2Title)
-    , m_Sensor2(SensorIdEsm, m_Plane, m_GlobalData)
+    , m_Sensor2(SensorIdAis, m_Plane, m_GlobalData)
     , m_Sensor2Ctrl(m_Sensor2)
     , m_Sensor2Dlg(m_Sensor2Title, m_Sensor2, this)
     , m_HasStateMap(hasStateMap)

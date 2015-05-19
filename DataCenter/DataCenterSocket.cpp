@@ -104,7 +104,7 @@ void DataCenterSocket::SendPlane(Plane &plane)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypePlane << plane << plane.m_Radar << plane.m_Esm << plane.m_Tong << plane.m_Lei;
+    ar << PacketTypePlane << plane << plane.m_Radar << plane.m_Ais << plane.m_Tong << plane.m_Lei;
     ar.Flush();
 }
 
@@ -124,11 +124,11 @@ void DataCenterSocket::SendRadar(Sensor &radar)
     ar.Flush();
 }
 
-void DataCenterSocket::SendEsm(Sensor &esm)
+void DataCenterSocket::SendAis(Sensor &ais)
 {
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
-    ar << PacketTypeSensor2 << esm;
+    ar << PacketTypeSensor2 << ais;
     ar.Flush();
 }
 

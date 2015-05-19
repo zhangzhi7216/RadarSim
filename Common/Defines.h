@@ -248,7 +248,7 @@ extern CString __declspec(dllimport) NoiseTypeNames[NoiseTypeLast];
 enum SensorId
 {
     SensorIdRadar = 0,
-    SensorIdEsm,
+    SensorIdAis,
     SensorIdTong,
     SensorIdLei,
     SensorIdLast,

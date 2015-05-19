@@ -25,7 +25,7 @@ public:
     void SendPlane(Plane &plane);
     void SendTarget(Target &target);
     void SendRadar(Sensor &radar);
-    void SendEsm(Sensor &esm);
+    void SendAis(Sensor &ais);
     void SendTong(Sensor &Tong);
     void SendLei(Sensor &lei);
     void SendStateMap(StateMap &stateMap);

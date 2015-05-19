@@ -10,9 +10,9 @@
 #define IDC_SENSOR1_CTRL                1000
 #define IDC_RADAR_CTRL_GRP              1001
 #define IDC_SENSOR1_CTRL_GRP            1001
-#define IDC_ESM_CTRL                    1002
+#define IDC_AIS_CTRL                    1002
 #define IDC_SENSOR2_CTRL                1002
-#define IDC_ESM_CTRL_GRP                1003
+#define IDC_AIS_CTRL_GRP                1003
 #define IDC_SENSOR2_CTRL_GRP            1003
 #define IDC_INFRARED_CTRL               1004
 #define IDC_STATEMAP_CTRL               1004
