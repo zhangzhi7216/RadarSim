@@ -247,10 +247,24 @@ void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
 
         if (m_StateMap.m_ZoomKeyTargetId != -1)
         {
-            TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[m_StateMap.m_ZoomKeyTargetId];
-            m_RenderCenterSocket->SendKeyTarget(frame);
+            bool found = false;
+            for (int i = 0; i < m_FusionOutput.m_FusionDataPacket.m_FusionDatas.size(); i++)
+            {
+                TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[i];
+                if (frame.m_Id == m_StateMap.m_ZoomKeyTargetId)
+                {
+                    m_RenderCenterSocket->SendKeyTarget(frame);
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                m_StateMap.m_ZoomKeyTargetId = -1;
+            }
         }
-        else
+
+        if (m_StateMap.m_ZoomKeyTargetId == -1)
         {
             AddNoiseDataPhase2();
         }

@@ -59,7 +59,7 @@ void StateMap::AddTargetData(int target, Position pos, Velocity vel)
 void StateMap::ZoomKeyTarget(double x, double y)
 {
     Position p(x, y, 0);
-    for (map<int, Path>::iterator it = m_TargetPaths.begin(); it != m_TargetPaths.end(); it++)
+    for (map<int, Path>::reverse_iterator it = m_TargetPaths.rbegin(); it != m_TargetPaths.rend(); it++)
     {
         p.Z = it->second.back().Z;
         if (Utility::Distance(it->second.back(), p) <= KEY_TARGET_HIT_THRESHOLD && m_Targets[it->first].m_IsKeyTarget)

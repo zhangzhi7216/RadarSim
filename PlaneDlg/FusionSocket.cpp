@@ -62,22 +62,23 @@ void FusionSocket::Dispatch(int type, CArchive &ar)
         break;
     case PacketTypeKeyTarget:
         {
-    //         int length;
-    //         ar >> length;
-    //         HANDLE file = CreateFile(
-    //             KEY_TARGET_FILE_NAME,
-    //             GENERIC_READ | GENERIC_WRITE,
-    //             FILE_SHARE_WRITE,
-    //             NULL,
-    //             CREATE_ALWAYS,
-    //             FILE_ATTRIBUTE_NORMAL,
-    //             NULL);
-    //         char *buf = new char[length];
-    //         Receive(&buf[0], length);
-    //         DWORD written = 0;
-    //         WriteFile(file, buf, length, &written, NULL);
-    //         delete[] buf;
-    //         CloseHandle(file);
+            int length;
+            ar >> length;
+            HANDLE file = CreateFile(
+                KEY_TARGET_FILE_NAME,
+                GENERIC_READ | GENERIC_WRITE,
+                FILE_SHARE_WRITE,
+                NULL,
+                CREATE_ALWAYS,
+                FILE_ATTRIBUTE_NORMAL,
+                NULL);
+            char *buf = new char[length];
+            ar.Read(&buf[0], length);
+            DWORD written = 0;
+            WriteFile(file, buf, length, &written, NULL);
+            delete[] buf;
+            CloseHandle(file);
+
             m_Dlg->AddNoiseDataPhase2();
         }
         break;

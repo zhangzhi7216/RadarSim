@@ -641,8 +641,6 @@ void CDataCenterDlg::GenerateGlobalData()
 
 void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
-    m_FusionDatas.push_back(packet);
-
     int index = (m_CurrentFrame - m_GlobalData.m_StartTime) / m_GlobalData.m_Interval;
 
     /////// 以下为本帧内容显示
@@ -654,17 +652,6 @@ void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
     {
         targetTrueDatas.push_back(&m_TargetClients[i].m_TargetTrueDatas[index]);
     }
-
-    // 显示本帧目标
-    for (int i = 0; i < m_TargetClients.size(); ++i)
-    {
-        TrueDataFrame &fusionFrame = m_FusionDatas.back().m_FusionDatas[i];
-        m_StateMap.AddTargetData(i, m_TargetClients[i].m_TargetTrueDatas[index].m_Pos, m_TargetClients[i].m_TargetTrueDatas[index].m_Vel);
-    }
-
-    m_StateMapDlg.m_Ctrl->DrawTargets();
-    m_StateMapDlg.m_Ctrl->BlendAll();
-    m_StateMapDlg.m_Ctrl->Invalidate();
 
     ResumeSim();
 }

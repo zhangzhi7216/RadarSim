@@ -150,6 +150,10 @@ void PlaneSocket::SendImDetect()
 
 void PlaneSocket::SendFusionData(FusionDataPacket &packet)
 {
+    // if (packet.m_FusionDatas.size() == 0)
+    // {
+    //     return;
+    // }
     CSocketFile file(this);
     CArchive ar(&file, CArchive::store);
 

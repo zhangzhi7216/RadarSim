@@ -52,7 +52,7 @@ void RenderCenterSocket::OnClose(int nErrorCode)
 
 void RenderCenterSocket::SendKeyTarget()
 {
-    HANDLE file = CreateFile(
+    HANDLE h = CreateFile(
         KEY_TARGET_FILE_NAME,
         GENERIC_READ,
         FILE_SHARE_READ,
@@ -60,18 +60,17 @@ void RenderCenterSocket::SendKeyTarget()
         OPEN_EXISTING,
         FILE_ATTRIBUTE_NORMAL,
         NULL);
-    int length = GetFileSize(file, NULL);
+    int length = GetFileSize(h, NULL);
+    char *buf = new char[length];
+    DWORD read = 0;
+    ReadFile(h, buf, length, &read, NULL);
+    CloseHandle(h);
+
     PacketType type = PacketTypeKeyTarget;
-    Send(&type, sizeof(type));
-    // Send(&length, 4);
-    // TransmitFile(
-    //     this->m_hSocket,
-    //     file,
-    //     0,
-    //     0,
-    //     NULL,
-    //     NULL,
-    //     TF_USE_KERNEL_APC
-    //     );
-    CloseHandle(file);
+
+    CSocketFile file(this);
+    CArchive ar(&file, CArchive::store);
+    ar.Write(&type, sizeof(type));
+    ar.Write(&length, sizeof(length));
+    ar.Write(&buf[0], length);
 }

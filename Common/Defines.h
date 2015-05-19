@@ -12,7 +12,7 @@ using namespace std;
 using namespace Gdiplus;
 
 #define PAD 10
-#define KEY_TARGET_HIT_THRESHOLD 100
+#define KEY_TARGET_HIT_THRESHOLD 50
 
 #define TARGET_TRACK_WIDTH 2
 #define TARGET_RADIUS 4
