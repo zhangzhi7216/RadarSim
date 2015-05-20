@@ -72,7 +72,6 @@ public:
     vector<TrueDataFrame> m_PlaneTrueDatas;
     DataCenterSocket *m_PlaneSockets[PLANE_COUNT];
     vector<TargetClient> m_TargetClients;
-    vector<Missile> m_Missiles;
 
     void GeneratePlaneClients();
     void GenerateTargetClients();

@@ -3,7 +3,7 @@
 
 Target::Target()
 : m_Id(0)
-, m_Type(TargetTypeHeli)
+, m_Type(TargetTypeAir)
 , m_InitPosition()
 , m_InitVel(1, 1, 1)
 , m_InitAcc(1, 1, 1)

@@ -39,38 +39,23 @@ CString __declspec(dllexport) StateMapBackgroundNames[] =
 
 Image __declspec(dllexport) *TargetTypeImages[] =
 {
-    Image::FromFile(TEXT("Heli.png")),
-    Image::FromFile(TEXT("Fighter.png")),
-    Image::FromFile(TEXT("Aew.png")),
-    Image::FromFile(TEXT("Bomber.png")),
-    Image::FromFile(TEXT("Shipboard.png")),
-    Image::FromFile(TEXT("Tank.png")),
-    Image::FromFile(TEXT("Panzer.png")),
-    Image::FromFile(TEXT("Missile.png")),
+    Image::FromFile(TEXT("Land.png")),
+    Image::FromFile(TEXT("Sea.png")),
+    Image::FromFile(TEXT("Air.png")),
 };
 
 Image __declspec(dllexport) *TargetTypeMaskImages[] =
 {
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
-    Image::FromFile(TEXT("HeliMask.png")),
+    Image::FromFile(TEXT("LandMask.png")),
+    Image::FromFile(TEXT("SeaMask.png")),
+    Image::FromFile(TEXT("AirMask.png")),
 };
 
 CString __declspec(dllexport) TargetTypeNames[] =
 {
-    TEXT("直升机"),
-    TEXT("歼敌机"),
-    TEXT("预警机"),
-    TEXT("轰炸机"),
-    TEXT("舰载机"),
-    TEXT("坦克"),
-    TEXT("装甲车"),
-    TEXT("导弹"),
+    TEXT("路上目标"),
+    TEXT("海上目标"),
+    TEXT("空中目标"),
 };
 
 Image __declspec(dllexport) *ExplosionTypeImages[] =
@@ -153,23 +138,13 @@ void __declspec(dllexport) GlobalInit()
     StateMapBackgrounds[StateMapBackground3] = Image::FromFile(TEXT("StateMapBackground3.bmp"));
     StateMapBackgrounds[StateMapBackground4] = Image::FromFile(TEXT("StateMapBackground4.bmp"));
 
-    TargetTypeImages[TargetTypeHeli] = Image::FromFile(TEXT("Heli.png"));
-    TargetTypeImages[TargetTypeFighter] = Image::FromFile(TEXT("Fighter.png"));
-    TargetTypeImages[TargetTypeAew] = Image::FromFile(TEXT("Aew.png"));
-    TargetTypeImages[TargetTypeBomber] = Image::FromFile(TEXT("Bomber.png"));
-    TargetTypeImages[TargetTypeShipboard] = Image::FromFile(TEXT("Shipboard.png"));
-    TargetTypeImages[TargetTypeTank] = Image::FromFile(TEXT("Tank.png"));
-    TargetTypeImages[TargetTypePanzer] = Image::FromFile(TEXT("Panzer.png"));
-    TargetTypeImages[TargetTypeMissile] = Image::FromFile(TEXT("Missile.png"));
+    TargetTypeImages[TargetTypeLand] = Image::FromFile(TEXT("Land.png"));
+    TargetTypeImages[TargetTypeSea] = Image::FromFile(TEXT("Sea.png"));
+    TargetTypeImages[TargetTypeAir] = Image::FromFile(TEXT("Air.png"));
 
-    TargetTypeMaskImages[TargetTypeHeli] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypeFighter] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypeAew] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypeBomber] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypeShipboard] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypeTank] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypePanzer] = Image::FromFile(TEXT("HeliMask.png"));
-    TargetTypeMaskImages[TargetTypeMissile] = Image::FromFile(TEXT("HeliMask.png"));
+    TargetTypeMaskImages[TargetTypeLand] = Image::FromFile(TEXT("LandMask.png"));
+    TargetTypeMaskImages[TargetTypeSea] = Image::FromFile(TEXT("SeaMask.png"));
+    TargetTypeMaskImages[TargetTypeAir] = Image::FromFile(TEXT("AirMask.png"));
 
     ExplosionTypeImages[ExplosionType0] = Image::FromFile(TEXT("Explosion0.png"));
     ExplosionTypeImages[ExplosionType1] = Image::FromFile(TEXT("Explosion1.png"));
@@ -195,7 +170,7 @@ void __declspec(dllexport) GlobalShut()
     {
         delete StateMapBackgrounds[i];
     }
-    for (int i = TargetTypeHeli; i < TargetTypeLast; ++i)
+    for (int i = TargetTypeLand; i < TargetTypeLast; ++i)
     {
         delete TargetTypeImages[i];
     }

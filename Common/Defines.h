@@ -21,12 +21,6 @@ using namespace Gdiplus;
 
 #define LIST_ITEM_WIDTH 90
 
-#ifdef _DEV
-#define MISSILE_HIT_THRESHOLD 10000
-#else
-#define MISSILE_HIT_THRESHOLD 5000
-#endif
-
 typedef struct __declspec(dllexport) Point3D
 {
     Point3D()
@@ -146,14 +140,9 @@ extern CString __declspec(dllimport) StateMapBackgroundNames[StateMapBackgroundL
 
 enum TargetType
 {
-    TargetTypeHeli = 0,
-    TargetTypeFighter,
-    TargetTypeAew,
-    TargetTypeBomber,
-    TargetTypeShipboard,
-    TargetTypeTank,
-    TargetTypePanzer,
-    TargetTypeMissile,
+    TargetTypeLand = 0,
+    TargetTypeSea,
+    TargetTypeAir,
     TargetTypeLast,
 };
 

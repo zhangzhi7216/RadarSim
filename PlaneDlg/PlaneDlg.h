@@ -69,7 +69,6 @@ public:
     void ResetSensors();
     void AddPlane(Plane &plane);
     void AddTarget(Target &target);
-    void AddMissile(int id);
 
     GlobalDataPacket m_GlobalData;
     Plane m_Plane;
