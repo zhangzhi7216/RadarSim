@@ -170,7 +170,7 @@ NoiseDataPacket Sensor::GetNoiseData(TrueDataPacket &packet)
     {
         NoiseDataFrame frame;
         frame.m_Time = packet.m_TargetTrueDatas[i].m_Time;
-        frame.m_Id = packet.m_TargetTrueDatas[i].m_Id;
+        frame.m_Type = packet.m_TargetTrueDatas[i].m_Type;
         frame.m_Dis = m_TargetDistances[i].back();
         frame.m_Theta = m_TargetThetas[i].back();
         frame.m_Phi = m_TargetPhis[i].back();

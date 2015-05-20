@@ -79,7 +79,7 @@ extern "C" __declspec(dllexport) bool FusionVcAlgoTest2(FusionInput &input, Fusi
     {
         TrueDataFrame frame;
         frame.m_Time = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Time;
-        frame.m_Id = noiseDatas[SensorIdRadar].m_TargetNoiseDatas[iTarget].m_Id;
+        frame.m_Id = 100 + iTarget + frame.m_Time / 100 * 100;
         for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; ++iSensor)
         {
             // frame += noiseDatas[(SensorId)iSensor].m_TargetNoiseDatas[iTarget];

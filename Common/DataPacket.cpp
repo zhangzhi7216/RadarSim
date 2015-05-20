@@ -32,21 +32,21 @@ wifstream & operator >> (wifstream &is, TrueDataFrame &frame)
 
 CArchive & operator << (CArchive &ar, NoiseDataFrame &frame)
 {
-    ar << frame.m_Time << frame.m_Id << frame.m_Dis << frame.m_Theta << frame.m_Phi
+    ar << frame.m_Time << frame.m_Type << frame.m_Dis << frame.m_Theta << frame.m_Phi
         << frame.m_DisVar << frame.m_ThetaVar << frame.m_PhiVar;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, NoiseDataFrame &frame)
 {
-    ar >> frame.m_Time >> frame.m_Id >> frame.m_Dis >> frame.m_Theta >> frame.m_Phi
+    ar >> frame.m_Time >> frame.m_Type >> frame.m_Dis >> frame.m_Theta >> frame.m_Phi
         >> frame.m_DisVar >> frame.m_ThetaVar >> frame.m_PhiVar;
     return ar;
 }
 
 wofstream & operator << (wofstream &os, NoiseDataFrame &frame)
 {
-    os << frame.m_Time << TEXT(" ") << frame.m_Id << TEXT(" ")
+    os << frame.m_Time << TEXT(" ") << frame.m_Type << TEXT(" ")
         << frame.m_Dis << TEXT(" ") << frame.m_Theta << TEXT(" ") << frame.m_Phi << TEXT(" ")
         << frame.m_DisVar << TEXT(" ") << frame.m_ThetaVar << TEXT(" ") << frame.m_PhiVar;
     return os;
@@ -54,7 +54,7 @@ wofstream & operator << (wofstream &os, NoiseDataFrame &frame)
 
 wifstream & operator >> (wifstream &is, NoiseDataFrame &frame)
 {
-    is >> frame.m_Time >> frame.m_Id
+    is >> frame.m_Time >> frame.m_Type
         >> frame.m_Dis >> frame.m_Theta >> frame.m_Phi
         >> frame.m_DisVar >> frame.m_ThetaVar >> frame.m_PhiVar;
     return is;

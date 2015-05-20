@@ -54,9 +54,9 @@ __declspec(dllexport) wifstream & operator >> (wifstream &is, TrueDataFrame &fra
 struct __declspec(dllexport) NoiseDataFrame
 {
     int m_Time;
-    int m_Id;
+    int m_Type;
     double m_Dis, m_Theta, m_Phi, m_DisVar, m_ThetaVar, m_PhiVar;
-    NoiseDataFrame() : m_Time(0), m_Id(0), m_Dis(0), m_Theta(0), m_Phi(0), m_DisVar(0), m_ThetaVar(0), m_PhiVar(0) {}
+    NoiseDataFrame() : m_Time(0), m_Type(0), m_Dis(0), m_Theta(0), m_Phi(0), m_DisVar(0), m_ThetaVar(0), m_PhiVar(0) {}
     NoiseDataFrame &operator += (const NoiseDataFrame &frame)
     {
         m_Dis += frame.m_Dis;
