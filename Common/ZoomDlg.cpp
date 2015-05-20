@@ -35,12 +35,30 @@ void CZoomDlg::DoDataExchange(CDataExchange* pDX)
 
 void CZoomDlg::DrawTarget()
 {
-    Image *keyTarget = Image::FromFile(KEY_TARGET_FILE_NAME);
     if (m_Image)
     {
         delete m_Image;
     }
-    m_Image = keyTarget;
+    Image *keyTarget = Image::FromFile(KEY_TARGET_FILE_NAME);
+    UINT width = keyTarget->GetWidth(), height = keyTarget->GetHeight();
+    m_Image = new Bitmap(width, height);
+    Graphics graphics(m_Image);
+    graphics.SetCompositingQuality(CompositingQualityHighQuality);
+    graphics.SetInterpolationMode(InterpolationModeHighQualityBicubic);
+    graphics.SetSmoothingMode(SmoothingModeAntiAlias);
+    graphics.DrawImage(keyTarget, PointF(0, 0));
+    delete keyTarget;
+    RECT rect;
+    GetWindowRect(&rect);
+    if (rect.right - rect.left < width)
+    {
+        rect.right = rect.left + width;
+    }
+    if (rect.bottom - rect.top < height)
+    {
+        rect.bottom = rect.top + height;
+    }
+    MoveWindow(&rect);
 }
 
 BEGIN_MESSAGE_MAP(CZoomDlg, CDialog)
@@ -62,10 +80,8 @@ void CZoomDlg::OnPaint()
         GetWindowRect(&rect);
         ScreenToClient(&rect);
 
-        double left = rect.left + PAD,
-            top = rect.top + PAD;
         Gdiplus::Graphics graphics(dc.GetSafeHdc());
-        graphics.DrawImage(m_Image, PointF(left, top));
+        graphics.DrawImage(m_Image, PointF(0, 0));
     }
 }
 
