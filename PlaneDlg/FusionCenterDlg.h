@@ -50,6 +50,8 @@ public:
     virtual void DoFusion();
     virtual void SendNoiseDatas(TrueDataPacket &packet);
     virtual void ResetSockets();
+    virtual void SetPlane(Plane &plane);
+    virtual void SetGlobalData(GlobalDataPacket &packet);
 
     FusionSocket *m_FusionSocket;
     vector<FusionSocket *> m_PlaneSockets;
