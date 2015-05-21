@@ -19,6 +19,8 @@
 #define IDC_CONFIG_LOAD                 1009
 #define IDC_CONFIG_SAVE                 1010
 #define IDC_EXT_DATA_PATH               1013
+#define IDC_IDC_DC_SENSOR_INTERVAL      1014
+#define IDC_DC_SENSOR_INTERVAL          1014
 #define IDC_DC_SENSOR_ENABLE            4004
 #define IDC_DC_SENSOR_PARAM_GRP         4005
 #define IDC_DC_PLANE_PARAM_GRP          4006
@@ -37,6 +39,7 @@
 #define IDC_DC_SENSOR_PHI_VAR_STATIC    4018
 #define IDC_DC_SENSOR_PHI_VAR           4019
 #define IDC_DC_SENSOR_PRO_DET_STATIC    4020
+#define IDC_DC_SENSOR_INTERVAL_STATIC   4020
 #define IDC_DC_SENSOR_PRO_DET           4021
 #define IDC_DC_PLANE_ID_SET_STATIC      4022
 #define IDC_DC_SENSOR_ID                4023
@@ -162,7 +165,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1014
+#define _APS_NEXT_CONTROL_VALUE         1015
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

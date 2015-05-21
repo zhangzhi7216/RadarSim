@@ -113,7 +113,7 @@ public:
     CString m_SensorDisVar;
     CString m_SensorThetaVar;
     CString m_SensorPhiVar;
-    CString m_SensorProDet;
+    CComboBox m_SensorInterval;
     afx_msg void OnBnClickedDcSensorEnable();
     afx_msg void OnEnChangeDcGlobalRounds();
     afx_msg void OnEnChangeDcGlobalCycle();
@@ -129,7 +129,7 @@ public:
     afx_msg void OnEnChangeDcSensorDisVar();
     afx_msg void OnEnChangeDcSensorThetaVar();
     afx_msg void OnEnChangeDcSensorPhiVar();
-    afx_msg void OnEnChangeDcSensorProDet();
+    afx_msg void OnCbnSelchangeDcSensorInterval();
     afx_msg void OnBnClickedConfigLoad();
     afx_msg void OnBnClickedConfigSave();
     afx_msg void OnBnClickedDcEvalAdd();

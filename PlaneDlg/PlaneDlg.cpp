@@ -381,8 +381,8 @@ void CPlaneDlg::AddTrueData(TrueDataPacket &packet)
     {
         Position rel = packet.m_TargetTrueDatas[i].m_Pos - packet.m_PlaneTrueData.m_Pos;
 
-        m_Sensor1.AddTargetData(i, rel);
-        m_Sensor2.AddTargetData(i, rel);
+        m_Sensor1.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time, rel);
+        m_Sensor2.AddTargetData(i, packet.m_TargetTrueDatas[i].m_Time, rel);
         if (!m_HasStateMap)
         {
             TrueDataFrame &frame = packet.m_TargetTrueDatas[i];

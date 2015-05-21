@@ -14,6 +14,7 @@ Sensor::Sensor()
 , m_ThetaVar(0)
 , m_PhiVar(0)
 , m_ProDet(100)
+, m_Interval(1)
 , m_ShowScanline(TRUE)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
@@ -34,6 +35,7 @@ Sensor::Sensor(SensorId id, Plane &plane, GlobalDataPacket &globalData)
 , m_ThetaVar(0)
 , m_PhiVar(0)
 , m_ProDet(100)
+, m_Interval(1)
 , m_ShowScanline(TRUE)
 , m_ShowTrack(TRUE)
 , m_ShowThetaRange(TRUE)
@@ -64,6 +66,7 @@ Sensor &Sensor::operator =(const Sensor &s)
     m_ThetaVar = s.m_ThetaVar;
     m_PhiVar = s.m_PhiVar;
     m_ProDet = s.m_ProDet;
+    m_Interval = s.m_Interval;
     m_ShowScanline = s.m_ShowScanline;
     m_ShowTrack = s.m_ShowTrack;
     m_ShowThetaRange = s.m_ShowThetaRange;
@@ -83,6 +86,7 @@ void Sensor::Reset()
     m_ThetaVar = 1;
     m_PhiVar = 1;
     m_ProDet = 0;
+    m_Interval= 1;
     m_ShowScanline = TRUE;
     m_ShowTrack = TRUE;
     m_TargetColors.clear();
@@ -99,11 +103,11 @@ void Sensor::AddTarget(Target &target)
     m_TargetPhis.push_back(vector<double>());
 }
 
-void Sensor::AddTargetData(int target, Position rel)
+void Sensor::AddTargetData(int target, double time, Position rel)
 {
     // 角度采与机头的相对夹角
     double d = Distance(rel), t = Theta(rel) - Theta(m_Plane->m_HeadDir), p = Phi(rel) - Phi(m_Plane->m_HeadDir);
-    if (IsInRange(target, d, t, p))
+    if (IsInRange(target, d, t, p) && (int)(time * 2) % (m_Interval * 2) == 0)
     {
         double a = d, b = t, c = p;
         // AIS直接对直角坐标系加噪
@@ -227,6 +231,7 @@ CArchive & operator << (CArchive &ar, Sensor &sensor)
         << sensor.m_MaxDis << sensor.m_MaxTheta << sensor.m_MaxPhi
         << sensor.m_DisVar << sensor.m_ThetaVar << sensor.m_PhiVar
         << sensor.m_ProDet
+        << sensor.m_Interval
         << color
         << sensor.m_ShowThetaRange
         << sensor.m_ShowHeight;
@@ -242,6 +247,7 @@ CArchive & operator >> (CArchive &ar, Sensor &sensor)
         >> sensor.m_MaxDis >> sensor.m_MaxTheta >> sensor.m_MaxPhi
         >> sensor.m_DisVar >> sensor.m_ThetaVar >> sensor.m_PhiVar
         >> sensor.m_ProDet
+        >> sensor.m_Interval
         >> color
         >> sensor.m_ShowThetaRange
         >> sensor.m_ShowHeight;
