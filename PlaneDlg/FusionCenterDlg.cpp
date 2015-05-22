@@ -449,6 +449,7 @@ void CFusionCenterDlg::SetPlane(Plane &plane)
     m_FusionInput.m_RadarThetaVar = plane.m_Radar.m_ThetaVar;
     m_FusionInput.m_RadarPhiMax = plane.m_Radar.m_MaxPhi;
     m_FusionInput.m_RadarPhiVar = plane.m_Radar.m_PhiVar;
+    m_FusionInput.m_RadarInterval = plane.m_Radar.m_Interval;
 
     m_FusionInput.m_AisXMax = plane.m_Ais.m_MaxDis;
     m_FusionInput.m_AisXVar = plane.m_Ais.m_DisVar;
@@ -456,6 +457,7 @@ void CFusionCenterDlg::SetPlane(Plane &plane)
     m_FusionInput.m_AisYVar = plane.m_Ais.m_ThetaVar;
     m_FusionInput.m_AisZMax = plane.m_Ais.m_MaxPhi;
     m_FusionInput.m_AisZVar = plane.m_Ais.m_PhiVar;
+    m_FusionInput.m_AisInterval = plane.m_Ais.m_Interval;
 
     m_FusionInput.m_TongScopeMax = plane.m_Tong.m_MaxDis;
     m_FusionInput.m_TongScopeVar = plane.m_Tong.m_DisVar;
@@ -463,6 +465,7 @@ void CFusionCenterDlg::SetPlane(Plane &plane)
     m_FusionInput.m_TongThetaVar = plane.m_Tong.m_ThetaVar;
     m_FusionInput.m_TongPhiMax = plane.m_Tong.m_MaxPhi;
     m_FusionInput.m_TongPhiVar = plane.m_Tong.m_PhiVar;
+    m_FusionInput.m_TongInterval = plane.m_Tong.m_Interval;
 
     m_FusionInput.m_LeiScopeMax = plane.m_Lei.m_MaxDis;
     m_FusionInput.m_LeiScopeVar = plane.m_Lei.m_DisVar;
@@ -470,6 +473,7 @@ void CFusionCenterDlg::SetPlane(Plane &plane)
     m_FusionInput.m_LeiThetaVar = plane.m_Lei.m_ThetaVar;
     m_FusionInput.m_LeiPhiMax = plane.m_Lei.m_MaxPhi;
     m_FusionInput.m_LeiPhiVar = plane.m_Lei.m_PhiVar;
+    m_FusionInput.m_LeiInterval = plane.m_Lei.m_Interval;
 }
 
 void CFusionCenterDlg::SetGlobalData(GlobalDataPacket &packet)

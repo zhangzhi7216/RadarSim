@@ -17,6 +17,7 @@ struct __declspec(dllexport) FusionInput
     double m_RadarThetaVar;
     double m_RadarPhiMax;
     double m_RadarPhiVar;
+    int m_RadarInterval;
 
     double m_AisXMax;
     double m_AisXVar;
@@ -24,6 +25,7 @@ struct __declspec(dllexport) FusionInput
     double m_AisYVar;
     double m_AisZMax;
     double m_AisZVar;
+    int m_AisInterval;
 
     double m_TongScopeMax;
     double m_TongScopeVar;
@@ -31,6 +33,7 @@ struct __declspec(dllexport) FusionInput
     double m_TongThetaVar;
     double m_TongPhiMax;
     double m_TongPhiVar;
+    int m_TongInterval;
 
     double m_LeiScopeMax;
     double m_LeiScopeVar;
@@ -38,6 +41,7 @@ struct __declspec(dllexport) FusionInput
     double m_LeiThetaVar;
     double m_LeiPhiMax;
     double m_LeiPhiVar;
+    int m_LeiInterval;
 };
 
 struct __declspec(dllexport) FusionOutput
