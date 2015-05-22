@@ -11,8 +11,7 @@ public:
     void Run(wstring &planeTrue,
         wstring &targetTrue,
         wstring &targetNoise,
-        wstring &fusion,
-        wstring &filter);
+        wstring &fusion);
 
     static int s_EvalItemCount;
 };

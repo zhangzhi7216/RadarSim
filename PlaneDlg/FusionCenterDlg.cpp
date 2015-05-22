@@ -235,6 +235,13 @@ void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
     if (m_FusionInput.m_NoiseDataPackets.size() == SensorIdLast)
     {
         DoFusion();
+        
+        // 添加噪声数据到融合输出.
+        m_FusionOutput.m_FusionDataPacket.m_TargetNoisePackets.clear();
+        for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; iSensor++)
+        {
+            m_FusionOutput.m_FusionDataPacket.m_TargetNoisePackets.push_back(m_FusionInput.m_NoiseDataPackets[(SensorId)iSensor]);
+        }
 
         for (int i = 0; i < m_FusionOutput.m_FusionDataPacket.m_FusionDatas.size(); ++i)
         {

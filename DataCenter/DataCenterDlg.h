@@ -177,7 +177,6 @@ public:
     CString m_OutputTargetTrue;
     CString m_OutputTargetNoise;
     CString m_OutputFusion;
-    CString m_OutputFilter;
     CComboBox m_EvalSel;
     CString m_EvalName;
     CString m_EvalDll;
@@ -185,10 +184,10 @@ public:
     afx_msg void OnEnChangeDcEvalTargetTrue();
     afx_msg void OnEnChangeDcTargetNoise();
     afx_msg void OnEnChangeDcEvalFusion();
-    afx_msg void OnEnChangeDcEvalFilter();
 
     void OutputPlaneTrueData();
     void OutputTargetTrueData();
+    void OutputTargetNoiseData();
     void OutputFusionData();
     CString m_EvalFunc;
     afx_msg void OnEnChangeDcEvalFunc();

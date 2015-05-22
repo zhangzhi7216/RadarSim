@@ -60,18 +60,6 @@ wifstream & operator >> (wifstream &is, NoiseDataFrame &frame)
     return is;
 }
 
-CArchive & operator << (CArchive &ar, ControlDataFrame &frame)
-{
-    ar << frame.m_Time << frame.m_Id << frame.m_C1;
-    return ar;
-}
-
-CArchive & operator >> (CArchive &ar, ControlDataFrame &frame)
-{
-    ar >> frame.m_Time >> frame.m_Id >> frame.m_C1;
-    return ar;
-}
-
 template <class T>
 __declspec(dllexport) CArchive & operator << (CArchive &ar, vector<T> &v);
 template <class T>
@@ -103,37 +91,15 @@ CArchive & operator >> (CArchive &ar, NoiseDataPacket &packet)
 
 CArchive & operator << (CArchive &ar, FusionDataPacket &packet)
 {
-    ar << packet.m_FusionDatas;
+    ar << packet.m_FusionDatas
+        << packet.m_TargetNoisePackets;
     return ar;
 }
 
 CArchive & operator >> (CArchive &ar, FusionDataPacket &packet)
 {
-    ar >> packet.m_FusionDatas;
-    return ar;
-}
-
-CArchive & operator << (CArchive &ar, ControlDataPacket &packet)
-{
-    ar << packet.m_FusionData << packet.m_ControlData;
-    return ar;
-}
-
-CArchive & operator >> (CArchive &ar, ControlDataPacket &packet)
-{
-    ar >> packet.m_FusionData >> packet.m_ControlData;
-    return ar;
-}
-
-CArchive & operator << (CArchive &ar, ControlDataAckPacket &packet)
-{
-    ar << packet.m_PlaneTrueData << packet.m_MissileTrueDatas;
-    return ar;
-}
-
-CArchive & operator >> (CArchive &ar, ControlDataAckPacket &packet)
-{
-    ar >> packet.m_PlaneTrueData >> packet.m_MissileTrueDatas;
+    ar >> packet.m_FusionDatas
+        >> packet.m_TargetNoisePackets;
     return ar;
 }
 

@@ -71,7 +71,6 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     , m_OutputTargetTrue(_T("TargetTrue.dat"))
     , m_OutputTargetNoise(_T("TargetNoise.dat"))
     , m_OutputFusion(_T("Fusion.dat"))
-    , m_OutputFilter(_T("Filter.dat"))
     , m_EvalName(_T(""))
     , m_EvalDll(_T(""))
     , m_EvalFunc(_T(""))
@@ -166,7 +165,6 @@ void CDataCenterDlg::DoDataExchange(CDataExchange* pDX)
     DDX_Text(pDX, IDC_DC_EVAL_TARGET_TRUE, m_OutputTargetTrue);
     DDX_Text(pDX, IDC_DC_TARGET_NOISE, m_OutputTargetNoise);
     DDX_Text(pDX, IDC_DC_EVAL_FUSION, m_OutputFusion);
-    DDX_Text(pDX, IDC_DC_EVAL_FILTER, m_OutputFilter);
     DDX_Control(pDX, IDC_DC_EVAL_ID, m_EvalSel);
     DDX_Text(pDX, IDC_DC_EVAL_NAME, m_EvalName);
     DDX_Text(pDX, IDC_DC_EVAL_DLL, m_EvalDll);
@@ -229,7 +227,6 @@ BEGIN_MESSAGE_MAP(CDataCenterDlg, CDialog)
     ON_EN_CHANGE(IDC_DC_EVAL_TARGET_TRUE, &CDataCenterDlg::OnEnChangeDcEvalTargetTrue)
     ON_EN_CHANGE(IDC_DC_TARGET_NOISE, &CDataCenterDlg::OnEnChangeDcTargetNoise)
     ON_EN_CHANGE(IDC_DC_EVAL_FUSION, &CDataCenterDlg::OnEnChangeDcEvalFusion)
-    ON_EN_CHANGE(IDC_DC_EVAL_FILTER, &CDataCenterDlg::OnEnChangeDcEvalFilter)
     ON_EN_CHANGE(IDC_DC_EVAL_FUNC, &CDataCenterDlg::OnEnChangeDcEvalFunc)
     ON_EN_CHANGE(IDC_DC_EVAL_DLL, &CDataCenterDlg::OnEnChangeDcEvalDll)
     ON_EN_CHANGE(IDC_DC_EVAL_NAME, &CDataCenterDlg::OnEnChangeDcEvalName)
@@ -747,6 +744,7 @@ void CDataCenterDlg::FinishSim()
     // Output datas.
     OutputPlaneTrueData();
     OutputTargetTrueData();
+    OutputTargetNoiseData();
     OutputFusionData();
 
     COneTimeMatlabDlg dlg;
@@ -759,8 +757,7 @@ void CDataCenterDlg::FinishSim()
             m_EvalItems[i].Run(wstring(m_OutputPlaneTrue),
                 wstring(m_OutputTargetTrue),
                 wstring(m_OutputTargetNoise),
-                wstring(m_OutputFusion),
-                wstring(m_OutputFilter));
+                wstring(m_OutputFusion));
         }
 
         GetDlgItem(IDOK)->EnableWindow(TRUE);
@@ -1872,17 +1869,6 @@ void CDataCenterDlg::OnEnChangeDcEvalFusion()
     UpdateData(TRUE);
 }
 
-void CDataCenterDlg::OnEnChangeDcEvalFilter()
-{
-    // TODO:  如果该控件是 RICHEDIT 控件，它将不
-    // 发送此通知，除非重写 CCommonDlg::OnInitDialog()
-    // 函数并调用 CRichEditCtrl().SetEventMask()，
-    // 同时将 ENM_CHANGE 标志“或”运算到掩码中。
-
-    // TODO:  在此添加控件通知处理程序代码
-    UpdateData(TRUE);
-}
-
 void CDataCenterDlg::OutputPlaneTrueData()
 {
     wofstream ofs(m_OutputPlaneTrue);
@@ -1914,6 +1900,24 @@ void CDataCenterDlg::OutputTargetTrueData()
         AfxMessageBox(msg);
     }
 
+    // 总时间数
+    int nData = m_TargetClients[0].m_TargetTrueDatas.size();
+    int nTarget = m_TargetClients.size();
+    ofs << nData << endl;
+    // 目标个数
+    ofs << nTarget << endl;
+    ofs << endl;
+
+    for (int iData = 0; iData < nData; iData++)
+    {
+        for (int iTarget = 0; iTarget < nTarget; iTarget++)
+        {
+            TrueDataFrame &trueDataFrame = m_TargetClients[iTarget].m_TargetTrueDatas[iData];
+            ofs << trueDataFrame << endl;
+        }
+        ofs << endl;
+    }
+
     ofs << m_TargetClients.size() << endl;
     ofs << endl;
     for (int i = 0; i < m_TargetClients.size(); ++i)
@@ -1931,6 +1935,45 @@ void CDataCenterDlg::OutputTargetTrueData()
     ofs.close();
 }
 
+void CDataCenterDlg::OutputTargetNoiseData()
+{
+    wofstream ofs(m_OutputTargetNoise);
+    if (!ofs)
+    {
+        CString msg;
+        msg.AppendFormat(TEXT("打开目标测量值输出文件%s失败"), m_OutputTargetNoise);
+        AfxMessageBox(msg);
+    }
+
+    // 总时间数
+    ofs << m_FusionDatas.size() << endl;
+    ofs << endl;
+
+    for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
+    {
+        FusionDataPacket &fusionDataPacket = m_FusionDatas[iData];
+        for (int iSensor = 0; iSensor < fusionDataPacket.m_TargetNoisePackets.size(); iSensor++)
+        {
+            NoiseDataPacket &noiseDataPacket = fusionDataPacket.m_TargetNoisePackets[iSensor];
+            // 传感器ID + 目标个数
+            ofs << noiseDataPacket.m_SensorId << endl;
+            ofs << noiseDataPacket.m_TargetNoiseDatas.size() << endl;
+            ofs << endl;
+
+            for (int iTarget = 0; iTarget < noiseDataPacket.m_TargetNoiseDatas.size(); iTarget++)
+            {
+                // 目标噪声
+                ofs << noiseDataPacket.m_TargetNoiseDatas[iTarget] << endl;
+                ofs << endl;
+            }
+            ofs << endl;
+        }
+        ofs << endl;
+    }
+
+    ofs.close();
+}
+
 void CDataCenterDlg::OutputFusionData()
 {
     wofstream ofs(m_OutputFusion);
@@ -1941,16 +1984,22 @@ void CDataCenterDlg::OutputFusionData()
         AfxMessageBox(msg);
     }
 
-    ofs << m_TargetClients.size() << endl;
+    // 总时间数
+    ofs << m_FusionDatas.size() << endl;
     ofs << endl;
-    for (int iTarget = 0; iTarget < m_TargetClients.size(); ++iTarget)
+
+    for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
     {
-        ofs << m_FusionDatas.size() << endl;
+        FusionDataPacket &fusionDataPacket = m_FusionDatas[iData];
+        // 目标个数
+        ofs << fusionDataPacket.m_FusionDatas.size() << endl;
         ofs << endl;
-        for (int iData = 0; iData < m_FusionDatas.size(); ++iData)
+
+        for (int iTarget = 0; iTarget < fusionDataPacket.m_FusionDatas.size(); iTarget++)
         {
-            TrueDataFrame &frame = m_FusionDatas[iData].m_FusionDatas[iTarget];
-            ofs << frame << endl;
+            // 目标融合
+            ofs << fusionDataPacket.m_FusionDatas[iTarget];
+            ofs << endl;
         }
         ofs << endl;
     }

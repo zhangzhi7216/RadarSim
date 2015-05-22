@@ -23,8 +23,7 @@ int EvalItem::s_EvalItemCount = 0;
 void EvalItem::Run(wstring &planeTrue,
         wstring &targetTrue,
         wstring &targetNoise,
-        wstring &fusion,
-        wstring &filter)
+        wstring &fusion)
 {
     vector<Array *> output(1);
     vector<Array *> input;
@@ -43,10 +42,6 @@ void EvalItem::Run(wstring &planeTrue,
 
     string fusionS(fusion.begin(), fusion.end());
     a = mxCreateString(fusionS.c_str());
-    input.push_back(a);
-
-    string filterS(filter.begin(), filter.end());
-    a = mxCreateString(filterS.c_str());
     input.push_back(a);
 
     bool result = RunFunc(m_Dll, m_Func, output, input);

@@ -104,16 +104,6 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, NoiseDataFrame &fram
 __declspec(dllexport) wofstream & operator << (wofstream &os, NoiseDataFrame &frame);
 __declspec(dllexport) wifstream & operator >> (wifstream &is, NoiseDataFrame &frame);
 
-struct __declspec(dllexport) ControlDataFrame
-{
-    int m_Time;
-    int m_Id;
-    double m_C1;
-    ControlDataFrame() : m_Time(0), m_Id(0), m_C1(1) {}
-};
-__declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataFrame &frame);
-__declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataFrame &frame);
-
 template <class T>
 __declspec(dllexport) CArchive & operator << (CArchive &ar, vector<T> &v)
 {
@@ -181,25 +171,10 @@ __declspec(dllexport) CArchive & operator >> (CArchive &ar, NoiseDataPacket &pac
 struct __declspec(dllexport) FusionDataPacket
 {
     vector<TrueDataFrame> m_FusionDatas;
+    vector<NoiseDataPacket> m_TargetNoisePackets;
 };
 __declspec(dllexport) CArchive & operator << (CArchive &ar, FusionDataPacket &packet);
 __declspec(dllexport) CArchive & operator >> (CArchive &ar, FusionDataPacket &packet);
-
-struct __declspec(dllexport) ControlDataPacket
-{
-    FusionDataPacket m_FusionData;
-    ControlDataFrame m_ControlData;
-};
-__declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataPacket &packet);
-__declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataPacket &packet);
-
-struct __declspec(dllexport) ControlDataAckPacket
-{
-    TrueDataFrame m_PlaneTrueData;
-    vector<TrueDataFrame> m_MissileTrueDatas;
-};
-__declspec(dllexport) CArchive & operator << (CArchive &ar, ControlDataAckPacket &packet);
-__declspec(dllexport) CArchive & operator >> (CArchive &ar, ControlDataAckPacket &packet);
 
 struct __declspec(dllexport) GlobalDataPacket
 {
