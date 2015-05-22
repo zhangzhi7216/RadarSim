@@ -79,30 +79,43 @@ CDataCenterDlg::CDataCenterDlg(CWnd* pParent /*=NULL*/)
     m_DataCenterSocket = new DataCenterSocket(this);
 
     m_Sensors[SensorIdRadar].m_Id = SensorIdRadar;
-    m_Sensors[SensorIdRadar].m_MaxDis = 350;
-    m_Sensors[SensorIdRadar].m_MaxTheta = 120;
+    m_Sensors[SensorIdRadar].m_MaxDis = 250;
+    m_Sensors[SensorIdRadar].m_MaxTheta = 360;
+    m_Sensors[SensorIdRadar].m_MaxPhi = 360;
+    m_Sensors[SensorIdRadar].m_DisVar = 40;
+    m_Sensors[SensorIdRadar].m_ThetaVar = 0.25;
+    m_Sensors[SensorIdRadar].m_PhiVar = 0.25;
+    m_Sensors[SensorIdRadar].m_Interval = 1;
 
     m_Sensors[SensorIdAis].m_Id = SensorIdAis;
-    m_Sensors[SensorIdAis].m_MaxDis = 300;
-    m_Sensors[SensorIdAis].m_MaxTheta = 90;
-    m_Sensors[SensorIdAis].m_ThetaRangeColor = Color::Red;
-    m_Sensors[SensorIdAis].m_ShowHeight = FALSE;
+    m_Sensors[SensorIdAis].m_MaxDis = 250;
+    m_Sensors[SensorIdAis].m_MaxTheta = 360;
+    m_Sensors[SensorIdAis].m_MaxPhi = 360;
+    m_Sensors[SensorIdAis].m_DisVar = 10;
+    m_Sensors[SensorIdAis].m_ThetaVar = 0;
+    m_Sensors[SensorIdAis].m_PhiVar = 0;
+    m_Sensors[SensorIdAis].m_Interval = 2;
+    m_Sensors[SensorIdTong].m_ThetaRangeColor = Color::Green;
 
     m_Sensors[SensorIdTong].m_Id = SensorIdTong;
-    m_Sensors[SensorIdTong].m_MaxDis = 250;
-    m_Sensors[SensorIdTong].m_MaxTheta = 60;
-    m_Sensors[SensorIdTong].m_ShowScanline = FALSE;
-    m_Sensors[SensorIdTong].m_ShowThetaRange = FALSE;
+    m_Sensors[SensorIdTong].m_MaxDis = 200;
+    m_Sensors[SensorIdTong].m_MaxTheta = 90;
+    m_Sensors[SensorIdTong].m_MaxPhi = 60;
+    m_Sensors[SensorIdTong].m_DisVar = 0;
+    m_Sensors[SensorIdTong].m_ThetaVar = 3;
+    m_Sensors[SensorIdTong].m_PhiVar = 3;
+    m_Sensors[SensorIdTong].m_Interval = 3;
     m_Sensors[SensorIdTong].m_ThetaRangeColor = Color::Yellow;
-    m_Sensors[SensorIdTong].m_ShowHeight = FALSE;
 
     m_Sensors[SensorIdLei].m_Id = SensorIdLei;
-    m_Sensors[SensorIdLei].m_MaxDis = 250;
-    m_Sensors[SensorIdLei].m_MaxTheta = 60;
-    m_Sensors[SensorIdLei].m_ShowScanline = FALSE;
-    m_Sensors[SensorIdLei].m_ShowThetaRange = FALSE;
+    m_Sensors[SensorIdLei].m_MaxDis = 200;
+    m_Sensors[SensorIdLei].m_MaxTheta = 360;
+    m_Sensors[SensorIdLei].m_MaxPhi = 60;
+    m_Sensors[SensorIdLei].m_DisVar = 0;
+    m_Sensors[SensorIdLei].m_ThetaVar = 2;
+    m_Sensors[SensorIdLei].m_PhiVar = 2;
+    m_Sensors[SensorIdLei].m_Interval = 3;
     m_Sensors[SensorIdLei].m_ThetaRangeColor = Color::Blue;
-    m_Sensors[SensorIdLei].m_ShowHeight = FALSE;
 
     for (int i = 0; i < PLANE_COUNT; ++i)
     {
@@ -635,17 +648,12 @@ void CDataCenterDlg::GenerateGlobalData()
 
 void CDataCenterDlg::AddFusionData(FusionDataPacket &packet)
 {
+    m_FusionDatas.push_back(packet);
+
     int index = (m_CurrentFrame - m_GlobalData.m_StartTime) / m_GlobalData.m_Interval;
 
-    /////// 以下为本帧内容显示
     // 显示本帧我机
     m_StateMap.AddPlaneData(0, m_PlaneTrueDatas[index].m_Pos, m_PlaneTrueDatas[index].m_Vel);
-
-    vector<TrueDataFrame *> targetTrueDatas;
-    for (int i = 0; i < m_TargetClients.size(); ++i)
-    {
-        targetTrueDatas.push_back(&m_TargetClients[i].m_TargetTrueDatas[index]);
-    }
 
     ResumeSim();
 }
