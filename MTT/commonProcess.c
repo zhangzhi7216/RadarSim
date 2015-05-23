@@ -1378,6 +1378,10 @@ void TrksAssign(TRACKINFO *pTLeft, TRACKINFO *pTRight)
 	pTLeft->DelNum = pTRight->DelNum;
 	pTLeft->DelStart = pTRight->DelStart;
 
+	pTLeft->Civi_Num = pTRight->Civi_Num;
+	pTLeft->Theat = pTRight->Theat;
+	pTLeft->Type = pTRight->Type;
+
 	pTLeft->Points = pTRight->Points;
 
 	pTLeft->fMdlProb[0] = pTRight->fMdlProb[0];
