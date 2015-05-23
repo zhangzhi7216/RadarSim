@@ -372,6 +372,7 @@ void OutFile(int iSpt, FusionOutput &output)
 				if ( (pTrk->Type == 3) || (pTrk->Type == 4) ){
 					TrueDataFrame frame1;
 					frame1.m_Time = iSpt;
+					frame1.m_Id = pTrk->idx;
 					frame1.m_Pos = Position(pTrk->fsn.xk[0],pTrk->fsn.xk[3],0.0);
 				//	frame1.m_Vel = Velocity(pTrk->fsn.xk[1],pTrk->fsn.xk[4],0.0);
 					frame1.m_Type = pTrk->Type;
@@ -382,6 +383,7 @@ void OutFile(int iSpt, FusionOutput &output)
 				else{
 					TrueDataFrame frame2;
 					frame2.m_Time = iSpt;
+					frame2.m_Id = pTrk->idx;
 					frame2.m_Pos = Position(pTrk->fsn.xk[0],pTrk->fsn.xk[3],pTrk->fsn.xk[6]);
 					//	frame2.m_Vel = Velocity(pTrk->fsn.xk[1],pTrk->fsn.xk[4],0.0);
 					frame2.m_Type = pTrk->Type;
