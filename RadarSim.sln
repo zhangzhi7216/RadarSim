@@ -14,6 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FusionCenter", "FusionCente
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Common.vcproj", "{61CFEE9C-D7C7-41D6-AA1C-7045594C401E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EEAB39F1-FC19-4EB0-9285-6CF5771AECB5} = {EEAB39F1-FC19-4EB0-9285-6CF5771AECB5}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FusionVcAlgoTest2", "FusionVcAlgoTest2\FusionVcAlgoTest2.vcproj", "{7C85FD41-C2F0-4A4C-97F5-C15977ECDFA0}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -49,6 +52,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RenderCenter", "RenderCente
 	EndProjectSection
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "RenderCenterSetup", "RenderCenterSetup\RenderCenterSetup.vdproj", "{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MTT", "MTT\MTT.vcproj", "{EEAB39F1-FC19-4EB0-9285-6CF5771AECB5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -104,6 +109,10 @@ Global
 		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Debug|Win32.Build.0 = Debug
 		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Release|Win32.ActiveCfg = Release
 		{DE5A011E-4438-4795-8582-FEBBCFBCB0FF}.Release|Win32.Build.0 = Release
+		{EEAB39F1-FC19-4EB0-9285-6CF5771AECB5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EEAB39F1-FC19-4EB0-9285-6CF5771AECB5}.Debug|Win32.Build.0 = Debug|Win32
+		{EEAB39F1-FC19-4EB0-9285-6CF5771AECB5}.Release|Win32.ActiveCfg = Release|Win32
+		{EEAB39F1-FC19-4EB0-9285-6CF5771AECB5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
