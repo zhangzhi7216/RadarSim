@@ -235,7 +235,18 @@ void CFusionCenterDlg::AddNoiseData(NoiseDataPacket &packet)
     if (m_FusionInput.m_NoiseDataPackets.size() == SensorIdLast)
     {
         DoFusion();
-        
+
+		// 恢复绝对坐标
+		for (int iTarget = 0; iTarget < m_FusionOutput.m_FusionDataPacket.m_FusionDatas.size(); iTarget++)
+		{
+			TrueDataFrame &frame = m_FusionOutput.m_FusionDataPacket.m_FusionDatas[iTarget];
+			frame.m_Pos += m_Plane.m_Position;
+			if (frame.m_Type == TargetTypeSea)
+			{
+				frame.m_Pos.Z = 0;
+			}
+		}
+
         // 添加噪声数据到融合输出.
         m_FusionOutput.m_FusionDataPacket.m_TargetNoisePackets.clear();
         for (int iSensor = SensorIdRadar; iSensor < SensorIdLast; iSensor++)
