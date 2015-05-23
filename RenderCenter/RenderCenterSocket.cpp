@@ -50,10 +50,10 @@ void RenderCenterSocket::OnClose(int nErrorCode)
     CSocket::OnClose(nErrorCode);
 }
 
-void RenderCenterSocket::SendKeyTarget()
+void RenderCenterSocket::SendKeyTarget(CString &path)
 {
     HANDLE h = CreateFile(
-        KEY_TARGET_FILE_NAME,
+        path,
         GENERIC_READ,
         FILE_SHARE_READ,
         NULL,

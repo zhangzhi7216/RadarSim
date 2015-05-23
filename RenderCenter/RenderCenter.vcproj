@@ -45,7 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;C:\Program Files (x86)\opencv\vc9\include&quot;;&quot;C:\Program Files (x86)\opencv\vc9\include\opencv&quot;;&quot;C:\Program Files (x86)\opencv\vc9\include\opencv2&quot;;../Common;../RenderCenter"
+				AdditionalIncludeDirectories="&quot;C:\Program Files (x86)\opencv\vc9\include\opencv2&quot;;&quot;C:\Program Files (x86)\opencv\vc9\include\opencv&quot;;&quot;C:\Program Files (x86)\opencv\vc9\include&quot;;D:\opencv244\build\include;D:\opencv244\build\include\opencv;D:\opencv244\build\include\opencv2;../Common;../RenderCenter"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -69,9 +69,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opencv_calib3d240d.lib opencv_contrib240d.lib opencv_core240d.lib opencv_features2d240d.lib opencv_flann240d.lib opencv_gpu240d.lib opencv_highgui240d.lib opencv_imgproc240d.lib opencv_legacy240d.lib opencv_ml240d.lib opencv_nonfree240d.lib opencv_objdetect240d.lib opencv_ts240d.lib opencv_video240d.lib"
+				AdditionalDependencies="opencv_calib3d240d.lib opencv_contrib240d.lib opencv_core240d.lib opencv_features2d240d.lib opencv_flann240d.lib opencv_gpu240d.lib opencv_highgui240d.lib opencv_imgproc240d.lib opencv_legacy240d.lib opencv_ml240d.lib opencv_nonfree240d.lib opencv_objdetect240d.lib opencv_ts240d.lib opencv_video240d.lib libmx.lib libmat.lib libeng.lib mclmcrrt.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\opencv\vc9\lib&quot;"
+				AdditionalLibraryDirectories="&quot;C:\Program Files (x86)\opencv\vc9\lib&quot;;D:\opencv244\build\x86\vc9\lib"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
