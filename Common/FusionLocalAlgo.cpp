@@ -177,6 +177,11 @@ void FrameRead_RadarAIS(FusionInput &input)
 			MSpt = -1;
 		}
 
+		/* 孙工，我在这里认为TargetTypeLast表示为民船的类型；若判断AIS观测的数据不是来自民船的，就不读入来融合 */
+		if ( Type != TargetTypeLast ){
+			MSpt = -1;
+		}
+
 		if (iSpt_Org == MSpt){
 			iflag = 1;
 			sEcho_RadarAIS_Org[iCount].msr[0] = fRng;
